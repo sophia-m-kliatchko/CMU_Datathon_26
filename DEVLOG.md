@@ -22,7 +22,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 18:05: Renamed tables: `bronze_facilities` → `facilities_bronze`, `silver_facilities` → `facilities_silver`
+### 2026-11-21 15:47: Corrected DEVLOG timestamps
+- **Who:** Claude (for Sophia)
+- **What:** the times in the headings of the entries from 12:28 to 15:45 in this file.
+- **How:** compared each entry with its git commit time (`git log --date=format-local:%H:%M`) and used the commit time. Entries without their own commit use the nearest commit, marked `~`.
+- **Why:** Claude had estimated times instead of reading the clock, so several entries were stamped later than the actual current time (e.g. "18:05" at 15:45). From now on each entry uses `Get-Date`, as `CLAUDE.md` requires.
+
+### 2026-11-21 15:45: Renamed tables: `bronze_facilities` → `facilities_bronze`, `silver_facilities` → `facilities_silver`
 - **Who:** Claude (for Sophia)
 - **What:**
   - `notebooks/01_bronze_to_silver.py`: table writes, reads, comments and SQL checks. The internal staging table is now `_facilities_silver_stage`.
@@ -33,13 +39,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - Anyone who already ran notebook 01 will still have the old `bronze_facilities` / `silver_facilities` tables in their workspace. Drop them by hand (`DROP TABLE IF EXISTS workspace.datathon.bronze_facilities`, and the same for `silver_facilities`).
   - The other outputs of notebook 01 keep their names: `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`, `silver_rejected_facilities`.
 
-### 2026-11-21 17:55: Decision: `source_urls` stays out of silver
+### 2026-11-21 15:44: Decision: `source_urls` stays out of silver
 - **Who:** Sophia (decision), Claude (logged it)
 - **What:** no code change. `source_urls` remains dropped from `silver_facilities`, as implemented in `notebooks/01_bronze_to_silver.py`.
 - **How:** Sophia answered "Drop it as asked" when asked whether to keep it for evidence citations.
 - **Why:** to keep silver to the agreed column set. The URLs are not lost: they remain in `bronze_facilities` and can be joined back on `unique_id` (documented in `docs/silver-tables.md`, watch-out 24) if a recommendation needs to show the web pages a record came from.
 
-### 2026-11-21 17:45: Merged `main` into `sophia-wip`; citations updated for the teammate additions
+### 2026-11-21 15:43: Merged `main` into `sophia-wip`; citations updated for the teammate additions
 - **Who:** Claude (for Sophia)
 - **What:**
   - Merge commit bringing `main` into `sophia-wip`. This adds `data/KAYAKALP WINNER FACILITIES 21-22.pdf` (from Sophia) and `notebooks/india_pincode_bronze_to_silver.py` (from elliotl-ops).
@@ -48,7 +54,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Why:** to keep `sophia-wip` current with the team, and to follow the citation rule for tables other people add.
 - **Notes / follow-ups:** the PIN notebook is a standalone PySpark script with placeholder paths (`path/to/bronze/...`, `catalog.schema...`). elliotl-ops should set the real paths and confirm the source date.
 
-### 2026-11-21 17:30: Silver facilities: row-removal rules, column drops, standardized addresses
+### 2026-11-21 15:42: Silver facilities: row-removal rules, column drops, standardized addresses
 - **Who:** Claude (for Sophia)
 - **What:**
   - `notebooks/01_bronze_to_silver.py`: new rule settings in section 0, `%run ./common/address_parsing`, column drop, UUID check, a coordinates fallback, address parsing, the row rules, a new table `silver_rejected_facilities`, flags, column comments, and 2 SQL check cells.
@@ -77,16 +83,16 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Notes / follow-ups:**
   - **Not yet run on Databricks;** the numbers above are from the local CSV. The Marketplace table may differ.
   - The real record that each fragment belongs to may be missing its tail fields (it was cut at the line break). Stitching fragments back is possible but not done.
-  - ~~Consider keeping `source_urls` in silver~~: decided 2026-11-21 17:55, see the entry above.
+  - ~~Consider keeping `source_urls` in silver~~: decided 2026-11-21 15:44, see the entry above.
 
-### 2026-11-21 16:40: Added the Kayakalp PDF source URL to the citations
+### 2026-11-21 15:18: Added the Kayakalp PDF source URL to the citations
 - **Who:** Claude (for Sophia)
 - **What:** `docs/data-sources.md` (Kayakalp entry: landing page, PDF URL, checksum, "cite as"); `notebooks/03_kayakalp_bronze_to_silver.py` (`source_url` widget default, publisher now NHSRC, `row_citation` now ends with the URL and retrieval date); `scripts/README.md` (link to the PDF).
 - **How:** Sophia gave the NHSRC page https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF. Its HTML links the PDF at `/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf`. I downloaded that file to a scratch folder and compared SHA-256 checksums with Sophia's copy: they are identical (`6af952e2…7680`, 788,186 bytes).
 - **Why:** this closes the Kayakalp TODO from the citation rule. The checksum proves our CSV came from the official published file. The publisher was changed to NHSRC because NHSRC hosts and lists the file.
 - **Notes / follow-ups:** the PIN and NFHS-5 sources still need confirming by JhK830.
 
-### 2026-11-21 16:20: NQAS and Kayakalp bronze → silver notebooks; data-citation rule and `docs/data-sources.md`
+### 2026-11-21 15:15: NQAS and Kayakalp bronze → silver notebooks; data-citation rule and `docs/data-sources.md`
 - **Who:** Claude (for Sophia)
 - **What:**
   - New `notebooks/02_nqas_bronze_to_silver.py` (`nqas_bronze` → `nqas_silver`) and `notebooks/03_kayakalp_bronze_to_silver.py` (`kayakalp_bronze` → `kayakalp_silver`).
@@ -109,7 +115,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - JhK830 to confirm the source and date of the PIN and NFHS-5 files in `data/raw/`.
   - Notebook 01 still has its own copy of the state lookup; consider switching it to `common/reference_data`.
 
-### 2026-11-21 15:30: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
+### 2026-11-21 14:26: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
 - **Who:** Claude (for Sophia)
 - **What:**
   - New `data/external/nqas_certified_facilities.csv` (989 rows: 796 full certification, 193 partial).
@@ -124,7 +130,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - `.DS_Store` files (macOS clutter) arrived from `main`. Consider removing them and adding them to `.gitignore`.
   - Now that the real `data/raw/facilities.csv` is in the repo, check the silver notebook against its actual columns.
 
-### 2026-11-21 14:45: Scripts to turn outside quality datasets into CSVs (NQAS website, Kayakalp PDF)
+### 2026-11-21 14:13: Scripts to turn outside quality datasets into CSVs (NQAS website, Kayakalp PDF)
 - **Who:** Claude (for Sophia)
 - **What:**
   - New `scripts/scrape_nqas.py`, `scripts/kayakalp_pdf_to_csv.py` and `scripts/README.md` (includes how to upload to Databricks).
@@ -143,7 +149,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The PDF itself is not committed; only the CSV is.
   - Kayakalp covers public facilities only (PHC, HWC, UPHC, CHC, DH). Matching to Virtue Foundation facilities is still to do.
 
-### 2026-11-21 14:10: Listed outside datasets for checking care quality, with links
+### 2026-11-21 13:24: Listed outside datasets for checking care quality, with links
 - **Who:** Claude (for Sophia)
 - **What:** Added the section "Outside datasets for checking care quality and reliability" to `docs/dataset-notes.md`, with about 25 sources in four groups (priority 1, specific services, existence and location, context) and links.
 - **How:** Web searches on 2026-11-21 for each source's official portal or data.gov.in / AIKosh page. Portals were mostly not opened, so availability and formats still need checking.
@@ -154,7 +160,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - No links found yet for SNCU, trauma centres, NOTTO or Kayakalp.
   - PM-JAY, NABH and HFR appear to be search-only portals, so they'd need scraping. Check each site's terms of use first.
 
-### 2026-11-21 13:30: Added the bronze → silver ETL notebook and silver-table docs
+### 2026-11-21 12:45: Added the bronze → silver ETL notebook and silver-table docs
 - **Who:** Claude (for Sophia)
 - **What:** New `notebooks/01_bronze_to_silver.py` (Databricks notebook, Python + PySpark + SQL) and `docs/silver-tables.md`. Made on the `sophia-wip` branch.
 - **How:** The notebook writes 5 Delta tables to `workspace.datathon` (settable with widgets):
@@ -188,26 +194,26 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The thresholds above are first guesses; tune them once real counts are visible.
   - Possible later improvements: PIN-centroid coordinates from the India Post directory, and point-in-polygon state checks using district boundaries.
 
-### 2026-11-21 13:25: Started using the `sophia-wip` branch
+### 2026-11-21 12:45: Started using the `sophia-wip` branch
 - **Who:** Sophia (created the branch), Claude (switched to it)
 - **What:** Sophia created `sophia-wip` on GitHub. The local repo now tracks `origin/sophia-wip`, and `CLAUDE.md` records that Claude's work goes there.
 - **How:** `git fetch origin` then `git switch sophia-wip`.
 - **Why:** Sophia wants `sophia-wip` to be the main place Claude's work goes, keeping `main` clean for the team.
 
-### 2026-11-21 12:50: First commit and push to GitHub
+### 2026-11-21 12:30: First commit and push to GitHub
 - **Who:** Claude (for Sophia)
 - **What:** Committed `DEVLOG.md`, `CLAUDE.md` and `docs/dataset-notes.md`, then pushed them to `origin/main`. This creates the `main` branch on GitHub.
 - **How:** `git add`, `git commit`, then `git push -u origin main`.
 - **Why:** So all collaborators can see the log, the logging rule and the dataset notes, and build on them.
 - **Notes / follow-ups:** Claude's push failed because Git wasn't signed in to GitHub yet. Sophia then ran `git push -u origin main` in their own terminal and signed in through the browser using Git Credential Manager. The push worked, and the login is now saved on this machine.
 
-### 2026-11-21 12:45: Set Git identity on Sophia's machine
+### 2026-11-21 ~12:29: Set Git identity on Sophia's machine
 - **Who:** Sophia
 - **What:** Set the global Git `user.name` (`sophia-m-kliatchko`) and `user.email`.
 - **How:** `git config --global user.name ...` and `git config --global user.email ...`
 - **Why:** Git needs an author identity before it will make commits.
 
-### 2026-11-21 12:40: Added dataset notes from a previous team's write-up
+### 2026-11-21 ~12:28: Added dataset notes from a previous team's write-up
 - **Who:** Claude (for Sophia)
 - **What:** Created `docs/dataset-notes.md`.
 - **How:** Read the previous DAIS 2026 hackathon team's dataset overview and their data-quality issue log on GitHub (petertadrous/2026-dbx-hackathon). Summarized the table location, key columns, known data problems and optional extra datasets in my own words. Compared their coverage numbers with our challenge brief.
