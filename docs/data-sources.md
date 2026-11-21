@@ -11,7 +11,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 | `bronze_facilities`, `silver_facilities`, `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`; file `data/raw/facilities.csv` | Virtue Foundation India healthcare facilities dataset (Databricks Marketplace) | Virtue Foundation | 2026-11-21 | `notebooks/01_bronze_to_silver.py` |
 | `nqas_bronze`, `nqas_silver`; file `data/external/nqas_certified_facilities.csv` | NQAS Certified Facilities list | NHSRC, MoHFW | 2026-11-21 | `scripts/scrape_nqas.py` → `notebooks/02_nqas_bronze_to_silver.py` |
 | `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
-| file `data/raw/india_post_pincode_directory.csv` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO | not yet processed |
+| file `data/raw/india_post_pincode_directory.csv`; table `india_post_offices_silver` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO | `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops) |
 | file `data/raw/nfhs_5_district_health_indicators.csv` | NFHS-5 (2019-21) district factsheets | IIPS / MoHFW, via data.gov.in | ⚠ TODO | not yet processed |
 
 ---
@@ -47,7 +47,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
   - PDF: https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf (uploaded to the NHSRC site in 2024-09, according to its path)
   - Background on the scheme: [Kayakalp Guidelines 2021 (NHSRC)](https://qps.nhsrcindia.org/sites/default/files/2022-03/Kayakalp%20Guidelines%202021%20%28with%20eco%20friendly%29.pdf)
 - **File check:** the copy Sophia downloaded matches the online PDF byte for byte (788,186 bytes, SHA-256 `6af952e2caa017f6f9ad92f916848caffa357f08db7556309805a44977607680`, checked 2026-11-21).
-- **Retrieved / converted:** 2026-11-21. The PDF itself is not committed to the repo; re-download it from the link above.
+- **Retrieved / converted:** 2026-11-21. A copy of the PDF is in the repo at `data/KAYAKALP WINNER FACILITIES 21-22.pdf` (uploaded by Sophia; same SHA-256 as the online file).
 - **Licence / terms:** a government publication; no explicit open-data licence was found. We cite NHSRC/MoHFW.
 - **Processing:** `scripts/kayakalp_pdf_to_csv.py` (pdfplumber) → CSV → upload as `kayakalp_bronze` → `notebooks/03_kayakalp_bronze_to_silver.py` → `kayakalp_silver`.
 - **Known limitations:**
@@ -61,6 +61,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 - **What:** about 165k post offices with PIN, district, state and latitude/longitude.
 - **Publisher:** Department of Posts, Government of India, via the Open Government Data Platform: https://data.gov.in/resource/all-india-pincode-directory-till-last-month.
 - **Where:** `data/raw/india_post_pincode_directory.csv`, added by JhK830 on 2026-11-21 as "original Datathon raw datasets". **⚠ TODO (JhK830): confirm the exact source** (data.gov.in or supplied by the datathon) **and the download date.** The official data.gov.in file may not include coordinates, so the coordinates may come from elsewhere.
+- **Processing:** `notebooks/india_pincode_bronze_to_silver.py` (added by elliotl-ops on 2026-11-21; its header says it was written against the data.gov.in CSV) → `india_post_offices_silver`, one row per post office. It handles junk latitudes, "NA" values and PINs that span several districts.
 - **Licence:** Government Open Data License – India (GODL), if it came from data.gov.in.
 - **Cite as:** Department of Posts. *All India Pincode Directory.* Open Government Data Platform India. ⚠ TODO: date.
 

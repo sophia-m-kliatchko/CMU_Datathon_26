@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 17:45: Merged `main` into `sophia-wip`; citations updated for the teammate additions
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merge commit bringing `main` into `sophia-wip`. This adds `data/KAYAKALP WINNER FACILITIES 21-22.pdf` (from Sophia) and `notebooks/india_pincode_bronze_to_silver.py` (from elliotl-ops).
+  - `docs/data-sources.md`: the Kayakalp PDF copy is now in the repo; the PIN directory's processing chain points at the new notebook and its `india_post_offices_silver` table.
+- **How:** `git merge origin/main` (no conflicts; the branches had diverged, so it couldn't fast-forward), then edited the citations doc.
+- **Why:** to keep `sophia-wip` current with the team, and to follow the citation rule for tables other people add.
+- **Notes / follow-ups:** the PIN notebook is a standalone PySpark script with placeholder paths (`path/to/bronze/...`, `catalog.schema...`). elliotl-ops should set the real paths and confirm the source date.
+
 ### 2026-11-21 17:30: Silver facilities: row-removal rules, column drops, standardized addresses
 - **Who:** Claude (for Sophia)
 - **What:**
