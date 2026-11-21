@@ -22,6 +22,36 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:03: PIN directory notebook producing `pincode_*` tables
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/04_pincode_bronze_to_silver.py`, which writes:
+    - `pincode_bronze`: raw copy.
+    - `pincode_silver`: one row per post office.
+    - `pincode_centroids_silver`: one row per PIN.
+    - `pincode_rejected` and `pincode_dq_summary`.
+  - New `notebooks/common/coordinate_parsing.py` (plain Python plus a Spark UDF) and `scripts/test_pincode_cleaning.py` (12 unit tests plus a dry run on the real CSV).
+  - `docs/data-sources.md` and `CLAUDE.md` (layout and the `<dataset>_<layer>` naming rule) updated.
+- **How:** profiled `data/raw/india_post_pincode_directory.csv`: 165,627 offices, 19,586 PINs, about 7% "NA" coordinates, a few junk values ("28.43° N", "17°57'17.7", "28.4 32628"), swapped pairs, 2 exact duplicate rows, 0 invalid PINs.
+  - Coordinates: plain numbers are used as-is; degree signs and N/E letters are removed; degrees-minutes-seconds are converted; spaces inside decimals are removed; values are checked against India's bounding box, and swapped pairs are fixed. The method is recorded in `lat_how`/`lon_how`.
+  - Each PIN's centroid is the median of its offices' locations, leaving out offices more than 50 km from the PIN's median.
+  - The source can be a CSV path (Volume) or a table.
+- **Why:** Sophia asked for a PIN-directory pipeline like 02/03, named `pincode_*`. The centroid table is what turns a user's PIN into coordinates for distance ranking.
+  - **Builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`:** its "NA" handling, junk-latitude findings, PIN ambiguity, office-name suffix cleaning and deterministic `office_id` were kept; that file was left untouched.
+  - **Differences from it:**
+    - Swapped lat/lon pairs and recoverable junk are repaired rather than set to NULL, and every repair is flagged.
+    - `.cache()` is avoided, because Free Edition's serverless compute doesn't support it.
+    - The "quality gate" that refuses to write is replaced by a flags table.
+    - Per-row citations are added.
+- **Dry-run results:**
+  - 91.2% of offices are usable as given and 0.5% after a swap fix; 7.3% have no coordinates; 1.1% are outside India.
+  - 99.9% of PINs get a centroid; the median PIN spread is 10.5 km.
+  - **12,102 offices (7%) sit more than 50 km from their PIN's median point.** These are probably wrong coordinates in the source; they're flagged `COORDS_FAR_FROM_PIN`.
+- **Notes / follow-ups:**
+  - **Not yet run on Databricks.**
+  - Upload the CSV to `/Volumes/workspace/datathon/external/` first, or point the `source` widget at a table.
+  - The team should decide whether to keep both PIN notebooks or retire the older one.
+
 ### 2026-11-21 15:47: Corrected DEVLOG timestamps
 - **Who:** Claude (for Sophia)
 - **What:** the times in the headings of the entries from 12:28 to 15:45 in this file.

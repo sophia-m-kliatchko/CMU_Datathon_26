@@ -10,7 +10,9 @@ CMU Datathon Fall 2026, "Find the right care": given a medical service and a loc
 - `notebooks/`: Databricks notebooks (source `.py` format).
   - `01_bronze_to_silver.py` builds the Virtue Foundation bronze/silver tables.
   - `02_nqas_bronze_to_silver.py` and `03_kayakalp_bronze_to_silver.py` build `nqas_silver` and `kayakalp_silver`.
-  - `common/reference_data.py` holds the shared lookups (states, name cleaning, facility types, provenance); load it with `%run`.
+  - `04_pincode_bronze_to_silver.py` builds the `pincode_*` tables (post offices and PIN centroids).
+  - Table names follow `<dataset>_<layer>`, e.g. `facilities_silver`, `pincode_bronze`.
+  - `common/reference_data.py` holds the shared lookups (states, name cleaning, facility types, provenance). `common/address_parsing.py` and `common/coordinate_parsing.py` are plain-Python parsers with Spark UDFs, tested locally by `scripts/test_*.py`. Load them with `%run`.
 - `scripts/`: local Python scripts that fetch or convert outside datasets (see `scripts/README.md`).
 - `data/external/`: CSVs those scripts produce, for upload to Databricks.
 - `docs/`: data citations (`data-sources.md`), dataset notes (`dataset-notes.md`) and the silver-table reference with filtering watch-outs (`silver-tables.md`).
