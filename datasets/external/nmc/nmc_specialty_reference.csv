@@ -1,0 +1,104 @@
+specialty,course_levels,is_clinical,related_services,n_colleges,total_seats
+Aerospace Medicine/Aviation Medicine,PG degree,0,,1,10
+Anaesthesiology,PG degree,1,surgery_support,534,5687
+Anatomy,PG degree,0,,388,1399
+Anesthesiology,PG diploma,1,surgery_support,15,99
+Biochemistry,PG degree,0,,404,1359
+Biophysics,PG degree,0,,1,1
+Cardiac Anaesthesia,Super-specialty (DM),1,cardiac_care;surgery_support,16,65
+Cardio Vascular and Thoracic Surgery/ Cardio Vascular Surgery,Super-specialty (M.Ch.),1,cardiac_care;cardiac_surgery,62,240
+Cardiology,Super-specialty (DM),1,cardiac_care,142,591
+Clinical Haematology,Super-specialty (DM),1,blood_disorders,13,40
+Clinical Immunology and Rheumatology,Super-specialty (DM),1,rheumatology,16,61
+Clinical Pathology,PG diploma,1,lab_services,7,22
+Clinical Pharmacology,Super-specialty (DM),0,,4,9
+Community Health Administration,PG degree,0,,2,13
+Community Medicine,PG diploma,0,,8,12
+Community Medicine/Social & Preventive Medicine,PG degree,0,,436,2078
+Critical Care Medicine,Super-specialty (DM),1,icu,39,146
+"Dermatology, Venereology and Leprosy",PG diploma,1,dermatology,12,16
+"Dermatology, Venereology and Leprosy/Dermatology",PG degree,1,dermatology,413,1889
+Diabetology,PG diploma,1,diabetes_endocrine,1,3
+Emergency Medicine,PG degree,1,emergency;trauma,186,663
+Endocrine Surgery,Super-specialty (M.Ch.),1,diabetes_endocrine,5,11
+Endocrinology,Super-specialty (DM),1,diabetes_endocrine,41,122
+Family Medicine,PG degree,1,primary_care,9,26
+Forensic Medicine,PG diploma,0,,1,1
+Forensic Medicine and Toxicology/Forensic Medicine,PG degree,0,,259,859
+General Medicine,PG degree,1,general_medicine,512,6174
+General Surgery,PG degree,1,general_surgery,522,5593
+Geriatric Mental Health,Super-specialty (DM),1,mental_health;geriatrics,2,5
+Geriatrics,PG degree,1,geriatrics,21,68
+Gynaecological Oncology,Super-specialty (M.Ch.),1,cancer_care,12,32
+Hand Surgery,Super-specialty (M.Ch.),1,plastic_reconstructive;trauma,4,8
+Head and Neck Surgery,Super-specialty (M.Ch.),1,cancer_care;ent,11,35
+Health Administration,PG diploma,0,,1,6
+Health Education,PG diploma,0,,1,20
+Hepato-Pancreatto-Biliary-Surgery,Super-specialty (M.Ch.),1,gastro_liver,6,15
+Hepatology,Super-specialty (DM),1,gastro_liver,10,33
+Hospital Administration,PG degree,0,,17,65
+Immuno Haematology and Blood Transfusion/Transfusion Medicine,PG degree,1,blood_bank;blood_disorders,68,217
+Immuno-Haematology and Blood Transfusion,PG diploma,1,blood_bank;blood_disorders,1,2
+Infectious Disease,Super-specialty (DM),1,infectious_disease,6,21
+Interventional Radiology,Super-specialty (DM),1,imaging;interventional_radiology,17,42
+Laboratory Medicine,PG degree,1,lab_services,4,12
+Marine Medicine,PG degree,0,,1,2
+Master of Public Health (Epidemiology),PG degree,0,,1,7
+Medical Gastroenterology,Super-specialty (DM),1,gastro_liver,75,262
+Medical Genetics,Super-specialty (DM),1,genetics,3,9
+Medical Oncology,Super-specialty (DM),1,cancer_care;chemotherapy,41,189
+Microbiology,PG degree,1,lab_services,441,1836
+Neonatology,Super-specialty (DM),1,nicu;neonatal_care,36,119
+Nephrology,Super-specialty (DM),1,dialysis;kidney_care,82,294
+Neuro-Anaesthesia,Super-specialty (DM),1,surgery_support,9,26
+Neuro-radiology,Super-specialty (DM),1,imaging,1,1
+Neurology,Super-specialty (DM),1,neurology;stroke_care,105,400
+Neurosurgery,Super-specialty (M.Ch.),1,neurosurgery,123,419
+Neurosurgery (3 years),Super-specialty (M.Ch.),1,neurosurgery,1,1
+Neurosurgery (Direct 6 years),Super-specialty (M.Ch.),1,neurosurgery,1,2
+Nuclear Medicine,PG degree,1,nuclear_medicine,11,40
+Obstetrics and Gynaecology,PG degree; PG diploma,1,obstetrics;emergency_c_section,516,4768
+Occupational Health,PG diploma,0,,4,5
+Onco-Pathology,Super-specialty (DM),1,cancer_care;lab_services,15,58
+Ophthalmology,PG degree; PG diploma,1,eye_care,473,2548
+Organ Transplant Anaesthesia and Critical Care,Super-specialty (DM),1,icu;surgery_support;transplant,2,5
+Orthopaedics,PG degree; PG diploma,1,orthopaedics;trauma,502,3669
+Otorhinolaryngology,PG diploma,1,ent,6,10
+Otorhinolaryngology/ENT,PG degree,1,ent,469,2071
+Paediatric Cardio Thoracic Vascular Surgery,Super-specialty (M.Ch.),1,cardiac_care;cardiac_surgery;paediatrics,1,4
+Paediatric Cardiology,Super-specialty (DM),1,cardiac_care;paediatrics,3,6
+Paediatric Gastroenterology,Super-specialty (DM),1,paediatrics;gastro_liver,2,6
+Paediatric Hepatology,Super-specialty (DM),1,paediatrics;gastro_liver,1,3
+Paediatric Nephrology,Super-specialty (DM),1,dialysis;kidney_care;paediatrics,4,11
+Paediatric Neurology,Super-specialty (DM),1,neurology;stroke_care;paediatrics,5,10
+Paediatric Oncology,Super-specialty (DM),1,cancer_care;paediatrics,6,20
+Paediatric Orthopaedics,Super-specialty (M.Ch.),1,paediatrics;orthopaedics;trauma,4,10
+Paediatric Surgery,Super-specialty (M.Ch.),1,paediatrics;paediatric_surgery,76,234
+Paediatric and Neonatal Anaesthesia,Super-specialty (DM),1,paediatrics;surgery_support,3,6
+Paediatrics,PG degree; PG diploma,1,paediatrics,509,4233
+Palliative Medicine,PG degree,1,palliative_care,7,25
+Pathology,PG degree,1,lab_services,486,3351
+Pharmacology,PG degree,0,,397,1512
+Physical Medicine and Rehabilitation,PG degree,1,rehabilitation,28,104
+Physiology,PG degree,0,,383,1377
+Plastic and Reconstructive Surgery/ Plastic Surgery,Super-specialty (M.Ch.),1,plastic_reconstructive;burns,101,341
+Psychiatry,PG degree; PG diploma,1,mental_health,375,1616
+Pulmonary Medicine,Super-specialty (DM),1,respiratory,20,57
+Radiation Medicine,PG diploma,1,nuclear_medicine,1,4
+Radiation Oncology/ Radiotherapy,PG degree,1,cancer_care;radiotherapy,120,549
+Radio-diagnosis /Radiology,PG degree,1,imaging,431,3241
+Radio-therapy,PG diploma,1,cancer_care;radiotherapy,1,3
+Radiodiagnosis,PG diploma,1,imaging,5,12
+Reproductive Medicine and Surgery,Super-specialty (M.Ch.),1,fertility,9,21
+Respiratory Medicine/Tuberculosis & Respiratory Diseases,PG degree,1,respiratory,141,419
+Sports Medicine,PG degree; PG diploma,1,orthopaedics;rehabilitation,10,36
+Surgical Gastroenterology,Super-specialty (M.Ch.),1,gastro_liver,3,11
+Surgical Gastroenterology/G.I. Surgery,Super-specialty (M.Ch.),1,gastro_liver,34,105
+Surgical Oncology,Super-specialty (M.Ch.),1,cancer_care,55,225
+Traumatology and Surgery,PG degree,1,trauma,3,8
+Tropical Medicine,PG degree,0,,2,11
+Tuberculosis & Respiratory Diseases / Pulmonary Medicine/ Respiratory Medicine,PG diploma,1,respiratory,188,910
+Urology,Super-specialty (M.Ch.),1,urology;kidney_care,31,89
+Urology/Genito-Urinary Surgery,Super-specialty (M.Ch.),1,urology;kidney_care,96,345
+Vascular Surgery,Super-specialty (M.Ch.),1,vascular_surgery,9,26
+Virology,Super-specialty (DM),1,lab_services,3,5

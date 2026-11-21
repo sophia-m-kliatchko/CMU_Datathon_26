@@ -1,0 +1,72 @@
+specialty,category,related_services,n_hospitals
+Anaesthesiology,clinical,surgery_support;icu,191
+Arthroplasty,clinical,joint_replacement;orthopaedics,7
+Biochemistry,lab_basic_science,lab_services,3
+Breast Imaging,diagnostic,imaging;cancer_care,3
+Cardiac Anaesthesia,clinical,cardiac_surgery,20
+Cardio Thoracic Surgery,clinical,cardiac_surgery;cardiac_care,35
+Cardiology,clinical,cardiac_care;cath_lab,136
+Critical Care Medicine,clinical,icu,92
+Cross Sectional Body Imaging,diagnostic,imaging;ct_mri,2
+"Dermatology, Venereology and Leprosy",clinical,dermatology,6
+Emergency Medicine,clinical,emergency;trauma,53
+Endocrinology,clinical,diabetes_endocrine,10
+Endovascular and Interventional Radiology,diagnostic,interventional_radiology;imaging,4
+Family Medicine,clinical,primary_care,39
+Forensic Medicine,lab_basic_science,,2
+Gastroenterology,clinical,gastro_liver;endoscopy,68
+General Medicine,clinical,general_medicine,228
+General Surgery,clinical,general_surgery,180
+Genito Urinary Surgery (Urology),clinical,urology;kidney_care,64
+Gynaecologic Oncology,clinical,cancer_care;gynaecology,5
+Hand and Micro Surgery,clinical,plastic_reconstructive;trauma,2
+Health Administration including Hospital Administration,public_health_admin,,3
+Hematology,clinical,blood_disorders,10
+High Risk Pregnancy and Perinatology,clinical,obstetrics;high_risk_pregnancy;emergency_c_section,6
+Immuno Hematology and Blood Transfusion,lab_basic_science,blood_bank,8
+Infectious Diseases,clinical,infectious_disease,3
+Interventional Cardiology,clinical,cath_lab;cardiac_care,12
+Liver Transplantation,clinical,transplant;gastro_liver,3
+Medical Genetics,clinical,genetics,2
+Medical Oncology,clinical,cancer_care;chemotherapy,33
+Microbiology,lab_basic_science,lab_services,9
+Minimal Access Surgery,clinical,general_surgery;laparoscopy,19
+Neonatology,clinical,nicu;neonatal_care,11
+Nephrology,clinical,dialysis;kidney_care,62
+Neuro Anaesthesia and Critical Care,clinical,neurosurgery;icu,11
+Neuro Surgery,clinical,neurosurgery;trauma,67
+Neurology,clinical,neurology;stroke_care,67
+Neurovascular Intervention,clinical,stroke_care;interventional_radiology,4
+Nuclear Medicine,diagnostic,nuclear_medicine;cancer_care,9
+Obstetrics and Gynaecology,clinical,obstetrics;emergency_c_section;gynaecology,159
+Ophthalmology,clinical,eye_care,93
+Orthopaedic Surgery,clinical,orthopaedics;trauma,166
+Otorhinolaryngology (ENT),clinical,ent,48
+Paediatric Gastroenterology,clinical,paediatrics;gastro_liver,3
+Paediatric Nephrology,clinical,paediatrics;dialysis;kidney_care,4
+Paediatric Surgery,clinical,paediatrics;paediatric_surgery,12
+Paediatrics,clinical,paediatrics,174
+Pathology,lab_basic_science,lab_services,48
+Pediatric Cardiology,clinical,paediatrics;cardiac_care,12
+Pediatric Hemato Oncology,clinical,paediatrics;cancer_care;blood_disorders,11
+Pediatric Intensive Care,clinical,paediatrics;picu;icu,10
+Pharmacology,lab_basic_science,,1
+Physical Medicine and Rehabilitation,clinical,rehabilitation,3
+Physiology,lab_basic_science,,1
+Plastic Surgery,clinical,plastic_reconstructive;burns,18
+Psychiatry,clinical,mental_health,17
+Radio Diagnosis,diagnostic,imaging;ct_mri,113
+Radio Therapy,clinical,cancer_care;radiotherapy,41
+Reproductive Medicine,clinical,fertility,10
+Respiratory Medicine,clinical,respiratory,38
+Rheumatology,clinical,rheumatology,11
+Rural Surgery,clinical,general_surgery,1
+Social and Preventive Medicine / Community Medicine,public_health_admin,,2
+Spine Surgery,clinical,spine;orthopaedics;neurosurgery,12
+Sports Medicine,clinical,orthopaedics;rehabilitation,4
+Surgical Gastroenterology,clinical,gastro_liver;general_surgery,29
+Surgical Oncology,clinical,cancer_care;cancer_surgery,41
+Thoracic Surgery,clinical,thoracic_surgery,5
+Trauma Care,clinical,trauma;emergency,4
+Vascular Surgery,clinical,vascular_surgery,12
+Vitreo Retinal Surgery,clinical,eye_care,4

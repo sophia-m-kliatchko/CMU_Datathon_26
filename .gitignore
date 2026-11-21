@@ -1,0 +1,4 @@
+.DS_Store
+
+# Raw scraper responses (large; rebuild with the scrapers)
+datasets/external/*/raw/

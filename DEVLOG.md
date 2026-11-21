@@ -22,6 +22,76 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 14:35: Added .gitignore; committed scraper work to `Will_branch`
+- **Who:** Claude (for William)
+- **What:** New `.gitignore` that ignores `.DS_Store` and `datasets/external/*/raw/`. Committed the ANBAI and NMC scrapers, outputs and docs, then pushed `Will_branch` to `origin`.
+- **How:** `git add -A`, `git commit`, then `git push -u origin Will_branch`.
+- **Why:** William asked to keep the raw scraper responses out of git (NMC `raw/` is about 23 MB). The CSV and SQLite outputs are committed so teammates can use them without re-scraping. Tradeoff: page snapshots stay only on William's machine, and `--offline` rebuilds need them. The scrape dates are recorded in the CSVs (`scraped_at` / `snapshot_date`).
+
+### 2026-11-21 14:27: Scraped NMC medical colleges and their MBBS/PG courses
+- **Who:** Claude (for William)
+- **What:** New `scrapers/nmc_colleges.py`, new `docs/nmc-colleges.md`, and new outputs in `datasets/external/nmc/`:
+  - `nmc_colleges.csv`
+  - `nmc_college_courses.csv`
+  - `nmc_specialty_reference.csv`
+  - `nmc_colleges.sqlite`, which holds those 3 tables plus the view `v_service_evidence`
+  - `raw/`, which holds the API responses
+
+  Also updated the NMC row in `docs/dataset-notes.md`.
+- **How:**
+  - The NMC pages load their tables with JavaScript from JSON endpoints. The script calls those endpoints directly; robots.txt allows all paths.
+    - `/college-courses/list`: MBBS, 1 request.
+    - `/college-courses/pg-list`: PG, 11 requests of 1,000 rows each.
+    - `/college-courses/detail/<id>`: one per college, 911 in total, 0.5 s apart and cached.
+  - Removed degree prefixes and diploma suffixes from the course names to get specialty names.
+  - Tagged related challenge services with regex rules, using the same tags as the ANBAI/DNB data.
+  - Mapped state names to the silver names.
+- **Result:**
+  - 911 colleges: 611 with a valid PIN, 219 with super-specialty courses.
+  - 11,583 course rows across 103 PG specialties.
+  - Super-specialty evidence: dialysis at 82 colleges, NICU at 36, ICU at 40.
+- **Why:** William wanted NMC as a second source of outside evidence that specialties are really practised. A PG course needs a working department with enough patients and faculty, and the detail records give the address and PIN, which makes matching easier than with the DNB names. Decisions:
+  - **Named staff contacts, mobile numbers and emails are dropped before saving.** We don't need personal data.
+  - Course levels are kept so evidence can be weighted (DM/M.Ch. strong, MD/MS broad, MBBS weak).
+  - `recognition_status` is kept as published text.
+  - Service tags are marked as our hints, not as claims by NMC.
+- **Notes / follow-ups:**
+  - Bugs caught while checking the output: "neurology" matched the urology rule, and Gynaecological Oncology was tagged as C-section. Both are fixed.
+  - Not yet matched to `silver_facilities`.
+  - `raw/` is about 23 MB; decide whether to keep it out of git.
+
+### 2026-11-21 13:58: William's work goes on `Will_branch`
+- **Who:** William (created the branch), Claude (recorded the rule)
+- **What:** Added a line to `CLAUDE.md` saying Claude's work for William goes on `Will_branch`. The ANBAI scraper work (entry below) moved to this branch uncommitted.
+- **How:** Edited `CLAUDE.md`.
+- **Why:** Each teammate works on their own branch, so `main` stays clean.
+
+### 2026-11-21 13:54: Scraped DNB-accredited hospitals and their specialties (ANBAI)
+- **Who:** Claude (for William)
+- **What:** New `scrapers/anbai_dnb.py`, new `docs/anbai-dnb.md`, and new outputs in `datasets/external/anbai_dnb/`:
+  - `dnb_hospitals.csv`
+  - `dnb_hospital_specialties.csv`
+  - `dnb_specialty_reference.csv`
+  - `anbai_dnb.sqlite`, which holds those 3 tables plus the view `v_service_evidence`
+  - `raw/anbai_dnb_2026-11-21.html`
+
+  Also updated the NBEMS row in `docs/dataset-notes.md`.
+- **How:**
+  - Fetched https://anbai.org/DNB_accredited_institutions.php in one request with `requests`. The site has no robots.txt.
+  - The page is static HTML with one collapsible section per state, and a Hospital | City | Specialties table in each. Parsed it with BeautifulSoup.
+  - Split the specialty cells on commas and repaired broken or missing commas against a 71-name canonical list, plus aliases.
+  - Fixed old state names, and moved 3 hospitals in Telangana cities that were listed under Andhra Pradesh.
+  - Added a hand-written `related_services` hint for each specialty (e.g. Nephrology → dialysis).
+- **Why:** William wanted DNB accreditation as outside evidence that a specialty is really practised at a hospital. Training accreditation needs real patient volume and faculty. Decisions:
+  - The ANBAI HTML page was used instead of the NBEMS PDFs, because it's one structured table.
+  - Raw text is kept next to the cleaned values.
+  - Same-name, same-city listings are kept separate (they have different specialty lists, so they're probably branches).
+  - Specialty → service links are marked as hints, not claims.
+- **Notes / follow-ups:**
+  - The page has no update date, and its Andhra Pradesh / Telangana listings look out of date, so cite the snapshot date.
+  - Not yet matched to `silver_facilities`; the suggested approach is in `docs/anbai-dnb.md`.
+  - Not yet loaded into Databricks.
+
 ### 2026-11-21 14:10: Listed outside datasets for checking care quality, with links
 - **Who:** Claude (for Sophia)
 - **What:** Added the section "Outside datasets for checking care quality and reliability" to `docs/dataset-notes.md`, with about 25 sources in four groups (priority 1, specific services, existence and location, context) and links.
