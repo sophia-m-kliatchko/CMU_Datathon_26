@@ -13,6 +13,7 @@ CMU Datathon Fall 2026, "Find the right care": given a medical service and a loc
   - `01_bronze_to_silver.py` builds the Virtue Foundation bronze/silver tables.
   - `02_nqas_bronze_to_silver.py` and `03_kayakalp_bronze_to_silver.py` build `nqas_silver` and `kayakalp_silver`.
   - `04_pincode_bronze_to_silver.py` builds the `pincode_*` tables (post offices and PIN centroids).
+  - `05_registries_bronze_to_silver.py` builds `registry_sites_silver` and `registry_services_silver` from the scraped service registries in `datasets/external/*/` (see `docs/registries-silver.md`).
   - Table names follow `<dataset>_<layer>`, e.g. `facilities_silver`, `pincode_bronze`.
   - Column names in silver tables carry no `_clean` suffix: being in silver implies clean. A raw column that a cleaned one replaces is left out of silver (kept in bronze), or renamed `*_raw` if it's needed for citations.
   - `common/reference_data.py` holds the shared lookups (states, name cleaning, facility types, provenance). `common/address_parsing.py` and `common/coordinate_parsing.py` are plain-Python parsers with Spark UDFs, tested locally by `scripts/test_*.py`. Load them with `%run`.

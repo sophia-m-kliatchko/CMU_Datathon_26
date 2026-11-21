@@ -13,11 +13,12 @@ Items marked **⚠ TODO** still need information from the person who added the d
 | `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
 | `pincode_bronze`, `pincode_silver`, `pincode_centroids_silver`, `pincode_rejected`, `pincode_dq_summary`; file `data/raw/india_post_pincode_directory.csv` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO (file received 2026-11-21) | `notebooks/04_pincode_bronze_to_silver.py` (builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`) |
 | file `data/raw/nfhs_5_district_health_indicators.csv` | NFHS-5 (2019-21) district factsheets | IIPS / MoHFW, via data.gov.in | ⚠ TODO | not yet processed |
-| files `datasets/external/anbai_dnb_bronze/*_bronze.csv` (+ `.sqlite`) | List of DNB accredited institutions | Association of National Board Accredited Institutions (ANBAI), mirroring NBEMS accreditation | 2026-11-21 | `scrapers/anbai_dnb.py` (no silver table yet) |
-| files `datasets/external/nmc_bronze/*_bronze.csv` (+ `.sqlite`) | Lists of colleges teaching MBBS and PG courses | National Medical Commission (NMC) | 2026-11-21 | `scrapers/nmc_colleges.py` (no silver table yet) |
-| file `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv` | Rajya Sabha Unstarred Q. 2048 (10 Mar 2026), Annexure-I | Ministry of Health and Family Welfare, via Rajya Sabha | 2026-11-21 | `scrapers/mohfw_trauma_centres.py` (no silver table yet) |
-| files `datasets/external/laqshya_bronze/laqshya_*_bronze.csv` | LaQshya Master data (8 Apr 2026) | NHSRC, MoHFW | 2026-11-21 | `scrapers/nhsrc_laqshya.py` (no silver table yet) |
-| file `datasets/external/ncg_bronze/ncg_members_bronze.csv` | National Cancer Grid member list | National Cancer Grid (Tata Memorial Centre, DAE) | 2026-11-21 | `scrapers/ncg_members.py` (no silver table yet) |
+| files `datasets/external/anbai_dnb_bronze/*_bronze.csv` (+ `.sqlite`) | List of DNB accredited institutions | Association of National Board Accredited Institutions (ANBAI), mirroring NBEMS accreditation | 2026-11-21 | `scrapers/anbai_dnb.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| files `datasets/external/nmc_bronze/*_bronze.csv` (+ `.sqlite`) | Lists of colleges teaching MBBS and PG courses | National Medical Commission (NMC) | 2026-11-21 | `scrapers/nmc_colleges.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv` | Rajya Sabha Unstarred Q. 2048 (10 Mar 2026), Annexure-I | Ministry of Health and Family Welfare, via Rajya Sabha | 2026-11-21 | `scrapers/mohfw_trauma_centres.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| files `datasets/external/laqshya_bronze/laqshya_*_bronze.csv` | LaQshya Master data (8 Apr 2026) | NHSRC, MoHFW | 2026-11-21 | `scrapers/nhsrc_laqshya.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/ncg_bronze/ncg_members_bronze.csv` | National Cancer Grid member list | National Cancer Grid (Tata Memorial Centre, DAE) | 2026-11-21 | `scrapers/ncg_members.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/nabh_bronze/nabh_organisations_bronze.csv` | Find an Accredited Healthcare Organisation (directory) | NABH, Quality Council of India | 2026-11-21 | `scrapers/nabh_organisations.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
 
 ---
 
@@ -182,6 +183,29 @@ Items marked **⚠ TODO** still need information from the person who added the d
   - Some addresses are cut short by the site.
 - **Cite as:** National Cancer Grid. *Member List: Hospitals & Institutions.* Tata Memorial Centre, Mumbai. https://www.ncgindia.org/hospitals-and-institutions/members. Accessed 2026-11-21.
 - **Per-row citation:** `source_url` and `snapshot_date` in the CSV.
+
+## 11. NABH accredited, certified and empanelled organisations
+- **What:** 21,582 listings from NABH's public directory, one per accreditation, certification or empanelment. Each has a name, address, state, PIN (79%), coordinates (93%), website, accreditation number, programme and status. Programmes include hospital and small-hospital accreditation, entry-level certification, CGHS/ECHS empanelment, and service-specific accreditation (blood bank, dialysis centre, emergency department, stroke centre, maternity care, imaging, lab, eye, dental).
+- **Publisher:** National Accreditation Board for Hospitals & Healthcare Providers (NABH), a constituent board of the Quality Council of India.
+- **Where:** https://nabh.co/find-a-healthcare-organisation/. Data comes from the page's search endpoint (`/wp-admin/admin-ajax.php`, `action=get_hospitals`, 25 results per page). File: `datasets/external/nabh_bronze/nabh_organisations_bronze.csv`. API pages are in `raw/pages/`, which is git-ignored.
+- **Retrieved:** 2026-11-21, with 865 requests 1.5 s apart. robots.txt explicitly allows `admin-ajax.php`.
+- **Licence / terms:** a public website directory; no open-data licence found. Cite NABH / Quality Council of India.
+- **Personal data:** contact phone numbers are shown on the site but not saved.
+- **Processing:** `scrapers/nabh_organisations.py`:
+  - programme taken from the accreditation-number prefix (checked against status text and certificate folder);
+  - state taken from the address, with a last-state-name-in-text fallback;
+  - PIN taken from the address; coordinates validated to India;
+  - `listing_current` set from the status text.
+
+  Then `notebooks/05` brings it to silver: travel facilitators and ethics committees are excluded, and for 389 listings the state is replaced by the PIN's state. Details are in `docs/nabh.md`.
+- **Known limitations:**
+  - NABH's appended "City, State" is often wrong; the PIN is more reliable.
+  - No validity dates are shown.
+  - Hospital accreditation is general quality, not evidence for a specific service.
+  - The ECHS/CGHS reading of the E/C letter in empanelment numbers is our inference.
+  - 33 fewer listings than the site's own total (repeated cards skipped).
+- **Cite as:** National Accreditation Board for Hospitals & Healthcare Providers. *Find an Accredited Healthcare Organisation.* Quality Council of India. https://nabh.co/find-a-healthcare-organisation/. Accessed 2026-11-21.
+- **Per-row citation:** `accreditation_no`, `certificate_url`, `source_url` and `snapshot_date` in the CSV; `row_citation` in the silver tables.
 
 ---
 

@@ -22,6 +22,49 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 18:16: NABH directory scraped and added to the registries silver tables
+- **Who:** Claude (for William)
+- **What:**
+  - New `scrapers/nabh_organisations.py`, `datasets/external/nabh_bronze/nabh_organisations_bronze.csv` (21,582 listings) and `docs/nabh.md`. The API pages are in `raw/pages/` (82 MB, git-ignored).
+  - `notebooks/05_registries_bronze_to_silver.py` gains a `nabh` source, plus new site columns for every source: `latitude`, `longitude`, `listing_type`, `listing_category`, `listing_status`, `listing_current`, `state_listed`. `dental` is added to the service list.
+  - `docs/data-sources.md`: entry 11 and a summary row.
+  - `docs/registries-silver.md` updated.
+- **How:**
+  - NABH's directory posts its search form to `admin-ajax.php` (allowed by robots.txt). 865 requests, 1.5 s apart, each page cached; 2 dropped connections succeeded on retry. Phone numbers aren't saved.
+  - The programme comes from the accreditation-number prefix (35 prefixes, each checked against status text and certificate folder).
+  - The state comes from the address, with a last-state-in-text fallback: 79% → 99.4% coverage.
+  - Notebook 05 tested locally again, with all six sources: 24,961 sites, 22,757 service rows, all checks passed.
+- **Why:** NABH fills gaps the blocked sources left: 127 blood centres (blood bank directory blocked), 49 dialysis centres (PMNDP blocked), 90 emergency departments, 15 stroke centres. It also covers private hospitals, which the government sources miss. Decisions:
+  - **Only service-specific programmes become service rows.** Hospital, entry-level and empanelment listings are general quality and stay as site-level `listing_category`.
+  - **Travel facilitators and ethics committees are excluded**; they aren't care sites.
+  - **For NABH, the PIN's state wins** when it disagrees with NABH's listed state (389 sites; e.g. an Agra hospital listed as South Delhi). The original is kept in `state_listed`. Other sources are flagged only, because it's unclear there which side is wrong.
+  - Empanelment numbers' **E/C letter is read as ECHS/CGHS** (labelled "inferred"). This separates two listings of one hospital that aren't duplicates: duplicate flags went from 3,303 to 397.
+- **Notes / follow-ups:** Notebook 06 (matching to `facilities_silver`). NABH coordinates (93% of listings) should make matching much easier.
+
+
+### 2026-11-21 17:34: Service registries brought to silver (notebook 05)
+- **Who:** Claude (for William)
+- **What:**
+  - New `notebooks/05_registries_bronze_to_silver.py`. It loads each uploaded `*_bronze.csv` as a raw table of the same name, then builds `registry_sites_silver` (one row per registry place) and `registry_services_silver` (one row per place × service × evidence).
+  - New `docs/registries-silver.md`.
+  - `docs/data-sources.md`: the five summary rows now point to notebook 05 and its tables.
+  - `CLAUDE.md`: layout line for notebook 05.
+- **How:**
+  - Follows notebooks 02–04: `%run ./common/reference_data`, the shared `state_from_text` / `name_norm` / `name_core`, `dq_flags`, per-row `row_citation` and citation columns, `write_table`.
+  - One mapping function per source (LaQshya, trauma, NMC, DNB, NCG); all are unioned into the shared columns.
+  - Optional enrichment from `pincode_centroids_silver` (PIN location, `PIN_STATE_MISMATCH`).
+  - **Tested locally:** PySpark 4.0 in a scratchpad virtualenv, with a small harness that stubs `dbutils`, `display` and `%sql`. Notebook 04 ran first (building the PIN centroids), then 05, against the real CSVs. Results: 3,481 sites, 19,198 service rows, all assertions passed (unique IDs, no orphan services).
+  - The local run caught a summary query that Spark rejects (correlated subquery inside GROUP BY); it now joins two aggregates.
+- **Why:** William wants all his data at silver, ready for teammates, in a structure that makes confidence easy to calculate later. Decisions:
+  - **Facilities aren't given a list column of sources.** The registries are separate tables that link to `facility_id` through a links table (notebook 06), so each piece of evidence keeps its own detail, date, validity, citation and, later, match score. `facilities_silver` is unchanged.
+  - **Reliability is described per evidence row, not per dataset:** `evidence_type`, `service_specific`, `is_current`, `status`. That's because one dataset can hold both strong and weak evidence (current vs expired, DM vs MD). **No scores at silver**; points belong in gold.
+  - `surgery_support` (anaesthesiology) is dropped as not a patient-facing service. NCG NGOs, societies and research members are left out, as they aren't care sites.
+- **Notes / follow-ups:**
+  - Notebook 06 (matching to `facilities_silver`).
+  - Add NABH once its download finishes.
+  - 3 sites have a PIN from another state: source errors, flagged.
+
+
 ### 2026-11-21 17:12: Data-source citations for William's scraped datasets
 - **Who:** Claude (for William)
 - **What:** `docs/data-sources.md` gets five summary rows and entries 6–10:
