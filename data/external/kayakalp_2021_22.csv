@@ -1,0 +1,1198 @@
+s_no,financial_year,award_raw,award_rank,award_category,facility_type,facility_name,district,state,state_raw,district_repaired,source_file,source_page
+1,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, ATMAKUR",Nellore,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+2,2021-22,JOINT WINNER- Kayakalp,Joint Winner,Kayakalp,SDH/CHC,"COMMUNITY HEALTH CENTRE, MACHERLA",Guntur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+3,2021-22,JOINT WINNER- Kayakalp,Joint Winner,Kayakalp,SDH/CHC,"AREA HOSPITAL, RAMACHANDRAPURAM",East Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+4,2021-22,JOINT RUNNER UP- Kayakalp,Joint Runner Up,Kayakalp,SDH/CHC,"COMMUNITY HEALTH CENTRE, RANASTALAM",Srikakulam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+5,2021-22,JOINT RUNNER UP- Kayakalp,Joint Runner Up,Kayakalp,SDH/CHC,"COMMUNITY HEALTH CENTRE, ULAVAPADU",Prakasam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+6,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DISTRICT HOSPITAL, VIZIANAGARAM",Vizianagaram,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+7,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,"AREA HOSPITAL, TANUKU",West Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+8,2021-22,WINNER,Winner,Kayakalp,PHC,Molakavemula,Anantapur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+9,2021-22,WINNER,Winner,Kayakalp,PHC,Yellankivaripalli,Chittoor,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+10,2021-22,WINNER,Winner,Kayakalp,PHC,Tetagunta,East Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+11,2021-22,WINNER,Winner,Kayakalp,PHC,Mandapadu,Guntur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+12,2021-22,WINNER,Winner,Kayakalp,PHC,Chinaogirala,Krishna,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+13,2021-22,WINNER,Winner,Kayakalp,PHC,Akumalla,Kurnool,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+14,2021-22,WINNER,Winner,Kayakalp,PHC,Ethamukkala,Prakasam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+15,2021-22,WINNER,Winner,Kayakalp,PHC,Ramatheertham,Spsr Nellore,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+16,2021-22,WINNER,Winner,Kayakalp,PHC,Ganguwada,Srikakulam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+17,2021-22,WINNER,Winner,Kayakalp,PHC,Peddagantayada,Visakhapatnam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+18,2021-22,WINNER,Winner,Kayakalp,PHC,Piridi,Vizianagaram,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+19,2021-22,WINNER,Winner,Kayakalp,PHC,Lankalakoderu,West Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+20,2021-22,WINNER,Winner,Kayakalp,PHC,Chinnamandem,Y.S.R Kadapa,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+21,2021-22,Winner,Winner,Kayakalp,UPHC,Chittoor,Bairagipatteda,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+22,2021-22,Winner,Winner,Kayakalp,UPHC,Hamali Colony,Anantapuram,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+23,2021-22,Winner,Winner,Kayakalp,UPHC,BAIRAGIPATTEDA,Chittoor,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+24,2021-22,Winner,Winner,Kayakalp,UPHC,Bruhannalapeta UHC,East Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+25,2021-22,Winner,Winner,Kayakalp,UPHC,Rajakapet,Guntur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+26,2021-22,Winner,Winner,Kayakalp,UPHC,Patamata,Krishna,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+27,2021-22,Winner,Winner,Kayakalp,UPHC,Joharapuram 2,Kurnool,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+28,2021-22,Winner,Winner,Kayakalp,UPHC,Balagi Nagar,Prakasam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+29,2021-22,Winner,Winner,Kayakalp,UPHC,Kissan Nagar,SPS Nellore,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+30,2021-22,Winner,Winner,Kayakalp,UPHC,Gujaratipeta,Srikakulam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+31,2021-22,Winner,Winner,Kayakalp,UPHC,One Town,Visakhapatnam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+32,2021-22,Winner,Winner,Kayakalp,UPHC,Rajeevnagar Colony,Vizianagaram,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+33,2021-22,Winner,Winner,Kayakalp,UPHC,Titus Nagar,West Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+34,2021-22,Winner,Winner,Kayakalp,UPHC,Joseph Peta,YSR Kadapa,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+35,2021-22,Winner,Winner,Kayakalp,HWC,Rekulakunta,Y.S.R Kadapa,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+36,2021-22,Winner,Winner,Kayakalp,HWC,Kamathampalli,Anantapur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+37,2021-22,Winner,Winner,Kayakalp,HWC,BAIRUPALLE,Chittoor,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+38,2021-22,Winner,Winner,Kayakalp,HWC,Kutrawada,East Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+39,2021-22,Winner,Winner,Kayakalp,HWC,MORAMPUDI,Guntur,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+40,2021-22,Winner,Winner,Kayakalp,HWC,Tadigadapa l,Krishna,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+41,2021-22,Winner,Winner,Kayakalp,HWC,Nemkal,Kurnool,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+42,2021-22,Winner,Winner,Kayakalp,HWC,Lingamguntla,Prakasam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+43,2021-22,Winner,Winner,Kayakalp,HWC,Ayyavaripalli,Spsr Nellore,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+44,2021-22,Winner,Winner,Kayakalp,HWC,Nowthala,Srikakulam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+45,2021-22,Winner,Winner,Kayakalp,HWC,Makavaram,Visakhapatnam,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+46,2021-22,Winner,Winner,Kayakalp,HWC,Budarayavalasa,Vizianagaram,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+47,2021-22,Winner,Winner,Kayakalp,HWC,Vasanthawada,West Godavari,Andhra Pradesh,ANDHRA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+48,2021-22,WINNER - Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, YINGKIONG",Upper Siang,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+49,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC KALAKTANG,West Kameng,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+50,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DISTRICT HOSPITAL, YINGKIONG",Upper Siang,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+51,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC KALAKTANG,West Kameng,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+52,2021-22,Winner,Winner,Kayakalp,PHC,PHC Loiliang,Lohit,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+53,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kamhua Noknu,Longding,Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+54,2021-22,Winner,Winner,Kayakalp,HWC,HWC New Lainwang,"Lainwang, Tirap",Arunachal Pradesh,ARUNACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+55,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,HAFLONG CIVIL HOSPITAL,Dima Hasao,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+56,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,S.M. DEV. CIVIL HOSPITAL,Cachar,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+57,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,HAJO CHC,Kamrup,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+58,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,GAURIPUR CHC,Dhubri,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+59,2021-22,Winner,Winner,Kayakalp,PHC,Saudarvitha MPHC,Baksa,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+60,2021-22,Winner,Winner,Kayakalp,PHC,Roha PHC,Barpeta,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+61,2021-22,Winner,Winner,Kayakalp,PHC,Kauripathar SD,Biswanath,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+62,2021-22,Winner,Winner,Kayakalp,PHC,Patiladaha MPHC,Bongaigaon,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+63,2021-22,Winner,Winner,Kayakalp,PHC,Joypur SHC,Cachar,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,1
+64,2021-22,Winner,Winner,Kayakalp,PHC,Sapekhati BPHC,Charaideo,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+65,2021-22,Winner,Winner,Kayakalp,PHC,Basugaon MPHC,Chirang,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+66,2021-22,Winner,Winner,Kayakalp,PHC,Garukhuti MPHC,Darrang,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+67,2021-22,Winner,Winner,Kayakalp,PHC,Dekapam MPHC,Dhemaji,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+68,2021-22,Winner,Winner,Kayakalp,PHC,Salkocha SHC,Dhubri,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+69,2021-22,Winner,Winner,Kayakalp,PHC,Barbaruah BPHC,Dibrugarh,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+70,2021-22,Winner,Winner,Kayakalp,PHC,"Urban Health Centre,Haflong",Haflong,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+71,2021-22,Winner,Winner,Kayakalp,PHC,"Maternity & Child Centre,Goalpara",Goalpara,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+72,2021-22,Winner,Winner,Kayakalp,PHC,Bhagyapur MPHC,Golaghat,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+73,2021-22,Winner,Winner,Kayakalp,PHC,Bilaipur MPHC,Hailakandi,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+74,2021-22,Winner,Winner,Kayakalp,PHC,Kaki MPHC,Hojai,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+75,2021-22,Winner,Winner,Kayakalp,PHC,Tipomia SD,Jorhat,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+76,2021-22,Winner,Winner,Kayakalp,PHC,Changsari SD,Kamrup,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+77,2021-22,Winner,Winner,Kayakalp,PHC,Panikhati MPHC,Kamrup(M),Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+78,2021-22,Winner,Winner,Kayakalp,PHC,Dholmara PHC,Kokrajhar,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+79,2021-22,Winner,Winner,Kayakalp,PHC,Bazaricherra SHC,Karimganj,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+80,2021-22,Winner,Winner,Kayakalp,PHC,Simoluguri SHC,Lakhimpur,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+81,2021-22,Winner,Winner,Kayakalp,PHC,Charaibahi SD,Morigoan,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+82,2021-22,Winner,Winner,Kayakalp,PHC,Silghat MPHC,Nagaon,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+83,2021-22,Winner,Winner,Kayakalp,PHC,Daulashal MPHC,Nalbari,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+84,2021-22,Winner,Winner,Kayakalp,PHC,Bokota MPHC,Sivasagar,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+85,2021-22,Winner,Winner,Kayakalp,PHC,Hapjan BPHC,Tinsukia,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+86,2021-22,Winner,Winner,Kayakalp,PHC,Pauripota SD,Udalguri,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+87,2021-22,Winner,Winner,Kayakalp,PHC,Manja BPHC,Karbi-Anglong,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+88,2021-22,Winner,Winner,Kayakalp,UPHC,Kamakhya SD,Kamrup Metro,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+89,2021-22,Winner,Winner,Kayakalp,UPHC,Chaporigaon UPHC,Lakhimpur,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+90,2021-22,Winner,Winner,Kayakalp,HWC,Dhulijan H&WC,Tinsukia,Assam,ASSAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+91,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, BHAGALPUR",Bhagalpur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+92,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,DH MOTIHARI,East Champaran,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+93,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC SHAHKUND,Bhagalpur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+94,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,RH SULTANGANJ,Bhagalpur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+95,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DH, BEGUSARAI",Begusarai,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+96,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC SHAHKUND,Bhagalpur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+97,2021-22,WINNER,Winner,Kayakalp,PHC,APHC GAUCHHARI,GOGRI (Khagaria),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+98,2021-22,WINNER,Winner,Kayakalp,PHC,PHC BANJARIYA,BANJARIYA (East Champaran),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+99,2021-22,WINNER,Winner,Kayakalp,PHC,APHC MORDIWA,Samastipur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+100,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Bihariganj,Bihariganj (Madhepura),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+101,2021-22,WINNER,Winner,Kayakalp,PHC,Ramgarh Chowk,Ramghar Chowk (Lakhisarai),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+102,2021-22,WINNER,Winner,Kayakalp,PHC,HWC APHC Champanagar,Knagar (Purnia),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+103,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Chhorahi,Chhoradhi (Begusarai),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+104,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Narayanpur,Narayanpur (Bhagalpur),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+105,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Ghat Kusumbha,Sheikhpura,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+106,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Karaiparsurai,Karaiparsurai (Nalanda),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+107,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Bhitahan,Bhitahan (West Champaran),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+108,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Manihari,Manihari (Katihar),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+109,2021-22,WINNER,Winner,Kayakalp,PHC,APHC SIMRAHA,Araria,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+110,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Jamalpur,Munger,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+111,2021-22,WINNER,Winner,Kayakalp,PHC,PHC Terhagachh,Kishanganj,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+112,2021-22,WINNER,Winner,Kayakalp,PHC,Goh,Aurangabad,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+113,2021-22,WINNER,Winner,Kayakalp,UPHC,Sandalpur Kumhrar,Patna,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+114,2021-22,WINNER,Winner,Kayakalp,UPHC,Mata Chowk,Purnia,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+115,2021-22,WINNER,Winner,Kayakalp,UPHC,UPHC Aurangabad,Aurangabad,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+116,2021-22,WINNER,Winner,Kayakalp,UPHC,Rekabganj,Bhaglapur,Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+117,2021-22,WINNER,Winner,Kayakalp,HWC,HWC EKNIA,MANSI (Khagaria),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+118,2021-22,WINNER,Winner,Kayakalp,HWC,HWC BAKHARI PATAHI,PATAHI (East Champaran),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+119,2021-22,WINNER,Winner,Kayakalp,HWC,HWC Rupaspur Khagha,Dhamdaha (Purnia),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+120,2021-22,WINNER,Winner,Kayakalp,HWC,HWC Khabaspur,Pirpanti(Bhagalpur),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+121,2021-22,WINNER,Winner,Kayakalp,HWC,HWC Deepnagar,Biharsharif (Nalanda),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+122,2021-22,WINNER,Winner,Kayakalp,HWC,HSC HWC Parsauni,Bagha 1 (West Champaran),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+123,2021-22,WINNER,Winner,Kayakalp,HWC,HWC RAUTARA,KORHA (Katihar),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+124,2021-22,WINNER,Winner,Kayakalp,HWC,HWC More Dihri,Sadar block (Aurangabad),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+125,2021-22,WINNER,Winner,Kayakalp,HWC,HWC Kalyanpur Karhariya,Bariyarpur (Munger),Bihar,BIHAR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+126,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,"GOVERNMENT MULTI SPECIALTY HOSPITAL, SECTOR-16",Chandigarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+127,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,SUB DISTRICT HOSPITAL MANIMAJRA,Chandigarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+128,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"GOVERNMENT MULTI SPECIALTY HOSPITAL, SECTOR-16",Chandigarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+129,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,SUB DISTRICT HOSPITAL MANIMAJRA,Chandigarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+130,2021-22,Winner,Winner,Kayakalp,UPHC,"Civil Hosiptal, Sector-45, Chandigarh",Chandigarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+131,2021-22,Winner,Winner,Kayakalp,HWC,"Health and Wellness Centre, Sector-33, Ch",aCnhdaignadrihgarh,Chandigarh,CHANDIGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+132,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, BIJAPUR",Bijapur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,2
+133,2021-22,Runner Up,Runner Up,Kayakalp,DH,DH Kawardha,Kawardha,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+134,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC PATAN,Durg,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+135,2021-22,RUNNER UP,Runner Up,Kayakalp,SDH/CHC,CHC BILHA,Bilaspur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+136,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DISTRICT HOSPITAL, RAIPUR",Raipur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+137,2021-22,Best Eco friendly,Best,Eco-friendly,UCHC,UCHC Birgaon,Raipur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+138,2021-22,Winner,Winner,Kayakalp,PHC,PHC Katgi,Balodabajar,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+139,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sankra,Dhamtari,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+140,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kopra,Gariyabnd,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+141,2021-22,Winner,Winner,Kayakalp,PHC,PHC Patewa,Mahasamund,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+142,2021-22,Winner,Winner,Kayakalp,PHC,PHC Mandirhasod,Raipur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+143,2021-22,Winner,Winner,Kayakalp,PHC,PHC Parpodi,Bemetara,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+144,2021-22,Winner,Winner,Kayakalp,PHC,PHC Nagpura,Durg,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+145,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kunda,Kawardha,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+146,2021-22,Winner,Winner,Kayakalp,PHC,PHC Ramatola,Rajnandgaon,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+147,2021-22,Winner,Winner,Kayakalp,PHC,PHC Malhar,Bilaspur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+148,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kodgar,Gpm,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+149,2021-22,Winner,Winner,Kayakalp,PHC,PHC Pantora,Janjgir,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+150,2021-22,Winner,Winner,Kayakalp,PHC,PHC Tilkeja,Korba,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+151,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sildaha,Mungeli,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+152,2021-22,Winner,Winner,Kayakalp,PHC,PHC KANAKBIRA,Raigarh,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+153,2021-22,Winner,Winner,Kayakalp,PHC,PHC Adawal,Bastar,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+154,2021-22,Winner,Winner,Kayakalp,PHC,PHC Cherpal,Bijapur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+155,2021-22,Winner,Winner,Kayakalp,PHC,PHC Potali,Dantewada,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+156,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bande,Kanker,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+157,2021-22,Winner,Winner,Kayakalp,PHC,PHC Adenga,Kondagaon,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+158,2021-22,Winner,Winner,Kayakalp,PHC,PHC BENUR,Narayanpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+159,2021-22,Winner,Winner,Kayakalp,PHC,PHC Balangi,Balrampur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+160,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhelwan,Jashpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+161,2021-22,Winner,Winner,Kayakalp,PHC,PHC Khadgawa,Koria,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+162,2021-22,Winner,Winner,Kayakalp,PHC,PHC Umeshwar pur,Surajpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+163,2021-22,Winner,Winner,Kayakalp,PHC,Phc Khamariya,Surguja,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+164,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Rajatalab,Raipur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+165,2021-22,Winner,Winner,Kayakalp,HWC,SHC Baya,Balodabajar,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+166,2021-22,Winner,Winner,Kayakalp,HWC,SHC Goregaon,Dhamtari,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+167,2021-22,Winner,Winner,Kayakalp,HWC,SHC Sukhipali,Mahasamund,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+168,2021-22,Winner,Winner,Kayakalp,HWC,SHC Chandi,Raipur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+169,2021-22,Winner,Winner,Kayakalp,HWC,SHC Madanpur,Gariyabandh,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+170,2021-22,Winner,Winner,Kayakalp,HWC,SHC HWC Karchuwa,Bemetara,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+171,2021-22,Winner,Winner,Kayakalp,HWC,HWC SHC Marra,Durg,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+172,2021-22,Winner,Winner,Kayakalp,HWC,SHC Kasari,Rajnandgaon,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+173,2021-22,Winner,Winner,Kayakalp,HWC,SHC Majhagaon,Bilaspur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+174,2021-22,Winner,Winner,Kayakalp,HWC,SHC Madwani,Korba,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+175,2021-22,Winner,Winner,Kayakalp,HWC,SHC Kodvabani,Mungeli,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+176,2021-22,Winner,Winner,Kayakalp,HWC,SHC HARDI,Raigarh,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+177,2021-22,Winner,Winner,Kayakalp,HWC,SHC Gatam,Dantewada,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+178,2021-22,Winner,Winner,Kayakalp,HWC,SHC Selegaon,Kanker,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+179,2021-22,Winner,Winner,Kayakalp,HWC,SHC Khallaree,Kondagaon,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+180,2021-22,Winner,Winner,Kayakalp,HWC,SHC Badejamhari,Narayanpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+181,2021-22,Winner,Winner,Kayakalp,HWC,SHC Kapildevpur,Balrampur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+182,2021-22,Winner,Winner,Kayakalp,HWC,SHC Kurkunga,Jashpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+183,2021-22,Winner,Winner,Kayakalp,HWC,SHC Saraigahna,Koria,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+184,2021-22,Winner,Winner,Kayakalp,HWC,SHC Nawaparakala,Surajpur,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+185,2021-22,Winner,Winner,Kayakalp,HWC,HWC MANGARI,Surguja,Chhattisgarh,CHHATTISGARH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+186,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"CHC, MOTI DAMAN",Daman,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+187,2021-22,Winner,Winner,Kayakalp,PHC,"Primary Health Centre,Kachigam",Daman,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+188,2021-22,Winner,Winner,Kayakalp,PHC,"Primary Health Centre,Vanakbara",Diu,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+189,2021-22,Winner,Winner,Kayakalp,PHC,"Primary Health Centre, Dudhani",Dnh,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+190,2021-22,Winner,Winner,Kayakalp,HWC,"Health and Wellness Centre, Shelti",Dnh,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+191,2021-22,Winner,Winner,Kayakalp,HWC,Health and Wellness Centre Jumprim,Daman,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+192,2021-22,Winner,Winner,Kayakalp,HWC,Health and Wellness Centre Vanakbara,Diu,Dadra and Nagar Haveli and Daman and Diu,DNH &DD,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+193,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,DH,Acharya Shree Bhikshu Hospital (DH Category),Central,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+194,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,SDH/CHC,Maulana Azad Institute of Dental Science ( SDH Category),Central,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+195,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,SDH/CHC,B.R. Sur Hospital Medical College and Research Centre (SDH Category),Central,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+196,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,Jag Pravesh Chandra Hospital,Delhi,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+197,2021-22,Winner,Winner,Kayakalp,UPHC,DGD Surajmal Vihar,Shahdara,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+198,2021-22,Winner,Winner,Kayakalp,UPHC,DGD Shahbad,New Delhi,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+199,2021-22,Winner,Winner,Kayakalp,UPHC,DGD Sunlight Colony,South East,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+200,2021-22,Winner,Winner,Kayakalp,UPHC,MH Patpaerganj,East,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+201,2021-22,Winner,Winner,Kayakalp,UPHC,DGD Chhawla,South West,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+202,2021-22,Winner,Winner,Kayakalp,UPHC,MH Yamuna Vihar,North east,Delhi,DELHI,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+203,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"COMMUNITY HEALTH CENTRE, SANQUELIM",North Goa,Goa,GOA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,3
+204,2021-22,Winner,Winner,Kayakalp,PHC,PHC Candolim,North Goa,Goa,GOA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+205,2021-22,Winner,Winner,Kayakalp,PHC,PHC Cansaulim,South Goa,Goa,GOA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+206,2021-22,Winner,Winner,Kayakalp,HWC,RMD Keri,North Goa,Goa,GOA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+207,2021-22,Winner,Winner,Kayakalp,HWC,RMD Agapur,South Goa,Goa,GOA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+208,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, VYARA",Tapi,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+209,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"SUB DISTRICT HOPSITAL, MANSA",Gandhinagar,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+210,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,"CHC, SALAYA",Devbhumi Dwarka,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+211,2021-22,Best UCHC,Best,Kayakalp,UCHC,UCHC Mogab,Surat,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+212,2021-22,Runner Up,Runner Up,Kayakalp,UCHC,UCHC Bamroli,Surat,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+213,2021-22,Winner,Winner,Kayakalp,PHC,PHC Upardal,"Sanand,Ahmedaabd",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+214,2021-22,Winner,Winner,Kayakalp,PHC,PHC Thamna,"Umreth,Anand",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+215,2021-22,Winner,Winner,Kayakalp,PHC,PHC Narsanda,"Nadiad,Kheda",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+216,2021-22,Winner,Winner,Kayakalp,PHC,Phc Sanosara,"Chotila,Surendranagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+217,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhesavada,"Dhansura,Arvalli",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+218,2021-22,Winner,Winner,Kayakalp,PHC,PHC Asodar,"Tharad,Banaskantha",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+219,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rupal,"Gandhinagar,Gandhinagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+220,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kherva,"Mehsana,Mehsana",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+221,2021-22,Winner,Winner,Kayakalp,PHC,PHC Ranuj,"Patan,Patan",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+222,2021-22,Winner,Winner,Kayakalp,PHC,PHC Balisana,"Prantij,Sabarkantha",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+223,2021-22,Winner,Winner,Kayakalp,PHC,PHC Zavada,"Waghai,Dang",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+224,2021-22,Winner,Winner,Kayakalp,PHC,PHC Achhavani,"Khergam,Navsari",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+225,2021-22,Winner,Winner,Kayakalp,PHC,PHC Orna,"Kamrej,Surat",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+226,2021-22,Winner,Winner,Kayakalp,PHC,PHC Algat,"Valod,Tapi",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+227,2021-22,Winner,Winner,Kayakalp,PHC,PHC Dharasana,"Valsad,Valsad",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+228,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sajod,"Ankleshwar,Bharuch",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+229,2021-22,Winner,Winner,Kayakalp,PHC,PHC Padharvant,"Chhota Udepur,Chota Udepur",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+230,2021-22,Winner,Winner,Kayakalp,PHC,PHC Antela,"Devgadh baria,Dahod",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+231,2021-22,Winner,Winner,Kayakalp,PHC,PHC Munpur,"Kadana, Mahisagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+232,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bujetha,"Tilakwada,Narmada",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+233,2021-22,Winner,Winner,Kayakalp,PHC,PHC Vav kulli,"Ghoghamba,Panchmahal",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+234,2021-22,Winner,Winner,Kayakalp,PHC,PHC Methi,"Karjan,Vadodara",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+235,2021-22,Winner,Winner,Kayakalp,PHC,PHC Movan,"Khambhalia,DevBhumi Dwarka",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+236,2021-22,Winner,Winner,Kayakalp,PHC,PHC Vasai,"Jamnagar,Jamnagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+237,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kukma,"Bhuj,Kutchh",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+238,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rajpar,"Morbi,Morbi",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+239,2021-22,Winner,Winner,Kayakalp,PHC,PHC Garej,"Porbandar, Porbandar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+240,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kanpar,"Jasadan,Rajkot",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+241,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chamardi,"Babra,Amreli",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+242,2021-22,Winner,Winner,Kayakalp,PHC,PHC Hathab,"Bhavnagar,Bhavnagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+243,2021-22,Winner,Winner,Kayakalp,PHC,PHC Nagnesh,"Ranpur,Botad",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+244,2021-22,Winner,Winner,Kayakalp,PHC,PHC Fulka,"Gir Gadhada, Gir Somnath",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+245,2021-22,Winner,Winner,Kayakalp,PHC,PHC Datrana,"Mendarda,Junagadh",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+246,2021-22,Winner,Winner,Kayakalp,UPHC,UCHC Mogab,Surat Municipal Corporation,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+247,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Adajan,Surat Municipal Corporation,Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+248,2021-22,Winner,Winner,Kayakalp,HWC,Timbdi,"Modpar, Bhanvad,Devbhumi Dwarka",Gujarat,wGaUrkJAaRAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+249,2021-22,Winner,Winner,Kayakalp,HWC,Dharpipala,"Umrala, Ranpur, Botad",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+250,2021-22,Winner,Winner,Kayakalp,HWC,Bagavadar,"Modhwada,Porbandar,Porbandar",Gujarat,aGrUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+251,2021-22,Winner,Winner,Kayakalp,HWC,Shingana,"Shingana,Subir, Dang",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+252,2021-22,Winner,Winner,Kayakalp,HWC,Telav,"Santhal,Sanand",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+253,2021-22,Winner,Winner,Kayakalp,HWC,Khambhodaj-2,"Rasnol,Anand, Anand",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+254,2021-22,Winner,Winner,Kayakalp,HWC,Bar Muvada -2,"Ghodasar,Mahemdavad, Kheda",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+255,2021-22,Winner,Winner,Kayakalp,HWC,Kharva,"Memka,Wadhwan, Surendranagar",Gujarat,gGarUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+256,2021-22,Winner,Winner,Kayakalp,HWC,Gobha,"motazinzuda,Savarkundla, Amreli",Gujarat,eGlUiJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+257,2021-22,Winner,Winner,Kayakalp,HWC,Virdi,"Velavadar,Gariyadhar, Bhavnagar",Gujarat,aGrUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+258,2021-22,Winner,Winner,Kayakalp,HWC,Muldwaraka,"Panadar,Kodinar, Gir Somnath",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+259,2021-22,Winner,Winner,Kayakalp,HWC,Mevasa Kamari,"Bagadu,Junagadh,Junagadh",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+260,2021-22,Winner,Winner,Kayakalp,HWC,Varthu,"Dadhaliya, Modasa, Arvalli",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+261,2021-22,Winner,Winner,Kayakalp,HWC,Vesa,"Nandotra,Vadgam,Banaskantha",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+262,2021-22,Winner,Winner,Kayakalp,HWC,Raipur,"Vadodara,Gandhinagar,Gandhinagar",Gujarat,nGagUaJrARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+263,2021-22,Winner,Winner,Kayakalp,HWC,Meu,"Kherva,Mehsana",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+264,2021-22,Winner,Winner,Kayakalp,HWC,Dharpur,"Balisana,Patan,Patan",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+265,2021-22,Winner,Winner,Kayakalp,HWC,Bhadresar,"Chitroda,Idar,Sabarkantha",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+266,2021-22,Winner,Winner,Kayakalp,HWC,Bajarangpur,"jamvanthali,jamnagar,Jamnagar",Gujarat,rGUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+267,2021-22,Winner,Winner,Kayakalp,HWC,Galpadar-1,"Mithi rohar,Gandhidham, Kutchh",Gujarat,hGUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+268,2021-22,Winner,Winner,Kayakalp,HWC,Ravapar,"Rajpar,Morbi,Morbi",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+269,2021-22,Winner,Winner,Kayakalp,HWC,Chapara,"Nagar Pipliya,Lodhika, Rajkot",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+270,2021-22,Winner,Winner,Kayakalp,HWC,Shahu,"Munsad,Navsari,Navsari",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+271,2021-22,Winner,Winner,Kayakalp,HWC,Kim-2,"Kim, Olpad,Surat",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+272,2021-22,Winner,Winner,Kayakalp,HWC,Andhavadi Dur,"Karanjkhed,Dolvan, Tapi",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+273,2021-22,Winner,Winner,Kayakalp,HWC,Malav,"Sanjan,Umargam,Valsad",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+274,2021-22,Winner,Winner,Kayakalp,HWC,Chaklad,"Matar,Amod, Bharuch",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+275,2021-22,Winner,Winner,Kayakalp,HWC,Achhala,"raysingpura,Chhotaudepur,Chhotaudepur",Gujarat,oGtUauJAdRepAuTr,True,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+276,2021-22,Winner,Winner,Kayakalp,HWC,Karmba-2,"Karmba,Sanjeli, Dahod",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+277,2021-22,Winner,Winner,Kayakalp,HWC,Dokelav,"Viraniya,Lunawada, Mahisagar",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+278,2021-22,Winner,Winner,Kayakalp,HWC,Sundrapura,"Jesalpor,Nandod, Narmada",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,4
+279,2021-22,Winner,Winner,Kayakalp,HWC,Bodidra Khurd,"Dharapur,Shahera, Panchmahal",Gujarat,lGUJARAT,True,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+280,2021-22,Winner,Winner,Kayakalp,HWC,Kundhela,"Thuvavi,Dabhoi, Vadodara",Gujarat,GUJARAT,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+281,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT CIVIL HOSPITAL, KARNAL",Karnal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+282,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"CHC, MULLANA",Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+283,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DISTRICT CIVIL HOSPITAL, Ambala city",Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+284,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,SDH/CHC,"CHC, MULLANA",Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+285,2021-22,Winner,Winner,Kayakalp,PHC,PHC Noorpur,Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+286,2021-22,Winner,Winner,Kayakalp,PHC,PHC Jui,Bhiwani,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+287,2021-22,Winner,Winner,Kayakalp,PHC,PHC Badhra,Charkhi Dadri,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+288,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chhainsa,Faridabad,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+289,2021-22,Winner,Winner,Kayakalp,PHC,PHC Pilimandori,Fatehabad,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+290,2021-22,Winner,Winner,Kayakalp,PHC,PHC Wazirabad,Gurugram,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+291,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chaudhariwas,Hisar,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+292,2021-22,Winner,Winner,Kayakalp,PHC,PHC Jahangirpur,Jhajjar,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+293,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chhattar,Jind,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+294,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhagal,Kaithal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+295,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhadson,Karnal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+296,2021-22,Winner,Winner,Kayakalp,PHC,PHC Babain,Kurukshetra,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+297,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sihma,Narnaul,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+298,2021-22,Winner,Winner,Kayakalp,PHC,PHC Tigaon,Nuh,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+299,2021-22,Winner,Winner,Kayakalp,PHC,PHC Allika,Palwal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+300,2021-22,Winner,Winner,Kayakalp,PHC,PHC Barwala,Panchkula,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+301,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kawi,Panipat,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+302,2021-22,Winner,Winner,Kayakalp,PHC,PHC Fatehpuri,Rewari,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+303,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhalaut,Rohtak,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+304,2021-22,Winner,Winner,Kayakalp,PHC,PHC Panihari,Sirsa,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+305,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bega,Sonipat,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+306,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhambhol,Yamunanagar,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+307,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Ekta vihar (chhabiyana),Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+308,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Krishna nagar Gamri,Kurukshetra,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+309,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Gandhi Nagar,Gurugram,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+310,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Chauma,Gurugram,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+311,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Rajiv Nagar,Rewari,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+312,2021-22,Winner,Winner,Kayakalp,HWC,SC Barouli,Ambala,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+313,2021-22,Winner,Winner,Kayakalp,HWC,SC Pathrari,Gurugram,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+314,2021-22,Winner,Winner,Kayakalp,HWC,SC Hassanpur,Karnal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+315,2021-22,Winner,Winner,Kayakalp,HWC,SC Dhurala,Kurukshetra,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+316,2021-22,Winner,Winner,Kayakalp,HWC,SC Rundhi,Palwal,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+317,2021-22,Winner,Winner,Kayakalp,HWC,SC Jalouli,Panchkula,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+318,2021-22,Winner,Winner,Kayakalp,HWC,SC Larsoli,Sonipat,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+319,2021-22,Winner,Winner,Kayakalp,HWC,SC Garhi Banjara,Yamunanagar,Haryana,HARYANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+320,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,"DH, KULLU (CAT I)",Kullu,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+321,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"CHC, BIR (CAT II)",Kangra,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+322,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,ZH D/SHALA,Kangra,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+323,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,SDH/CHC,"CHC, BIR",Kangra,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+324,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kuthar,Solan,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+325,2021-22,Winner,Winner,Kayakalp,PHC,PHC Palkwah,Una,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+326,2021-22,Winner,Winner,Kayakalp,PHC,PHC- Jakhna,Sirmaur,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+327,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chauntra,Mandi,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+328,2021-22,Winner,Winner,Kayakalp,PHC,PHC BHARERI,Hamirpur,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+329,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kohlari,Chamba,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+330,2021-22,Winner,Winner,Kayakalp,PHC,PHC Swahan,Bilaspur,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+331,2021-22,Winner,Winner,Kayakalp,PHC,PHC KHAIRA,Shimla,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+332,2021-22,Winner,Winner,Kayakalp,PHC,PHC Durana,Kangra,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+333,2021-22,Winner,Winner,Kayakalp,PHC,PHC Neul,Kullu,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+334,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Annadale,Shimla,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+335,2021-22,Winner,Winner,Kayakalp,HWC,HWC Bamta,Bilaspur,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+336,2021-22,Winner,Winner,Kayakalp,HWC,HWC Rajain,Chamba,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+337,2021-22,Winner,Winner,Kayakalp,HWC,HWC LAGMANWIN,Hamirpur,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+338,2021-22,Winner,Winner,Kayakalp,HWC,HWC Thorabhloon,Kangra,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+339,2021-22,Winner,Winner,Kayakalp,HWC,HWC Shuru,Kullu,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+340,2021-22,Winner,Winner,Kayakalp,HWC,HWC Hart,Mandi,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+341,2021-22,Winner,Winner,Kayakalp,HWC,HWC Bairchha,Solan,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+342,2021-22,Winner,Winner,Kayakalp,HWC,HWC Sundli,Shimla,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+343,2021-22,Winner,Winner,Kayakalp,HWC,HWC Kotla Kalan,Una,Himachal Pradesh,HIMACHAL PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+344,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DISTRICT HOSPITAL UDHAMPUR,Udhampur,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+345,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC PATTAN,Baramulla,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+346,2021-22,Winner,Winner,Kayakalp,PHC,PHC Larnoo,Anantnag,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+347,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kunzer,Baramulla,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+348,2021-22,Winner,Winner,Kayakalp,PHC,PHC Babanagri,Ganderbal,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+349,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kalamabad,Kupwara,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+350,2021-22,Winner,Winner,Kayakalp,PHC,PHC Khrew,Pulwama,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,5
+351,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kharrah,Jammu,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+352,2021-22,Winner,Winner,Kayakalp,PHC,PHC Mehari,Reasi,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+353,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sanoora,Samba,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+354,2021-22,Winner,Winner,Kayakalp,PHC,PHC Tikri,Udhampur,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+355,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Shastri Nagar,Jammu,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+356,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Krishna Colony,Kathua,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+357,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Baramulla,Baramulla,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+358,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Hazratbal,Srinagar,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+359,2021-22,Winner,Winner,Kayakalp,HWC,HWC SC Tarda,Kathua,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+360,2021-22,Winner,Winner,Kayakalp,HWC,HWC Nesbal,Bandipora,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+361,2021-22,Winner,Winner,Kayakalp,HWC,HWC Dub,Reasi,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+362,2021-22,Winner,Winner,Kayakalp,HWC,HWC Batera,Jammu,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+363,2021-22,Winner,Winner,Kayakalp,HWC,HWC MAND,Udhampur,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+364,2021-22,Winner,Winner,Kayakalp,HWC,HWC Rainawari,Srinagar,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+365,2021-22,Winner,Winner,Kayakalp,HWC,HWC Koreg,Ganderbal,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+366,2021-22,Winner,Winner,Kayakalp,HWC,HWC Wullarhama,Anantnag,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+367,2021-22,Winner,Winner,Kayakalp,HWC,HWC Shaloora,Kupwara,Jammu and Kashmir,JAMMU AND KASHMIR,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+368,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DISTRICT HOSPITAL,Simdega,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+369,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,"CHC, CHAINPUR",Palamu,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+370,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,"SDH, GHATSHILA",East Singhbhum,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+371,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,District Hospital,Ramgarh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+372,2021-22,WINNER-Eco Friendly,Winner,Eco-friendly,SDH/CHC,"CHC, CHAINPUR",Palamu,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+373,2021-22,Winner,Winner,Kayakalp,PHC,PHC Pindajora(Chas),Bokaro,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+374,2021-22,Winner,Winner,Kayakalp,PHC,PHC Mayurhant,Chatra,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+375,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhandro,Giridih,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+376,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rajbhitha (Boarijor),Godda,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+377,2021-22,Winner,Winner,Kayakalp,PHC,PHC Charhi,Hazaribagh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+378,2021-22,Winner,Winner,Kayakalp,PHC,PHC Birbanki (Arki),Khunti,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+379,2021-22,Winner,Winner,Kayakalp,PHC,"PHC Telaiya Dam,Jainagar",Koderma,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+380,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rampur,Loharadaga,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+381,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bahrabad,Pakur,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+382,2021-22,Winner,Winner,Kayakalp,PHC,PHC Haidernagar,Palamu,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+383,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chaingada,Ramgarh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+384,2021-22,Winner,Winner,Kayakalp,PHC,PHC Pithoriya,Ranchi,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+385,2021-22,Winner,Winner,Kayakalp,PHC,PHC Phulbanga,Sahebganj,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+386,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sini,Saraikela,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+387,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Kayalanpur,Deoghar,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+388,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Kankani,Dhanbad,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+389,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Baliguma,East Singhbum,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+390,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Khirgaon,Hazaribagh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+391,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Hatiya Garden,Loharadaga,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+392,2021-22,Winner,Winner,Kayakalp,HWC,HWC Gunjardih (Nawadih),Bokaro,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+393,2021-22,Winner,Winner,Kayakalp,HWC,HWC Pandepura,Chatra,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+394,2021-22,Winner,Winner,Kayakalp,HWC,HWC Devipur,Deoghar,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+395,2021-22,Winner,Winner,Kayakalp,HWC,HWC Amainagar,East Singhbhum,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+396,2021-22,Winner,Winner,Kayakalp,HWC,HWC Tirla,Giridih,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+397,2021-22,Winner,Winner,Kayakalp,HWC,HWC KASIR,Gumla,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+398,2021-22,Winner,Winner,Kayakalp,HWC,HWC MAHESHKUTRO,Godda,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+399,2021-22,Winner,Winner,Kayakalp,HWC,HWC Basadih,Hazaribagh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+400,2021-22,Winner,Winner,Kayakalp,HWC,HWC Patrodhi,Jamtara,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+401,2021-22,Winner,Winner,Kayakalp,HWC,HWC Lodhma,Khunti,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+402,2021-22,Winner,Winner,Kayakalp,HWC,"HWC Pathaldiha,Koderma",Koderma,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+403,2021-22,Winner,Winner,Kayakalp,HWC,HWC Bamandiha,Lohardaga,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+404,2021-22,Winner,Winner,Kayakalp,HWC,HWC- Barari,Dhanbad,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+405,2021-22,Winner,Winner,Kayakalp,HWC,HWC- Sinduria,Dumka,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+406,2021-22,Winner,Winner,Kayakalp,HWC,HWC- Peska,Garhwa,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+407,2021-22,Winner,Winner,Kayakalp,HWC,HWC-Rud (Chandwa),Latehar,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+408,2021-22,Winner,Winner,Kayakalp,HWC,HWC Alubera,Pakur,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+409,2021-22,Winner,Winner,Kayakalp,HWC,HWC Polpol,Palamu,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+410,2021-22,Winner,Winner,Kayakalp,HWC,HWC Badgaon,Ramgarh,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+411,2021-22,Winner,Winner,Kayakalp,HWC,HWC Arabaram,Ranchi,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+412,2021-22,Winner,Winner,Kayakalp,HWC,HWC Darla,Sahibganj,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+413,2021-22,Winner,Winner,Kayakalp,HWC,HWC Kolabira,Saraikela,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+414,2021-22,Winner,Winner,Kayakalp,HWC,"HWC Nakti, Bandgoan",West Singhbum,Jharkhand,JHARKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+415,2021-22,Winner,Winner,Kayakalp,DH,Sri Chamarajendra Teaching Hospital.HIMS,Hassan,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+416,2021-22,Runner Up,Runner Up,Kayakalp,DH,Victoria Hospital,Bengaluru Urban,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+417,2021-22,Winner,Winner,Kayakalp,SDH/CHC,Gangavathi,Koppal,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+418,2021-22,Runner Up,Runner Up,Kayakalp,SDH/CHC,B.Bagewadi,Vijayapura,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+419,2021-22,winner,Winner,Kayakalp,UCHC,Ullal,Dakshina Kannada,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+420,2021-22,Winner,Winner,Kayakalp,PHC,KABBUR,"Haveri Taluk, Haveri District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,6
+421,2021-22,Winner,Winner,Kayakalp,PHC,HARAVE,"Chamarajanagara Taluk, Chamrajnagar District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+422,2021-22,Winner,Winner,Kayakalp,PHC,KONDLAHALLI,"Molkalmuru Taluk, Chitradurga District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+423,2021-22,Winner,Winner,Kayakalp,PHC,NAGAVALLI,"Tumakuru Taluk, Tumakuru District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+424,2021-22,Winner,Winner,Kayakalp,PHC,GARAG,"Dharwad Taluk, Dharwad District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+425,2021-22,Winner,Winner,Kayakalp,PHC,GANWAR,"Jewargi Taluk, Kalaburgi District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+426,2021-22,Winner,Winner,Kayakalp,PHC,TAGGAHALLI,"Mandya Taluk, Mandya District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+427,2021-22,Winner,Winner,Kayakalp,PHC,DHANNUR,"Bhalki Taluk, Bidar District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+428,2021-22,Winner,Winner,Kayakalp,PHC,KOKATNUR,"Athani Taluk, Belagavi District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+429,2021-22,Winner,Winner,Kayakalp,PHC,METAGUDDA,"Mudhol Taluk, Bagalkote District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+430,2021-22,Winner,Winner,Kayakalp,PHC,KUNDANA,"Devanahalli Taluk, Bengaluru Rural District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+431,2021-22,Winner,Winner,Kayakalp,PHC,K.R PETE,"Chikmagaluru Taluk, Chikmagalur District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+432,2021-22,Winner,Winner,Kayakalp,PHC,MULURU,"Heggadadevankote Taluk, Mysuru District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+433,2021-22,Winner,Winner,Kayakalp,PHC,KOLURU,"Ballari Taluk, Ballari District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+434,2021-22,Winner,Winner,Kayakalp,PHC,SHANKARANARAYANA,"Kundapura Taluk, Udupi District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+435,2021-22,Winner,Winner,Kayakalp,PHC,KONDAJJI,"Honnali Taluk, Davangere District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+436,2021-22,Winner,Winner,Kayakalp,PHC,HALEKOTE,"Holenarsipura Taluk, Hassan District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+437,2021-22,Winner,Winner,Kayakalp,PHC,BISLAKOPPA,"Sirsi Taluk, Uttar Kannada District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+438,2021-22,Winner,Winner,Kayakalp,PHC,KINNAL,"Koppal Taluk, Koppal District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+439,2021-22,Winner,Winner,Kayakalp,PHC,KOULOOR,"Yadagiri Taluk, Yadgiri District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+440,2021-22,Winner,Winner,Kayakalp,PHC,DIBBURHALLI,"Sidlaghatta Taluk, Chikkaballapur District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+441,2021-22,Winner,Winner,Kayakalp,PHC,SHANTAGERI,"Ron Taluk, Gadag District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+442,2021-22,Winner,Winner,Kayakalp,PHC,JIGANI,"Anekal Taluk, Bengaluru Urban District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+443,2021-22,Winner,Winner,Kayakalp,PHC,MALAVALLI,"Shikaripura Taluk, Shivamogga District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+444,2021-22,Winner,Winner,Kayakalp,PHC,SHIRTHADY,"Mangalore Taluk, Dakshina Kannada District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+445,2021-22,Winner,Winner,Kayakalp,PHC,SRIMANGALA,"Virajpete Taluk, Kodagu District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+446,2021-22,Winner,Winner,Kayakalp,PHC,HOSADURGA,"Kanakapura Taluk, Ramanagar District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+447,2021-22,Winner,Winner,Kayakalp,PHC,GANDHALL,"Raichur Taluk, Raichur District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+448,2021-22,Winner,Winner,Kayakalp,PHC,HORTI,"Indi Taluk, Vijayapura District",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+449,2021-22,Winner,Winner,Kayakalp,UPHC,AYODHYA NAGAR,"Hubballi Taluk, Dharwad District, Belagavi Division",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+450,2021-22,Winner,Winner,Kayakalp,UPHC,SARASWATIPURAM,"Mysuru Taluk, Mysuru District, Mysuru Division",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+451,2021-22,Winner,Winner,Kayakalp,UPHC,SHIVAJINAGAR,"Kalaburagi Taluk, Kalaburgi District, Kalaburgi Division",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+452,2021-22,Winner,Winner,Kayakalp,UPHC,JALAHALLI,"R R Nagar Zone, Bbmp-Bu, District Cluster 2- Dasarahalli, Rr Nagar & Yelahanka",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+453,2021-22,Winner,Winner,Kayakalp,UPHC,DARGAMOHALLA,"Kolar Taluk, Kolar District, Bengaluru Division",Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,7
+454,2021-22,Winner,Winner,Kayakalp,HWC,Byasigideri,Vijayanagara,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+455,2021-22,Winner,Winner,Kayakalp,HWC,Mangalgi,Humnabad,Karnataka,KARNATAKA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+456,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,District Hospital (A.A Rahim Memorial) Kollam,Kollam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+457,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,General Hospital Ernakulam,Ernakulam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+458,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,General Hospital Thrissur,Thrissur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+459,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,Taluk Headquarters Hospital Punalur.,Kollam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+460,2021-22,Runner Up-Kayakalp,Runner Up,Kayakalp,SDH/CHC,Taluk Headquarters Hospital Thamarassery,Kozhikode,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+461,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC Perinjanam,Thrissur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+462,2021-22,Winner,Winner,Kayakalp,PHC,"FHC Kattakada NEW, Amachal",Thiruvananthapuram,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+463,2021-22,Winner,Winner,Kayakalp,PHC,FHC Azheekkal,Kollam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+464,2021-22,Winner,Winner,Kayakalp,PHC,PHC Punnapra South,Alappuzha,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+465,2021-22,Winner,Winner,Kayakalp,PHC,PHC Panavally,Alappuzha,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+466,2021-22,Winner,Winner,Kayakalp,PHC,FHC Omallor,Pathanamthitta,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+467,2021-22,Winner,Winner,Kayakalp,PHC,FHC Mutholy,Kottayam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+468,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kodikulam,Idukki,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+469,2021-22,Winner,Winner,Kayakalp,PHC,FHC Rayamangalam,Ernakulam,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+470,2021-22,Winner,Winner,Kayakalp,PHC,FHC Poomangalam,Thrissur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+471,2021-22,Winner,Winner,Kayakalp,PHC,FHC Madavana,Thrissur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+472,2021-22,Winner,Winner,Kayakalp,PHC,FHC Vellinezhi,Palakkad,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+473,2021-22,Winner,Winner,Kayakalp,PHC,FHC Vazhakkad,Malappuram,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+474,2021-22,Winner,Winner,Kayakalp,PHC,FHC Naripatta,Kozhikode,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+475,2021-22,Winner,Winner,Kayakalp,PHC,FHC Edavaka,Wayanad,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+476,2021-22,Winner,Winner,Kayakalp,PHC,FHC New Mahe,Kannur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+477,2021-22,Winner,Winner,Kayakalp,PHC,FHC Panathur,Kasaragod,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+478,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Thiruvalla,Pathanamthitta,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+479,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC V R Puram,Thrissur,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+480,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Vettekode,Malappuram,Kerala,KERALA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+481,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"Shrimant Madhavrao Scindia District Hospital, Vidisha",Vidisha,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+482,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,"Mahatma Gandhi District Hospital, Dewas",Dewas,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+483,2021-22,2ND RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,"Sardar Vallabh Bhai Patel District Hospital, Satna",Satna,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+484,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC-Seonimalwa,Hoshangabd,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+485,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC Ramnagar,Satna,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+486,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"Seth Govind Das District Hospital, Jabalpur",Jabalpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+487,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC PATAN,Jabalpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+488,2021-22,Winner,Winner,Kayakalp,PHC,PHC Jerath,Damoh,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+489,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rajnagar,Chatarpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+490,2021-22,Winner,Winner,Kayakalp,PHC,PHC Gunga,Bhopal,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+491,2021-22,Winner,Winner,Kayakalp,PHC,PHC Aamdhana,Betul,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+492,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rahatgaon,Harda,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+493,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kothra,Hoshangabad,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+494,2021-22,Winner,Winner,Kayakalp,PHC,PHC Mudiyakheda,Raisen,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+495,2021-22,Winner,Winner,Kayakalp,PHC,PHC Machalpur,Rajgadh,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+496,2021-22,Winner,Winner,Kayakalp,PHC,PHC VEERPUR DEM,Sehore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+497,2021-22,Winner,Winner,Kayakalp,PHC,PHC Rahat,Rewa,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+498,2021-22,Winner,Winner,Kayakalp,PHC,PHC NAKJHAR,Sidhi,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+499,2021-22,Winner,Winner,Kayakalp,PHC,PHC AMJHORE,Shahdole,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+500,2021-22,Winner,Winner,Kayakalp,PHC,PHC Khatai,Singrouli,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+501,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kanad,Aagar Malwa,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+502,2021-22,Winner,Winner,Kayakalp,PHC,PHC Baijagwada,Dewas,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+503,2021-22,Winner,Winner,Kayakalp,PHC,PHC Nahargarh,Mandsore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+504,2021-22,Winner,Winner,Kayakalp,PHC,PHC KUKDESHWAR,Neemach,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+505,2021-22,Winner,Winner,Kayakalp,PHC,PHC MAKSI,Shajapur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+506,2021-22,Winner,Winner,Kayakalp,PHC,PHC KATANGI,Jabalpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+507,2021-22,Winner,Winner,Kayakalp,PHC,PHC MOHGAON (DHA),Balaghat,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+508,2021-22,Winner,Winner,Kayakalp,PHC,PHC PARADSINGHA,Chhindwada,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+509,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHANDA,Dindori,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+510,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHIRAI DONGRI,Mandla,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+511,2021-22,Winner,Winner,Kayakalp,PHC,PHC Singhpur,Narsinghpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+512,2021-22,Winner,Winner,Kayakalp,PHC,PHC PALARI,Seoni,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+513,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kshipra,Indore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+514,2021-22,Winner,Winner,Kayakalp,PHC,PHC BARJHAR,Alirajpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+515,2021-22,Winner,Winner,Kayakalp,PHC,PHC- Bhawati,Barwani,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+516,2021-22,Winner,Winner,Kayakalp,PHC,PHC – SAROLA,Burhanpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+517,2021-22,Winner,Winner,Kayakalp,PHC,PHC PITOL,Jhabua,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+518,2021-22,Winner,Winner,Kayakalp,PHC,PHC JAWAR,Khandwa,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+519,2021-22,Winner,Winner,Kayakalp,PHC,PHC KARHI,Khargone,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+520,2021-22,Winner,Winner,Kayakalp,PHC,PHC GORMI,Bhind,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,8
+521,2021-22,Winner,Winner,Kayakalp,PHC,PHC Jamner,Guna,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+522,2021-22,Winner,Winner,Kayakalp,PHC,PHC Parikshitpura,Morena,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+523,2021-22,Winner,Winner,Kayakalp,PHC,PHC KHOD,Shivpuri,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+524,2021-22,Winner,Winner,Kayakalp,PHC,PHC PREMSAR,Sheopur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+525,2021-22,Winner,Winner,Kayakalp,UPHC,Gov UPHC Govindpura,Bhopal,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+526,2021-22,Winner,Winner,Kayakalp,UPHC,Govt UPHC AZADNAGAR,Indore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+527,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Itawa,Dewas,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+528,2021-22,Winner,Winner,Kayakalp,UPHC,Gov UPHC Falka Bazar,Gwalior,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+529,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Amanganj Mohalla Chhatarpur,Chhatarpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+530,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Hanuman Nagar,Satna,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+531,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC KOTWALI,Jabalpur,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+532,2021-22,Winner,Winner,Kayakalp,UPHC,UCHC Banganga,Indore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+533,2021-22,Winner,Winner,Kayakalp,HWC,Chandaniya,Umaria,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+534,2021-22,Winner,Winner,Kayakalp,HWC,Kalaria,Indore,Madhya Pradesh,MADHYA PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+535,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DH, AURANGABAD",Aurangabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+536,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,"DH, WARDHA",Wardha,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+537,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,"SDH, TIRORA",Gondiya,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+538,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,"SDH, ISLAMPUR",Sangli,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+539,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,"DH, AURANGABAD",Aurangabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+540,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,SDH Tirora,Gondiya,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+541,2021-22,Winner,Winner,Kayakalp,PHC,Angaon,Thane,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+542,2021-22,Winner,Winner,Kayakalp,PHC,Nandgaon,Palghar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+543,2021-22,Winner,Winner,Kayakalp,PHC,Ambewadi,Raigad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+544,2021-22,Winner,Winner,Kayakalp,PHC,Jategaon,Nashik,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+545,2021-22,Winner,Winner,Kayakalp,PHC,Rohani,Dhule,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+546,2021-22,Winner,Winner,Kayakalp,PHC,Bramhanwada,Ahmednagar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+547,2021-22,Winner,Winner,Kayakalp,PHC,Chas,Ahmednagar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+548,2021-22,Winner,Winner,Kayakalp,PHC,Shendurni,Jalgaon,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+549,2021-22,Winner,Winner,Kayakalp,PHC,Lahan Shahada,Nandurbar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+550,2021-22,Winner,Winner,Kayakalp,PHC,Paud,Pune,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+551,2021-22,Winner,Winner,Kayakalp,PHC,Limb,Satara,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+552,2021-22,Winner,Winner,Kayakalp,PHC,Maligre,Kolhapur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+553,2021-22,Winner,Winner,Kayakalp,PHC,Bavachi,Sangli,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+554,2021-22,Winner,Winner,Kayakalp,PHC,Rampur,Ratnagiri,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+555,2021-22,Winner,Winner,Kayakalp,PHC,Walawal,Sindhudurg,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+556,2021-22,Winner,Winner,Kayakalp,PHC,Ganori,Aurangabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+557,2021-22,Winner,Winner,Kayakalp,PHC,Pingali,Parbhani,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+558,2021-22,Winner,Winner,Kayakalp,PHC,Khasgaon,Jalna,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+559,2021-22,Winner,Winner,Kayakalp,PHC,PHC,Hingoli,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+560,2021-22,Winner,Winner,Kayakalp,PHC,Handarguli,Latur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+561,2021-22,Winner,Winner,Kayakalp,PHC,Para,Osmanabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+562,2021-22,Winner,Winner,Kayakalp,PHC,Kada,Beed,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+563,2021-22,Winner,Winner,Kayakalp,PHC,Mugut,Nanded,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+564,2021-22,Winner,Winner,Kayakalp,PHC,Palso,Akola,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+565,2021-22,Winner,Winner,Kayakalp,PHC,Shelu Bajar,Washim,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+566,2021-22,Winner,Winner,Kayakalp,PHC,kalamkhar,Amravati,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+567,2021-22,Winner,Winner,Kayakalp,PHC,Nanza,Yavatmal,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+568,2021-22,Winner,Winner,Kayakalp,PHC,Bela,Nagpur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+569,2021-22,Winner,Winner,Kayakalp,PHC,Kharangana,Wardha,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+570,2021-22,Winner,Winner,Kayakalp,PHC,Kondha,Bhandara,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+571,2021-22,Winner,Winner,Kayakalp,PHC,Dawwa,Gondia,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+572,2021-22,Winner,Winner,Kayakalp,PHC,Durgapur,Chandrapur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+573,2021-22,Winner,Winner,Kayakalp,PHC,Sawangi,Gadchiroli,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+574,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC MHB COLONY,Nashik,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+575,2021-22,Winner,Winner,Kayakalp,UPHC,Neharunagar Disp,Pcmc,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+576,2021-22,Winner,Winner,Kayakalp,UPHC,DATTANAGAR UPHC,Kdmc,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+577,2021-22,Winner,Winner,Kayakalp,UPHC,Soygaon,Malegaon Corporation,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+578,2021-22,Winner,Winner,Kayakalp,UPHC,Indora,Nagpur Municipal Corporation,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+579,2021-22,Winner,Winner,Kayakalp,UPHC,Samatanagar,Sangli Miraj Kupwad Municipal Corporation,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+580,2021-22,Winner,Winner,Kayakalp,UPHC,Kai. Vilasrao Tambe PHC,Pmc,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+581,2021-22,Winner,Winner,Kayakalp,UPHC,R S Nimkar UPHC,City Bureau Zone I D,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+582,2021-22,Winner,Winner,Kayakalp,UPHC,Bai gulbai UPHC,City Bureau Zone II GN,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+583,2021-22,Winner,Winner,Kayakalp,UPHC,Gurunanak UPHC,Western Bureau Zone III HW,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+584,2021-22,Winner,Winner,Kayakalp,UPHC,M.W Desai UPHC,Western Bureau Zone IV PN,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+585,2021-22,Winner,Winner,Kayakalp,UPHC,Nehru Nagar UPHC,Western Bureau Zone V ME,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+586,2021-22,Winner,Winner,Kayakalp,UPHC,Dhanukarwadi UPHC,Western Bureau Zone VII RS,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+587,2021-22,Winner,Winner,Kayakalp,HWC,Brahamangaon,Palghar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+588,2021-22,Winner,Winner,Kayakalp,HWC,Jasai,Raigad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+589,2021-22,Winner,Winner,Kayakalp,HWC,Vilholi,Nashik,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+590,2021-22,Winner,Winner,Kayakalp,HWC,Nandarkheda,Nandurbar,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,9
+591,2021-22,Winner,Winner,Kayakalp,HWC,Ambadave,Ratnagiri,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+592,2021-22,Winner,Winner,Kayakalp,HWC,Jatwada,Aurangabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+593,2021-22,Winner,Winner,Kayakalp,HWC,Basamba,Hingoli,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+594,2021-22,Winner,Winner,Kayakalp,HWC,Awalkonda,Latur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+595,2021-22,Winner,Winner,Kayakalp,HWC,Tamalwadi,Osmanabad,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+596,2021-22,Winner,Winner,Kayakalp,HWC,Sindhkhed,Akola,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+597,2021-22,Winner,Winner,Kayakalp,HWC,Nildoh,Nagpur,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+598,2021-22,Winner,Winner,Kayakalp,HWC,Tawasi,Bhandara,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+599,2021-22,Winner,Winner,Kayakalp,HWC,Tedwa,Gondia,Maharashtra,MAHARASHTRA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+600,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,TURA CIVIL HOSPITAL,West Garo Hills,Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+601,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,SOHIONG CHC,East Khasi Hills,Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+602,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,BHOIRYMBONG CHC,Ri Bhoi District,Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+603,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,TURA CIVIL HOSPITAL,West Garo Hills,Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+604,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,MAWPHLANG CHC,East Khasi Hills,Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+605,2021-22,Winner,Winner,Kayakalp,PHC,Dobu PHC,"Songsak Block, East Garo Hills",Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+606,2021-22,Winner,Winner,Kayakalp,PHC,Babadam PHC,"Rongram Block, West Garo Hills",Meghalaya,sMEGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+607,2021-22,Winner,Winner,Kayakalp,PHC,Gabil PHC,"Resubelpara Block, North Garohills",Meghalaya,HMilElsGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+608,2021-22,Winner,Winner,Kayakalp,PHC,Jongksha PHC,"Mawkynrew Block, East Khasihills",Meghalaya,HMillEsGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+609,2021-22,Winner,Winner,Kayakalp,PHC,Dongki-ingding PHC,"Mairang Block, West Khasi Hills",Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+610,2021-22,Winner,Winner,Kayakalp,PHC,Umden PHC,"Umling Block, Ri Bhoi District",Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+611,2021-22,Winner,Winner,Kayakalp,PHC,Rymbai PHC,"Khliehriat Block, East Jaintia Hills",Meghalaya,lMlsEGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+612,2021-22,Winner,Winner,Kayakalp,PHC,Jarain PHC,"Amlarem Block, West Jaintia Hills",Meghalaya,lMlsEGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+613,2021-22,Winner,Winner,Kayakalp,UPHC,Chutwakhu UPHC,"Thadlaskein Block, West Jaintia Hills",Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+614,2021-22,Winner,Winner,Kayakalp,HWC,Thynroit SC,"Mawkynrew Block,East Khasi Hills",Meghalaya,iMllsEGHALAYA,True,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+615,2021-22,Winner,Winner,Kayakalp,HWC,Umroi SC,"Umsning Block, Ri Bhoi District",Meghalaya,MEGHALAYA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+616,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,Lawngtlai DH,Lawngtlai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+617,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,Siaha DH,Siaha,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+618,2021-22,2ND RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,Champhai DH,Champhai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+619,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,Saitual CHC,Aizawl East,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+620,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,Biate CHC,Champhai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+621,2021-22,2ND RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,Thenzawl CHC,Serchhip,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+622,2021-22,WINNER-eco friendly,Winner,Eco-friendly,DH,Lawngtlai DH,Lawngtlai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+623,2021-22,Winner,Winner,Kayakalp,PHC,Aibawk PHC,Aizawl West,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+624,2021-22,Winner,Winner,Kayakalp,PHC,Hnahlan PHC,Champhai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+625,2021-22,Winner,Winner,Kayakalp,PHC,Lungdai PHC,Kolasib,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+626,2021-22,Winner,Winner,Kayakalp,PHC,Sangau PHC,Lawngtlai,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+627,2021-22,Winner,Winner,Kayakalp,PHC,Thingsai PHC,Lunglei,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+628,2021-22,Winner,Winner,Kayakalp,PHC,Kanghmun PHC,Mamit,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+629,2021-22,Winner,Winner,Kayakalp,PHC,Chhingchhip PHC,Serchhip,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+630,2021-22,Winner,Winner,Kayakalp,PHC,Chhaolo PHC,Siaha,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+631,2021-22,Winner,Winner,Kayakalp,UPHC,Chawlhhmun UPHC,Aizawl West,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+632,2021-22,Winner,Winner,Kayakalp,HWC,Bethlehem Vengthlang SC,Aizawl East,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+633,2021-22,Winner,Winner,Kayakalp,HWC,Luangmual SC,Aizawl West,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+634,2021-22,Winner,Winner,Kayakalp,HWC,Biate SC,Champhai District,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+635,2021-22,Winner,Winner,Kayakalp,HWC,Tumpui SC,Kolasib District,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+636,2021-22,Winner,Winner,Kayakalp,HWC,Rahsiveng SC,Lunglei District,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+637,2021-22,Winner,Winner,Kayakalp,HWC,Sailulak SC,Serchhip District,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+638,2021-22,Winner,Winner,Kayakalp,HWC,Niawhtlang/Noaohtla SC,Siaha District,Mizoram,MIZORAM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+639,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,DH DIMAPUR,Dimapur,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+640,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,DH TUENSANG,Tuensang,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+641,2021-22,2ND RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,DH KIPHIRE,Kiphire,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+642,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC CHANGTONGYA,Changtongya,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+643,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC ABOI,Aboi,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+644,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,IMDH,Mokokchung,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+645,2021-22,Winner,Winner,Kayakalp,PHC,PHC KUHUBOTO,Dimapur,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+646,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHUNLIKHA,Kohima,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+647,2021-22,Winner,Winner,Kayakalp,PHC,PHC SITIMI,Kiphire,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+648,2021-22,Winner,Winner,Kayakalp,PHC,PHC LONGKHUM,Mokokchung,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+649,2021-22,Winner,Winner,Kayakalp,PHC,PHC PHOMCHING,Mon,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+650,2021-22,Winner,Winner,Kayakalp,PHC,PHC ATHIBUNG,Peren,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+651,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHETHEBA,Phek,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+652,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHARE,Tuensang,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+653,2021-22,Winner,Winner,Kayakalp,PHC,PHC CHUKITONG,Wokha,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,10
+654,2021-22,Winner,Winner,Kayakalp,PHC,PHC SURUHOTO,Zunheboto,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+655,2021-22,Winner,Winner,Kayakalp,HWC,LONGKONG HWC SC,Mokokchung,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+656,2021-22,Winner,Winner,Kayakalp,HWC,MHAINAMTSI HWC SC,Peren,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+657,2021-22,Winner,Winner,Kayakalp,HWC,SEKRUZU HWC SC,Phek,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+658,2021-22,Winner,Winner,Kayakalp,HWC,PONGIDONG HWC SC,Wokha,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+659,2021-22,Winner,Winner,Kayakalp,HWC,NAGA UNITED HWC HWC SC,Dimapur,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+660,2021-22,Winner,Winner,Kayakalp,HWC,SINGREP HWC SC,Kiphire,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+661,2021-22,Winner,Winner,Kayakalp,HWC,TANGHA HWC SC,Longleng,Nagaland,NAGALAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+662,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, MALKANGIRI",Malkangiri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+663,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,"DISTRICT HOSPITAL, SUNDARGARH",Sundargarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+664,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC BHANDA,Keonjhar,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+665,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC KUDUMULUGUMA,Malkangiri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+666,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC TIKABALI,Kandhamal,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+667,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DHH SUNDARGARH,Sundargarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+668,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC CHANDRAGIRI,Gajapati,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+669,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC BHANDA,Keojhar,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+670,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC GHATAGAON,Keojhar,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+671,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC KUDUMULGUMA,Malkangiri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+672,2021-22,Winner,Winner,Kayakalp,PHC,BALARAMPRASAD,Angul,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+673,2021-22,Winner,Winner,Kayakalp,PHC,Patrapada,Angul,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+674,2021-22,Winner,Winner,Kayakalp,PHC,Ghantua,Balasore,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+675,2021-22,Winner,Winner,Kayakalp,PHC,MELECHHAMUNDA,Baragarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+676,2021-22,Winner,Winner,Kayakalp,PHC,BAINCHA,Bhadrak,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+677,2021-22,Winner,Winner,Kayakalp,PHC,BADIMUNDA,Bolangir,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+678,2021-22,Winner,Winner,Kayakalp,PHC,KHUNTIGUDA,Boudh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+679,2021-22,Winner,Winner,Kayakalp,PHC,ERAKANA,Cuttack,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+680,2021-22,Winner,Winner,Kayakalp,PHC,Budhapal,Deogarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+681,2021-22,Winner,Winner,Kayakalp,PHC,SIRIMULA(KURUMA),Dhenkanal,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+682,2021-22,Winner,Winner,Kayakalp,PHC,GARABANDHA,Gajapati,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+683,2021-22,Winner,Winner,Kayakalp,PHC,GAUDAGOTH,Ganjam,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+684,2021-22,Winner,Winner,Kayakalp,PHC,MANITARA,Ganjam,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+685,2021-22,Winner,Winner,Kayakalp,PHC,DIHASAI,Jagatsinghpur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+686,2021-22,Winner,Winner,Kayakalp,PHC,SINGIPUR,Jajpur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+687,2021-22,Winner,Winner,Kayakalp,PHC,PAKELPARA,Jharsuguda,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+688,2021-22,Winner,Winner,Kayakalp,PHC,DADPUR,Kalahandi,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+689,2021-22,Winner,Winner,Kayakalp,PHC,BARIKUMPA,Kandhamal,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+690,2021-22,Winner,Winner,Kayakalp,PHC,BABAR,Kendrapara,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+691,2021-22,Winner,Winner,Kayakalp,PHC,TALCHUA,Kendrapara,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+692,2021-22,Winner,Winner,Kayakalp,PHC,ITIPUR,Khurda,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+693,2021-22,Winner,Winner,Kayakalp,PHC,MURTAHANDI,Koraput,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+694,2021-22,Winner,Winner,Kayakalp,PHC,MV-79,Malkangiri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+695,2021-22,Winner,Winner,Kayakalp,PHC,MHU Gudugadia,Mayurbhanj,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+696,2021-22,Winner,Winner,Kayakalp,PHC,ASONGA,Nabarangpur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+697,2021-22,Winner,Winner,Kayakalp,PHC,KANTILLO,Nayagarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+698,2021-22,Winner,Winner,Kayakalp,PHC,TARBOD,Nuapada,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+699,2021-22,Winner,Winner,Kayakalp,PHC,NAGAPUR,Puri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+700,2021-22,Winner,Winner,Kayakalp,PHC,RUGADABAI,Rayagada,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+701,2021-22,Winner,Winner,Kayakalp,PHC,BHAJAPUR,Sambalpur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+702,2021-22,Winner,Winner,Kayakalp,PHC,Keonjhar,Deogaon,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+703,2021-22,Winner,Winner,Kayakalp,PHC,MURUSUNDHI,Sonepur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+704,2021-22,Winner,Winner,Kayakalp,PHC,KADOBAHAL,Sundargarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+705,2021-22,Winner,Winner,Kayakalp,UPHC,Dhenkanal,Kathagadasahi UPHC,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+706,2021-22,Winner,Winner,Kayakalp,UPHC,Bhawanipatna,Bhabwanipatana UPHC,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+707,2021-22,Winner,Winner,Kayakalp,HWC,Dharampur,Angul,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+708,2021-22,Winner,Winner,Kayakalp,HWC,Taliudar,Balangir,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+709,2021-22,Winner,Winner,Kayakalp,HWC,Palasa,Balasore,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+710,2021-22,Winner,Winner,Kayakalp,HWC,Pahandi,Bargarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+711,2021-22,Winner,Winner,Kayakalp,HWC,Chatrang,Boudh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+712,2021-22,Winner,Winner,Kayakalp,HWC,Dobal,Bhadrak,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+713,2021-22,Winner,Winner,Kayakalp,HWC,Agrahat HWC SC,Cuttack,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+714,2021-22,Winner,Winner,Kayakalp,HWC,Kalla,Deogarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+715,2021-22,Winner,Winner,Kayakalp,HWC,Kandabindha,Dhenkanal,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+716,2021-22,Winner,Winner,Kayakalp,HWC,Tumana,Gajapati,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+717,2021-22,Winner,Winner,Kayakalp,HWC,Phulta,Ganjam,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+718,2021-22,Winner,Winner,Kayakalp,HWC,HAJIPUR,Jagatsinghapur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+719,2021-22,Winner,Winner,Kayakalp,HWC,Muskuti,Kalahandi,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+720,2021-22,Winner,Winner,Kayakalp,HWC,Pabingia,Kandhamal,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+721,2021-22,Winner,Winner,Kayakalp,HWC,Jamboo,Kendrapara,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+722,2021-22,Winner,Winner,Kayakalp,HWC,Tentulinanda,Keonjhar,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,11
+723,2021-22,Winner,Winner,Kayakalp,HWC,Sagadabhanga,Khordha,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+724,2021-22,Winner,Winner,Kayakalp,HWC,Hardoli,Koraput,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+725,2021-22,Winner,Winner,Kayakalp,HWC,Uduluibeda,Malkangiri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+726,2021-22,Winner,Winner,Kayakalp,HWC,Rajoda,Nabarangapur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+727,2021-22,Winner,Winner,Kayakalp,HWC,Lunisira,Nayagarh,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+728,2021-22,Winner,Winner,Kayakalp,HWC,Amsena,Nuapada,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+729,2021-22,Winner,Winner,Kayakalp,HWC,Baliguali,Puri,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+730,2021-22,Winner,Winner,Kayakalp,HWC,Bankamba,Rayagada,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+731,2021-22,Winner,Winner,Kayakalp,HWC,Deulpadar,Subarnapur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+732,2021-22,Winner,Winner,Kayakalp,HWC,Mayurbhanj,Gangraj,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+733,2021-22,Winner,Winner,Kayakalp,HWC,Sarapali,Sambalpur,Odisha,ODISHA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+734,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,"DISTRICT HOSPITAL, BARNALA",Barnala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+735,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,SDH MUKERIAN,Hoshiarpur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+736,2021-22,Winner -Kayakalp,Winner,Kayakalp,CHC,CHC SHANKAR,Jalandhar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+737,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DH BARNALA,Barnala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+738,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC CHANAWAL,Barnala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+739,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kyam pur,Amritsar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+740,2021-22,Winner,Winner,Kayakalp,PHC,PHC Tallewal,Barnala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+741,2021-22,Winner,Winner,Kayakalp,PHC,PHC Balluana,Bathinda,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+742,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhagrana,Fathehgarh Sahib,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+743,2021-22,Winner,Winner,Kayakalp,PHC,PHC Panjgarein,Faridkot,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+744,2021-22,Winner,Winner,Kayakalp,PHC,PHC Khai Pheme ki,Ferozpur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+745,2021-22,Winner,Winner,Kayakalp,PHC,PHC DHianpur,Gurdaspur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+746,2021-22,Winner,Winner,Kayakalp,PHC,PHC Possi,Hoshiarpur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+747,2021-22,Winner,Winner,Kayakalp,PHC,PHC Raipur Rasulpur,Jalandhar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+748,2021-22,Winner,Winner,Kayakalp,PHC,PHC Dhilwaan,Kapurthala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+749,2021-22,Winner,Winner,Kayakalp,PHC,PHC Issru,Ludhiana,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+750,2021-22,Winner,Winner,Kayakalp,PHC,PHC Ubha,Mansa,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+751,2021-22,Winner,Winner,Kayakalp,PHC,PHC Bhoothgarh,Mohali,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+752,2021-22,Winner,Winner,Kayakalp,PHC,PHC Thandewala,Muktsar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+753,2021-22,Winner,Winner,Kayakalp,PHC,PHC pojewal,SBS Nagar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+754,2021-22,Winner,Winner,Kayakalp,PHC,PHC Dunera,Pathankot,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+755,2021-22,Winner,Winner,Kayakalp,PHC,PHC Fatehpur,Patiala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+756,2021-22,Winner,Winner,Kayakalp,PHC,PHC Amrali,Ropar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+757,2021-22,Winner,Winner,Kayakalp,PHC,PHC Sabrah,Tarn Taran,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+758,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Bhanolanga,Kapurthala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+759,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Jujhar Nagar,Patiala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+760,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Lal Singh Basti,Bathinda,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+761,2021-22,Winner,Winner,Kayakalp,HWC,HWC Ghonewal,Amritsar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+762,2021-22,Winner,Winner,Kayakalp,HWC,HWC Ghunas,Barnala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+763,2021-22,Winner,Winner,Kayakalp,HWC,HWC Bir Behman,Bathinda,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+764,2021-22,Winner,Winner,Kayakalp,HWC,HWC Chunni kalan,Fathehgarh Sahib,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+765,2021-22,Winner,Winner,Kayakalp,HWC,HWC Chunni kalan,Faridkot,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+766,2021-22,Winner,Winner,Kayakalp,HWC,HWC Jandwala,Ferozpur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+767,2021-22,Winner,Winner,Kayakalp,HWC,HWC Hakinpur,Gurdaspur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+768,2021-22,Winner,Winner,Kayakalp,HWC,HWC Jaja,Hoshiarpur,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+769,2021-22,Winner,Winner,Kayakalp,HWC,HWC Dakoha-1,Jalandhar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+770,2021-22,Winner,Winner,Kayakalp,HWC,HWC Arianwal,Kapurthala,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+771,2021-22,Winner,Winner,Kayakalp,HWC,HWC Jarg,Ludhiana,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+772,2021-22,Winner,Winner,Kayakalp,HWC,HWC Dael Singh Wala,Mansa,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+773,2021-22,Winner,Winner,Kayakalp,HWC,HWC Saneta SC,Mohali,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+774,2021-22,Winner,Winner,Kayakalp,HWC,HWC Kauni,Muktsar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+775,2021-22,Winner,Winner,Kayakalp,HWC,HWC Kangna Bet,SBS Nagar,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+776,2021-22,Winner,Winner,Kayakalp,HWC,HWC Kagill,Tarn Taran,Punjab,PUNJAB,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+777,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,R K DISTRICT HOSPITAL RAJSAMAND,Rajsamand,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+778,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,B D K HOSPITAL JHUNJHUNU,Jhunjhunu,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+779,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,SDH CUM NAWALGARH,Jhunjhunu,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+780,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,SATELLITE HOSPITAL SHAHPURA,Bhilwara,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+781,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,B D K HOSPITAL JHUNJHUNU,Jhunjhunu,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+782,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,"CHC NAI, Udaipur",Udaipur,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+783,2021-22,Winner,Winner,Kayakalp,UPHC,BAJARIYA,Sawai Madhopur,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+784,2021-22,Winner,Winner,Kayakalp,HWC,TULCHHON KA NAMLA,Udaipur,Rajasthan,RAJASTHAN,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+785,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,DH SINGTAM,East District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+786,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC JORETHANG,East District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+787,2021-22,Winner,Winner,Kayakalp,PHC,PHC Machung,East District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+788,2021-22,Winner,Winner,Kayakalp,PHC,PHC Samdong,East District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+789,2021-22,Winner,Winner,Kayakalp,PHC,PHC Soreng,West District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+790,2021-22,Winner,Winner,Kayakalp,PHC,PHC Dikchu,North District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+791,2021-22,Winner,Winner,Kayakalp,PHC,PHC Yangyang,South District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,12
+792,2021-22,Winner,Winner,Kayakalp,HWC,Nandugaon HWC,South District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+793,2021-22,Winner,Winner,Kayakalp,HWC,Karjee HWC,West District,Sikkim,SIKKIM,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+794,2021-22,Winner-Kayakalp,Winner,Kayakalp,DH,DH MANAPPARI,Tiruchirapalli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+795,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,DH ERODE,Erode,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+796,2021-22,Winner-Kayakalp,Winner,Kayakalp,SDH/CHC,SDH SIVAKASI,Virudhunagar,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+797,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,SDH HARUR,Dharmapuri,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+798,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DH POLLACHI,Coimbatore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+799,2021-22,WINNER-eco friendly,Winner,Eco-friendly,SDH/CHC,CHC KONGANAPURAM,Salem,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+800,2021-22,Winner,Winner,Kayakalp,PHC,Thindal,Erode,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+801,2021-22,Winner,Winner,Kayakalp,PHC,Kalingapatti,Tenkasi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+802,2021-22,Winner,Winner,Kayakalp,PHC,Pavithiram,Namakkal,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+803,2021-22,Winner,Winner,Kayakalp,PHC,Mannarkoil,Tirunelveli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+804,2021-22,Winner,Winner,Kayakalp,PHC,Kodumbalur,Pudukottai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+805,2021-22,Winner,Winner,Kayakalp,PHC,Valasaiyur,Attur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+806,2021-22,Winner,Winner,Kayakalp,PHC,Belrampatti,Dharmapuri,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+807,2021-22,Winner,Winner,Kayakalp,PHC,Sevalpatti,Sivakasi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+808,2021-22,Winner,Winner,Kayakalp,PHC,MANDALAMANICKAM,Paramakudi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+809,2021-22,Winner,Winner,Kayakalp,PHC,Soranchery,Poonamallee,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+810,2021-22,Winner,Winner,Kayakalp,PHC,Melpatti,Vellore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+811,2021-22,Winner,Winner,Kayakalp,PHC,Mamandur,Cheyyar,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+812,2021-22,Winner,Winner,Kayakalp,PHC,Anandur,Krishnagiri,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+813,2021-22,Winner,Winner,Kayakalp,PHC,Koilpappakudi,Madurai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+814,2021-22,Winner,Winner,Kayakalp,PHC,Kandamangalam,Villupuram,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+815,2021-22,Winner,Winner,Kayakalp,PHC,Kayathar,Koilpatti,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+816,2021-22,Winner,Winner,Kayakalp,PHC,Otivakkam,Chengalpet,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+817,2021-22,Winner,Winner,Kayakalp,PHC,Mungilthuraipattu,Kallakurichi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+818,2021-22,Winner,Winner,Kayakalp,PHC,Edayamelur,Sivagangai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+819,2021-22,Winner,Winner,Kayakalp,PHC,Keezhkulam,Nagercoil,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+820,2021-22,Winner,Winner,Kayakalp,PHC,Thiruvalampozhil,Thanjavur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+821,2021-22,Winner,Winner,Kayakalp,PHC,Kumananthozu,Theni,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+822,2021-22,Winner,Winner,Kayakalp,PHC,Pudhuchatram,Dindugal,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+823,2021-22,Winner,Winner,Kayakalp,PHC,Yedapalli,The Nilgiris,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+824,2021-22,Winner,Winner,Kayakalp,PHC,Ramanaickenpettai,Tirupattur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+825,2021-22,Winner,Winner,Kayakalp,PHC,Govindampalayam,Karur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+826,2021-22,Winner,Winner,Kayakalp,PHC,Salavakkam,Kancheepuram,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+827,2021-22,Winner,Winner,Kayakalp,PHC,Peruvalappur,Tiruchirapalli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+828,2021-22,Winner,Winner,Kayakalp,PHC,Ganapathikurichi,Cuddalore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+829,2021-22,Winner,Winner,Kayakalp,PHC,4 Veerapandi,Coimbatore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+830,2021-22,Winner,Winner,Kayakalp,PHC,Vadugappatti,Tiruppur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+831,2021-22,Winner,Winner,Kayakalp,PHC,Perumuchi,Ranipet,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+832,2021-22,Winner,Winner,Kayakalp,PHC,Suthamalli,Ariyalur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+833,2021-22,Winner,Winner,Kayakalp,PHC,Thethakudi,Nagapattinam,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+834,2021-22,Winner,Winner,Kayakalp,PHC,Kankoduthavanitham,Tiruvarur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+835,2021-22,Winner,Winner,Kayakalp,PHC,V.Kalathur,Perambalur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+836,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Subramaniyapuram,Tiruchirapalli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+837,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Poonamallee,Tiruvallur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+838,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Srivilliputhur,Virudhunagar,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+839,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Thollavilai,Kaniyakumari,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+840,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Thiruchengode,Namakkal,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+841,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Therkuvasal,Madurai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+842,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Lakshmipuram,Vellore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+843,2021-22,Winner,Winner,Kayakalp,UPHC,Uphc Ganapathi Managar,Coimbatore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+844,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Kumarasamipatti,Salem,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+845,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Maharnombuchavadi,Thanjavur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+846,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Karur,Karur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+847,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Dharapuram,Tiruppur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+848,2021-22,Winner,Winner,Kayakalp,HWC,Melaottampatty,Sivakasi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+849,2021-22,Winner,Winner,Kayakalp,HWC,M.Kallupatti,Madurai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+850,2021-22,Winner,Winner,Kayakalp,HWC,Melmana Medu (Thirumazhisai III),Poonamallee,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+851,2021-22,Winner,Winner,Kayakalp,HWC,Pakkanadu,Salem,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+852,2021-22,Winner,Winner,Kayakalp,HWC,Thazhakudy,Nagercoil,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+853,2021-22,Winner,Winner,Kayakalp,HWC,Athipallam,Pudukottai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+854,2021-22,Winner,Winner,Kayakalp,HWC,Peranaikenpudur,Tiruppur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+855,2021-22,Winner,Winner,Kayakalp,HWC,Uthanapalli,Krishnagiri,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+856,2021-22,Winner,Winner,Kayakalp,HWC,Endapatti,Dharmapuri,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+857,2021-22,Winner,Winner,Kayakalp,HWC,Sivanthipuram,Tirunelveli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+858,2021-22,Winner,Winner,Kayakalp,HWC,Kalaiyur,Paramakudi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+859,2021-22,Winner,Winner,Kayakalp,HWC,Thottapuram,Erode,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+860,2021-22,Winner,Winner,Kayakalp,HWC,K.Kailasapuram,Koilpatti,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+861,2021-22,Winner,Winner,Kayakalp,HWC,Thirupanampakkam,Cuddalore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+862,2021-22,Winner,Winner,Kayakalp,HWC,Burliar,The Nilgiris,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+863,2021-22,Winner,Winner,Kayakalp,HWC,Vaividanthangal,Tiruvannamalai,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,13
+864,2021-22,Winner,Winner,Kayakalp,HWC,Kumalam,Villupuram,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+865,2021-22,Winner,Winner,Kayakalp,HWC,Vellalankulam,Tenkasi,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+866,2021-22,Winner,Winner,Kayakalp,HWC,Perungadambanur,Nagapattinam,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+867,2021-22,Winner,Winner,Kayakalp,HWC,Komabaitholu,Theni,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+868,2021-22,Winner,Winner,Kayakalp,HWC,Minnampalli,Karur,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+869,2021-22,Winner,Winner,Kayakalp,HWC,Perunagar,Kancheepuram,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+870,2021-22,Winner,Winner,Kayakalp,HWC,Marathirettiyapatti,Tiruchirapalli,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+871,2021-22,Winner,Winner,Kayakalp,HWC,S.Ayyampalayam,Coimbatore,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+872,2021-22,Winner,Winner,Kayakalp,HWC,Vazhuvathur,Chengalpet,Tamil Nadu,TAMIL NADU,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+873,2021-22,JOINT WINNER- Kayakalp,Joint Winner,Kayakalp,DH,DH TANDUR,Tandur,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+874,2021-22,JOINT WINNER- Kayakalp,Joint Winner,Kayakalp,DH,DH NIRMAL,Nirmal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+875,2021-22,JOINT RUNNER UP- Kayakalp,Joint Runner Up,Kayakalp,DH,DH GAJWEL,Gajwel,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+876,2021-22,JOINT RUNNER UP- Kayakalp,Joint Runner Up,Kayakalp,DH,DH CIRICILLA,Siricilla,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+877,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,AH Mulugu,Mulugu,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+878,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,AH Vemulawada,Vemulawada,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+879,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC AMEERPET,Ameerpet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+880,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC Utnoor,Utnoor,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+881,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,District Hospital- Kamareddy,Kamareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+882,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,District Hospital -Khammam,Khammam,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+883,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,AH Bhanswada,Bhanswada,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+884,2021-22,Winner,Winner,Kayakalp,PHC,GUDI HATHNOOR,Adilabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+885,2021-22,Winner,Winner,Kayakalp,PHC,PHC KOMARARAM,Bhadradri Kothagudem,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+886,2021-22,Winner,Winner,Kayakalp,PHC,PHC Velgatur,Jagitial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+887,2021-22,Winner,Winner,Kayakalp,PHC,PHC Malkapur,Jangaon,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+888,2021-22,Winner,Winner,Kayakalp,PHC,PHC- Kataram,Bhupalapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+889,2021-22,Winner,Winner,Kayakalp,PHC,PHC Ltikyala,Gadwal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+890,2021-22,Winner,Winner,Kayakalp,PHC,PHC Machareddy,Kamareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+891,2021-22,Winner,Winner,Kayakalp,PHC,PHC - MANAKONDUR,Karimnagar,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+892,2021-22,Winner,Winner,Kayakalp,PHC,PHC BONAKAL,Khammam,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+893,2021-22,Winner,Winner,Kayakalp,PHC,PHC Ginnedhari,Asifabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+894,2021-22,Winner,Winner,Kayakalp,PHC,PHC Gangaram,Mahaboobabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+895,2021-22,Winner,Winner,Kayakalp,PHC,PHC GANGAPUR,Mahaboobnagar,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+896,2021-22,Winner,Winner,Kayakalp,PHC,PHC HAZIPUR,Mancharial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+897,2021-22,Winner,Winner,Kayakalp,PHC,PHC Narsingi,Medak,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+898,2021-22,Winner,Winner,Kayakalp,PHC,Keesara,Medchal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+899,2021-22,Winner,Winner,Kayakalp,PHC,PHC Peruru,Mulugu,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+900,2021-22,Winner,Winner,Kayakalp,PHC,PHC Damaragidda,Narayanapet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+901,2021-22,Winner,Winner,Kayakalp,PHC,PHC-BALMOOR,Nagarkurnool,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+902,2021-22,Winner,Winner,Kayakalp,PHC,PHC ALGADAPA,Nalgonda,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+903,2021-22,Winner,Winner,Kayakalp,PHC,PHC Thanoor,Nirmal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+904,2021-22,Winner,Winner,Kayakalp,PHC,PHC VELPUR,Nizamabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+905,2021-22,Winner,Winner,Kayakalp,PHC,PHC ELIGAID,Peddapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+906,2021-22,Winner,Winner,Kayakalp,PHC,PHC Kodurpaka,Rajanna Siricilla,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+907,2021-22,Winner,Winner,Kayakalp,PHC,PHC Talkondapally,Rangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+908,2021-22,Winner,Winner,Kayakalp,PHC,Nylkal,Sangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+909,2021-22,Winner,Winner,Kayakalp,PHC,PHC - Bejjanki,Siddipet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+910,2021-22,Winner,Winner,Kayakalp,PHC,PHC Chilkur,Suryapet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+911,2021-22,Winner,Winner,Kayakalp,PHC,PHC Peddamandadi,Wanaparthy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+912,2021-22,Winner,Winner,Kayakalp,PHC,PHC Khanapur,Warangal Rural,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+913,2021-22,Winner,Winner,Kayakalp,PHC,PHC Shyampet,Warangal Urban,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+914,2021-22,Winner,Winner,Kayakalp,PHC,PHC THURKAPALLY,Yadadri Bhuvanagir,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+915,2021-22,Winner,Winner,Kayakalp,PHC,BOMRASPET,Vikarabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+916,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC HAMALIWADA,Adilabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+917,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC RAMAVARAM,Kothagudem,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+918,2021-22,Winner,Winner,Kayakalp,UPHC,Khilagadda,Jagitial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+919,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC- Bhupalpally,Bhupalapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+920,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Rajiv Nagar,Kamareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+921,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC - MOUTHAZKHANA,Karimnagar,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+922,2021-22,Winner,Winner,Kayakalp,UPHC,MAMILLAGUDEM,Khammam,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+923,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Navegaonbhasthi,Asifabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+924,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC OLD MANCHERIAL,Mancherial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+925,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Medak,Medak,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+926,2021-22,Winner,Winner,Kayakalp,UPHC,Balanagar,Medchal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+927,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC LINEWADA,Mulugu,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+928,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC bangalpet,Nirmal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+929,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Dubba,Nizamabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+930,2021-22,Winner,Winner,Kayakalp,UPHC,ALLUR,Peddapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,14
+931,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC P.S. Nagar,Rajanna Siricilla,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+932,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC ABDULLAPURMET,Rangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+933,2021-22,Winner,Winner,Kayakalp,UPHC,Indranagar,Sangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+934,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC - Narsapura,Siddipet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+935,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Girinagar,Suryapet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+936,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Deshaipet,Warangal Rural,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+937,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Laskersingaram,Warangal Urban,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+938,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC-BORABANDA,Hyderabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+939,2021-22,Winner,Winner,Kayakalp,HWC,HWC GOKONDA,Adilabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+940,2021-22,Winner,Winner,Kayakalp,HWC,HWC SARVARAM,Kothagudem,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+941,2021-22,Winner,Winner,Kayakalp,HWC,Madannapet HWC,Hyderabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+942,2021-22,Winner,Winner,Kayakalp,HWC,Pudur,Jagitial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+943,2021-22,Winner,Winner,Kayakalp,HWC,HWC-Alimpur,Jangaon,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+944,2021-22,Winner,Winner,Kayakalp,HWC,Dhanwada,Bhupalapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+945,2021-22,Winner,Winner,Kayakalp,HWC,HWC Nemli,Kamareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+946,2021-22,Winner,Winner,Kayakalp,HWC,HWC - MULKANOOR,Karimnagar,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+947,2021-22,Winner,Winner,Kayakalp,HWC,SR.PURAM,Khammam,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+948,2021-22,Winner,Winner,Kayakalp,HWC,Gundaipet,Asifabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+949,2021-22,Winner,Winner,Kayakalp,HWC,HWC Munigalaveedu,Mahaboobad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+950,2021-22,Winner,Winner,Kayakalp,HWC,HWC AJILAPUR,Mahaboobnagar,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+951,2021-22,Winner,Winner,Kayakalp,HWC,SRIRAMPUR,Mancherial,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+952,2021-22,Winner,Winner,Kayakalp,HWC,HWC Lingampally,Medak,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+953,2021-22,Winner,Winner,Kayakalp,HWC,KPHB4,Medchal,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+954,2021-22,Winner,Winner,Kayakalp,HWC,HWC-Medaram,Mulugu,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+955,2021-22,Winner,Winner,Kayakalp,HWC,HWC Teelair,Narayanpet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+956,2021-22,Winner,Winner,Kayakalp,HWC,HWC-PENIMILLA,Nagarkurnool,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+957,2021-22,Winner,Winner,Kayakalp,HWC,HWC-BAIRAVONIBANDA,Nalgonda,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+958,2021-22,Winner,Winner,Kayakalp,HWC,HWC Chimanpally,Nizamabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+959,2021-22,Winner,Winner,Kayakalp,HWC,SULTHANPUR,Peddapally,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+960,2021-22,Winner,Winner,Kayakalp,HWC,Boppapur,Rajanna Siricilla,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+961,2021-22,Winner,Winner,Kayakalp,HWC,AZIZ NAGAR HWC- MOINABAD,Rangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+962,2021-22,Winner,Winner,Kayakalp,HWC,Malkapur,Sangareddy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+963,2021-22,Winner,Winner,Kayakalp,HWC,HWC - Wattipally,Siddipet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+964,2021-22,Winner,Winner,Kayakalp,HWC,Kandagatla,Suryapet,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+965,2021-22,Winner,Winner,Kayakalp,HWC,HWC Pamreddypally,Wanaparthy,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+966,2021-22,Winner,Winner,Kayakalp,HWC,HWC Dharmaram,Warangal Rural,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+967,2021-22,Winner,Winner,Kayakalp,HWC,HWC Bheempally,Warangal Urban,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+968,2021-22,Winner,Winner,Kayakalp,HWC,HWC ARRUR,Yadadri Bhuvanagiri,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+969,2021-22,Winner,Winner,Kayakalp,HWC,Ellakonda,Vikarabad,Telangana,TELANGANA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+970,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DH DHALAI,Dhalai,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+971,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC MANUBAZAR,South District,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+972,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DH DHALAI,Dhalai,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+973,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC MANUBAZAR,South District,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+974,2021-22,Winner,Winner,Kayakalp,PHC,Jampui PHC,North Tripura,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+975,2021-22,Winner,Winner,Kayakalp,PHC,Machmara PHC,Unakoti,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+976,2021-22,Winner,Winner,Kayakalp,PHC,Nepaltilla PHC,Dhalai,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+977,2021-22,Winner,Winner,Kayakalp,PHC,HDS PHC,Khowai,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+978,2021-22,Winner,Winner,Kayakalp,PHC,Taibandal PHC,Sephaijala,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+979,2021-22,Winner,Winner,Kayakalp,PHC,Tulamura PHC,Gomati,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+980,2021-22,Winner,Winner,Kayakalp,PHC,Baikhora PHC,Gomati,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+981,2021-22,Winner,Winner,Kayakalp,UPHC,Madhyapratapgarh UPHC,West,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+982,2021-22,Winner,Winner,Kayakalp,HWC,Dhaleswar HWC-SC,West,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+983,2021-22,Winner,Winner,Kayakalp,HWC,East Piraikhola HWC-SC,South,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+984,2021-22,Winner,Winner,Kayakalp,HWC,Dudhpur HWC-SC,Unakoti,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+985,2021-22,Winner,Winner,Kayakalp,HWC,Sarma HWC-SC,Dhalai,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+986,2021-22,Winner,Winner,Kayakalp,HWC,East Gokul Nagar HWC-SC,Sephaijala,Tripura,TRIPURA,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+987,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DWH MUZAFFARNAGAR,Muzaffarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+988,2021-22,1ST RUNNER UP- Kayakalp,Runner Up,Kayakalp,DH,DWH LALITPUR,Lalitpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+989,2021-22,2ND RUNNER UP,Runner Up,Kayakalp,DH,DWH MEERUT,Meerut,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+990,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,CHC DEEH,Raibarelli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+991,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,CHC LAR,Deoria,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+992,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DWH PILIBHIT,Pilibhit,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+993,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC DEEH,Raibarelli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+994,2021-22,Winner,Winner,Kayakalp,PHC,Barara,Agra,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+995,2021-22,Winner,Winner,Kayakalp,PHC,Phc Surajpur,Aligarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+996,2021-22,Winner,Winner,Kayakalp,PHC,Tigri,Amroha,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+997,2021-22,Winner,Winner,Kayakalp,PHC,Kudarkoat,Auraiya,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+998,2021-22,Winner,Winner,Kayakalp,PHC,Sathion,Azamgarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+999,2021-22,Winner,Winner,Kayakalp,PHC,Saidpur,Badaun,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+1000,2021-22,Winner,Winner,Kayakalp,PHC,Pandah,Ballia,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,15
+1001,2021-22,Winner,Winner,Kayakalp,PHC,Kamasin,Banda,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1002,2021-22,Winner,Winner,Kayakalp,PHC,Ram Nagar,Bareilly,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1003,2021-22,Winner,Winner,Kayakalp,PHC,Phc Halua,Basti,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1004,2021-22,Winner,Winner,Kayakalp,PHC,Aphc Mahjooda,Bhadohi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1005,2021-22,Winner,Winner,Kayakalp,PHC,Phc Noorpur,Bijnor,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1006,2021-22,Winner,Winner,Kayakalp,PHC,Amdahan,Chandauli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1007,2021-22,Winner,Winner,Kayakalp,PHC,Aphc Baghwala,Etah,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1008,2021-22,Winner,Winner,Kayakalp,PHC,Bijauli,Etawah,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1009,2021-22,Winner,Winner,Kayakalp,PHC,Amritpur,Farrukhabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1010,2021-22,Winner,Winner,Kayakalp,PHC,Teliyani,Fatehpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1011,2021-22,Winner,Winner,Kayakalp,PHC,Nphc Karhara,Firozabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1012,2021-22,Winner,Winner,Kayakalp,PHC,Zamania,Ghazipur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1013,2021-22,Winner,Winner,Kayakalp,PHC,Bphc Sardarnagar,Gorakhpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1014,2021-22,Winner,Winner,Kayakalp,PHC,Phc Sisolar,Hamirpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1015,2021-22,Winner,Winner,Kayakalp,PHC,Simbhaoli,Hapur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1016,2021-22,Winner,Winner,Kayakalp,PHC,Bharawan,Hardoi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1017,2021-22,Winner,Winner,Kayakalp,PHC,Hathras Junction,Hathras,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1018,2021-22,Winner,Winner,Kayakalp,PHC,Tezibazar,Jaunpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1019,2021-22,Winner,Winner,Kayakalp,PHC,Phc Garautha,Jhansi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1020,2021-22,Winner,Winner,Kayakalp,PHC,Patti,Kannauj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1021,2021-22,Winner,Winner,Kayakalp,PHC,Rania,Kanpur Dehat,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1022,2021-22,Winner,Winner,Kayakalp,PHC,Bithoor,Kanpur Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1023,2021-22,Winner,Winner,Kayakalp,PHC,Sarsawan,Kaushambi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1024,2021-22,Winner,Winner,Kayakalp,PHC,Bphc Khadda,Kushinagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1025,2021-22,Winner,Winner,Kayakalp,PHC,"Phc, Birdha",Lalitpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1026,2021-22,Winner,Winner,Kayakalp,PHC,Phc Bharwara,Mahoba,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1027,2021-22,Winner,Winner,Kayakalp,PHC,Salempur,Mainpuri,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1028,2021-22,Winner,Winner,Kayakalp,PHC,Vrindavan,Mathura,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1029,2021-22,Winner,Winner,Kayakalp,PHC,Rajpura,Meerut,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1030,2021-22,Winner,Winner,Kayakalp,PHC,Phc Haliya,Mirzapur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1031,2021-22,Winner,Winner,Kayakalp,PHC,Tajpur,Moradabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1032,2021-22,Winner,Winner,Kayakalp,PHC,Sukhpalnagar,Pratapgarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1033,2021-22,Winner,Winner,Kayakalp,PHC,Pratappur,Prayagraj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1034,2021-22,Winner,Winner,Kayakalp,PHC,Saidnagar,Rampur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1035,2021-22,Winner,Winner,Kayakalp,PHC,Phc Sadholi Kadeem,Saharanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1036,2021-22,Winner,Winner,Kayakalp,PHC,Rajpur,Sambhal,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1037,2021-22,Winner,Winner,Kayakalp,PHC,Khudaganj,Shahjahanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1038,2021-22,Winner,Winner,Kayakalp,PHC,Kakrahi (Bphc),Sonebhadra,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1039,2021-22,Winner,Winner,Kayakalp,PHC,Pindhara,Varanasi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1040,2021-22,Winner,Winner,Kayakalp,UPHC,Jivnimandi,Agra,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1041,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Banna Devi,Aligarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1042,2021-22,Winner,Winner,Kayakalp,UPHC,Bakarganj,Bareilly,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1043,2021-22,Winner,Winner,Kayakalp,UPHC,MAHARAJPUR,Ghaziabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1044,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Basantpur (HWC),Gorakhpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1045,2021-22,Winner,Winner,Kayakalp,UPHC,"HWC-UPHC, OUT SIDE BARAGAON GATE",Jhansi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1046,2021-22,Winner,Winner,Kayakalp,UPHC,Kalyanpur Purani,Kanpur Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1047,2021-22,Winner,Winner,Kayakalp,UPHC,Sewa Sadan (UFWC),Lucknow,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1048,2021-22,Winner,Winner,Kayakalp,UPHC,Puliceline,Meerut,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1049,2021-22,Winner,Winner,Kayakalp,UPHC,MAJHOLI,Moradabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1050,2021-22,Winner,Winner,Kayakalp,UPHC,ESI TOWNHALL,Moradabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1051,2021-22,Winner,Winner,Kayakalp,UPHC,DARAGANJ-1,Prayagraj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1052,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Labour Colony,Saharanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1053,2021-22,Winner,Winner,Kayakalp,UPHC,Jalikothi,Shahjahanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1054,2021-22,Winner,Winner,Kayakalp,UPHC,MANDUADIH,Varanasi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1055,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Mandi Samiti,Etah,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1056,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC-Dakshini Khalapar,Muzaffarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1057,2021-22,Winner,Winner,Kayakalp,UPHC,KAJiPURA,Balia,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1058,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Indira Nagar (HWC),Maharajganj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1059,2021-22,Winner,Winner,Kayakalp,UPHC,UPHC Karvi,Chitrkoot,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1060,2021-22,Winner,Winner,Kayakalp,UPHC,RAMGANJ PAKKA TALAB,Fatehpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1061,2021-22,Winner,Winner,Kayakalp,HWC,Aphc Lakhanipatti,Ambedkarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1062,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Phc Ramganj,Amethi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1063,2021-22,Winner,Winner,Kayakalp,HWC,Chaure Bazar Hwc,Ayodhya,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1064,2021-22,Winner,Winner,Kayakalp,HWC,Dhanora,Bagpat,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1065,2021-22,Winner,Winner,Kayakalp,HWC,Ramwapur,Bahraich,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1066,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Mittai,Barabanki,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1067,2021-22,Winner,Winner,Kayakalp,HWC,Phc Sitapur,Chitrkoot,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1068,2021-22,Winner,Winner,Kayakalp,HWC,"Nphc Saiaon Lar ,Deoria",Deoria,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1069,2021-22,Winner,Winner,Kayakalp,HWC,Farrukh Nagar,Ghaziabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1070,2021-22,Winner,Winner,Kayakalp,HWC,Balpur,Gonda,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1071,2021-22,Winner,Winner,Kayakalp,HWC,Hwc-Phc Shekhpur Bujurg,Jalaun (Orai),Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1072,2021-22,Winner,Winner,Kayakalp,HWC,Oel,Lakhimpur Khiri,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1073,2021-22,Winner,Winner,Kayakalp,HWC,Kumhrawan,Lucknow,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1074,2021-22,Winner,Winner,Kayakalp,HWC,Phc Ramahuli (Hwc),Maharajganj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1075,2021-22,Winner,Winner,Kayakalp,HWC,Makhana,Mau,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,16
+1076,2021-22,Winner,Winner,Kayakalp,HWC,Aphc Ghansipura,Muzaffarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1077,2021-22,Winner,Winner,Kayakalp,HWC,Phc Parsa Jhakariya,Santkabir Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1078,2021-22,Winner,Winner,Kayakalp,HWC,Aphc Ghadi Puktha,Shamli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1079,2021-22,Winner,Winner,Kayakalp,HWC,Bhangaha,Shrawasti,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1080,2021-22,Winner,Winner,Kayakalp,HWC,Phc Kakrahwa,Siddhartha Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1081,2021-22,Winner,Winner,Kayakalp,HWC,Bhandia,Sitapur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1082,2021-22,Winner,Winner,Kayakalp,HWC,Haliyapur,Sultanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1083,2021-22,Winner,Winner,Kayakalp,HWC,Bakarganj,Bareilly,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1084,2021-22,Winner,Winner,Kayakalp,HWC,UPHC Basantpur (HWC),Gorakhpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1085,2021-22,Winner,Winner,Kayakalp,HWC,"HWC-UPHC, OUT SIDE BARAGAON GATE",Jhansi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1086,2021-22,Winner,Winner,Kayakalp,HWC,Sewa Sadan (UFWC),Lucknow,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1087,2021-22,Winner,Winner,Kayakalp,HWC,DARAGANJ-1,Prayagraj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1088,2021-22,Winner,Winner,Kayakalp,HWC,UPHC Labour Colony,Saharanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1089,2021-22,Winner,Winner,Kayakalp,HWC,Jalikothi,Shahjahanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1090,2021-22,Winner,Winner,Kayakalp,HWC,UPHC-Dakshini Khalapar,Muzaffarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1091,2021-22,Winner,Winner,Kayakalp,HWC,UPHC Indira Nagar (HWC),Maharajganj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1092,2021-22,Winner,Winner,Kayakalp,HWC,RAMGANJ PAKKA TALAB,Fatehpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1093,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Garsani Bicpuri,Agra,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1094,2021-22,Winner,Winner,Kayakalp,HWC,Jamunipur,Ambedkarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1095,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Sc Kathora,Amethi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1096,2021-22,Winner,Winner,Kayakalp,HWC,Devarpur,Auraiya,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1097,2021-22,Winner,Winner,Kayakalp,HWC,Sarethi Poora,Ayodhya,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1098,2021-22,Winner,Winner,Kayakalp,HWC,Mohamadpur,Azamgarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1099,2021-22,Winner,Winner,Kayakalp,HWC,Ashwa Mohd Pur,Bahraich,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1100,2021-22,Winner,Winner,Kayakalp,HWC,Sitakund,Ballia,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1101,2021-22,Winner,Winner,Kayakalp,HWC,Vishnupur Tantanwa,Balrampur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1102,2021-22,Winner,Winner,Kayakalp,HWC,Bagha,Banda,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1103,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Pyarepur Saraiya,Barabanki,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1104,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Baxer,Basti,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1105,2021-22,Winner,Winner,Kayakalp,HWC,Bahraichi (Hwc-Sc),Bhadohi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1106,2021-22,Winner,Winner,Kayakalp,HWC,Chowckpuri,Bijnor,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1107,2021-22,Winner,Winner,Kayakalp,HWC,Bateja,Chandauli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1108,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Bandhi,Chitrkoot,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1109,2021-22,Winner,Winner,Kayakalp,HWC,"Hwc Sc Puraina Salempur ,Deoria",Deoria,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1110,2021-22,Winner,Winner,Kayakalp,HWC,Fatehpura,Etawah,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1111,2021-22,Winner,Winner,Kayakalp,HWC,Simaura,Fatehpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1112,2021-22,Winner,Winner,Kayakalp,HWC,Asan Kotla,Firozabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1113,2021-22,Winner,Winner,Kayakalp,HWC,Shakoorpur,Ghaziabad,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1114,2021-22,Winner,Winner,Kayakalp,HWC,Sc Lahsari (Hwc),Gorakhpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1115,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Bandur Khurd,Hamirpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1116,2021-22,Winner,Winner,Kayakalp,HWC,Hwc-Sc Chamari,Jalaun (Orai),Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1117,2021-22,Winner,Winner,Kayakalp,HWC,Bhitari,Jaunpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1118,2021-22,Winner,Winner,Kayakalp,HWC,Hwc-Sc Eskil,Jhansi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1119,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Shareefpur,Kannauj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1120,2021-22,Winner,Winner,Kayakalp,HWC,Kandhi,Kanpur Dehat,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1121,2021-22,Winner,Winner,Kayakalp,HWC,Benda,Kanpur Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1122,2021-22,Winner,Winner,Kayakalp,HWC,Gadhi,Kaushambi,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1123,2021-22,Winner,Winner,Kayakalp,HWC,Ahirauli (Sc-Hwc),Kushinagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1124,2021-22,Winner,Winner,Kayakalp,HWC,"Hwc-Sc, Jamalpur",Lalitpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1125,2021-22,Winner,Winner,Kayakalp,HWC,Thawar,Lucknow,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1126,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Sc Girgitya Paniyara Maharajganj,Maharajganj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1127,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Nakara,Mahoba,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1128,2021-22,Winner,Winner,Kayakalp,HWC,Panigoun,Mathura,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1129,2021-22,Winner,Winner,Kayakalp,HWC,Dadi,Mau,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1130,2021-22,Winner,Winner,Kayakalp,HWC,Loti,Meerut,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1131,2021-22,Winner,Winner,Kayakalp,HWC,Nevadiya (Hwc-Sc)Lalganj,Mirzapur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1132,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Chapar,Muzaffarnagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1133,2021-22,Winner,Winner,Kayakalp,HWC,Yadavpur,Pratapgarh,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1134,2021-22,Winner,Winner,Kayakalp,HWC,Panchderva,Prayagraj,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1135,2021-22,Winner,Winner,Kayakalp,HWC,Jagdishpur,Raebareli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1136,2021-22,Winner,Winner,Kayakalp,HWC,Tiraha,Rampur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1137,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Kumhar Heda,Saharanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1138,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Sihtikar,Santkabir Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1139,2021-22,Winner,Winner,Kayakalp,HWC,Bangaon,Shahjahanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1140,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Kairtu,Shamli,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1141,2021-22,Winner,Winner,Kayakalp,HWC,Balanpur Basantpur,Shrawasti,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1142,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Baniyadeeh,Siddhartha Nagar,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1143,2021-22,Winner,Winner,Kayakalp,HWC,Hasanpur,Sitapur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1144,2021-22,Winner,Winner,Kayakalp,HWC,Patwadh (Hwc-Sc),Sonebhadra,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1145,2021-22,Winner,Winner,Kayakalp,HWC,Hwc Rasulpur,Sultanpur,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1146,2021-22,Winner,Winner,Kayakalp,HWC,Ajgain,Unnao,Uttar Pradesh,UTTAR PRADESH,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1147,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DH RUDRAPRAYAG,Rudraprayag,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1148,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,SDH ROORKEE,Haridawar,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1149,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,CHC SAHIYA,Dehradun,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1150,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Baricheena,Almora,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,17
+1151,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Gochar,Chamoli,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1152,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Banbasa,Champawat,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1153,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Balawala,Dehradun,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1154,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Dhari,Nainital,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1155,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Kot,Pauri,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1156,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Kanalichina,Pithoragarh,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1157,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Fakot,Tehri,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1158,2021-22,Winner,Winner,Kayakalp,PHC,PHC-Pipali,Uttarkashi,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1159,2021-22,Winner,Winner,Kayakalp,UPHC,"UPHC-Salempur, Roorkee",Haridwar,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1160,2021-22,Winner,Winner,Kayakalp,HWC,HWC-Shamshergarh,Dehradun,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1161,2021-22,Winner,Winner,Kayakalp,HWC,HWC-Himmatpur,Nainital,Uttarakhand,UTTARAKHAND,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1162,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,DH SILIGURI,Darjeeling,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1163,2021-22,WINNER-Kayakalp,Winner,Kayakalp,DH,M R BANGUR,S 24 Pargana,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1164,2021-22,WINNER-Kayakalp,Winner,Kayakalp,SDH/CHC,MEMARI RH,Purba Bardhaman,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1165,2021-22,RUNNER UP- Kayakalp,Runner Up,Kayakalp,SDH/CHC,BORSUL BPHC,Purba Bardhaman,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1166,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DH SILIGURI,Darjeeling,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1167,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,DH,DH SURI,Birbhum,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1168,2021-22,WINNER-Eco friendly,Winner,Eco-friendly,SDH/CHC,MEMARI RH,Purba Bardhaman,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1169,2021-22,Winner,Winner,Kayakalp,PHC,Silbarihat PHC,Alipurduar,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1170,2021-22,Winner,Winner,Kayakalp,PHC,Beliatore PHC,Bankura,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1171,2021-22,Winner,Winner,Kayakalp,PHC,Barunhat PHC,Basirhat Health District,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1172,2021-22,Winner,Winner,Kayakalp,PHC,Khujutipara PHC,Birbhum,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1173,2021-22,Winner,Winner,Kayakalp,PHC,Kundapuskarini PHC,Bishnupur HD,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1174,2021-22,Winner,Winner,Kayakalp,PHC,Kushadwip PHC,Bishnupur HD,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1175,2021-22,Winner,Winner,Kayakalp,PHC,Rampur PHC,Coochbehar,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1176,2021-22,Winner,Winner,Kayakalp,PHC,Batun PHC,Dakshin Dinajpur,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1177,2021-22,Winner,Winner,Kayakalp,PHC,Bidhannagar PHC,Darjeeling,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1178,2021-22,Winner,Winner,Kayakalp,PHC,Gadamathura PHC,Diamond Harbour Health District,West Bengal,cWtEST BENGAL,True,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1179,2021-22,Winner,Winner,Kayakalp,PHC,Bajemalia,Hooghly,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1180,2021-22,Winner,Winner,Kayakalp,PHC,Dhulasimla PHC,Howrah,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1181,2021-22,Winner,Winner,Kayakalp,PHC,Banarhat PHC,Jalpaiguri,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1182,2021-22,Winner,Winner,Kayakalp,PHC,Sasra PHC,Jhargram,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1183,2021-22,Winner,Winner,Kayakalp,PHC,Samthar PHC,Kalimpong,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1184,2021-22,Winner,Winner,Kayakalp,PHC,Golapganj PHC,Malda,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1185,2021-22,Winner,Winner,Kayakalp,PHC,Bahutali PHC,Murshidabad,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1186,2021-22,Winner,Winner,Kayakalp,PHC,Panighata PHC,Nadia,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1187,2021-22,Winner,Winner,Kayakalp,PHC,Heria PHC,Nandigram HD,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1188,2021-22,Winner,Winner,Kayakalp,PHC,Mahammadpur PHC,Nandigram HD,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1189,2021-22,Winner,Winner,Kayakalp,PHC,Beraberia PHC,North 24 Parganas,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1190,2021-22,Winner,Winner,Kayakalp,PHC,Shibpur PHC,Paschim Bardhaman,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1191,2021-22,Winner,Winner,Kayakalp,PHC,Bhurungi,Paschim Medinipur,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1192,2021-22,Winner,Winner,Kayakalp,PHC,Binodpur PHC,Purba Bardhaman,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1193,2021-22,Winner,Winner,Kayakalp,PHC,Dk. Damodarpur,Purba Medinipur,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1194,2021-22,Winner,Winner,Kayakalp,PHC,Begunkodar,Purulia,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1195,2021-22,Winner,Winner,Kayakalp,PHC,Noapara-Ulkunda,Rampurhat HD,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1196,2021-22,Winner,Winner,Kayakalp,PHC,Tona PHC,South 24 Parganas,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
+1197,2021-22,Winner,Winner,Kayakalp,PHC,Majihar PHC,Uttar Dinajpur,West Bengal,WEST BENGAL,False,KAYAKALP WINNER FACILITIES 21-22.pdf,18
