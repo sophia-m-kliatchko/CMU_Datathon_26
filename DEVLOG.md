@@ -22,12 +22,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 16:22: Raw address columns dropped from silver only when fully covered by a cleaned column
+### 2026-11-21 16:18: Raw address columns dropped from silver only when fully covered by a cleaned column
 - **Who:** Claude (for Sophia)
 - **What:**
   - `notebooks/01_bronze_to_silver.py` (section 7 and header).
   - `docs/silver-tables.md` (dropped-columns section and watch-out 22).
-  - Replaces the unconditional drop of `address_line1/2/3` logged at 16:17.
+  - Replaces the unconditional drop of `address_line1/2/3` logged earlier at 16:17.
 - **How:**
   - Pairs: `address_line1/2/3` → `address_full`, `address_city` → `city_clean`, `address_stateOrRegion` → `state_clean`, `address_zipOrPostcode` → `pincode_clean`.
   - For each pair, one aggregate counts rows that have a raw value but no cleaned value. A raw column is dropped only if that count is 0; otherwise it's kept, and the notebook prints the count.
