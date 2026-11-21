@@ -22,6 +22,21 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 15:30: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `data/external/nqas_certified_facilities.csv` (989 rows: 796 full certification, 193 partial).
+  - `sophia-wip` fast-forwarded to `main` (commit `0c56abd`). This brings in the teammate-added `data/raw/` files: `facilities.csv`, the India Post PIN directory and NFHS-5.
+  - GitHub CLI 2.105.0 installed via winget and signed in as `sophia-m-kliatchko`.
+  - The temporary `docs/pr-drafts/` folder was removed (its text is in PR #2).
+- **How:** ran `python scripts/scrape_nqas.py` (460 requests at a 0.5 s delay), then `git merge --ff-only origin/main` and `git push`.
+- **Why:** to finish the NQAS download, and keep `sophia-wip` level with `main` so the next PR is clean. PR #2 (NQAS scraper and Kayakalp converter) had already been opened by Sophia in the browser and merged, so no duplicate PR was created.
+- **Notes / follow-ups:**
+  - **NQAS completeness:** the site reports 994 rows; we got 989 unique. A plain page walk got only 872 unique rows, so splitting queries by state and district recovered 117. The last 5 are probably true duplicate listings on the site, but this isn't proven.
+  - **The list is historical:** certificate expiry dates run 2019–2023, so none are current. Use it only as a "was ever certified" signal, and look for a current NQAS source (the NHSRC dashboard reports about 21k certified facilities).
+  - `.DS_Store` files (macOS clutter) arrived from `main`. Consider removing them and adding them to `.gitignore`.
+  - Now that the real `data/raw/facilities.csv` is in the repo, check the silver notebook against its actual columns.
+
 ### 2026-11-21 14:45: Scripts to turn outside quality datasets into CSVs (NQAS website, Kayakalp PDF)
 - **Who:** Claude (for Sophia)
 - **What:**

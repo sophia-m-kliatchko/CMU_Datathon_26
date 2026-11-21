@@ -1,0 +1,990 @@
+state,district,facility_name,department_assessed,validity_from,validity_to,certification_type,source_url,scraped_on
+Andhra Pradesh,Anantapur,PHC Guttur,All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Anantapur,"PHC Kristipadu, Anantapur",All 6 departments,13-09-2020,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Ananthapur,"PHC Molakavemula, Ananthapur",All 6 departments,14-05-2021,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Ananthapur,"PHC Vajrakarur, Ananthapur",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Ananthapuramu,"PHC Tadimarri, Ananthapuram",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Anatapur,"PHC Chukkaluru, Anantapuram",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chitoor,"PHC Kuppambaduru, Chitoor",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittoor,"CHC- Puttur, Chittoor",All 12 department,25-07-2017,24-07-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittoor,"PHC Papanaidupeta, Chittoor",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittoor,PHC- Erpedu (Tribal) Chittoor,All 6 Departments,25-07-2017,24-07-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittor,"PHC Kammapalli, Chittor",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittor,"PHC Mangalam, Chittor",All 6 departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Chittor,"PHC Parameshwara, Mangalam, Chittor",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,East Godavari,PHC Avidi,All 6 departments,22-06-2019,21-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,East Godavari,"PHC Chopella, East Godavari",All 6 departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,East Godavari,"PHC Dowlaiswaram, East Godavari",All 6 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,East Godavari,"PHC Peddada, East Godavari",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,East Godavari,PHC- Lakkavaram (East Godavari),All Departments,09-05-2021,08-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Guntur,PHC Panidham,All 6 departments,22-06-2019,21-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Guntur,"PHC Tallapalem, Guntur",All 6 departments,14-07-2019,13-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Guntur,"PHC- Nutakki, Guntur",All 6 Departments,25-07-2019,24-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Guntur,"PHC- Venigandla, Guntur",All 6 Departments,25-07-2021,24-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kadapa,Devapatla (Kadapa),All 6 department,23-04-2021,22-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kadapa,PHC Muddanuru (Kadapa),All 6 department,23-04-2019,22-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kadapa,"PHC Pendlamarri, Kadapa",All 6 departments,16-08-2021,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kadapa,"PHC Thondur, Kadapa",All 6 departments,14-07-2019,13-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kadapa,"PHC Vaddiral, Kadapa",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,"PHC Chinaogirala, Krishna",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,"PHC Kodur, Krishna",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,"PHC Lingala, Krishna",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,"PHC Nagayalanka, Krishna",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,PHC Penamaluru (Krishna),All 6 department,23-04-2019,22-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Krishna,PHC- Musunuru (Krishna),All Departments,09-05-2019,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,"PHC Gonigandla, Kurnool",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,"PHC Kammarachedu, Kurnool",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,PHC Kothapalli (Tribal) Kurnool,All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,"PHC Pagidiroy, Kurnool",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,"PHC Peddatumbalam, Kurnool",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,"PHC Rudravaram, Kurnool",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Kurnool,PHC Yerraguntla,All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Nellore,PHC Muthukur,All 6 departments,08-06-2021,07-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Nellore,"PHC Ramatheertham, Nellore",All 6 departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Nellore,"PHC Sangam, Nellore",All 6 departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Nellore,"PHC Vidavalur, Nellore",All 6 departments,14-07-2021,13-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Nellore,PHC- Dhoravarisatram (Nellore),All 6 Departments,25-07-2019,24-07-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Prakasam,CHC- Kanigiri (Prakasm),All Departments,22-05-2019,21-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Prakasam,PHC Chinnaganjam,All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Prakasam,PHC East Gangavaram,All 6 departments,22-06-2019,21-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Prakasam,"PHC Kurichedu, Prakasam",All 6 departments,04-06-2021,03-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Prakasam,PHC Tarlupadu,All 6 departments,15-06-2019,14-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,SrikaKulam,PHC- Srikurman (Srikakulam),All Departments,09-05-2021,08-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Srikakulam,"PHC Baidalapuram, Srikakulam",All 6 departments,24-06-2019,23-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Srikakulam,PHC Chapara,All 6 departments,22-06-2019,21-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Vizianagaram,"Maharaja District Hospital, Vizianagaram",All 18 departments,02-08-2018,01-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Vizianagaram,PHC Garbham,All 6 departments,08-06-2021,07-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Vizianagaram,PHC Neelakantapuram,All 6 departments,08-06-2019,07-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Vizianagaram,"PHC PM Palem, Vizianagaram",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Vizianagaram,"PHC Vadada, Vizianagaram",All 6 departments,14-07-2021,13-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,DH Eluru,All 18 departments,09-03-2018,08-03-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Alamuru, West Godavari",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Chebrolu, West Godavari",All 6 departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Kagupadu, West Godavari",All 6 departments,16-08-2021,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Kanuru, West Godavari",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Nandapuram, West Godavari",All 6 departments,14-05-2021,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,"PHC Velpuru, West Godavari",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,PHC- Gollavanthippa (West Godavari),All Departments,24-07-2019,23-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,PHC- Kalavalapalli (West Godavari),All 6 Departments,22-05-2019,21-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,PHC- LND Peta (Tribal) West Godavari,All Departments,22-05-2017,21-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,PHC- T. Nasapuram (West Godavari),All Departments,09-05-2019,08-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,West Godavari,PHC- Vinjaram (Tribal) West Godavari,All Departments,09-05-2019,08-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,prakasam,"PHC- Maddipadu, Prakasam",All 6 Departments,25-07-2021,24-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,visakhapatnam,"CHC- Aganampudi, visakhapatnam",All 12 departments,25-07-2019,24-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,visakhapatnam,PHC Madhuravada (Visakhapatanam),All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,vizayanagaram,"CHC-S.Kota, Vizainagaram",All 12 department,25-07-2019,24-07-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,vizayanagaram,PHC Pusapatirega (Vizainagaram),All 6 department,15-04-2019,14-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,vizayanagaram,"PHC- Ramabhadrapuram, Vizainagaram",All 6 Departments,25-07-2017,24-07-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Arunachal Pradesh,East Siang,"PHC Bilat, East Siang",All 6 departments,27-04-2021,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Bhagyapur,"MPHC, Golaghat, Bhagyapur",All 6 departments,27-05-2021,26-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Dhubri,"BPHC Golakganj, Dhubri",All 6 departmenta,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Lakhimpur,"UPHC Chaporigaon, Lakhimpur",All 12 departments,21-01-2020,20-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Nagaon,"BPHC Kathiatoli, Nagaon",All 6 departments,27-04-2019,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Nalbari,"Daulasal MPHC, Nalbari",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Assam,Tinsukia,PHC Ledo,All 6 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Bihar,Aurangabad,"PHC Rafiganj, Aurangabad",All 6 departments,17-03-2020,16-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Balarampur,"PHC Samril, Balrampur",All 6 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Balrampur,"PHC Murkol, Balrampur",All 6 departmenta,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Bemetara,"PHC Deorbija, Bemetara",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Bijapur,DH Bijapur,All 18 departments,24-05-2021,23-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Bilaspur,"UPHC Gandhichowk, Bilaspur",All departments,18-08-2018,17-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Dhamtari,"PHC Chatod, Dhamtari",All 6 departments,18-08-2018,17-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Janjgir,"PHC Rahod, Janjgir",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Kobra,"PHC Rampur, Kobra",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Korba,"PHC Morga, Korba",All 6 departments,18-08-2018,17-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Korea,"PHC Khadgawan, Korea",All 6 departments,31-03-2021,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Mahasamund,"PHC Patewa,Mahasamund",All 6 departments,31-03-2021,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Raigarh,"PHC Chhal, Raigarh",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Raipur,"PHC Mandirhasod , Raipur",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Rajnandgaon,"PHC Ramatola, Rajnandgaon",All 6 departments,18-08-2018,17-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Sarguja,"PHC Lundra , Sarguja",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Chhattisgarh,Sarguja,"PHC Raghunathpur, Sarguja",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Amboli,PHC Amboli,All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Dapada,PHC Dapada,All 6 department,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Kilvani,PHC Kilvani,All 6 department,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Mandoni,PHC Mandoni,All 6 department,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Naroli,PHC Naroli,All 6 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Randha,PHC Randha,All 6 departments,17-08-2019,16-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"PHC Chekhla, Ta- Sanand",All 6 departmenta,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,PHC Jetalpur,All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"PHC Nanodara, Ahmedabad",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"PHC Sanathal, Ahmedabad",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"UPHC Amraiwadi Municipal Corporation, Ahmedabad",All 12 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"UPHC Jodhpur, Municial Corporation, Ahmedabad",All 12 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,UPHC Khokhara Ahmedabad Municipal Corporation,All 12 departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"UPHC Nobalnagar, Ahmedabad",All 12 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Ahmedabad,"UPHC Ranip, Ahmedabad",All 12 departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Amirgadh,"PHC Ganji, Amirgadh",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Amreli,"PHC Chamardi, Amreli",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Amreli,"PHC Chavand, Amreli",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Anand,"PHC Bandhani, Anand",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Anand,"PHC Thamna, Anand",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Anand,"PHC Vadod, Anand",All 6 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,"PHC Ambaliyara, Aravalli",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,"PHC Bolundra, Aravalli",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,PHC Demai,All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,"PHC Kheradi, Aravalli",All 6 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,"PHC Palla, Aravalli",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Aravalli,"PHC Vadgam, Aravalli",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Banthivada, Arvalli",All 6 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Bhesavada, Arvalli",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Limbhoi, Arvalli",All 6 departments,09-08-2021,08-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Ramgadhi, Arvalli",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Sardoi, Arvalli",All 6 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Arvalli,"PHC Shika, Arvalli",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Agthala, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Aseda, Deesa, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Bhadath, Deesa, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Chhapi, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Chithrasani, Banaskantha",All 6 Departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Dabhela, Banaskantha",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Dhanda, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Dhanpura, Banaskantha",All 6 Departments,22-09-2020,21-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,PHC Dudhva,All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Duva, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,PHC Gola,All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Hadad, Danta",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Jadiyali, (Lakheni), Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Kamodi, Banaskantha",All 6 Departments,09-12-2018,08-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,PHC Kansa,All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Khara, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Kodram, Vadgam, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Kuvarasi, Danta",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Lavana, Lakheni, Banaskantha",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Lorwada, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Luvana, Tharad, Banaskantha",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,PHC Magvas,All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Mandala, Kankrej",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Motasada, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Naroli, Tharad, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Panchada, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Raiya, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,PHC Rajkot. Banaskantha,All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Raner, Kankrej",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Ravel, Deodar",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Sanval, Banaskantha",All 6 Departments,09-12-2018,08-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Sara, Surendranagar",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Tetavara, Banaskantha",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Trithgam, Banaskantha",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Vadpag, Bhabhar, Banaskantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Vaghrol, Banaskantha",All 6 Departments,09-12-2018,08-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Varnoda, Banaskantha",All 6 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Banaskantha,"PHC Zalmore, Palanpur, Banaskantha",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bharuch,"PHC Jhagadia, Bharuch",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bharuch,"PHC Kavi, Bharuch",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bharuch,"PHC Matar, Bharuch",All 6 departments,14-01-2020,13-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bharuch,"PHC Sajod, Bharuch",All 6 departments,01-04-2020,31-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Bhumbhali, Bhumbhali, Bhavnagar",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Mathvada, Bhavnagar",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Patana, Bhavnagar",All 6 departments,11-09-2020,10-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Singadh, Bhavnagar",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Valukad, Bhavnagar",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Bhavnagar,"PHC Velavadar, Bhavnagar",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Botad,"PHC Bhimnath, Botad",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Botad,"PHC Dhasa, Botad",All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Botad,PHC Lakheni (Botad),All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Botad,"PHC Nagnesh, Botad",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Chota Udepur,PHC Padharwant,All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Corp,"UPHC Gajarawadi,Vadodara Municipal Corp",All 12 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Dahod,"PHC Antela, Dahod",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Dahod,"PHC Bavka, Dahod",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Dahod,"PHC Ranipura, Dahod",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Dwarka,"PHC Ran Dev Bhumi, Dwarka",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gandhinagar,"PHC Pundhara, Gandhinagar",All 6 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gandhinagar,"PHC Unava, Gandhinagar",All 6 departments,15-06-2019,14-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gandhinagar,"UPHC Palaj, Gandhinagar",All 12 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gandhinagar,"UPHC Sector 29, Gandhinagar Municipal Corporation",All 12 departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gandhinagar,"UPHC Sector- 2, Gandhinagar Municipal Corporation",All 12 departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gir Somnath,"PHC Harmadiya, Gir Somnath",All 6 Departments,11-09-2020,10-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gir Somnath,"PHC Panandar, Gir Somnath",All 6 departments,24-01-2020,23-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gri Somnath,PHC Fulka (Gir Somnath),All 6 departments,09-08-2019,08-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Gujarat,PHC Khopala (Botad),All 6 departments,05-02-2019,04-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,"PHC - Vasai, Jamnagar",All 6 department,31-07-2019,30-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,PHC Jamvanthali (Jamnagar),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,"PHC Lakhabaval, Jamanagar",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,PHC Latipur,All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,"PHC Motibanugar, Jamnagar",All 6 departments,14-01-2020,13-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,"PHC Pipartoda, Jamnagar",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Jamnagar,"UPHC Kamdar Colony, Jamnagar",All 12 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Junagadh,"PHC Limbuda, Junagadh",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Junagadh,"PHC Nakra, Junagadh",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Kankrej,"PHC Umbari, Kankrej",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Kheda,"PHC Palana, Kheda",All 6 departments,22-09-2020,21-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Kheda,"PHC Salun, Kheda",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Mahisagar,"PHC Gadiya,Mahisagar",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Mahisagar,"PHC Munpur, Mahisagar",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Mahisagar,"PHC Viraniya, Mahisagar",All 6 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Mehsana,"PHC Kherva, Mehsana",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Morbi,"PHC Bagathala, Morbi",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Morbi,"PHC Bharatnagar, Morbi",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Morbi,"PHC Ghuntu, Morbi",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Morbi,"PHC Rajpar, Morbi",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Nadiad,General Hospital Nadiad,All 18 departments,13-09-2020,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Narmada,"PHC Agar, Narmada",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Narmada,PHC Bujetha,All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Narmada,"PHC Lachharas, Narmada",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Narmada,"PHC Taropa, Narmada",All 6 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Navsari,"PHC Alipore, Navsari",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Navsari,"PHC Gadat, Navsari",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Navsari,"PHC Kandolpada, Navsari",All 4 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Delol,Panchmahal",All 6 Departments,11-09-2020,10-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Derolgam, Panchmahal",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Mirap, Panchmahal",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Rinchhvani, Panchmahal",All 6 Departments,09-12-2021,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Shivrajpur, Panchmahal",All 6 Departments,09-12-2019,08-12-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Vadodar, Panchmahal",All 6 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Panchmahal,"PHC Vejalpur, Panchmahal",All 6 Departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Porbandar,"PHC Modhvada, Porbandar",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Porbander,DH Porbandar,All 18 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Porbander,"PHC Garej, Porbander",All 6 departments,24-01-2020,23-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkor,"UPHC Shyamnagar, Municipal Corporation, Rajkor",All 12 departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,"PHC Bhadla, Rajkot",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,PHC Dantiwada,All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,"PHC Gadhaka, Rajkot",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,"PHC Khirasara, Ranjmalji, Rajkot",All 6 Departments,25-12-2019,24-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,"PHC Sanosara,Rajkot",All 6 departments,03-04-2019,02-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rajkot,"PHC Sarapdad, Rajkot",All 6 departments,01-06-2021,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Rtanpur,PHC Ratanpur,All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,PHC Aroda Sabarkantha,All 6 Departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Balisana, Sabarkantha",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Chandarni, Sabarkantha",All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Chitroda, Sabarkantha",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Derol,(Va) Sabarkantha",All 6 departments,03-04-2019,02-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Desasan, Sabarkantha",All 6 departments,03-04-2019,02-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Dobhada, Sabarkantha",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Hadiyol,Sabarkantha",All 6 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Jashwantgadh, Sabarkantha",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Kadiyadara, Sabarkantha",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Therasana, Sabarkantha",All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Verabar, Sabarkantha",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC Virpur, Sabarkantha",All 6 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC- Derol, Sabarkanth",All 6 department,31-07-2019,30-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Sabarkantha,"PHC- Fatepur, Sabarkantha",All 6 department,22-09-2020,21-09-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"CHC Bardoli, Surat",All 12 departments,22-10-2020,21-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"PHC Navipardi, Surat",All 6 Departments,09-12-2019,08-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"PHC Orna, Surat",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC Adajan, Surat",All 12 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC New Dindoli, Surat",All 12 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC Palanpore,Surat",All departments,03-04-2019,02-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC Randher, Surat",All 12 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC Umra, Surat",All 12 departments,11-02-2020,10-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surat,"UPHC Unn, Surat Municipal Corporation",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surendranagar,"PHC Kankavati, Surendranagar",All 6 departments,09-08-2019,08-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surendranagar,"PHC Kondh, Surendranagar",All 6 departments,09-08-2021,08-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surendranagar,"PHC Mojidad, Surendranagar",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Surendranagar,"PHC Zinzuwada, Surendranagar",All 4 departments,01-01-2021,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Tapi,"PHC Chapavadi, Tapi",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Tharad,PHC Bachar,All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadgam,"PHC Nandotra, Vadgam",All 6 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara,"PHC Koyali, Vadodara",All 6 departments,09-03-2021,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara,"PHC Methi, Vadodara",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara,"PHC Mujpur, Vadodara",All 6 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara,"PHC Sokhada, Vadodara",All 6 Departments,08-11-2019,07-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara,"PHC Thuvavi, Vadodara",All 6 departments,31-01-2020,30-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,Vadodara Municipal Corp.,"UPHC Savad, Vadodara Municipal Corp.",All 12 departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Gujarat,hathab,"PHC Hathab, Amreli",All 6 departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Alewa,"PHC Alewa, Jind",All 6 departments,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Allika,"PHC Allika, Palwal",All 6 departments,02-04-2019,01-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,PHC Boh (Ambala),All 6 departments,08-05-2019,07-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Majri, Ambala",All 6 departments,27-08-2018,26-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Nahoni , Ambala",All 6 departments,08-05-2019,07-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Noorpur, Ambala",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Panjokhra, Ambala",All 6 departments,08-05-2019,07-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Pathreri, Ambala",All 6 Departments,28-11-2019,27-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"PHC Saha, Ambala",All 6 departments,27-03-2021,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"UPHC Chhabiyana, Ambala",All 12 departments,15-10-2020,14-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Ambala,"UPHC Nishatbagh, Ambala",All 12 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Bhiwani,"PHC Jui, Bhiwani",All 6 departments,05-02-2019,04-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Bhiwani,"UPHC Sewa Nagar, Bhiwani",All 12 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Charkhi Dadri,"PHC Badhra, Charkhi Dadri",All 6 departments,02-04-2019,01-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Faridabad,"PHC Chhainsa, Faridabad",All 6 departments,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Faridabad,"PHC Dayalpur, Faridabad",All 6 departments,16-04-2018,15-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Faridabad,"PHC Dhouj, Faridabad",All 6 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Faridabad,"PHC Mohna, Faridabad",All 6 departments,02-04-2019,01-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Faridabad,"UPHC Hari Vihar, Faridabad",All 12 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Fatehabad,"PHC Bangaon, Fatehabad",All 6 departments,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Fatehabad,"PHC Nagpur, Fatehabad",All 6 departments,15-05-2019,14-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Fatehabad,"PHC Pilimandori, Fatehabad",All 6 Departments,28-11-2019,27-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Gurugram,"PHC Bhangrola, Gurugram",All 6 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Gurugram,"PHC Wazirabad, Gurugram",All 6 departments,16-10-2018,15-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Gurugram,"UPHC Chauma, Gurugram",All 12 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Gurugram,"UPHC Manesar, Gurugram",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Hisar,"PHC Agroha, Hisar",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Hisar,"PHC Chaudhariwas, Hisar",All 6 departments,03-03-2019,02-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Hisar,"PHC Kaimri, Hisar",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jhajjar,"PHC Chhuhhakwas, Jhajjar, Haryana",d,01-04-2020,31-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jhajjar,"PHC Patauda, Jhajjar",All 6 departments,15-10-2020,14-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jhajjar,"PHC Salhawas, Jhajjar",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jhajjar,"PHC Silani, Jhajjar",All 6 departments,02-04-2019,01-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jind,"PHC Chattar, Jind",All 6 departments,27-03-2021,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Jind,"PHC Dumerkha Khurd, District Jind",All 6 Departments,28-11-2019,27-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Deoban, Kaithal",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Kangthali, Kaithal",All 6 departments,27-03-2021,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Keorak, Kaithal",All 6 departments,27-08-2018,26-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Mundri, Kaithal",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Padla, Kaithal",All 6 departments,15-05-2019,14-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,"PHC Rasina, Kaithal",All 6 departments,16-04-2018,15-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kaithal,PHC-Bhagal(Kaithal),All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"PHC Bhadson, Karnal",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"PHC Jundla, Karnal",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"PHC Kachhwa, Karnal",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"PHC Kutail, Karnal",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"PHC Sambhli, Karnal",All 6 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Karnal,"UPHC City Dispensary, Karnal",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"PHC Deeg, Kurukshetra",All 6 departments,10-02-2020,09-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"PHC Ismailabad, Kurukshetra",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"PHC Kirmich, Kurukshetra",All 6 departments,10-02-2020,09-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"PHC khanpur Kolian, Kurukshetra",All 6 Sx departments,24-01-2020,23-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"UPHC Krishnanagar Gamri, Kurukshetra",12 departments,27-02-2016,26-02-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Kurukshetra,"UPHC Mohan Nagar, Kurukshetra",All 12 departments,01-03-2019,28-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Narnaul,"PHC Bacchod, Narnaul",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Narnaul,"PHC Chillro, Narnaul",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Nuh,"PHC Padheni, Nuh",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Nuh,"PHC Sikhrawa, Nuh",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Nuh,"PHC Tigaon, Nuh",All 6 departments,30-09-2019,29-09-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Pachkula,Civil Hospital Panchkula,All 19 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Palwal,"PHC Deeghot, Palwal",All 6 departments,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"PHC Barwala, Panchkula",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"PHC Hangola, Panchkula",All 6 departments,04-12-2018,03-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"PHC Kot, Panchkula",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"PHC Nanakpur, Panchkula",All 6 departments,04-12-2018,03-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"PHC Pinjore, Panchkula",All 6 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,"UPHC Sector 16, Panchkula",All 12 departments,15-05-2019,14-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panchkula,UPHC Sector 26 (Panchkula),All 12 Departments,28-11-2019,27-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panipat,"PHC Kawi, Panipat",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panipat,"PHC Siwah, Panipat",All 6 departments,04-12-2018,03-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panipat,"PHC Ujha, Panipat",All 6 departments,08-05-2019,07-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Panipat,"UPHC Rajnagar, Panipat",All 12 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Punchkula,"PHC Morni, Panchkula",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rewari,"PHC Bharawas, Rewari",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rewari,"PHC Dharuhera, Rewari",All 6 departments,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rewari,"PHC Fatehpuri, Rewari",All 6 departments,01-04-2020,31-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rohtak,District Civil Hospital Rohtak,15 departments,13-09-2018,12-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rohtak,"PHC Baland, Rohtak",All 6 departments,16-10-2018,15-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rohtak,"PHC Bhalout, Rohtak",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Rohtak,"PHC Lakhanmajra, Rohtak",All 6 departments,27-08-2018,26-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sirsa,"PHC Keharwala, Sirsa",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sirsa,"PHC Panihari, Sirsa",All 6 departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Bega, Sonipat",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Dubheta, Sonipat",All 6 departments,03-03-2019,02-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Halalpur, Sonipat",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Murthal, Sonipat",All 6 departments,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Rohat, Sonipat",All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"PHC Sisana, Sonipat",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Sonipat,"UPHC Jatwara, Sonipat",All 12 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Yamunanagar,"PHC Bambhol, Yamuna Nagar",All 6 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Yamunanagar,"PHC Buria, Yamunanagar",All 6 departments,16-10-2018,15-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Yamunanagar,"PHC Chhachharauli, Yamunanagar",All 6 departments,02-04-2019,01-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Yamunanagar,"PHC Kharwan, Yamunanagar",All 6 departments,03-03-2019,02-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Haryana,Yamunanagar,"PHC Kot Mustarka, Yamunanagar",All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Dharwad,"PHC Garag, Dharwad",All 6 departments,04-05-2021,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Dharwad,"PHC Noolvi, Dharwad",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Dharwad,"PHC Yaraguppi, Dharwad",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Dharwad,"UPHC Gandhiwad, dist. Dharwad",All 12 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Dharwad,UPHC- Neharunagar (Dharwad),All Departments,31-07-2019,30-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Gangavathi -Koppal,"PHC Budagumpa, Gangavathi -Koppal",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Haveri,"PHC Kabbur, Haveri",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Haveri,"PHC Kadaramandalagi, Haveri",All 6 departments,04-05-2021,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Haveri,"PHC Katenahalli, Haveri",All 6 departments,04-05-2021,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Hubballi,PHC Aralikatti,All 6 departments,04-05-2021,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Shivamogga,"UPHC Bapujinagar, Shivamogga,",All 12 departments,16-09-2019,15-09-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,VijayPura,"PHC Honawad, Vijayapura",All 6 departments,24-06-2021,23-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,VijayPura,"PHC Horti, Vijayapura",All 6 departments,24-06-2019,23-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Vijayapura,"PHC Tikota, Vijayapura",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Vijayapura,"UPHC Darga, Vijayapuram",All 12 departments,16-09-2017,15-09-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Vijaypura,"PHC Managuli, Vijay Pura",All 6 departments,18-07-2021,17-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Karnataka,Vijaypura,"UPHC Shantinagar, dist.Vijaypura",All 12 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kearla,Ernakulam,"UPHC Kalamasherry, Ernakulam",All departments,06-08-2021,05-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuza,"PHC- Panavally, Alappuza",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuzha,PHC Punnapra North Alappuzha,All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuzha,PHC Purakkad (Alappuzha),All 4 departments,05-02-2019,04-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuzha,"UPHC Cheravalli, Alappuzha",All 12 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuzha,"UPHC Mullathuvalappu, Alappuzha",All 12 departments,09-03-2019,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Alappuzha,"UPHC Nehrutrophy, Alappuzha",All departments,31-05-2019,30-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Amachal,"FHC Kattakada, Amachal",All 4 departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"FHC Paipra, Ernakulam",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"FHC- Vazhakulam, Ernakulam",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,GH Ernakulam,17 departements excluding NRC,17-04-2018,16-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"PHC Kottapady, Ernakulam",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"PHC Maneed, Ernakulam",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"UPH Thrippunithura, Ernakulam",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"UPHC Moolamkuzhy, Ernakulam",All 12 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Ernakulam,"UPHC Thammanam, Ernakulam",All 12 departments,09-03-2021,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Idukki,FHC Kan chiyar (Idukki),All 4 departments,27-06-2018,26-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Idukki,"FHC Udumbanchola,Idukki",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Idukki,UPHC Parakkadavu,All 12 departments,19-02-2019,18-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kallunira,UPHC Kallunira,All 12 Departments,25-10-2019,24-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Aralam Farm, Kannur",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Cherukunnuthara, Kannur",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Chirakkal, Kannur",All 4 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Eramamkuttur, Kannur",All 4 departments,23-12-2020,22-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Kadirur, Kannur",All 4 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Kalliassery, Kannur",All 4 departments,23-12-2018,22-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Malappattam, Kannur",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Mattool,Kannur",All 4 Departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Munderi,Kannur",All 4 Departments,19-11-2018,18-11-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC New Mahe , Kannur",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC Thillenkery, Kannur",All 4 Departments,25-10-2019,24-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC- Cheruthazham, Kannur",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC- Kankol, Alapadamba, kannur",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC- Kottiyoor, Kannur, kerala",All Departments,22-07-2019,21-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"FHC- Pattiam, kannur",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"PHC Pulingome, Kannur",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,PHC Therthally (Kannur),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"PHC Udayagiri, Kannur",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,PHC Valapattanam (Kannur),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"UPHC Koovode, Kannur",All 12 Departments,25-10-2019,24-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"UPHC Maithanapalli, Kannur",All 12 Departments,25-10-2019,24-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"UPHC Panoor, Kannur district",All 12 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"UPHC Porara, Kannur",All 12 departments,16-02-2019,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kannur,"UPHC- Kolasseri, kannur",All 12 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasaragod,PHC Chittarikal (Kasaragod),"4 departments (OPD. Lab, NHP & GA)",17-04-2018,16-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasaragod,PHC Narkilakad (Kasaragod),"4 departments (OPD. Lab, NHP & GA)",17-04-2018,16-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasaragode,"FHC Mulleria, Kasaragode",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasaragode,PHC Karinthalam (Kasaragode),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasaragode,PHC Kayyur (Kasaragode),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasargode,"FHC Ennapara, Kasargode",All 4 departments,09-03-2019,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasargode,PHC Valiyaparamba (Kasaragode),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kasargode,"UPHC Pulikunnu, Kasargode",All 12 departments,09-03-2019,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"FHC Chathanoor, Kollam",All 4 Departments,19-11-2018,18-11-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"FHC Elampalloor, Kollam district",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"FHC Mancode, Chithara, Kollam",All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"FHC Veliyam, Kollam",All 4 departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"Thaluk Hospital Punaloor, Kollam",13 departments,11-05-2018,10-05-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"UPHC Mundakkal, Kollam district",All departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kollam,"UPHC Uliyakovil, Kollam",All departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kottayam,"FHC Onamthuruthu, Kottayam",All 4 departments,19-02-2019,18-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kottayam,"FHC Vazhoor, Kottayam",All 4 Departments,19-11-2018,18-11-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kottayam,"FHC Veliyanor, Kottayam",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kottayam,PHC MUTHOLY (KOTTAYAM),All 4 departments,27-06-2018,26-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kottayam,"UPHC Perunna, Kottayam",All 12 departments,23-12-2018,22-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Edachery, Kozhikode",All 4 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Meppayur, Kozhikode",All 4 departments,23-12-2018,22-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Moodadi,Kozhikode",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Panangad, Kozhikode",All 4 Departments,19-11-2018,18-11-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Purameri, Kozhikode",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"FHC Ramanattukkara (Kozhikode), Kerala",All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"Govt. Taluk Hospital Thamaraserry, Kozhikode",All 13 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Kozhikode,"UPHC Kinassery, Kozhikode",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Athanikkal,Malappuram",All 4 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Chokkad, Malappuram",All 4 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Kottakkal, Malappuram",All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Morayur, Malappuram",All 4 departments,23-12-2018,22-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Pandikkad, Malappuram",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"FHC Vazhikadavu, Malappuram",All 4 Departments,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Malappuram,"PHC- Amarambalam, malappuram",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Mallapuram,"UPHC Eravimangalam, Mallapuram",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Mallapuram,"UPHC Mangalaseery, Mallapuram",All departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Mallapuram,"UPHC Mummully, Malappuram",All 12 departments,16-02-2021,15-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Palakkad,"FHC Kalladikode, Palakkad",All 4 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Palakkad,FHC- Sreekrishnapuram (Palakkad) Kerala,All Departments,22-07-2019,21-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Palakkad,PHC Peruvemba (Palakkad),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Pathanamthitta,"FHC Chennerkara, Pathanamthitta",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Pathanamthitta,"FHC- Othera, Pathanamthitta, Kerala",All Departments,22-07-2019,21-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Pattarnadakkavu,"FHC- Thirunavaya, Pattarnadakkavu",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thiruvananthapuram,"FHC- Poozhanad, Thiruvananthapuram, Kerala",All Departments,22-07-2019,21-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thiruvananthapuram,"PHC Kallikadu New, Thiruvananthapuram",All 4departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thodupuzha,"FHC Kumaramangalam, Thodupuzha",All 4 departments,26-03-2020,25-03-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"CHC Mullassery, Thrissur",All 8 Departments,27-03-2019,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"FHC Punnayur, Thrissur",All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"FHC Thalikulam, Thrissur",All 4 Departments,18-01-2020,17-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"FHC Velur, Thrissur",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"FHC- Desamangalam, Thrissur",All 4 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"FHC- Mandoor, Thrissur, Kerala",All Departments,22-07-2019,21-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,THQH Chalakudy (Thrissur),13 departments,31-08-2018,30-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,UPHC Anappuzha (Thrissur),All 12 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC Gossayikunnu, Thrissur",All 12 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC Guruvayur, Thrissur",All departments,27-03-2021,26-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC Kacherry, Thrissur",All 12 departments,09-03-2019,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC Paravattani, Thrissur",All 12 departments,09-03-2019,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC Porkalangad,Thrissur",All departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Thrissur,"UPHC V R Puram, Thrissur",All 12 departments,09-03-2021,08-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Trivandrum,"FHC Karakulam, Trivandrum",All 4 departments,22-10-2018,21-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Trivandrum,PHC Chemmaruthy (Trivandrum),All 6 department,10-04-2019,09-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Trivandrum,"UPHC Mampuzhakara, Trivandrum",All departments,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Trivandrum,"UPHC Vattiyoorkavu ,Trivandrum",All 12 departments,14-05-2019,13-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Wyanad,FHC Noolpuzha (Wyanad),All 6 departments,31-08-2018,30-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Wyanad,"FHC Poothady, Wyanad",All 4 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,Wyanad,"UPHC Mundery, Kalpetta, Wyanad",All departments,17-07-2021,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Kerala,kunnissery,"FHC Nenmanikara, kunnissery",All 4 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Bhind,DH Bhind,All 18 departments,20-06-2018,19-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Indore,"PHC Kshipra, Indore",All 6 departments,04-05-2019,03-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Jabalpur,"UPHC Richai, Jabalpur",All departments,17-08-2019,16-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Khargone,"PHC Karhi, Khargone",All 6 departments,17-08-2019,16-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Satna,DH Satna,All 18 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Madhya Pradesh,Vidisha,DH Vidisha,18 departments,06-08-2021,05-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Ahmednagar,PHC Adhalgaon ( Ahmednagar),ALL 6 dept,02-01-2018,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Ahmednagar,"PHC Kuldharan, (Ahmadnagar)",ALL 6 dept,27-06-2018,26-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Ahmednagar,"PHC Walki, Ahmednagar",All 6 departments,11-02-2018,10-02-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Akola,"PHC Adgaon, Akola",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Akola,"PHC Hiwarkhed, Akola",ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Akola,PHC- Malsur (Akola),All 6 departments,27-07-2019,26-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Amravati,PHC Amner (Amravati),All 6 departments,01-03-2019,28-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Amravati,"PHC Yeoda, Amravati",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Aurangabad,PHC Aland ( Aurangabad),ALL 6 dept,02-01-2018,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Aurangabad,PHC Ganori (Aurangabad),ALL 6 dept,02-01-2018,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Aurangabad,"PHC Jategaon,(Aurangabad)",ALL 6 dept,27-06-2018,26-06-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Aurangabad,PHC Pimpalwadi (Aurangabad),ALL 6 dept,27-06-2018,26-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Buldhana,"PHC Hatedi, Buldhana",ALL 6 dept,27-02-2018,26-02-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Dhule,PHC Holnanthe (Dhule),ALL 6 dept,02-01-2020,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Jalna,PHC Hasnabad,ALL 6 dept,27-02-2018,26-02-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Kolhapur,PHC Chikhali (Kolhapur),ALL 6 dept,02-01-2018,01-01-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Kolhapur,PHC Niwade (Kolhapur),ALL 6 dept,02-01-2018,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Latur,PHC Atnur (Latur),All 6 Departments,07-01-2019,06-01-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Latur,"PHC Halgara, latur",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Latur,"PHC Her, Latur",All 6 departments,26-03-2020,25-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Latur,"PHC Kharola, Latur",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Latur,PHC- Wanjarwada (Latur),All 6 departments,25-07-2019,24-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Nagpur,"PHC Bela, Nagpur",All 6 Departments,18-12-2019,17-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Nagpur,"PHC Borkhedi, Nagpur",All 6 Departments,18-12-2019,17-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Nagpur,PHC Makardhokada(Nagpur),ALL 6 dept,02-01-2016,01-01-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Nagpur,PHC Takalghat (Nagpur),ALL 6 dept,02-01-2018,01-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Nagpur,PHC- Dhapewada(Nagpur),ALL 6 dept,06-06-2017,05-06-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Osmanabad,SPARSH Rural Hospital - Sastur (Osmanabad),All 12 departments,09-03-2018,08-03-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Palghar,PHC Gholwad (Palghar),ALL 6 dept,03-10-2017,02-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Palghar,"PHC Jamsar, Palghar",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC Aale (Pune),All 6 department,11-12-2018,10-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC Fursungi (Pune),All 6 departments,26-03-2019,25-03-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,"PHC Karanjawane, Pune",All 6 departments,10-02-2020,09-02-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,"PHC Karla, PUNE",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,"PHC Kendur, Pune",All 6 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC Kunjirwadi (Pune),All 6 departments,28-09-2018,27-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC Kurkumbh (Pune),All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,"PHC Nimgaon, Sawa, Pune",All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC Shelpimpalgaon (Pune),All 6 departments,28-09-2018,27-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Kamshet( Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Maan (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Takalehaji (Pune),ALL 6 dept,27-11-2017,26-11-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Takave (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Urulikanchen (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC- Wagholi (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC-Katewadi (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC-Sawargaon (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC_ Lonikalbhor (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Pune,PHC_Morgaon (Pune),ALL 6 dept,09-05-2017,08-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Satara,PHC Kumathe(Satara),All 6 departments,05-02-2019,04-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Thane,PHC - Divaanjur (Thane),All 6 Departments,01-01-2019,31-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Thane,"PHC Dabhad, Thane",All 6 deptt,02-11-2017,01-11-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Thane,"PHC Dhasai, Thane",All 6 deptt,02-11-2017,01-11-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Maharashtra,Wardha,"PHC Sahur, Wardha",All 6 departments,01-03-2019,28-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Manipur,Churachandpur,"PHC Behiang, Churachandpur",All 6 Departments,25-10-2019,24-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Meghalaya,Ri-Bhoi,PHC- Umden,All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Meghalaya,West Jaintia Hills,PHC- Nartiang,All 6 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Behrampur,"UPHC Khodasingi, Behrampur",All departments,17-07-2019,16-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Bhubaneswar,UPHC Unit 3 Bhubaneswar,All 12 departments,05-03-2019,04-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Ganjam,UPHC- Agasahi. Berhampur,All 12 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Ganjam,"UPHC- Ambapua, Berhampur",All 12 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Ganjam,"UPHC- Aska Road, Berhampur",All 12 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Kalahandi,UPHC Bhawanipatna Kalahandi,ALL 12 departments,01-04-2020,31-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Odisha,Keonjhar,CHC Ghategaon,All 12 Departments,07-01-2019,06-01-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Punjab,Amritsar,"UPHC Ranjit Avenue, Amritsar, Punjab",All 12 Departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Punjab,Bathinda,CHC Goniana (Bathinda),All 12 departments,05-02-2019,04-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Punjab,Bathinda,"PHC Ballauana, Bathinda",All 6 departments,12-02-2020,11-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Punjab,Fatehgarh Sahib,"UPHC Bara, Fatehgarh Sahib",All 12 department,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Punjab,Patiala,UPHC Bishan Nagar (Patiala),All 12 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Ajmer,PHC Saradhana (Ajmer),All 6 departments,13-08-2019,12-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Banswara,"PHC Basi Adda, Banswara",All 6 departments,10-07-2020,09-07-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Banswara,PHC Sallopat (Banswara),All 6 departments,08-03-2019,07-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Barmer,"PHC Bhadka, Barmer",All 6 departments,02-07-2019,01-07-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Barmer,"PHC Kitnod, barmer",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Bhilwara,PHC Singoli (Bhilwara),All 6 department,15-04-2019,14-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Chittorgarh,Shri Sanwaliya Ji Govt. District Hospital Chittorgarh,All 18 departments,31-10-2019,30-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Hanumangarh,DH Hanumangarh,All 18 departments,21-01-2020,20-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jaipur,"PHC Bhankrota, Jaipur",All 6 departments,05-03-2021,04-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jaipur,"UPHC Banipark, jaipur",All 12 departments,11-04-2020,10-04-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jaipur,"UPHC Devinagar, Jaipur",All 12 department,02-05-2019,01-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jaipur,UPHC Kiran Path Mansarovarm District Jaipur-2,All 12 departments,27-11-2019,26-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jalore,"CHC Ahore, Jalore",All 12 departments,05-03-2021,04-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jhunjhunu,BDK Hospital Jhunjhunu,All 18 departments,16-10-2018,15-10-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Jhunjhunu,PHC Islampur (Jhunjhunu),All 6 Departments,18-01-2019,17-01-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Pali,PHC Chanod (Pali),All 6 departments,11-10-2019,10-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Rajsamand,CHC Amet (Rajsamand),All 12 Departments,20-09-2018,19-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Rajsamand,PHC Odda Rajsamand,All 6 departments,05-03-2021,04-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Rajsamand,"R.K. Government District Hospital , Rajsamand",All 18 departments,06-06-2017,05-06-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Rajasthan,Sawai Madhopur,"PHC Bhadoti, Sawai Madhopur",All 6 departments,05-03-2019,04-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Ariyalur,"PHC- Villankudi, Ariyalur",All 6 departments,27-04-2019,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Chrompet,"Government Hospital Tambaram, Chrompet",All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Coimbatore,DH Pollachi,All 17 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Coimbatore,PHC V.Kaliyapuram (Coimbatore),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Cuddalore,CHC Vadalore,All Departments,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Cuddalore,Government Head Quarters Hospital Cuddalore,17 except NRC,07-05-2019,06-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Cuddalore,PHC Avatti (Cuddalore),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Dharmapuri,CHC Morappur (Cuddlore),All Departments,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Dharmapuri,GH Harur,All 13 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Dharmapuri,PHC Belrampatti (Dharmapuri),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Dharmapuri,PHC Palayampudur,All Departments,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Erode,Government Headquarter Hospital Erode,17 except NRC,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Erode,"PHC Siruvalur, Erode",All 6 departments,08-01-2020,07-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Hosur,Government Hospital Hosur,All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kancheepuram,PHC Maraimalainaga (Kancheepuram),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanchipuram,CHC Medavakkam,All 12 departments,30-09-2019,29-09-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanchipuram,DHQH Kanchipuram,17th departments (Excluding NRC),17-03-2020,16-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanchipuram,PHC Sembakkam,All 6 departments,28-08-2019,27-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanyakumari,CHC Chebagaramanpoothur,All 12 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanyakumari,CHC Kuttakuzhi,All 12 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanyakumari,Government Headquarter Hospital Padmanabhapuram,17 except NRC,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Kanyakumari,"PHC Thovalai,Kanyakumari",All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Koilpatti,"CHC Nagalapuram, Koilpatti",All 12 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Krishnagiri,"PHC Anandhur, Krishnagiri",All 6 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Madurai,"PHC Kovilpappakudi,Madurai",All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Madurai,PHC Palamedu (Madurai),All 6 departments,18-03-2017,17-03-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Mettupalayam,Government Hospital Mettupalayam,All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Namakkal,"CHC Ernapuram, Namakkal",12 departments,16-08-2021,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Namakkal,"Government Hospital Rasipuram, Namakkal",All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Namakkal,PHC Pavithram,All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Nambiyur,CHC Nambiyur,all 12 departments,27-11-2019,26-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Perambalur,DH Perambalur,All 18 departments,28-12-2018,27-12-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Perungattur,CHC Perungattur,All 12 departments,08-01-2020,07-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Pudukottai,PHC Kodambalur (Puddukottai),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Ramanathapuram,CHC Sayalkudi (Usilampatti),All Departments,19-06-2018,18-06-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Ramanathapuram,"PHC Sholandur, Ramanathapuram",All 6 departments,08-01-2020,07-01-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Ramanathaputram,"Government Hospital Paramakudi, Ramanathaputram",All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Salem,CHC Mecheri (Erode),All Departments,19-06-2018,18-06-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Salem,PHC Thumbalapatty (Salem),All 6 departments,18-03-2019,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Thanjavur,"PHC Thiruvalampozhil, Thanjavur",All 6 departments,08-01-2020,07-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Thirunelvelli,"PHC Agasthiarpatti, Thirunelvelli",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Thiruvallur,PHC Soranchery (Thiruvallur),All 6 departments,18-03-2021,17-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Thiruvannamalai,PHC Mamandur,All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Thoothukudi,GH Thiruchendur,All 13 departments,28-08-2019,27-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tirunelveli,"PHC Kalingapatti, Tirunelveli",All 6 departments,30-09-2019,29-09-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Trichy,"DH Manappari, Trichy",All 18 departments,10-05-2019,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Trichy,PHC Pettavaithalai,All 6 departments,30-09-2019,29-09-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Trichy,"UPHC Subramaniyapuram, Trichy",All 12 departments,27-04-2019,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tuticorin,CHC Eral,All 12 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tuticorin,"PHC Mappillaiurani,Thoothukudi",All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tuticorin,"PHC Vembar,(Kovilpatti HUD) Tuticorin",All 6 departments,10-05-2021,09-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tuticorin,"UPHC Ganesh Nagar, Tuticorin",All 12 departments,27-04-2019,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Tuticorin,"UPHC Therespuram, Tuticorin",All 12 departments,27-04-2019,26-04-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Uchipuli,CHC Uchipuli,all 12 departments,27-11-2021,26-11-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Vellore,GH Ambur,All 13 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Vellore,"GH Sholingur,Vellore",All 13 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Vellore,GH Thirupathur,All 13 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Veppalodai,PHC Veppalodai,ALL 6 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Villupuram,CHC Mugaiyur (Villupuram),All Departments,19-06-2018,18-06-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Villupuram,PHC Eduthavainatham (Villupuram),All 6 department,07-05-2019,06-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Villupuram,PHC Kandamangalam (Villupuram),All 6 department,07-05-2019,06-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Villupuram,PHC Kedar,All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Virudhnagar,"PHC Thalavairpuram, Virudhnagar",All 6 departments,20-03-2020,19-03-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Virudhunagar,"Government Hospital Aruppukottai, Virudhunagar",All 13 Departments,01-11-2019,31-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Virudhunagar,PHC Sengundrapuram,All 6 departments,28-08-2019,27-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tamil Nadu,Viruthunagar,"DH Virudhunagar,",All seventeen departments,28-12-2018,27-12-2019,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Adilabad,"PHC Bazarhathnoor, Adilabad",All 6 departments,18-05-2021,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Adilabad,PHC Danthapally (Adilabad),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Adilabad,PHC Ichoda (Adilabad),ALL 6 dept,16-04-2018,15-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Adilabad,PHC Indravally (Adilabad),ALL 6 dept,16-04-2018,15-04-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Adilabad,PHC- Bheempur (Adilabad),ALL 6 dept,11-05-2017,10-05-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Asifabad,"PHC Rebbena, Asifabad",All 6 departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Asifabad,"PHC Rompally, Asifabad Telangana",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Asifabad,PHC Sirpur Asifabad,All 6 departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Bhadradri,PHC Erragunta(Bhadradri),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Bhadradri,"PHC Sulhanagar, Bhadradri",All 6 departments,18-05-2019,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,"Bhadradri, Kothagudem","PHC Ashwapuram, Bhadradri Kothagudem",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Gadwal,PHC Dharoor(Gadwal),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Gadwal,PHC Gattu(Gadwal District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Gadwal,PHC Manopad(Gadwal),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jagtial,PHC Ibhrahimpatnam (Jagityal),All 6 departments,30-08-2018,29-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jagtial,PHC Kathalapur(Jagtial),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jagtial,PHC Medipalli(Jagtial District ),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jagulambal Gadwal,PHC Ieeja(Jogulamba Gadwal District),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jangaon,PHC Raghunathpally(Jangaon District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Jangaon,PHC-Ghanpur Station(Jangaon District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kamareddy,PHC Bhiknur(Kamareddy),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Karimnagar,PHC Challur (Karimnagar),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Karimnagar,PHC Gangadhar (Karimnagar),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Karimnagar,PHC Shankarapatnam(Karimnagar District),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Karimnagar,"UPHC BBR Colony, Karimnagar",All departments,18-05-2019,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,District Hospital Khammam,All 18 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,"PHC Bonakal, Khammam",All 6 departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,"PHC Chintakani, Khammam",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,"PHC Enkoor, Khammam",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,"PHC Peddagopathi, Khammam",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammam,UPHC Mustafanagar- Khammam,All departments,16-08-2019,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Khammamm,"UPHC Mamillagudem, Khammamm",All 12 departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kothagudem,PHC Chandruganda (Kothagudem),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kothagudem,"PHC MP Banjara, Kothagudem",All 6 departments,25-09-2018,24-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kothagudem,PHC Parnashala (Kothagudem),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kothagudem,PHC Sujathanagar (Kothagudem),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kothagudem,UPHC Shekaram Banjara (Kothagudem),All 12 departments,22-02-2019,21-02-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kumrambheem Asifabad,PHC Kowtala (Asifabad),All 6 departments,06-03-2019,05-03-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Kurnool,PHC Padra Nagar Kurnool,All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubabad,PHC Bayyaram(Mahbubabad),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubabad,PHC Kambalapally(Mahabubabad),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubabad,PHC Thorrur(Mahbubabad),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubabad,PHCGandhampally(Mahaboobabad),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,"PHC Addakula, Mahabubnagar",All 6 departments,18-05-2019,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,PHC Devarakadra(Mahabubnagar),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,PHC Hanwada(Mahabubnagar),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,PHC Janampet (Mahbubnagar),All 6 departments,25-09-2018,24-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,PHC Marikal (Mahabubnagar),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,PHC Midjil (Mahabubnagar),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mahabubnagar,"PHC Nawabpet, Mahabubnagar",All 6 departments,20-05-2019,19-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mallapur,UPHC Mallapur,All departments,18-05-2021,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mancherial,PHC Jaipur(Mancherial),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Medak,PHC Reddypally(Medak),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Medchal,PHC Quthbullapur (Medchel),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Medchal,PHC Srirangavaram (Medchel),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Medchal Malkajgiri,"UPHC Jawahar Nagar, Medchal Malkajgiri",All 14 departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mugulu,"PHC Wajeedu, Mugulu",All 6 departments,20-05-2021,19-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Mulugu,"PHC Edhira, Mulugu",All 6 departments,18-05-2019,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,NIRMAL,PHC Soan (Nirmal),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nagarkurnool,"PHC Kodair, Nagarkurnool",All 6 departments,25-09-2018,24-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nagarkurnool,"PHC Raghupatipeth, Nagarkurnool",All 6 departments,20-05-2019,19-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nagarkurnool,PHC Tadoor(Nagarkurnool),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nalgonda,"PHC Chaandampeta ,Nalgonda",All 6 Departments,24-10-2019,23-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nalgonda,PHC Chityal- Nalgonda,All 6 departments,16-08-2021,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nalgonda,PHC Shaligoraram (Nalgonda),ALL 6 dept,02-08-2018,01-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nalgonda,"PHC Thipparthy, Nalgonda",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nalgonda,PHC Vemulapally(Nalgonda),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nirmal,PHC Dasturabad-Nirmal,All 6 departments,16-08-2021,15-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nirmal,"PHC Mujgi, Nirmal",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nizamabad,PHC Choutpally (Nizamabad),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nizamabad,PHC Kammapalli (Nizamabad),ALL 6 dept,17-07-2018,16-07-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Nizamabad,"PHC Yedpally, Nizamabad",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Peddapalli,"PHC Raghavpur, Peddapalli",All 6 departments,18-05-2019,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Peddapally,PHC Garrepally(Peddapally District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Peddapally,"PHC Kamanpur, Peddapally",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,RAJANNA SIRCILLA,PHC- Vemulawada (Rajannasiricilla),All Departments,09-05-2019,08-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Rajanna Sircilla,"PHC Thangalapally, Rajanna Sircilla",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Rangareddy,"PHC Burgula, Rangareddy",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Rangareddy,PHC Chinchode (Rangareddy),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Rangareddy,PHC Kondurg (Rangareddy),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Rangareddy,"PHC Moinabad, Rangareddy",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Sangareddy,"PHC Athmakur, Sangareddy",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Sangareddy,PHC Kangti(Sangareddy District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Sangareddy,"PHC Munipally, Sangareddy",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Sangareddy,"PHC RC Puram, Sangareddy",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Siddipet,PHC Kukunoorpally (Siddipet),All 6 departments,22-02-2019,21-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Siddipet,PHC Thimmapur(Siddipet),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Suryapet,"PHC Athmakur,Suryapet",All 6 Departments,28-10-2019,27-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Suryapet,"PHC Kapugallu, Suryapet",All 6 Departments,28-10-2019,27-10-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Uppal,UPHC Uppal,All departments,18-05-2021,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Vikarabad,PHC Chityal (Vikarabad),All 6 departments,30-08-2018,29-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Vikarabad,"PHC-Bomraspet, Vikarabad",All 6 departments,18-05-2021,17-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Wanaparthy,PHC Kadukuntala (Wanaparthy),All 6 departments,25-09-2018,24-09-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Wanaparthy,"PHC Peddamandadi, Wanaparthy",All 6 departments,20-01-2020,19-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Rural,PHC Athmakur(Rural-Warangal),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Rural,PHC Sangem(Rural-Warangal),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Urban,PHC Gopalpur(Urban-Warangal),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Urban,PHC Mulkanoor (Warangal Urban),ALL 6 dept,02-08-2018,01-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Urban,PHC Uppal (Warangal),ALL 6 dept,02-08-2018,01-08-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Warangal Urban,PHC-Dharmasagar(Urban-Warangal District),All 6 departments,26-08-2019,25-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Yadadri bhuvanagiri,PHC Bomalaramaram(Yadadri District),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Telangana,Yadadri bhuvanagiri,PHC Kondamadugu(Yadadri District),All 6 departments,26-08-2019,25-08-2020,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,Chachubazar,PHC Chachubazar,All 6 departments,11-11-2018,10-11-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,Gomati,PHC Atharabhola (Gomati),All 6 departments,24-01-2020,23-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,Gomati,"PHC Tulamura ,Gomati",All 6 departments,05-08-2019,04-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,Sepahijala,PHC Taibandal,All 6 departments,10-12-2019,09-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,South Tripura,"PHC Baikhora, South Tripura",All 6 departments,26-06-2021,25-06-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Tripura,Vagmun,"PHC Jampui, Vagmun",All 6 departments,10-12-2019,09-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Gorakhpur,DWH Gorakhpur,All 12 departments,26-02-2021,25-02-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Gorakhpur,"PHC Derwa, Gorakhpur",All 6 departments,04-10-2019,03-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Gorakhpur,"UPHC Basantpur, Gorakhpur",All 12 Departments,08-01-2020,07-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Gursandhi,"PHC Gursandi, Mirzapur",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Jalaun,"PHC- Rampura, Jalaun",All 6 departments,28-01-2020,27-01-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Jaunpur,"PHC Mugrabad Shahapur, Jaunpur",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Kanpur,"PHC Sarwankhera, Kanpur Dehat",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Kanpur Dehat,"PHC Rajpura, Kanpur Dehat",All 6 department,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Kaushambi,"PHC Mooratganj, Kaushambi",All 6 departments,12-02-2020,11-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Kaushambi,"PHC Newada, Kaushambi",All 6 departments,12-02-2018,11-02-2021,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Kaushambi,"PHC Saraswan, Kaushambi",All 6 department,01-06-2019,31-05-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Lucknow,"PHC Sarojni Nagar, Lucknow",All 6 departments,12-02-2020,11-02-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Lucknow,Veerangana Avantibai Mahila Hospital- Lucknow,12 departments,06-08-2019,05-08-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Mirzapur,"PHC Chunar, Mirzapur",All 6 departments,03-10-2019,02-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Muzaffar Nagar,DWH Muzaffar Nagar,12 departments,04-10-2019,03-10-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Prayagraj,DWH Hospital Prayagraj,All 12 Departments,19-03-2019,18-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Pryagraj,"PHC Pratapur, Prayagraj",All 6 Departments,02-12-2019,01-12-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttar Pradesh,Shahjahanpur,"PHC Kundaganj, Shahjahanpur",All 6 departments,31-03-2019,30-03-2022,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Uttarakhand,Dehradun,"PHC Kalsi, Dehradun",All 6 departments,15-10-2020,14-10-2023,full,https://qps.nhsrcindia.org/nqas-certification-full,2026-11-21
+Andhra Pradesh,Anatapur,AH.Kadiri (Anantapur),"ALL 14 departments(ICU, MORTURAY, SNCU, NRC)",16-04-2018,15-04-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Anatapur,AHGuntakal (Anantapur),"13 departments (NRC, SNCU BB, Mortuary , ICU)",31-08-2018,30-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Anatapur,DH Hindupur,"All 14 departments (excluding NRC, SNCU, Mortuary & ICU)",05-02-2019,04-02-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Chittoor,AH Kuppam (Chittoor),"14 departments excluding (NRC, SNCU, ICU & BB)",17-07-2018,16-07-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Chittoor,"AH Madanapalli, (Chittoor)","15 departments except (NRC, SNCU, ICU)",27-06-2018,26-06-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Chittoor,AH Palamaner (Chittoor),"14 departments ( excluding NRC, SNCU, BB, ICU",31-08-2018,30-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Chittoor,AH Srikalahasti,"14 departments ( excluding NRC, SNCU, BB, ICU",23-04-2019,22-04-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Chittoor,CHC- Chandragiri (Chittoor),"Ten department (Excluding BSU, NBSU)",25-07-2021,24-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,East Godavari,AH Amalapuram (East Godavari),"13 departments excluding NRC, PW, SNCU,ICU, PPU",17-07-2018,16-07-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,East Godavari,AH Ramachandrapuram,"12 departments (excluding nrc, sncu, pp unit, Peadiatric Ward, BB & ICU)",02-08-2018,01-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,East Godavari,CHC- Rampachodavaram (Tribal) East Godavari,Eleven departments (Excluding Auxiliary Services),05-08-2019,04-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,East Godavari,"CHC-p. Gannavaram, East Godavari","Eight departments (Excluding NBSU, Radiology, BSU, Auxiliary Services)",05-08-2019,04-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,East Godavari,District Hospital Rajamahendravaram,17 departments excluding NRC,09-08-2018,08-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Guntur,"Area Hoapital Baptla, Guntur","14 departments (excluding NRC, SNCU, ICU & BB)",28-10-2019,27-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Guntur,CHC Macherla (Guntur),11 departments (excluding Auxiliary Services),08-03-2021,07-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Guntur,CHC Rapelle (Guntur),10 departments,06-03-2017,05-03-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Guntur,District Hospital Tenali,16 departments (excluding NRC&ICU),26-03-2021,25-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Kadapa,DH Proddatur,16 departments (excluding NRC & ICU),16-09-2019,15-09-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Krishna,"CHC- Avanigadda, krishna","Eight departments (Excluding NBSU, Radiology, BSU, Auxiliary Services)",25-07-2017,24-07-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Krishna,"CHC- Kaikaluru, Krishna","Nine department (Excluding NBSU, Radiology & Auxiliary services )",25-07-2021,24-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Krishna,CHC- Tiruvur (Krishna),All 11 departments,09-05-2017,08-05-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Krishna,DH Machilipatnam,17 departments excluding NRC,09-03-2018,08-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Kurnool,"CHC- Dhone, Kurnool","Nine departments (Excluding NBSU, Radiology, Auxiliary)",05-08-2019,04-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Kurnool,DH Nandyal,17 departements excluding NRC,09-03-2018,08-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Nellore,"Area Hospital Kavali, Nellore","15 departments (excluding ICU, SNCU, NRC)",03-10-2019,02-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Nellore,"CHC- Venkatagiri, Nellore","Nine department (Excluding NBSU, Auxiliary services & BSU)",25-07-2019,24-07-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Nuzivedu,Area Hospital Nuzivedu,"14 departments (excluding NRC, SNCU, ICU & BB)",28-10-2019,27-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,SrikaKulam,CHC- Seetampeta (Tribal) Srikakulam,"Nine departments (Excluding NBSU, Radiology, BSU)",04-10-2019,03-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,Srikakulam,"Area Hospital Tekkali, Srikakulam","13 Departments (excluding NRC,SNCU,ICU,PPU& BB)",28-10-2021,27-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,AH Jagareddygudem,"ALL 14 departments (excluding NRC, SNCU, ICU & Peadiatric ward)",02-08-2020,01-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,AH Tadepalligudem,"13 departments (excluding nrc, sncu, pp unit, BB & ICU)",02-08-2018,01-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,"CHC- Bimavaram, West Godavari",Eleven departments (Excluding Auxiliary Services),25-07-2019,24-07-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,CHC- Chintalapudi (West Godavari),"Ten department (Excluding BSU, NBSU)",25-07-2021,24-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,CHC- Nasapuram (West Godaavari),Eleven departments ( BSU),05-08-2019,04-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,West Godavari,Tanuku,"ALL 14 departments(NRC, SNCU, BB, ICU)",16-04-2018,15-04-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,prakasam,"CHC- Cumbum, Prakasm",Ten department (Excluding BSU & Auxiliary Services),25-07-2017,24-07-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,prakasam,MCH Ongole,"9 departments (OPD, LR, NBSU,OT, Lab, Rad, Pharmacy, GA, IPD) excluding ER, Auxx, BSU",09-08-2018,08-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,visakhapatnam,"AH Narsipatanam, (Vishakhapatnam)","14 departments excluding NRC, SNCU, ICU & Blood Bank",17-07-2018,16-07-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,visakhapatnam,Dr. N T R District Hospital Anakapalli,"14 departments excluding ICU, NRC, SNCU & Paeds Ward",09-08-2018,08-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Andhra Pradesh,vizianagaram,"CHC- Bhogapuram, Vizianagaram",Eleven departments (Excluding BSU),31-07-2019,30-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Assam,Darrang,"Mangaldai Civil Hospital,Darrang",10 departments,27-04-2021,26-04-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Assam,Goalpara,DH Goalpara,"10departments(Excluding Accident &Emerency,OPD,IPD,PW,ICU,Mortuary,Radiology &Auxiliary",26-08-2019,25-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Bihar,Begusari,DH Begusari,"6 Departments (Including A&E, OPD, Lab., SNCU, IPD, Gen. Admin.)",17-03-2020,16-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Balodabazar,DH Balodabazar,"13 departments (Excluding ICU, NRC, SNCU, PP ward & Mortuary)",17-03-2020,16-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Dhamtari,"CHC Nagri, Dist. Dhamtari",11 departments (excluding Auxiliary Services),02-03-2020,01-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Durg,"CHC Patan, Durg",10 departments,18-08-2020,17-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Jashpur,District Hospital Jashpur,17 departments (excluding mortuary),28-09-2018,27-09-2019,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Kanker,"CHC Bhanupratapur, Kanker",11 departments (excluding Auxiliary Services),02-03-2020,01-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Kanker,CHC Charama (Kanker),11 departments (excluding Auxiliary Services),06-09-2018,05-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Kanker,DH Kanker,"12 departments (excluding indoor department, ICU, Pediatrics Ward, Laboratory, Auxiliary Services, Mortuary)",28-09-2018,27-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Korba,CHC Katghora (Korba),11 departments excluding BSU,28-09-2018,27-09-2019,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Korba,"District Hospital Korba, Chhattisghar",16 departments (Excluding ICU & Ped. Ward),02-05-2019,01-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Mahasamund,DH Mahasamund,"14 departments (Excluding ICU, IPD, Auxilary Services & Mortuary)",17-03-2020,16-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Mungeli,"CHC Lormi, Dist Mungeli,",10 Departments (Excluding Radiology & Auxiliary Services),17-03-2020,16-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Raipur,DH Raipur,"13 depts excluding Auxiliary services, PPU, ICU, Mortuary, BB)",03-12-2018,02-12-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Chhattisgarh,Rajnadgaon,CHC Chhuikhadan Rajnandgaon,11 departments (excluding Auxiliary Services),17-03-2020,16-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,,SDH Khanvel,12 departments,13-09-2020,12-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Dadra,CHC Dadra,9 departments,17-08-2021,16-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Rakholi,CHC Rakholi,8 departments,17-08-2019,16-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Dadra and Nagar Haveli & Daman and Diu,Silvasa,"Shri Vinobha Bhave Civil Hospital, Silvasa",15 departments,13-09-2018,12-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Delhi,Delhi,Pt. Madan Mohan Malaviya,14 departments,10-05-2019,09-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Delhi,Delhi,Sanjay Gandhi Memorial Hospital,17 departments,01-04-2020,31-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Delhi,East,"DH- Lal Bahadur Shastri Hospital, Delhi",All 17 departments,31-05-2019,30-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Delhi,South West,District Hospital Shri Dada Dev Matri Avum Shishu Chikitsalaya (Dabri) New Delhi,All 13 departments,03-06-2019,02-06-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Delhi,West,Guru Gobind Singh Govt. Hospital,13 departments excluding HDU & BSU,19-06-2018,18-06-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Khokhara,"SDH Ruxmaniben GH, Khokhara",14 departments,04-06-2019,03-06-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Mehsana,"CHC Kukarwada, Mehsana",8 departments,09-08-2019,08-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Mehsana,General Hospital- Mehsana,17 departments (excluding ICU),28-09-2018,27-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Patan,CHC Kakoshi (Patan),6 departments,01-04-2020,31-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Rajkot,PKG Rajkot,"14 excluding ICU, BB, NRC & Morturary",27-11-2017,26-11-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Sabarkantha,"SDH Khedbrahma, Sabarkantha",15 departments,16-08-2019,15-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Tapi,General Hospital- Vyara,17 excluding BB,12-01-2017,11-01-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Gujarat,Valsad,"CHC Pardi, Valsad",11 departments (Excluding BSU),09-03-2019,08-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Ambala,"CH Naraingarh, Ambala",All 9 departments,09-05-2019,08-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Ambala,SDH Ambala Cantt,"All 12 departments (excluding NRC, Paediatric Ward, SNCU, ICU, Blood Bank & Mortuary)",22-02-2019,21-02-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Ambala City,DCH Ambala City,16 departments,03-03-2019,02-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Faridabad,"B.K. Hospital, Faridabad",16 departments excluding ICU & NRC,29-06-2017,28-06-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Faridabad,"FRU1, Faridabad, Haryana",9 departments,01-04-2020,31-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Gurugram,"Civil Hospital, Gurugram",17 departments excluding NRC,09-05-2017,08-05-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Gurugram,"District Civil Hospital, Sector 10, Gurugram","11 departments(Excluding NRC, ICU, PW, PPU, Mortuary,Rradiology, BSU)",13-08-2019,12-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Kaithal,District Civil Hospital Kaithal,"14 Departments (excluding NRC,ICU,Auxiliary,Radiology)",24-10-2019,23-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Karnal,"District Hospital, Karnal, Haryana",16 departments,01-04-2020,31-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Panchkula,"CHC Raipur Rani, Panchkula, Haryana",10 departments (Excluding Auxiliary & Radiology),24-01-2020,23-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Rohtak,"CHC Kalanaur, Rohtak",All 9 departments,02-05-2019,01-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Sonipat,"CHC Gannaur, Sonipat","OPD, Laboratory, Labour Room, IPD,Emergency, NBSU, Radiology,Pharmacy & Store, Operation Theatre,GA, Auxiliary",02-07-2019,01-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Sonipat,"District Civil Hospital, Sonipat",16 departments (excluding NRC & ICU),15-05-2019,14-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Haryana,Yamunanagar,"Civil Hospital Jagadhari, Yamunanagar",10 departments (Excluding Auxiliary & Radiology),15-10-2020,14-10-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Himachal Pradesh,Kullu,RH Kullu,All Sixteen department (NRC & ICU),28-08-2019,27-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Himachal Pradesh,Mandi,"Civil Hospital Sarkaghat, Mandi","10 departments (eXCLuding OT, MOT & BSU)",27-03-2019,26-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Jammu and Kashmir,Gandhi Nagar,Government Hospital Gandhi Nagar,"14 departmes (Excluding ICU, Mortuary,Auxiliary & NRC)",13-08-2019,12-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Jammu and Kashmir,Katra,CHC Katra,11 departments,01-04-2018,31-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Jammu and Kashmir,Poonch,DH-Poonch,14 departments,11-04-2022,10-04-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Jammu and Kashmir,Udhampur,"DH- Udhampur, J&K","All 14 departments (Excluding Mortuary, Auxiliary, NRC & ICU)",24-07-2019,23-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Jharkhand,East Singhbhum,"Sadar Hospital Jamshedpur, East Singhbhum","12 deprt excluding NRC, Paediatric ward, SNCU, ICU, Mortuary, Blood Bank)",11-10-2019,10-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Ballari,DH Ballari,13 departments,04-05-2021,03-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Hassan,"DH- Sri Chamarajendra Teaching Hospital, HIMS (Hassan)","Ten Department (Accident & Emergency, OPD, NRCU, IPD, Radiology, Pharmacy, Auxiliary & Mortuary Services)",31-07-2019,30-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Karwar,"DH- Karwar Teaching Hospital, Karwar","Eight department (Excluding Accident & Emergency, OPD,NRC,IPD,laboratory, Radiology & Auxiliary, Pharmacy, Mortuary & Gen. Admin.)",31-07-2019,30-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Kolar,DH- SNR District Hospital (Kolar),"Seven Department (Excluding Accident & Emergency Services, OPD, ICU, NRC, IPD, Laboratory, Radiology, Pharmacy, Auxiliary, Mortuary & General Admin.)",31-07-2019,30-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Koppal,DH Koppal,"8 departements (LR, Mtty Ward, Paeds Ward, SNCU, ICU, OT,PPU, BB)",27-02-2018,26-02-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Vijayapura,DH Vijayapura,"7 departmenst (Lr, Mtty Wd, Paeds Wd, SNCU, ICU , OT & BB)",27-02-2018,26-02-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Karnataka,Wenlock,District Hospital- Wenlock,"5 departments - Paeds Ward, SNCU, ICU, OT & BB",21-05-2018,20-05-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Ernakulam,"CHC Keechery, Ernakulam",All 8 Departments,28-10-2019,27-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Kasargod,"District Hospital Kanhangad ,Kasargod",17 Departments (excluding NRC),25-10-2019,24-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Kottathara,"Tribal Speciality Hospital, Kottathara","13 departments A&E, OPD, IPD, LR, BSU, OT, PPU, NBSU, Lab, Radiology, Pharmacy, Auxx, GA",27-06-2018,26-06-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Kottayam,"CHC Kumarakom, Kottayam",All 8 Departments,28-10-2019,27-10-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Kozhikode,"CHC Thalakulathur, Kozhikode",All 8 Departments,18-01-2020,17-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Kozhikode,W & C Hospital Kozhikode,"14 departments A & E, OPD, SNCU, LR, Mtty Wd, Paeds Wd, BB, GA , PPU, OT , Lab, Radiology, Auxx)",27-06-2018,26-06-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Muvattupuzha,CHC- Pandappilly,"7 departments excluding OT, NBSU, LR, Radiology, BSU",09-03-2018,08-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Palakkad,"CHC Kadambazhipuram, Palakkad","8 departments ( Including A&E, NHP, Lab., OPD, Pharmacy, IPD, Auxiliary and Gen. Admin.)",09-03-2019,08-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Kerala,Poodamakallu,CHC Panathady (Poodamkallu),"8 departments (A& E, OPD, Indoor Dept, Lab, Pharmacy & Store, Auxilary, General Admin, NHP)",31-08-2018,30-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Madhya Pradesh,Jabalpur,"Civil Hospital Rani Durgawati, Jabalpur","14 departments (Excluding IPD, Ped. Ward, ICU & Mortuary)",31-10-2019,30-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Madhya Pradesh,Jabalpur,Seth Govind Das ( Victoria) District Hospital. Jabalpur,"12 Departments (excluding PPU, MW, SNCU, LR, Mortuary & ICU)",31-01-2020,30-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Madhya Pradesh,Seoni,District Hospital Seoni,17 Departments,06-08-2019,05-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Madhya Pradesh,Ujjain,District Hospital Ujjain,15 departments,06-08-2019,05-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Maharashtra,Gondia,"SDH Tirora, Gondia",All 12 departments,17-03-2022,16-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Maharashtra,Nagpur,Daga Memorial Government Women Hospital,"7 departments LR, Mtty Ward, OT, PPU , Paeds Ward, NRC & SNCU",17-04-2018,16-04-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Manipur,Churachandpur,District Hospital Churachandpur,"6 department( Including A&E, OPD, LR, MW, OT, BB)",13-02-2020,12-02-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Manipur,Khangabok,"DH Thoubal, Khangabok","5 departments (Including Accident & Emergency, MW, IPD, Ot, BB )",24-01-2020,23-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Mizoram,Aizawl East District,Civil Hospital- Aizawl,17 departments excluding NRC,03-04-2017,02-04-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Odisha,Jagatsinghpur,CHC Mandasahi (Jagatsinghpur),"All 6 departments namely; OPD, Laboratory, Labour room, IPD, National Health Program, General Administration",05-02-2019,04-02-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Odisha,Kalahandi,DHQH- Kalahandi,12 departments,05-08-2019,04-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Odisha,Koraput,District Headquarters Hospital- Koraput,"10 departments including LR, Mtty Ward, NRC, Paediatrics Ward, SNCU, OT, BB, Lab, radiology & General Admn",04-04-2017,03-04-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Amritsar,Jalliawallah Bagh Marty's Memorial Hospital (JBMM) Civil Hospital Amritsar,16 excluding NRC & ICU,27-03-2017,26-03-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Faridkot,CH Faridkot,"13 departments (A&E, OPD, LR, Mtty Ward, IPD, Paeds ward, OT, PPU, Lab, Radiology, Pharmacy, Auxillary Services, General Administration)",09-03-2018,08-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Hoshiarpur,"Civil Hospital Mukerian, Hoshiarpur","Fifteen department (Excluding SNCU, ICU & NRC)",16-09-2019,15-09-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Hoshiarpur,SDH Dasuya (Hoshiarpur),"15 departments (excluding ICU, SNCU, NRC)",20-09-2018,19-09-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Ludhiana,"Civil Hospital Jagraon, Ludhiana","15th department (Excluding SNCU, NRC, ICU)",13-08-2019,12-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Mansa,Civil Hospital Mansa,16 departments (excluding NRC & ICU),20-01-2020,19-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Nawanshahr,CH Nawanshahr,"14 departments excluding ICU, NRC, Blood Bank, SNCU",27-09-2017,26-09-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Pathankot,Civil Hospital- Pathankot,16 excluding NRC & ICU,09-06-2017,08-06-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Punjab,Patiala,"A.P. Jain Civil Hospital , Rajpura","14 departments excluding SNCU, ICU, NRC & Paeds ward",04-10-2017,03-10-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Rajasthan,Churu,"CHC- Sahawa, Churu",10 departments (Excluding NBSU & BSU),13-08-2019,12-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Rajasthan,Jhunjhunu,"CHC Bagger, Jhunjhunu",10 departments (Excluding NBSU & BSU),21-01-2020,20-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Rajasthan,Jhunjhunu,CHC Bissau (Jhunjhunu),ALL 10 departments (excluding NBSU and BSU),02-08-2018,01-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Ariyalur,"CHC- Kadugur, Ariyalur",11 departments,27-04-2021,26-04-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Chithode,CHC Chithode,"9 departments(Excluding NBSU,BSU&Radiolog)",27-11-2021,26-11-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Dhamapuri,Government Headquarter Hospital Pennagaram,6 departments,19-06-2018,18-06-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Kovilapatti,DH Kovilpatti,All fifteen departments excluding (Auxillary services & Mortuary),28-12-2018,27-12-2019,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Kunnur,CHC Kunnur,11 departments (excluding Radiology),20-03-2020,19-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Namakkal,"CHC Pillanallur,Namakkal","9Departments (Excluding NBSU,Radiology &BSU)",28-08-2019,27-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Nangavalli,CHC Nangavalli,10 departments (Excluding NBSU & Radiology),08-01-2020,07-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Pudukottai,GHQH Aranthangi,16 departments excluding ICU,16-01-2019,15-01-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Salem,CHC Chithoor,"9 departments(Excluding NBSU,BSU&Radiolog)",28-08-2019,27-08-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Siruvaviduthy,CHC Siruvaviduthy,"9 departments(Excluding NBSU,BSU&Radiolog)",08-01-2020,07-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,The Nilgiris,GHQM Udhagamandalam,All 12 department,02-05-2019,01-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Trichy,CHC Inamkulathur,10 departments(Excluding NBSU&Radiology),28-08-2019,27-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Trichy,"Government Hospital Srirangam,Trichy",12 Departments (excluding PPU),01-11-2019,31-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Usilampatti,General headquarter Hospital Usilampatti,16 Departments (excluding A&E and NRC),01-11-2019,31-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Tamil Nadu,Virudhnagar,"CHC Mallankinaru, Virudhnagar","9 departments(Excluding NBSU,BSU&Radiolog)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Bhadradri Kothagudem,"Area Hospital Bhadrachalam, Bhadradri Kothagudem",All 18 Departments,28-10-2019,27-10-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Jagtial,DH Jagtial,16 departments,18-05-2021,17-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Janagaon,DH Janagaon,16 departments,18-05-2021,17-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Kamareddy,Area Hospital Bhanswada,13 department,10-04-2019,09-04-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Kamareddy,DH Kamareddy,"15 departments (Excluding NRC, SNCU, PPU)",20-01-2020,19-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,RAJANNA SIRCILLA,Area Hospital Sircilla(Rajanna Sircilla District),"15 departments(Excluding SNCU,PPU,NRC)",26-08-2019,25-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Telangana,Rangareddy,"DH Kondapur, Rangareddy",13 departments,18-05-2019,17-05-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Ambedkarnagar,DCH Ambedkarnagar,7 departments,31-03-2021,30-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Ayodhya,DWH Ayodhya,7 departments,19-03-2021,18-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Bareilly,DWH Bareilly,"6 departments (Including OPD, LR, MW, PPU, OT & gen. Admin)",02-12-2019,01-12-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Bijnor,DWH Bijnor,6 departments,01-04-2020,31-03-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Etawah,"District Women Hospital Etawah, Uttar Pradesh","Eight department (Excluding Accident & Emergency, PPU, Radiology & Auxiliary)",22-07-2019,21-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Etawah,Dr. Bhim Rao Ambedkar District Male Hospital Etawah,"11 departments (A& E, OPD, IPD, NRC, OT, BB, Lab, Radiology, Pharmacy, Auxillairy, General Admin)",11-10-2018,10-10-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Farrukhabad,"Dr. Ram Manohar Lohiya Female Hospital, Farrukhabad (DWH Farrukhabad)",7 departments,06-08-2021,05-08-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Fatehpur,DWH Fatehpur,"7 Departments (OPD,LR,MW,PPU,OT,Pharmacy,GA)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Gaziabad,DWH Ghaziabad,All 11 departments,12-07-2017,11-07-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Ghaziabad,"CHC Dasna, Ghaziabad","8 Departments (Emergency,OPD,IPD,LR,Lab,Pharmacy,GA,Auxiliary)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Gonda,DWH Gonda,6 departments,19-03-2021,18-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Hamirpur,DWH Hamirpur,8 departments,26-02-2021,25-02-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Jalaun,"CHC Nadigaon, Jalaun","8 departments (Excluding NBSU, OT, Radiology & BSU)",12-02-2020,11-02-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Kanpur,"K.P.M. Hospital, Kanpur","6 departments (Including OPD, IPD, OT, Lab., Pharmacy & Gen. Admin.)",12-02-2020,11-02-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Lalitpur,DWH Lalitpur,11 departments excluding Radiology,28-11-2018,27-11-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Lucknow,Dr. RML Hospital (Lucknow),"14 departments ( excluding NRC, ICU, PPU & Mortuary)",10-10-2018,09-10-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Lucknow,"Virangana Jhalkari Bai Mahila Hospital, Lucknow",11 departments (Excluding PPU),12-02-2020,11-02-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Mathura,"DCH Vrindavan, Mathura","6 Departments (NRC,PPU,Lab,Radiology,Pharmacy,GA)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Pryagraj,"Moti Lal Nehru District Hospital, Pryagraj","10 departments (A& E, OPD, IPD, OT, Blood Bank, Lab, Radiology, Pharmacy, Auxiliary and General Administration)",02-12-2019,01-12-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Raebarelly,DH Raebarelly,"7 Departments (OPD, IPD, NRC,OT,LAB,Pharmacy,GA)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Raebarelly,DWH Raebarelly,"6 Departments (OPD,LR,MW,SNCU,OT,GA)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Rampur,DWH Rampur,"6 Departments (LR, SNCU,OT,Laboratory,Pharmacy, GA)",08-01-2020,07-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Shahjahapur,"District Women Hospital Shahjahanpur, Uttar Pradesh","06 departments (Labour Room, Mattenity Ward, OT, SNCU, Pathalogy, General Admin)",22-07-2019,21-07-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Sitapur,DWH Sitapur,"7 Departments (LR,MW,SNCU,PPU,OT,Pharmacy,GA)",08-01-2020,07-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttar Pradesh,Unnao,DWH Unnao,6 departments,31-03-2021,30-03-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttarakhand,Haridwar,Chain Rai Women District Hospital (Haridwar),"All five departments namely; OPD Labour Room, Maternity Ward, SNCU & OT",05-02-2019,04-02-2022,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+Uttarakhand,US Nagar,"J.L.N.District Hospital Rudrapur, US Nagar","5 departments (Including OPD, OT, BB, Lab, Radiology)",20-01-2020,19-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Cooch Behar,MJN Coochbehar (Connverted into Government Medical College on 22nd Feb-2019),17 departments excluding Mortuary,23-02-2018,22-02-2019,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Darjeeling,DH Siliguri,16 Deptt Excluding Mortuary & NRC,24-11-2017,23-11-2020,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Darjeeling,"Mirik BPHC, Darjeeling",8 departments,01-04-2020,31-03-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Hoogly,Tarakeswar Rural Hospital Hoogly,11 departments (Excluding NBSU),31-01-2020,30-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Jalpaiguri,Jalpaiguri District Hospital,17 Departments (excluding NRC),31-01-2020,30-01-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Jalpaiguri,"RH Oodlabari, Jalpaiguri",10 departments,16-08-2018,15-08-2021,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Jalpaiguri,"Rajgunj Rural Hospital, Jalpaiguri",10 departments (Excluding OT & BSU),15-09-2020,14-09-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Parganas,M R Bangur district Hospital South 24 Parganas,16 departments (Excluding NRC & Mortuary),31-01-2020,30-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Parganas,Vidyasagar State General Hospital South 24 Parganas,"13 Departments (excluding NRC,SNCU,ICU,Mortuary & BB)",31-01-2020,30-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
+West Bengal,Purba Bardhaman,"Sub divisional Hospital Katwa, Purba Bardhaman",16 departments (excluding NRC & ICU),31-01-2020,30-01-2023,partial,https://qps.nhsrcindia.org/nqas-certification-partial,2026-11-21
