@@ -19,14 +19,14 @@ A match is evidence FOR a facility; no match is NOT evidence against it.
 Personal data: the detail endpoint also returns named staff contacts. These are NOT kept.
 Only institutional fields (address, city, PIN, website) are saved.
 
-Outputs (default: datasets/external/nmc/):
+Outputs (default: datasets/external/nmc_bronze/; "bronze" = not yet verified by the team):
   raw/mbbs_list_<date>.json, raw/pg_list_<date>_p<N>.json   list responses as fetched
   raw/details/<college_id>.json                             detail responses (contacts removed);
                                                             cached, so re-runs resume
-  nmc_colleges.csv               one row per college
-  nmc_college_courses.csv        one row per college x course (MBBS + PG)
-  nmc_specialty_reference.csv    one row per specialty: course levels, n_colleges, related services
-  nmc_colleges.sqlite            the three tables plus the view v_service_evidence
+  nmc_colleges_bronze.csv            one row per college
+  nmc_college_courses_bronze.csv     one row per college x course (MBBS + PG)
+  nmc_specialty_reference_bronze.csv one row per specialty: course levels, n_colleges, related services
+  nmc_colleges_bronze.sqlite         the three tables plus the view v_service_evidence
 
 Usage:
   python scrapers/nmc_colleges.py                 # fetch everything (details take ~15-20 min)
@@ -58,7 +58,7 @@ HEADERS = {
 PER_PAGE = 1000
 DELAY_S = 0.5  # pause between requests, to be polite to a government server
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = REPO_ROOT / "datasets" / "external" / "nmc"
+DEFAULT_OUT = REPO_ROOT / "datasets" / "external" / "nmc_bronze"
 
 # Detail fields we keep (institutional only; 'contacts', 'mobile', 'email' etc. are dropped)
 DETAIL_KEEP = ["id", "college_code", "college_name", "management_type", "state_name", "university_name",
@@ -452,10 +452,10 @@ def main():
                 fetch_details(session, raw, ids)
 
     colleges, courses, reference = build(raw)
-    write_csv(args.out / "nmc_colleges.csv", colleges)
-    write_csv(args.out / "nmc_college_courses.csv", courses)
-    write_csv(args.out / "nmc_specialty_reference.csv", reference)
-    write_sqlite(args.out / "nmc_colleges.sqlite", {
+    write_csv(args.out / "nmc_colleges_bronze.csv", colleges)
+    write_csv(args.out / "nmc_college_courses_bronze.csv", courses)
+    write_csv(args.out / "nmc_specialty_reference_bronze.csv", reference)
+    write_sqlite(args.out / "nmc_colleges_bronze.sqlite", {
         "nmc_colleges": colleges, "nmc_college_courses": courses, "nmc_specialty_reference": reference,
     })
 

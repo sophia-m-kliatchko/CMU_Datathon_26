@@ -4,7 +4,7 @@ Outside evidence from the **National Medical Commission (NMC)**, India's regulat
 
 - **Source pages:** [MBBS colleges](https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-mbbs) · [PG courses](https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-pg-courses)
 - **Scraper:** `scrapers/nmc_colleges.py`
-- **Output:** `datasets/external/nmc/`
+- **Output:** `datasets/external/nmc_bronze/` (bronze: not yet verified by the team)
 - **Snapshot:** 2026-11-21. NMC's own records were last updated on 2026-11-04.
 - **Size:** 911 colleges (839 with MBBS, 645 with PG courses, 219 with super-specialty courses) and 11,583 college × course rows (839 MBBS, 9,079 MD/MS, 299 diploma, 722 DM, 644 M.Ch.) across 103 PG specialties. Detail coverage: 819 colleges with a city, 611 with a valid PIN, 831 with a website.
 
@@ -29,10 +29,10 @@ python scrapers/nmc_colleges.py --offline       # rebuild the CSVs and SQLite fr
 
 | File | One row per | Key columns |
 |---|---|---|
-| `nmc_colleges.csv` | college | `college_id`, `college_code`, `college_name`, `name_norm`, `state_clean`, `city`, `pincode_clean`, `address`, `website`, `management_type` (Government / Private / Trust), `inception_year`, `mbbs_seats`, `n_pg_courses`, `n_pg_seats`, `n_super_specialty_courses`, `super_specialties` |
-| `nmc_college_courses.csv` | college × course | `course_level` (MBBS / PG degree / PG diploma / Super-specialty (DM) / Super-specialty (M.Ch.)), `course_name` (as published), `specialty` (degree prefix removed), `is_clinical`, `related_services`, `approved_seats`, `recognition_status`, `lop_date` |
-| `nmc_specialty_reference.csv` | PG specialty | `course_levels`, `is_clinical`, `related_services`, `n_colleges`, `total_seats` |
-| `nmc_colleges.sqlite` | the 3 tables, plus the view `v_service_evidence` (college × service, with the courses behind it, whether any is super-specialty, and seats) | |
+| `nmc_colleges_bronze.csv` | college | `college_id`, `college_code`, `college_name`, `name_norm`, `state_clean`, `city`, `pincode_clean`, `address`, `website`, `management_type` (Government / Private / Trust), `inception_year`, `mbbs_seats`, `n_pg_courses`, `n_pg_seats`, `n_super_specialty_courses`, `super_specialties` |
+| `nmc_college_courses_bronze.csv` | college × course | `course_level` (MBBS / PG degree / PG diploma / Super-specialty (DM) / Super-specialty (M.Ch.)), `course_name` (as published), `specialty` (degree prefix removed), `is_clinical`, `related_services`, `approved_seats`, `recognition_status`, `lop_date` |
+| `nmc_specialty_reference_bronze.csv` | PG specialty | `course_levels`, `is_clinical`, `related_services`, `n_colleges`, `total_seats` |
+| `nmc_colleges_bronze.sqlite` | the 3 tables (table names have no `_bronze` suffix), plus the view `v_service_evidence` (college × service, with the courses behind it, whether any is super-specialty, and seats) | |
 | `raw/` | API responses as fetched (details with contacts removed) | provenance and offline rebuilds |
 
 **Into Databricks:** upload the CSVs with **Create table → Upload file**, e.g. as `workspace.datathon.ext_nmc_colleges` and `ext_nmc_college_courses`.

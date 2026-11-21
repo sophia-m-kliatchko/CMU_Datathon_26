@@ -12,12 +12,12 @@ facility claims. A match is evidence FOR a facility; no match is NOT evidence ag
 The page is one static HTML file: one collapsible section per state, each holding a table
 of  Hospital | City | Specialties (comma-separated). One HTTP request fetches everything.
 
-Outputs (default: datasets/external/anbai_dnb/):
+Outputs (default: datasets/external/anbai_dnb_bronze/; "bronze" = not yet verified by the team):
   raw/anbai_dnb_<date>.html         snapshot of the page that was parsed (provenance)
-  dnb_hospitals.csv                 one row per hospital listing
-  dnb_hospital_specialties.csv      one row per hospital x accredited specialty
-  dnb_specialty_reference.csv       canonical specialties: category + related challenge services
-  anbai_dnb.sqlite                  the three tables above plus a view v_service_evidence
+  dnb_hospitals_bronze.csv          one row per hospital listing
+  dnb_hospital_specialties_bronze.csv  one row per hospital x accredited specialty
+  dnb_specialty_reference_bronze.csv  canonical specialties: category + related challenge services
+  anbai_dnb_bronze.sqlite           the three tables above plus a view v_service_evidence
 
 Usage:
   python scrapers/anbai_dnb.py                       # fetch live page
@@ -40,7 +40,7 @@ from bs4 import BeautifulSoup
 SOURCE_URL = "https://anbai.org/DNB_accredited_institutions.php"
 USER_AGENT = "Mozilla/5.0 (compatible; datathon-research-scraper/1.0)"
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = REPO_ROOT / "datasets" / "external" / "anbai_dnb"
+DEFAULT_OUT = REPO_ROOT / "datasets" / "external" / "anbai_dnb_bronze"
 
 # ---------------------------------------------------------------------------
 # Reference data
@@ -397,10 +397,10 @@ def main():
                  for k, (c, sv) in sorted(SPECIALTIES.items())]
     ref_fields = ["specialty", "category", "related_services", "n_hospitals"]
 
-    write_csv(args.out / "dnb_hospitals.csv", hospitals, hosp_fields)
-    write_csv(args.out / "dnb_hospital_specialties.csv", specialties, spec_fields)
-    write_csv(args.out / "dnb_specialty_reference.csv", reference, ref_fields)
-    write_sqlite(args.out / "anbai_dnb.sqlite", {
+    write_csv(args.out / "dnb_hospitals_bronze.csv", hospitals, hosp_fields)
+    write_csv(args.out / "dnb_hospital_specialties_bronze.csv", specialties, spec_fields)
+    write_csv(args.out / "dnb_specialty_reference_bronze.csv", reference, ref_fields)
+    write_sqlite(args.out / "anbai_dnb_bronze.sqlite", {
         "dnb_hospitals": (hospitals, hosp_fields),
         "dnb_hospital_specialties": (specialties, spec_fields),
         "dnb_specialty_reference": (reference, ref_fields),

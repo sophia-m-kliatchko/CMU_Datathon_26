@@ -22,6 +22,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:18: ANBAI and NMC scrapers now write to the bronze names
+- **Who:** Claude (for William)
+- **What:**
+  - `scrapers/anbai_dnb.py` now writes to `datasets/external/anbai_dnb_bronze/`, and `scrapers/nmc_colleges.py` to `datasets/external/nmc_bronze/`.
+  - Every output file has the `_bronze` suffix, e.g. `dnb_hospitals_bronze.csv` and `nmc_colleges_bronze.sqlite`.
+  - Updated `docs/anbai-dnb.md` and `docs/nmc-colleges.md` to match.
+  - Table names inside the SQLite files are unchanged, matching the files William renamed.
+- **How:**
+  - Replaced the default output folder and the output file names in both scripts and docs.
+  - Checked the result:
+    - NMC: `--offline` rebuilt into `nmc_bronze/` with no git diff, so it's identical.
+    - ANBAI: rebuilt from the saved HTML into a scratch folder; contents identical apart from the `scraped_at` timestamp.
+- **Why:** Closes the follow-up from the 15:14 bronze rename. Before this, re-running either scraper would have recreated the old `anbai_dnb/` and `nmc/` folders next to the bronze ones.
+
 ### 2026-11-21 16:07: Built the LaQshya maternity certification dataset
 - **Who:** Claude (for William)
 - **What:** New `scrapers/nhsrc_laqshya.py`, new `docs/laqshya.md`, and new outputs in `datasets/external/laqshya_bronze/`:

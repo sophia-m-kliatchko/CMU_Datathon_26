@@ -4,7 +4,7 @@ Outside evidence for **which specialties a hospital really practises**. NBEMS on
 
 - **Source:** https://anbai.org/DNB_accredited_institutions.php (Association of National Board Accredited Institutions)
 - **Scraper:** `scrapers/anbai_dnb.py` (one HTTP request; the page is static HTML)
-- **Output:** `datasets/external/anbai_dnb/`
+- **Output:** `datasets/external/anbai_dnb_bronze/` (bronze: not yet verified by the team)
 - **Snapshot:** 2026-11-21. 655 hospital listings, 2,596 hospital × specialty rows, 28 states, 71 specialties.
 
 ```bash
@@ -17,10 +17,10 @@ Needs `requests` and `beautifulsoup4`.
 
 | File | One row per | Key columns |
 |---|---|---|
-| `dnb_hospitals.csv` | hospital listing | `hospital_id`, `hospital_name`, `name_norm` (for matching), `city_raw`, `state_listed`, `state_clean`, `state_note`, `n_specialties`, `specialties`, `specialties_raw`, `duplicate_name_city`, `source_url`, `scraped_at` |
-| `dnb_hospital_specialties.csv` | hospital × accredited specialty | `hospital_id`, `specialty` (canonical), `course_note`, `category`, `related_services`, `specialty_raw` |
-| `dnb_specialty_reference.csv` | canonical specialty | `category`, `related_services`, `n_hospitals` |
-| `anbai_dnb.sqlite` | the 3 tables above, plus the view `v_service_evidence` (hospital × challenge service, with the specialties behind it) | |
+| `dnb_hospitals_bronze.csv` | hospital listing | `hospital_id`, `hospital_name`, `name_norm` (for matching), `city_raw`, `state_listed`, `state_clean`, `state_note`, `n_specialties`, `specialties`, `specialties_raw`, `duplicate_name_city`, `source_url`, `scraped_at` |
+| `dnb_hospital_specialties_bronze.csv` | hospital × accredited specialty | `hospital_id`, `specialty` (canonical), `course_note`, `category`, `related_services`, `specialty_raw` |
+| `dnb_specialty_reference_bronze.csv` | canonical specialty | `category`, `related_services`, `n_hospitals` |
+| `anbai_dnb_bronze.sqlite` | the 3 tables above (table names have no `_bronze` suffix), plus the view `v_service_evidence` (hospital × challenge service, with the specialties behind it) | |
 | `raw/anbai_dnb_<date>.html` | the page that was parsed | provenance |
 
 **Into Databricks:** upload the CSVs with **Create table → Upload file** (or copy them to a Volume), e.g. as `workspace.datathon.ext_dnb_hospitals` and `ext_dnb_hospital_specialties`.
