@@ -1,0 +1,93 @@
+# Silver Tables: What They Contain and How to Use Them Safely
+
+Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_catalog>.<target_schema>`, which defaults to `workspace.datathon`.
+
+## Tables
+
+| Table | One row per | Use it for |
+|---|---|---|
+| `bronze_facilities` | source row | Raw copy of the Marketplace table. Control characters such as NUL bytes are removed, nothing else is changed. |
+| `silver_facilities` | facility (`facility_id`) | Everything: filtering, distance, scoring, display. |
+| `silver_facility_claims` | facility × field × claimed item | Matching a service (e.g. dialysis) and **quoting the evidence**. |
+| `silver_possible_duplicates` | suspected duplicate pair | Avoiding recommending the same place twice. |
+| `silver_dq_summary` | data-quality flag | How common each problem is (good for the presentation). |
+
+## Key columns in `silver_facilities`
+
+| Column | Meaning |
+|---|---|
+| `facility_id` | Source `unique_id`, after merging rows that shared it. A `gen_…` value means the source had no ID and one was generated. |
+| original columns (`name`, `description`, `capability`…) | The source text with whitespace trimmed and "null"-like values set to NULL. **Quote these as evidence.** |
+| `latitude_clean`, `longitude_clean` | Coordinates checked to be inside India, with swapped lat/lon fixed. NULL if the location can't be used. |
+| `coord_status` | `ok`, `swapped_fixed`, `missing`, `zero`, `outside_india` |
+| `coords_low_precision` | Both coordinates have 2 or fewer decimal places (about ±1 km or worse, often a city-centre point). |
+| `pincode_clean` | A valid 6-digit PIN code, or NULL. |
+| `state_clean` | The standardized state or union territory. Taken from the reported state; if that's missing, inferred from the PIN code (`state_from_pin`). |
+| `pin_state_consistent` | Whether the reported state fits the PIN prefix. NULL if either is missing. |
+| `city_clean` | Title-cased city name, with old names replaced by current ones (Bombay → Mumbai, Bangalore → Bengaluru…). |
+| `year_established_clean`, `num_doctors_clean`, `capacity_clean` | Numbers; implausible values are set to NULL. |
+| `n_specialties`, `n_capability`, `n_procedure`, `n_equipment`, `n_service_claims` | How many items each list contains. |
+| `completeness_score` | 0–1: the share of 13 key fields that are filled in. |
+| `dq_flags`, `dq_flag_count` | Data-quality issue codes (see below). |
+| `n_source_rows`, `source_row_ids`, `name_variants`, `description_all`, `state_variants`, `pincode_variants`, `dup_coord_spread_km` | How the duplicate-ID merge went. |
+| `possible_duplicate_ids` | Other facility IDs that look like the same place. |
+| `states_mentioned_in_text` | State names found in the name or description. |
+
+## Data-quality flags (`dq_flags`)
+
+| Flag | Meaning |
+|---|---|
+| `MISSING_NAME` | No facility name. |
+| `MISSING_COORDS` / `COORDS_ZERO` / `COORDS_OUTSIDE_INDIA` | The location can't be used for distance. |
+| `COORDS_SWAPPED_FIXED` | Latitude and longitude were swapped in the source; we swapped them back. |
+| `COORDS_LOW_PRECISION` | Coordinates are probably approximate (city-centre point). |
+| `PINCODE_MISSING_OR_INVALID` | No valid 6-digit PIN code. |
+| `STATE_UNRECOGNIZED` | We couldn't work out the state (it was missing or unreadable, and the PIN didn't settle it). |
+| `STATE_INFERRED_FROM_PIN` | The state came from the PIN code, not from the record. |
+| `PIN_STATE_MISMATCH` | The reported state and the PIN prefix disagree, so one of them is wrong. |
+| `YEAR_IMPLAUSIBLE` / `DOCTORS_IMPLAUSIBLE` / `CAPACITY_IMPLAUSIBLE` | The source had a value, but it was impossible, so it was set to NULL. |
+| `NO_SERVICE_CLAIMS` | Specialties, capability, procedure and equipment are all empty. |
+| `DUPLICATE_ID_MERGED` | Several source rows shared this ID and were merged. |
+| `DUP_ROWS_COORD_CONFLICT` / `DUP_ROWS_STATE_CONFLICT` / `DUP_ROWS_PINCODE_CONFLICT` | The merged rows disagreed on location, so this may be two different places. |
+| `TEXT_MENTIONS_MULTIPLE_STATES` | The name or description mentions 2 or more states. Possibly a merged record or a chain. |
+| `TEXT_STATE_DIFFERS` | The text mentions a state that isn't `state_clean`. |
+| `POSSIBLE_NEAR_DUPLICATE` | Another facility ID looks like the same place. |
+
+---
+
+## ⚠️ Watch-outs when using and filtering silver
+
+### Lists and missing values
+1. **Lists are never NULL; they're empty.** Use `size(capability) > 0` or `n_capability > 0`, never `capability IS NOT NULL`, which is always true.
+2. **Missing doesn't mean zero.** Year established, number of doctors and beds are missing for 50–75% of facilities. Don't treat a missing value as 0 in a score, and don't filter on `capacity_clean > 50` unless you're happy to drop three-quarters of the data. Treat missing values as "unknown" and say so.
+3. **Don't treat `completeness_score` as quality.** A well-documented facility isn't necessarily a better one. Use it to express *confidence*, not *rank*.
+
+### Service matching
+4. **Every service in the data is a claim the facility made, not a verified fact.** Silver only cleans the data; it doesn't verify anything. A facility with "Dialysis" in `capability` *says* it does dialysis.
+5. **Match on `silver_facility_claims.claim_norm`, quote `claim_text`.** Use synonyms and spelling variants: dialysis / haemodialysis / hemodialysis / renal replacement; NICU / neonatal intensive care; C-section / caesarean / cesarean / LSCS.
+6. **Be careful with substring matching.** `LIKE '%ent%'` matches "equipm*ent*" and "pati*ent*". Use word boundaries (`RLIKE '\\bent\\b'`) or exact items.
+7. **Searching descriptions can catch negatives:** "referred out for dialysis", "no ICU". Treat the description as weaker evidence than the structured lists.
+8. **A specialty isn't the service.** "Nephrology" ≠ dialysis, and "Obstetrics" ≠ emergency C-section capability. Score indirect evidence lower than a direct claim.
+9. **The equipment list backs up claims.** A dialysis claim plus "dialysis machine" in `equipment` is stronger than the claim alone.
+
+### Location and distance
+10. **Use `latitude_clean`/`longitude_clean`, never the raw columns.** Raw columns may hold swapped, zero or out-of-India values.
+11. **When `latitude_clean` is NULL, don't silently drop the facility.** Decide deliberately: fall back to a PIN-code centroid, or show it as "location unknown".
+12. **Low-precision coordinates (`coords_low_precision`) can be ±1 km or more.** Many facilities may share one city-centre point, so treat small distance differences as ties.
+13. **Filter on `state_clean`, distance or PIN code, not on city text.** City spellings vary even after cleaning (the alias list only covers common renames), and the city field is self-reported.
+14. **`STATE_INFERRED_FROM_PIN` and `PIN_STATE_MISMATCH` mean the location is uncertain.** Say so to the user.
+
+### Duplicates
+15. **Facilities merged from several rows (`n_source_rows > 1`) have their lists combined.** If `DUP_ROWS_*_CONFLICT` is also set, those may be two different facilities, and the services may come from either one.
+16. **Near-duplicates are flagged, not removed.** When showing a top-N list, collapse results that appear in each other's `possible_duplicate_ids`. Otherwise the same hospital can appear twice.
+17. **The near-duplicate rules are heuristics:** names ≥85% similar or one contains the other, within 2 km. Expect some misses and some false alarms. Facilities on the edge of a ~1 km grid square can be missed.
+
+### Flags and the text checks
+18. **Flags are information, not filters.** `WHERE dq_flag_count = 0` throws away a large share of the data. Choose per use: for distance, care about the coordinate flags; for service claims, care about `NO_SERVICE_CLAIMS` and the duplicate conflicts.
+19. **The text-based state flags are soft.** A Gurugram hospital "near Delhi" gets `TEXT_STATE_DIFFERS`. Use them as a nudge to check, not as proof.
+
+### Running it as a team
+20. **Re-run the notebook; don't edit silver tables by hand.** Every run overwrites all tables.
+21. **Each teammate has their own workspace and tables.** Results only match if everyone runs the same notebook version from the same branch.
+22. **Generated IDs (`gen_…`) can change** if the facility's name, PIN or coordinates change in the source. Don't hard-code them.
+23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.
