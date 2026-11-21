@@ -22,6 +22,16 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 15:14: Renamed scraped datasets to bronze
+- **Who:** William (renamed the files), Claude (logged and committed)
+- **What:**
+  - Folders: `datasets/external/anbai_dnb/` → `anbai_dnb_bronze/`, and `datasets/external/nmc/` → `nmc_bronze/`.
+  - Every CSV and SQLite file in them gained a `_bronze` suffix, e.g. `nmc_colleges.csv` → `nmc_colleges_bronze.csv`.
+  - The `raw/` folders moved with them and are still git-ignored.
+- **How:** William renamed the files by hand. Claude committed the renames with `git add -A` and pushed to `Will_branch`.
+- **Why:** The teammates haven't verified these datasets yet. Calling them bronze marks them as unverified, following the project's bronze → silver convention.
+- **Notes / follow-ups:** The scrapers (`scrapers/anbai_dnb.py`, `scrapers/nmc_colleges.py`) and the docs (`docs/anbai-dnb.md`, `docs/nmc-colleges.md`) still use the old folder and file names. Re-running a scraper will write to the old names until they're updated.
+
 ### 2026-11-21 14:35: Added .gitignore; committed scraper work to `Will_branch`
 - **Who:** Claude (for William)
 - **What:** New `.gitignore` that ignores `.DS_Store` and `datasets/external/*/raw/`. Committed the ANBAI and NMC scrapers, outputs and docs, then pushed `Will_branch` to `origin`.
