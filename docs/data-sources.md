@@ -10,7 +10,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 |---|---|---|---|---|
 | `bronze_facilities`, `silver_facilities`, `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`; file `data/raw/facilities.csv` | Virtue Foundation India healthcare facilities dataset (Databricks Marketplace) | Virtue Foundation | 2026-11-21 | `notebooks/01_bronze_to_silver.py` |
 | `nqas_bronze`, `nqas_silver`; file `data/external/nqas_certified_facilities.csv` | NQAS Certified Facilities list | NHSRC, MoHFW | 2026-11-21 | `scripts/scrape_nqas.py` → `notebooks/02_nqas_bronze_to_silver.py` |
-| `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | MoHFW (Kayakalp scheme, with NHSRC) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
+| `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
 | file `data/raw/india_post_pincode_directory.csv` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO | not yet processed |
 | file `data/raw/nfhs_5_district_health_indicators.csv` | NFHS-5 (2019-21) district factsheets | IIPS / MoHFW, via data.gov.in | ⚠ TODO | not yet processed |
 
@@ -41,16 +41,20 @@ Items marked **⚠ TODO** still need information from the person who added the d
 
 ## 3. Kayakalp Winner Facilities, FY 2021-22
 - **What:** 1,197 public facilities that won Kayakalp awards (cleanliness, hygiene and infection control) in FY 2021-22, including Eco-friendly awards.
-- **Publisher:** Ministry of Health and Family Welfare, Government of India (Kayakalp Award Scheme, administered with NHSRC).
-- **Where:** PDF file `KAYAKALP WINNER FACILITIES 21-22.pdf`, downloaded by Sophia. **⚠ TODO: add the URL it was downloaded from**, and put it in the `source_url` widget of notebook 03. No official online copy was found by web search on 2026-11-21. Background on the scheme: [Kayakalp Guidelines 2021 (NHSRC)](https://qps.nhsrcindia.org/sites/default/files/2022-03/Kayakalp%20Guidelines%202021%20%28with%20eco%20friendly%29.pdf).
-- **Retrieved / converted:** 2026-11-21. The PDF itself is not committed to the repo.
-- **Licence / terms:** a government publication; no explicit open-data licence was found. We cite MoHFW.
+- **Publisher:** National Health Systems Resource Centre (NHSRC), Ministry of Health and Family Welfare, Government of India (Kayakalp Award Scheme).
+- **Where:**
+  - Landing page: [List of Kayakalp winner facilities (NHSRC)](https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF)
+  - PDF: https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf (uploaded to the NHSRC site in 2024-09, according to its path)
+  - Background on the scheme: [Kayakalp Guidelines 2021 (NHSRC)](https://qps.nhsrcindia.org/sites/default/files/2022-03/Kayakalp%20Guidelines%202021%20%28with%20eco%20friendly%29.pdf)
+- **File check:** the copy Sophia downloaded matches the online PDF byte for byte (788,186 bytes, SHA-256 `6af952e2caa017f6f9ad92f916848caffa357f08db7556309805a44977607680`, checked 2026-11-21).
+- **Retrieved / converted:** 2026-11-21. The PDF itself is not committed to the repo; re-download it from the link above.
+- **Licence / terms:** a government publication; no explicit open-data licence was found. We cite NHSRC/MoHFW.
 - **Processing:** `scripts/kayakalp_pdf_to_csv.py` (pdfplumber) → CSV → upload as `kayakalp_bronze` → `notebooks/03_kayakalp_bronze_to_silver.py` → `kayakalp_silver`.
 - **Known limitations:**
   - In 17 rows, district text had spilled into the State column; this was repaired and flagged `DISTRICT_REPAIRED_FROM_PDF`.
   - Some states wrote "village, block, district" in the district field; it's split into `locality` and `district_clean`.
   - Public facilities only, and FY 2021-22 only.
-- **Cite as:** Ministry of Health and Family Welfare. *Kayakalp Winner Facilities of FY 2021-22.* Government of India, 2022. ⚠ TODO: URL. Accessed 2026-11-21.
+- **Cite as:** National Health Systems Resource Centre. *List of Kayakalp Winner Facilities FY 2021-22.* Ministry of Health and Family Welfare, Government of India. https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf. Accessed 2026-11-21.
 - **Per-row citation:** the `row_citation` column in `kayakalp_silver`, which gives the PDF page and S.No.
 
 ## 4. India Post Pincode Directory

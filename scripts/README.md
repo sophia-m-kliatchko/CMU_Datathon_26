@@ -5,7 +5,7 @@ Local Python scripts that fetch or convert **outside datasets** into CSVs under 
 | Script | Input | Output | Needs |
 |---|---|---|---|
 | `scrape_nqas.py` | NHSRC NQAS certified facilities website ([qps.nhsrcindia.org/nqas-facility-list](https://qps.nhsrcindia.org/nqas-facility-list)) | `data/external/nqas_certified_facilities.csv` | Standard library only |
-| `kayakalp_pdf_to_csv.py` | A Kayakalp award-winners PDF, e.g. `KAYAKALP WINNER FACILITIES 21-22.pdf` | `data/external/kayakalp_<fy>.csv` | `python -m pip install pdfplumber` |
+| `kayakalp_pdf_to_csv.py` | A Kayakalp award-winners PDF, e.g. [`KAYAKALP WINNER FACILITIES 21-22.pdf`](https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf) (from [NHSRC's Kayakalp winners page](https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF)) | `data/external/kayakalp_<fy>.csv` | `python -m pip install pdfplumber` |
 
 Run them from the repo root:
 

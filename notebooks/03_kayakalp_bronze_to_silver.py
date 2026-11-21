@@ -28,8 +28,13 @@ dbutils.widgets.text("catalog", "workspace", "1. Catalog")
 dbutils.widgets.text("schema", "datathon", "2. Schema")
 dbutils.widgets.text("bronze_table", "kayakalp_bronze", "3. Bronze table")
 dbutils.widgets.text("silver_table", "kayakalp_silver", "4. Silver table")
-# TODO: fill in where the PDF was downloaded from (see docs/data-sources.md)
-dbutils.widgets.text("source_url", "", "5. URL the PDF was downloaded from")
+# Official PDF link, from the NHSRC page "List of Kayakalp winner facilities"
+# (https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF). See docs/data-sources.md.
+dbutils.widgets.text(
+    "source_url",
+    "https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf",
+    "5. URL the PDF was downloaded from",
+)
 
 CATALOG = dbutils.widgets.get("catalog").strip()
 SCHEMA = dbutils.widgets.get("schema").strip()
@@ -40,7 +45,7 @@ spark.sql(f"USE CATALOG `{CATALOG}`")
 spark.sql(f"USE SCHEMA `{SCHEMA}`")
 
 SOURCE_NAME = "Kayakalp Winner Facilities of FY 2021-22 (PDF)"
-SOURCE_PUBLISHER = "Ministry of Health and Family Welfare (MoHFW), Government of India, Kayakalp Award Scheme (administered with NHSRC)"
+SOURCE_PUBLISHER = "National Health Systems Resource Centre (NHSRC), Ministry of Health and Family Welfare, Government of India (Kayakalp Award Scheme)"
 SOURCE_LICENSE = "Government publication. No explicit open-data licence found; cite MoHFW/NHSRC as the source."
 PRODUCED_BY = "scripts/kayakalp_pdf_to_csv.py -> notebooks/03_kayakalp_bronze_to_silver.py (github.com/sophia-m-kliatchko/CMU_Datathon_26)"
 RETRIEVED_ON = "2026-11-21"  # date the PDF was converted; update if you re-download it
@@ -145,14 +150,14 @@ silver = add_provenance(silver, SOURCE_NAME, SOURCE_PUBLISHER,
                         F.lit(SOURCE_URL).cast("string"), F.lit(RETRIEVED_ON).cast("date"), SOURCE_LICENSE, PRODUCED_BY)
 silver = silver.withColumn(
     "row_citation",
-    F.concat(F.lit("MoHFW, Kayakalp Winner Facilities of FY "), F.coalesce(F.col("financial_year"), F.lit("?")),
+    F.concat(F.lit("NHSRC/MoHFW, Kayakalp Winner Facilities of FY "), F.coalesce(F.col("financial_year"), F.lit("?")),
              F.lit(", "), F.coalesce(F.col("source_file"), F.lit("PDF")),
              F.lit(", p. "), F.coalesce(F.col("source_page").cast("string"), F.lit("?")),
              F.lit(", S.No "), F.coalesce(F.col("s_no").cast("string"), F.lit("?")), F.lit(": "),
              F.coalesce(F.col("award_raw"), F.lit("?")), F.lit(", "), F.coalesce(F.col("facility_type_reported"), F.lit("?")),
              F.lit(", "), F.coalesce(F.col("facility_name"), F.lit("?")), F.lit(", "),
              F.coalesce(F.col("district_raw"), F.lit("?")), F.lit(", "), F.coalesce(F.col("state_raw"), F.col("state_pdf"), F.lit("?")),
-             F.lit(".")),
+             F.lit(". "), F.coalesce(F.col("source_url"), F.lit("")), F.lit(" (retrieved "), F.lit(RETRIEVED_ON), F.lit(").")),
 )
 
 ORDER = ["award_id", "financial_year", "facility_name", "facility_type_reported", "facility_type_from_name", "facility_level",
@@ -166,7 +171,7 @@ write_table(silver, SILVER,
             "Kayakalp award winners FY 2021-22 (MoHFW PDF), one row per award, with page and S.No citations. "
             "Public facilities only. Built by notebooks/03_kayakalp_bronze_to_silver.")
 if SOURCE_URL is None:
-    print("NOTE: source_url is empty. Fill in the PDF's download URL (widget 5) and docs/data-sources.md.")
+    print("NOTE: source_url widget is empty; row citations will have no link. Default is the NHSRC PDF URL.")
 
 # COMMAND ----------
 
