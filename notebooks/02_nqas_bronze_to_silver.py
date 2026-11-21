@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # MAGIC %md
 # MAGIC # 02 · NQAS: `nqas_bronze` → `nqas_silver`
 # MAGIC
@@ -34,7 +38,7 @@
 
 dbutils.widgets.text("catalog", "workspace", "1. Catalog")
 dbutils.widgets.text("schema", "datathon", "2. Schema")
-dbutils.widgets.text("bronze_table", "nqas_bronze", "3. Bronze table")
+dbutils.widgets.text("bronze_table", "nqas_certified_facilities", "3. Bronze table")
 dbutils.widgets.text("silver_table", "nqas_silver", "4. Silver table")
 
 CATALOG = dbutils.widgets.get("catalog").strip()

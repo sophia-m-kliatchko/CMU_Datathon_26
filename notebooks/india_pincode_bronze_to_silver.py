@@ -29,12 +29,12 @@ from pyspark.sql.types import StructType, StructField, StringType
 # --------------------------------------------------------------------------- #
 # Config
 # --------------------------------------------------------------------------- #
-BRONZE_PATH = "path/to/bronze/india_post_pincode_directory.csv"
-SILVER_TABLE = "catalog.schema.india_post_offices_silver"
+BRONZE_PATH = "databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory"
+SILVER_TABLE = "workspace.datathon.pincode_silver"
 QUALITY_HISTORY_TABLE = f"{SILVER_TABLE}_quality_history"   # one row appended per run
 QUALITY_VIEW = f"{SILVER_TABLE}_quality_current"            # current-state summary
 
-HAS_LONGITUDE = False          # set True if your file has a `longitude` column
+HAS_LONGITUDE = True           # the source table has a `longitude` column
 LAT_RANGE = (6.0, 38.0)        # generous bounds for India (incl. islands)
 LON_RANGE = (68.0, 98.0)
 
@@ -91,18 +91,21 @@ def coord_status(raw_col, parsed_col, lo, hi):
 # --------------------------------------------------------------------------- #
 # 1. Bronze: read as-is (all strings, explicit schema, "NA" -> NULL)
 # --------------------------------------------------------------------------- #
-schema = StructType([StructField(c, StringType(), True) for c in SOURCE_COLS])
-
 bronze = (
     spark.read
-    .option("header", "true")
-    .option("nullValue", "NA")
-    .option("ignoreLeadingWhiteSpace", "true")
-    .option("ignoreTrailingWhiteSpace", "true")
-    .schema(schema)
-    .csv(BRONZE_PATH)
-    .select("*", F.col("_metadata.file_path").alias("source_file"))
+    .table(BRONZE_PATH)
+    .select(
+        # pincode arrives as bigint; the rest of the script works on strings
+        *[F.col(c).cast("string") for c in SOURCE_COLS],
+        # _metadata.file_path only exists for file sources; record the source table instead
+        F.lit(BRONZE_PATH).alias("source_file"),
+    )
 )
+# A table read has no "nullValue" option, so map the literal "NA" text to NULL here
+for c in SOURCE_COLS:
+    bronze = bronze.withColumn(
+        c, F.when(F.trim(F.col(c)) == "NA", F.lit(None).cast("string")).otherwise(F.col(c))
+    )
 bronze_count = bronze.count()    # for the Bronze -> Silver reconciliation
 
 # --------------------------------------------------------------------------- #

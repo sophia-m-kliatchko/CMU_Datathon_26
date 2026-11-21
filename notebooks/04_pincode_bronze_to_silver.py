@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "6"
+# ///
 # MAGIC %md
 # MAGIC # 04 · PIN directory: `pincode_bronze` → `pincode_silver`, `pincode_centroids_silver`
 # MAGIC

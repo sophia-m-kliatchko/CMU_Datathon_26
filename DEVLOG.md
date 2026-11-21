@@ -22,74 +22,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 17:18: Silver-vs-bronze validation for facilities, pincode and NQAS; coordinates nulled when they don't match the address
-- **Who:** Claude (for Sophia)
-- **What:**
-  - New `notebooks/common/validation.py`: `run_validations()`, `mismatch_rows()`, `haversine_km_col()`, `same_number()`.
-  - Notebooks `01`, `02` and `04` updated.
-  - New `scripts/dryrun_coordinate_checks.py`.
-  - Docs: `docs/silver-tables.md`, `scripts/README.md`, `CLAUDE.md` (run order and validation rule).
-  - New tables: `facilities_validation`, `pincode_validation`, `nqas_validation`.
-- **How:**
-  - **Pincode (04):** an office's coordinates are set to NULL if they're more than 50 km from its PIN's median point (`coord_status = nulled_far_from_pin`).
-    - Silver and centroids are staged and checked against `pincode_bronze`: row reconciliation; PIN, office name and raw coordinate text equal bronze; coordinates equal the re-parsed bronze values; state and district derived from bronze; no kept coordinate far from its PIN; unique `office_id`; each centroid inside its offices' box.
-    - Then published.
-  - **Facilities (01):** coordinates must be within 25 km plus the PIN's spread of the PIN centroid, and inside the state's box (from `pincode_silver`, padded 0.25°); otherwise set to NULL (`nulled_pin_mismatch` / `nulled_state_mismatch`).
-    - New columns: `km_from_pin_centre`, `pin_in_directory`, `state_matches_pin`.
-    - New flags: `COORDS_NULLED_PIN_MISMATCH`, `COORDS_NULLED_STATE_MISMATCH`, `PIN_NOT_IN_DIRECTORY`, `STATE_NOT_SERVED_BY_PIN`.
-    - Checks against `facilities_bronze`: row reconciliation (merged + rejected); IDs in bronze, UUID-shaped and unique; name, PIN, coordinates (exact, or swapped back), state and the numbers all come from the facility's bronze rows; no kept coordinate breaks the PIN or state rule.
-  - **NQAS (02):** the district must exist in that state in `pincode_silver` (flag `DISTRICT_NOT_IN_STATE`; there are no coordinates to null).
-    - Checks: row reconciliation; every listing exists in bronze; dates match the bronze day/month/year; state and district come from bronze; status matches the dates; unique ID.
-  - **All three** write the candidate silver to a staging table and validate it. If a check fails, the run stops and the existing silver table is left untouched.
-- **Why:** Sophia wants all silver data accurate to bronze, with PINs, addresses/regions and coordinates consistent with each other, and coordinates set to NULL when they don't match.
-- **Tradeoffs:**
-  - The PIN check allows each PIN's own spread, so large rural PINs aren't penalized.
-  - The state check uses a padded bounding box (cheap, no polygons), so it only catches clearly wrong states.
-  - NQAS district matching is exact on a letters-only key, so old or alternate district names will be flagged.
-- **Dry-run results (local CSVs):**
-  - **Facilities:** about 1,492 lose their coordinates for PIN mismatch (e.g. "Aravind Eye Hospital": Delhi PIN 110002, point ~1,870 km away, consistent with merged records), 5 for being outside their state; 8,467 keep theirs.
-  - **Post offices:** 12,102 lose their coordinates.
-  - **NQAS:** 236 of 989 listings are flagged `DISTRICT_NOT_IN_STATE`.
-- **Notes / follow-ups:**
-  - **Run order is now 04 → 01, 02** (enforced by an assertion).
-  - Not yet run on Databricks.
-  - Kayakalp (03) wasn't in scope; it could get the same treatment.
-
-### 2026-11-21 16:43: No script creates `*_clean` columns anymore, and a guard enforces it
-- **Who:** Claude (for Sophia)
-- **What:**
-  - `notebooks/01_bronze_to_silver.py`, `notebooks/04_pincode_bronze_to_silver.py`, `notebooks/common/reference_data.py`.
-  - `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops's script: minimal rename plus a header note).
-  - `CLAUDE.md`.
-- **How:**
-  - **Notebook 01:** cleaned columns are built under plain names from the start (`city`, `state`, `pincode`, `latitude`, `longitude`, `year_established`, `num_doctors`, `capacity`). Raw source columns with those names (raw `latitude`, `longitude`, `capacity`) are renamed `src_<name>` by the existing collision step and left out of silver. The end-of-pipeline rename block is removed. This means the temporary `_facilities_silver_stage` table no longer has `*_clean` columns either.
-  - **Notebook 04:** raw `latitude`, `longitude` and `district` are renamed `*_raw` right after the duplicate collapse, and the cleaned values use the plain names throughout. The end rename block is removed.
-  - **elliotl-ops's script:** `latitude_clean`/`longitude_clean`/`office_name_clean` → `latitude`/`longitude`/`office_name` (its raw values were already `*_raw`).
-  - **Guard:** `assert_no_clean_columns()` runs before every silver write: inside `write_table()` (used by 02, 03, 04), inline before notebook 01's six writes, and before 04's direct writes. A write fails if any column ends in `_clean`.
-- **Why:** Sophia asked that no script ever produce `*_clean` columns in silver tables. The previous change only renamed them at the end, and notebook 01's staging table still had them. The guard makes the rule hold for future edits too.
-- **Notes / follow-ups:**
-  - Local unit tests pass; all notebooks compile. Not yet run on Databricks.
-  - elliotl-ops should know their script's output column names changed.
-
-### 2026-11-21 16:27: No `_clean` suffix on silver column names
-- **Who:** Claude (for Sophia)
-- **What:**
-  - `notebooks/01`–`04` and the docs.
-  - **`facilities_silver`:** `city_clean`→`city`, `state_clean`→`state`, `pincode_clean`→`pincode`, `latitude_clean`→`latitude`, `longitude_clean`→`longitude`, `year_established_clean`→`year_established`, `num_doctors_clean`→`num_doctors`, `capacity_clean`→`capacity`.
-    - The raw `latitude`, `longitude`, `coordinates`, `yearEstablished`, `numberDoctors` and `capacity` columns are now left out of silver; bronze keeps them.
-    - `silver_possible_duplicates`: `pincode_clean_a/b`→`pincode_a/b` (latitude/longitude likewise).
-  - **`nqas_silver`, `kayakalp_silver`:** `state_clean`→`state`, `district_clean`→`district` (raw stays in `state_raw`/`district_raw`).
-  - **`pincode_silver`:** `latitude`, `longitude`, `state`, `district`, `office_name`; the raw district column is renamed `district_raw`.
-  - `CLAUDE.md`: naming rule added.
-- **How:**
-  - **Notebooks 01 and 04:** the code keeps the `_clean` names internally and renames only at the final select, with an assertion that no names collide. This is because their raw columns use the same plain names.
-  - **Notebooks 02 and 03:** a word-boundary rename, since raw values there are already `*_raw`.
-  - Downstream code, comments and SQL checks were updated to the new names.
-- **Why:** Sophia: being in a silver table already implies a column is clean. Raw columns that would clash with the plain names are dropped from `facilities_silver`, consistent with the earlier address decision ("if it is not standard, drop it"). In the outside-data tables, raw text is kept as `*_raw` because their `row_citation` and source checks rely on it.
-- **Notes / follow-ups:**
-  - Earlier `facilities_silver` drafts kept the raw `coordinates`/`latitude`/`longitude`. The validated coordinates now carry those names instead; the raw ones are in bronze.
-  - **Anything already querying `*_clean` columns must be updated.** Not yet run on Databricks.
-
+<<<<<<< Updated upstream
 ### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -150,6 +83,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - **Not yet run on Databricks.**
   - Upload the CSV to `/Volumes/workspace/datathon/external/` first, or point the `source` widget at a table.
   - The team should decide whether to keep both PIN notebooks or retire the older one.
+=======
+### 2026-11-21 ~16:35: Fixed `notebooks/india_pincode_bronze_to_silver.py` — read the PIN directory as a UC table, not a CSV
+- **Who:** Claude (for Sophia)
+- **What:** Single-cell script `india_pincode_bronze_to_silver.py`, focused-cell fix only. Changes: (1) `BRONZE_PATH` corrected to `databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory` — the old value had catalog/schema segments repeated 4×; (2) read changed from `spark.read.csv(...)` to `spark.read.table(...)`, since the source is a Delta Sharing table, not a data.gov.in CSV file; (3) the CSV `nullValue="NA"` option replaced with an explicit "NA"→NULL mapping after the read; (4) `pincode` cast to string (it arrives as bigint) so the PIN-format regex still works; (5) `source_file` now records the source table name (`_metadata.file_path` exists only for file reads); (6) `HAS_LONGITUDE = True` — the source table verifiably has a populated `longitude` column.
+- **How:** Diagnosed `CloudInvalidPathException: Path must be absolute` from `.csv()` receiving a table name. Verified the real table schema (pincode bigint, longitude present) and NA-token counts (12,007 NA latitudes, 715 NA statenames) before writing the fix. Then ran the fixed cell end-to-end on its attached compute.
+- **Why:** The script was written against a raw CSV from data.gov.in, but the actual source is the Unity Catalog shared table. The error can only be fixed by reading it as a table; the NA/pincode/source_file changes replicate what the CSV reader options used to do.
+- **Notes / follow-ups:** Full run passed the quality gate: 165,627 bronze → 165,625 silver rows (2 duplicates dropped), 19,586 unique PINs, 151,840 valid latitudes (91.6%), 1,775 out-of-range, 3 unparseable, 715 missing state/district, 0 invalid PINs. `workspace.datathon.pincode_silver` written, `pincode_silver_quality_history` appended, `pincode_silver_quality_current` view created.
+
+### 2026-11-21 ~16:05 (approx.): Dropped stale duplicate tables `bronze_facilities` and `silver_facilities`
+- **Who:** Claude (for Sophia)
+- **What:** Dropped `workspace.datathon.bronze_facilities` and `workspace.datathon.silver_facilities` from the metastore.
+- **How:** Verified identical row counts to the current tables first (`bronze_facilities` 10,088 = `facilities_bronze`; `silver_facilities` 10,077 = `facilities_silver`), dropped both, then listed `workspace.datathon` to confirm only the tables the notebooks write remain. (This restores an entry lost when DEVLOG.md was concurrently updated from git; the exact time was not recorded.)
+- **Why:** They were leftovers from notebook 01's original table names, renamed at 15:45; nothing writes the old names anymore. Sophia confirmed the drop. This also closes the follow-up note in the 15:45 entry.
+>>>>>>> Stashed changes
 
 ### 2026-11-21 15:47: Corrected DEVLOG timestamps
 - **Who:** Claude (for Sophia)
@@ -244,6 +191,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - JhK830 to confirm the source and date of the PIN and NFHS-5 files in `data/raw/`.
   - Notebook 01 still has its own copy of the state lookup; consider switching it to `common/reference_data`.
 
+### 2026-11-21 ~15:15: Dropped stale duplicate tables `bronze_facilities` and `silver_facilities`
+- **Who:** Claude (for Sophia)
+- **What:** Dropped `workspace.datathon.bronze_facilities` and `workspace.datathon.silver_facilities`.
+- **How:** Verified first that they were stale duplicates of the current tables — identical row counts (`bronze_facilities` 10,088 = `facilities_bronze`; `silver_facilities` 10,077 = `facilities_silver`) and same schema shapes. These were the notebook's *original* table names (see the 12:45 entry) before a later run renamed the outputs to `facilities_bronze` / `facilities_silver`; nothing in the current notebook writes the old names. Dropped both via SQL, then listed `workspace.datathon` to confirm only the 5 current tables remain.
+- **Why:** Sophia asked where the silver tables are saved and confirmed dropping the two leftovers, so the schema holds only the tables the notebook actually writes.
+- **Notes / follow-ups:** `workspace.datathon` now contains exactly: `facilities_bronze`, `facilities_silver`, `silver_facility_claims`, `silver_dq_summary`, `silver_possible_duplicates`.
+
+### 2026-11-21 ~14:30: Full notebook verified end-to-end; all 5 tables written and cleaning rules independently checked
+- **Who:** Claude (for Sophia)
+- **What:** Ran every executable cell of `notebooks/01_bronze_to_silver` in the workspace with no errors, including sections 8-10 which had never run (`silver_facility_claims` 549,851 rows, `silver_dq_summary` 16 flags, table/column comments applied, `_silver_facilities_stage` dropped). Then ran an independent verification pass (separate SQL, using the notebook's own constants) over all five tables in `workspace.datathon`.
+- **How:** Executed remaining cells in dependency order on serverless compute; then a standalone check script: null-like tokens and control chars in all string/array columns, PIN format, India bounding box, state whitelist, year/doctor/capacity ranges, array dedup, facility_id uniqueness, claims completeness, and duplicate-pair rule conformance.
+- **Why:** Sophia asked to verify the whole notebook runs clean and that the saved tables are properly cleaned and processed.
+- **Notes / follow-ups:** Every check returned zero violations. `silver_facilities`: 10,077 rows, 10,077 distinct facility_id; 9,953 usable coords; 9,913 valid PINs; 9,833 with state; avg completeness 0.812. Top flags: STATE_UNRECOGNIZED 244 (2.4%), PINCODE_MISSING_OR_INVALID 164 (1.6%), MISSING_COORDS 118. Notebooks's cell IDs shifted at some point (an old nuid no longer resolved); runs used freshly-read nuids.
+
 ### 2026-11-21 14:26: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -277,6 +238,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The full NQAS scrape was still running at commit time, so its CSV will follow in a later commit.
   - The PDF itself is not committed; only the CSV is.
   - Kayakalp covers public facilities only (PHC, HWC, UPHC, CHC, DH). Matching to Virtue Foundation facilities is still to do.
+
+### 2026-11-21 ~14:05: Re-ran sections 0-7 in the workspace after a Python restart; `silver_facilities` written
+- **Who:** Claude (for Sophia)
+- **What:** Notebook `01_bronze_to_silver` sections 0-7 re-run end to end on serverless compute. No code changed. The `silver_facilities` table now exists (83 columns: clean fields, counts, `dq_flags`, `possible_duplicate_ids`, variants). Earlier tables (`bronze_facilities`, `_silver_facilities_stage`, `silver_possible_duplicates`) refreshed by the same run.
+- **How:** The Python process had restarted, so cell 25 (section 7) failed with `NameError: name 'qc' is not defined` — stale session state, not a code bug. Re-ran the full prerequisite chain (cells 3-23) in dependency order, then cell 25.
+- **Why:** A kernel/compute restart clears all notebook variables; `qc` and the rest are defined in earlier cells and just needed re-running.
+- **Notes / follow-ups:** Section 8 (SQL checks) still not run. The fix from the ~13:45 entry held up: the near-duplicates cell ran clean again.
+
+### 2026-11-21 ~13:45: Fixed `TypeError` in the near-duplicates cell of `01_bronze_to_silver`
+- **Who:** Claude (for Sophia)
+- **What:** `notebooks/01_bronze_to_silver.py` (Databricks notebook, section 6 "Possible near-duplicates", cell 23): fixed the `TypeError: unsupported operand type(s) for -: 'str' and 'str'`.
+- **How:** The `haversine_km` helper subtracts its arguments (`lat2 - lat1`), but the call passed bare column-name strings (`"latitude_clean_a"` etc.); Python cannot subtract two strings, so the cell failed before Spark ever ran. Wrapped the four call-site arguments in `F.col(...)` (minimal fix; the helper itself is unchanged). Re-ran all prerequisite cells plus the fixed cell on serverless compute in the Databricks workspace.
+- **Why:** Strings are fine as column names for single-argument functions like `F.radians`, but only for arithmetic done inside Spark columns; fixing at the call site keeps the helper usable with both strings and Columns.
+- **Notes / follow-ups:** Verified on the first full run in the workspace: 10,088 bronze rows -> 10,077 unique facilities, 32 possible near-duplicate pairs written to `silver_possible_duplicates`. Section 7 (flags / final `silver_facilities`) and section 8 (SQL checks) were not run this time and still need a pass.
 
 ### 2026-11-21 13:24: Listed outside datasets for checking care quality, with links
 - **Who:** Claude (for Sophia)
