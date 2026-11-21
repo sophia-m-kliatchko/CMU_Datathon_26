@@ -15,6 +15,10 @@ drift as the source is refreshed, so nothing below is hard-coded):
   * Office-name suffixes are inconsistent ("B.O", "BO", "B.O.", "S.O", "SO"...).
   * A small share of rows has no district/state/region.
 
+Column naming (team rule, 2026-11-21): silver columns never get a "_clean" suffix; being in
+silver already means clean. Parsed coordinates are `latitude`/`longitude`; the raw text is in
+`latitude_raw`/`longitude_raw`.
+
 Run order: read -> clean -> metrics -> quality gate -> history -> write Silver.
 If the gate fails, the Silver table is NOT overwritten.
 """
@@ -119,7 +123,7 @@ df = (
     .withColumn("officetype", F.upper(F.col("officetype")))
     # office name without the B.O / BO / S.O / SO / H.O / HO suffix variants
     .withColumn(
-        "office_name_clean",
+        "office_name",
         F.trim(F.regexp_replace(F.col("officename"), r"(?i)\s+[BSH]\.?\s?O\.?$", "")),
     )
     .withColumn("is_delivery_office", F.upper(F.col("delivery")) == F.lit("DELIVERY"))
@@ -128,26 +132,26 @@ df = (
 )
 
 # Latitude (and longitude if present): parse, validate range, keep a status
-df = df.withColumn("latitude_clean", parse_coord(F.col("latitude_raw")))
+df = df.withColumn("latitude", parse_coord(F.col("latitude_raw")))
 df = df.withColumn(
     "latitude_status",
-    coord_status(F.col("latitude_raw"), F.col("latitude_clean"), *LAT_RANGE),
+    coord_status(F.col("latitude_raw"), F.col("latitude"), *LAT_RANGE),
 )
 df = df.withColumn(
-    "latitude_clean",
-    F.when(F.col("latitude_status") == "ok", F.col("latitude_clean")),
+    "latitude",
+    F.when(F.col("latitude_status") == "ok", F.col("latitude")),
 )
 
 if HAS_LONGITUDE:
     df = df.withColumnRenamed("longitude", "longitude_raw")
-    df = df.withColumn("longitude_clean", parse_coord(F.col("longitude_raw")))
+    df = df.withColumn("longitude", parse_coord(F.col("longitude_raw")))
     df = df.withColumn(
         "longitude_status",
-        coord_status(F.col("longitude_raw"), F.col("longitude_clean"), *LON_RANGE),
+        coord_status(F.col("longitude_raw"), F.col("longitude"), *LON_RANGE),
     )
     df = df.withColumn(
-        "longitude_clean",
-        F.when(F.col("longitude_status") == "ok", F.col("longitude_clean")),
+        "longitude",
+        F.when(F.col("longitude_status") == "ok", F.col("longitude")),
     )
     df = df.withColumn(
         "has_valid_coordinates",
@@ -187,7 +191,7 @@ df = (
 
 # Deterministic surrogate key (survives reloads, unlike monotonically_increasing_id).
 # A few offices share the natural key, so add a deterministic tie-breaker.
-natural_key_cols = ["pincode", "office_name_clean", "officetype", "district_norm", "divisionname"]
+natural_key_cols = ["pincode", "office_name", "officetype", "district_norm", "divisionname"]
 key_hash = F.sha2(
     F.concat_ws("|", *[F.coalesce(F.col(c), F.lit("")) for c in natural_key_cols]), 256
 )
@@ -323,11 +327,11 @@ print(f"✓ Silver table written: {SILVER_TABLE}")
 # --------------------------------------------------------------------------- #
 COLUMN_COMMENTS = {
     "latitude_status": "Coordinate quality: missing | unparseable | out_of_range | ok",
-    "latitude_clean": "Parsed latitude; NULL unless latitude_status = ok",
+    "latitude": "Parsed latitude; NULL unless latitude_status = ok",
     "pin_ambiguous": "True when offices sharing this PIN map to more than one district or state "
                      "(district compared case-insensitively). Join on PIN with care.",
     "office_id": "Deterministic SHA-256 surrogate key (stable across reloads)",
-    "office_name_clean": "Office name with suffix variants (B.O/BO/S.O/SO/H.O/HO) removed",
+    "office_name": "Office name with suffix variants (B.O/BO/S.O/SO/H.O/HO) removed",
     "district_norm": "Upper-cased district, for joins. Original casing is in district",
     "state_norm": "Upper-cased state, for joins. Original casing is in statename",
 }

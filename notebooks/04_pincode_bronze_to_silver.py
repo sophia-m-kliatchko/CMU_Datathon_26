@@ -106,25 +106,28 @@ df = df.where(PIN_OK)
 # Collapse exact duplicates (same text in every column)
 df = df.groupBy(*EXPECTED).agg(F.count(F.lit(1)).alias("n_listings"),
                                F.sort_array(F.collect_list("_bronze_row_id")).alias("source_row_ids"))
+# Raw columns whose plain name a cleaned column will use are kept as *_raw (for citations).
+# Silver never has *_clean columns: being in silver already means clean.
+df = (df.withColumnRenamed("latitude", "latitude_raw")
+        .withColumnRenamed("longitude", "longitude_raw")
+        .withColumnRenamed("district", "district_raw"))
 
 df = (df
-    .withColumn("_c", fix_pair_udf(F.col("latitude"), F.col("longitude")))
-    .withColumn("latitude_clean", F.col("_c.latitude"))
-    .withColumn("longitude_clean", F.col("_c.longitude"))
+    .withColumn("_c", fix_pair_udf(F.col("latitude_raw"), F.col("longitude_raw")))
+    .withColumn("latitude", F.col("_c.latitude"))
+    .withColumn("longitude", F.col("_c.longitude"))
     .withColumn("coord_status", F.col("_c.coord_status"))
     .withColumn("lat_how", F.col("_c.lat_how"))
     .withColumn("lon_how", F.col("_c.lon_how"))
     .drop("_c")
-    .withColumnRenamed("latitude", "latitude_raw")
-    .withColumnRenamed("longitude", "longitude_raw")
-    .withColumn("state_clean", state_from_text(F.col("statename")))
-    .withColumn("district_clean", F.initcap(F.lower(F.col("district"))))
-    .withColumn("district_key", F.regexp_replace(F.lower(F.col("district")), r"[^a-z0-9]", ""))
+    .withColumn("state", state_from_text(F.col("statename")))
+    .withColumn("district", F.initcap(F.lower(F.col("district_raw"))))
+    .withColumn("district_key", F.regexp_replace(F.lower(F.col("district_raw")), r"[^a-z0-9]", ""))
     .withColumn("office_type", F.upper(F.col("officetype")))
     .withColumn("office_type_label", F.when(F.col("office_type") == "HO", "Head Office")
                                       .when(F.col("office_type") == "PO", "Sub/Post Office")
                                       .when(F.col("office_type") == "BO", "Branch Office"))
-    .withColumn("office_name_clean",
+    .withColumn("office_name",
                 F.trim(F.regexp_replace(F.col("officename"), r"(?i)\s*\b[BSH]\.?\s?O\.?$", "")))
     .withColumn("is_delivery_office", F.upper(F.col("delivery")) == "DELIVERY")
 )
@@ -134,25 +137,25 @@ w_pin = Window.partitionBy("pincode")
 df = (df
     .withColumn("pin_n_offices", F.count(F.lit(1)).over(w_pin))
     .withColumn("pin_n_districts", F.size(F.collect_set("district_key").over(w_pin)))
-    .withColumn("pin_n_states", F.size(F.collect_set("state_clean").over(w_pin)))
+    .withColumn("pin_n_states", F.size(F.collect_set("state").over(w_pin)))
     .withColumn("pin_ambiguous", (F.col("pin_n_districts") > 1) | (F.col("pin_n_states") > 1))
 )
 
 # Distance from the PIN's median point (robust to a few bad coordinates)
 df = (df
-    .withColumn("_pin_med_lat", F.percentile_approx("latitude_clean", 0.5).over(w_pin))
-    .withColumn("_pin_med_lon", F.percentile_approx("longitude_clean", 0.5).over(w_pin)))
+    .withColumn("_pin_med_lat", F.percentile_approx("latitude", 0.5).over(w_pin))
+    .withColumn("_pin_med_lon", F.percentile_approx("longitude", 0.5).over(w_pin)))
 p = 3.141592653589793 / 180
-h = (F.pow(F.sin((F.col("latitude_clean") - F.col("_pin_med_lat")) * p / 2), 2) +
-     F.cos(F.col("_pin_med_lat") * p) * F.cos(F.col("latitude_clean") * p) *
-     F.pow(F.sin((F.col("longitude_clean") - F.col("_pin_med_lon")) * p / 2), 2))
+h = (F.pow(F.sin((F.col("latitude") - F.col("_pin_med_lat")) * p / 2), 2) +
+     F.cos(F.col("_pin_med_lat") * p) * F.cos(F.col("latitude") * p) *
+     F.pow(F.sin((F.col("longitude") - F.col("_pin_med_lon")) * p / 2), 2))
 df = (df
     .withColumn("km_from_pin_median", F.round(2 * 6371.0 * F.asin(F.least(F.lit(1.0), F.sqrt(h))), 2))
     .withColumn("coords_far_from_pin", F.col("km_from_pin_median") > FAR_FROM_PIN_KM)
     .drop("_pin_med_lat", "_pin_med_lon"))
 
 # Deterministic office_id (stable across reloads; tie-breaker for offices sharing the natural key)
-key_cols = ["pincode", "office_name_clean", "office_type", "district_key", "divisionname"]
+key_cols = ["pincode", "office_name", "office_type", "district_key", "divisionname"]
 df = df.withColumn("_k", F.sha2(F.concat_ws("|", *[F.coalesce(F.col(c), F.lit("")) for c in key_cols]), 256))
 w_k = Window.partitionBy("_k").orderBy("circlename", "regionname", "delivery", "latitude_raw", "longitude_raw")
 df = (df.withColumn("office_id", F.substring(F.sha2(F.concat_ws("|", "_k", F.row_number().over(w_k)), 256), 1, 16))
@@ -176,8 +179,8 @@ FLAGS = [
     ("COORDS_FAR_FROM_PIN",         F.col("coords_far_from_pin")),
     ("PIN_SPANS_DISTRICTS",         F.col("pin_n_districts") > 1),
     ("PIN_SPANS_STATES",            F.col("pin_n_states") > 1),
-    ("MISSING_DISTRICT",            F.col("district").isNull()),
-    ("STATE_UNRECOGNIZED",          F.col("state_clean").isNull()),
+    ("MISSING_DISTRICT",            F.col("district_raw").isNull()),
+    ("STATE_UNRECOGNIZED",          F.col("state").isNull()),
     ("DUPLICATE_ROW_COLLAPSED",     F.col("n_listings") > 1),
 ]
 silver = df.withColumn(
@@ -187,21 +190,16 @@ silver = add_provenance(silver, SOURCE_NAME, SOURCE_PUBLISHER, SOURCE_URL,
                         F.lit(RETRIEVED_ON).cast("date"), SOURCE_LICENSE, PRODUCED_BY)
 silver = silver.withColumn("row_citation", F.concat(
     F.lit("India Post, All India Pincode Directory: "), F.coalesce(F.col("officename"), F.lit("?")),
-    F.lit(", PIN "), F.col("pincode"), F.lit(", "), F.coalesce(F.col("district"), F.lit("?")), F.lit(", "),
+    F.lit(", PIN "), F.col("pincode"), F.lit(", "), F.coalesce(F.col("district_raw"), F.lit("?")), F.lit(", "),
     F.coalesce(F.col("statename"), F.lit("?")), F.lit(". "), F.lit(SOURCE_URL), F.lit(", obtained "), F.lit(RETRIEVED_ON), F.lit(".")))
 
-ORDER = ["office_id", "pincode", "officename", "office_name_clean", "office_type", "office_type_label", "is_delivery_office",
-         "district_clean", "state_clean", "latitude_clean", "longitude_clean", "coord_status", "km_from_pin_median",
+ORDER = ["office_id", "pincode", "officename", "office_name", "office_type", "office_type_label", "is_delivery_office",
+         "district", "state", "latitude", "longitude", "coord_status", "km_from_pin_median",
          "coords_far_from_pin", "pin_n_offices", "pin_n_districts", "pin_n_states", "pin_ambiguous", "dq_flags",
-         "row_citation", "circlename", "regionname", "divisionname", "district", "district_key", "statename",
+         "row_citation", "circlename", "regionname", "divisionname", "district_raw", "district_key", "statename",
          "officetype", "delivery", "latitude_raw", "longitude_raw", "lat_how", "lon_how", "n_listings", "source_row_ids",
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
-# Being in silver means a column is clean: cleaned columns get the plain name, and the raw column they would
-# collide with is renamed *_raw (district) so the original text stays available for citations.
-SILVER_RENAME = {"district": "district_raw", "district_clean": "district", "state_clean": "state",
-                 "latitude_clean": "latitude", "longitude_clean": "longitude", "office_name_clean": "office_name"}
-silver_out = silver.select(*[F.col(c).alias(SILVER_RENAME.get(c, c)) for c in ORDER])
-assert len(set(silver_out.columns)) == len(silver_out.columns), f"duplicate column names: {silver_out.columns}"
+silver_out = silver.select(*ORDER)
 write_table(silver_out, "pincode_silver",
             "India Post offices (All India Pincode Directory), one row per office, cleaned coordinates and PIN ambiguity. "
             "Built by notebooks/04_pincode_bronze_to_silver.")
@@ -254,11 +252,13 @@ write_table(cent, "pincode_centroids_silver",
 
 # COMMAND ----------
 
+assert_no_clean_columns(rejected, "pincode_rejected")
 rejected.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("pincode_rejected")
 n_silver = silver.count()
 dq = (silver.select(F.explode("dq_flags").alias("flag")).groupBy("flag").count()
       .withColumn("pct_of_offices", F.round(100.0 * F.col("count") / n_silver, 1))
       .withColumnRenamed("count", "n_offices").orderBy(F.desc("n_offices")))
+assert_no_clean_columns(dq, "pincode_dq_summary")
 dq.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("pincode_dq_summary")
 
 COLUMN_COMMENTS = {

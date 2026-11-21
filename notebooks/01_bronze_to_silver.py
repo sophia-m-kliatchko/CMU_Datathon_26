@@ -83,6 +83,11 @@ from pyspark.sql import functions as F
 from pyspark.sql import Window
 from pyspark.sql.types import ArrayType, StringType, NumericType
 
+def assert_no_clean_columns(df, table):
+    """Silver tables never have *_clean columns: being in silver already means clean."""
+    bad = [c for c in df.columns if c.lower().endswith("_clean")]
+    assert not bad, f"{table} would get *_clean columns {bad}; use the plain name instead"
+
 def qc(name):
     """Reference a column safely, even if its name has dots or spaces."""
     return F.col(f"`{name}`")
@@ -229,14 +234,17 @@ SERVICE_KEYS = ["specialties", "capability", "procedure", "equipment"]
 
 # Rename any source column whose name collides with a column we're about to create
 DERIVED_NAMES = {
-    "facility_id", "pincode_clean", "state_clean", "state_from_pin", "pin_state_consistent", "city_clean",
-    "latitude_clean", "longitude_clean", "coord_status", "coords_low_precision", "year_established_clean",
-    "num_doctors_clean", "capacity_clean", "n_source_rows", "source_row_ids", "name_variants",
+    "facility_id", "pincode", "state", "state_from_pin", "pin_state_consistent", "city",
+    "latitude", "longitude", "coord_status", "coords_low_precision", "year_established",
+    "num_doctors", "capacity", "n_source_rows", "source_row_ids", "name_variants",
     "description_all", "state_variants", "pincode_variants", "dup_coord_spread_km", "possible_duplicate_ids",
     "dq_flags", "dq_flag_count", "completeness_score", "states_mentioned_in_text",
     "n_specialties", "n_capability", "n_procedure", "n_equipment", "n_service_claims",
     "address_street", "address_region", "address_landmark", "address_full", "pincode_from_address_text",
     "source_fill_share",
+    # Cleaned columns use plain names, so raw source columns with these names are renamed src_<name>
+    # (e.g. raw latitude -> src_latitude) and later left out of silver. Silver never has *_clean columns.
+    "city", "state", "pincode", "latitude", "longitude", "year_established", "num_doctors", "capacity",
 }
 
 # ---- Drop the columns we don't carry into silver ----
@@ -468,11 +476,11 @@ df = df.where(F.col("facility_id").isNotNull())
 if COL.get("pincode"):
     pin_txt = F.regexp_replace(qc(COL["pincode"]).cast("string"), r"(?<=\d)[\s-](?=\d)", "")
     pin = F.regexp_extract(pin_txt, r"(?<!\d)([1-9]\d{5})(?!\d)", 1)
-    df = df.withColumn("pincode_clean", F.when(pin != "", pin))
+    df = df.withColumn("pincode", F.when(pin != "", pin))
 else:
-    df = df.withColumn("pincode_clean", F.lit(None).cast("string"))
+    df = df.withColumn("pincode", F.lit(None).cast("string"))
 
-df = df.withColumn("_pin_states", PIN_MAP[F.substring("pincode_clean", 1, 2)])
+df = df.withColumn("_pin_states", PIN_MAP[F.substring("pincode", 1, 2)])
 
 # ---- State: as reported, standardized; inferred from the PIN only when the reported state is missing or unrecognized ----
 state_rep = state_from_text(qc(COL["state"])) if COL.get("state") else F.lit(None).cast("string")
@@ -480,7 +488,7 @@ df = (
     df.withColumn("_state_reported", state_rep)
       .withColumn("state_from_pin",
                   F.when(F.col("_state_reported").isNull() & (F.size("_pin_states") == 1), F.col("_pin_states")[0]))
-      .withColumn("state_clean", F.coalesce("_state_reported", "state_from_pin"))
+      .withColumn("state", F.coalesce("_state_reported", "state_from_pin"))
       .withColumn("pin_state_consistent",
                   F.when(F.col("_state_reported").isNotNull() & F.col("_pin_states").isNotNull(),
                          F.array_contains("_pin_states", F.col("_state_reported"))))
@@ -491,12 +499,12 @@ if COL.get("city"):
     city = F.regexp_replace(qc(COL["city"]), r"\s+", " ")
     city_l = F.lower(city)
     df = df.withColumn(
-        "city_clean",
+        "city",
         F.when(city.isNull() | city.rlike(r"^[\d\W_]+$"), F.lit(None).cast("string"))
          .otherwise(F.coalesce(CITY_MAP[city_l], F.initcap(city))),
     )
 else:
-    df = df.withColumn("city_clean", F.lit(None).cast("string"))
+    df = df.withColumn("city", F.lit(None).cast("string"))
 
 # ---- Coordinates: must fall inside India; swapped lat/lon gets fixed ----
 lat0 = try_double(COL["lat"]) if COL.get("lat") else F.lit(None).cast("double")
@@ -517,24 +525,24 @@ df = (
                    .when(ok, "ok")
                    .when(swapped, "swapped_fixed")
                    .otherwise("outside_india"))
-      .withColumn("latitude_clean", F.when(ok, F.col("_lat0")).when(swapped, F.col("_lon0")))
-      .withColumn("longitude_clean", F.when(ok, F.col("_lon0")).when(swapped, F.col("_lat0")))
+      .withColumn("latitude", F.when(ok, F.col("_lat0")).when(swapped, F.col("_lon0")))
+      .withColumn("longitude", F.when(ok, F.col("_lon0")).when(swapped, F.col("_lat0")))
       # Two or fewer decimal places on both values means roughly ±1 km precision; often a city-centre point
       .withColumn("coords_low_precision",
-                  F.when(F.col("latitude_clean").isNotNull(),
-                         (F.abs(F.col("latitude_clean") * 100 - F.round(F.col("latitude_clean") * 100)) < 1e-6) &
-                         (F.abs(F.col("longitude_clean") * 100 - F.round(F.col("longitude_clean") * 100)) < 1e-6)))
+                  F.when(F.col("latitude").isNotNull(),
+                         (F.abs(F.col("latitude") * 100 - F.round(F.col("latitude") * 100)) < 1e-6) &
+                         (F.abs(F.col("longitude") * 100 - F.round(F.col("longitude") * 100)) < 1e-6)))
 )
 
 # ---- Year established / doctors / beds: numbers only, implausible values set to NULL ----
 if COL.get("year"):
     y = F.regexp_extract(qc(COL["year"]).cast("string"), r"(?<!\d)(1[5-9]\d{2}|20\d{2})(?!\d)", 1)
     y = F.when(y != "", y.cast("int"))
-    df = df.withColumn("year_established_clean", F.when(y.between(YEAR_MIN, THIS_YEAR), y))
+    df = df.withColumn("year_established", F.when(y.between(YEAR_MIN, THIS_YEAR), y))
 else:
-    df = df.withColumn("year_established_clean", F.lit(None).cast("int"))
+    df = df.withColumn("year_established", F.lit(None).cast("int"))
 
-for key, out, mx in [("doctors", "num_doctors_clean", DOCTORS_MAX), ("capacity", "capacity_clean", CAPACITY_MAX)]:
+for key, out, mx in [("doctors", "num_doctors", DOCTORS_MAX), ("capacity", "capacity", CAPACITY_MAX)]:
     if COL.get(key):
         v = first_number(qc(COL[key]))
         df = df.withColumn(out, F.when((v >= 1) & (v <= mx), v.cast("int")))
@@ -565,11 +573,11 @@ w_grp = Window.partitionBy("facility_id")
 w_best = Window.partitionBy("facility_id").orderBy(F.desc("_row_completeness"), F.asc("_bronze_row_id"))
 w_best_all = w_best.rowsBetween(Window.unboundedPreceding, Window.unboundedFollowing)
 w_coord = (Window.partitionBy("facility_id")
-           .orderBy(F.col("latitude_clean").isNull().asc(), F.desc("_row_completeness"), F.asc("_bronze_row_id"))
+           .orderBy(F.col("latitude").isNull().asc(), F.desc("_row_completeness"), F.asc("_bronze_row_id"))
            .rowsBetween(Window.unboundedPreceding, Window.unboundedFollowing))
 
 COORD_COLS = [c for c in [COL.get("lat"), COL.get("lon")] if c] + \
-             ["_lat0", "_lon0", "coord_status", "latitude_clean", "longitude_clean", "coords_low_precision"]
+             ["_lat0", "_lon0", "coord_status", "latitude", "longitude", "coords_low_precision"]
 SKIP = set(COORD_COLS) | {"facility_id", "_bronze_row_id", "_row_completeness"}
 
 merged_exprs = [F.col("facility_id")]
@@ -592,10 +600,10 @@ merged = (
         F.collect_list("_bronze_row_id").over(w_grp).alias("source_row_ids"),
         F.array_distinct(F.collect_list(qc(COL["name"])).over(w_grp)).alias("name_variants"),
         F.array_distinct(F.collect_list(desc_col).over(w_grp)).alias("description_all"),
-        F.array_distinct(F.collect_list("state_clean").over(w_grp)).alias("state_variants"),
-        F.array_distinct(F.collect_list("pincode_clean").over(w_grp)).alias("pincode_variants"),
-        (F.max("latitude_clean").over(w_grp) - F.min("latitude_clean").over(w_grp)).alias("_dlat"),
-        (F.max("longitude_clean").over(w_grp) - F.min("longitude_clean").over(w_grp)).alias("_dlon"),
+        F.array_distinct(F.collect_list("state").over(w_grp)).alias("state_variants"),
+        F.array_distinct(F.collect_list("pincode").over(w_grp)).alias("pincode_variants"),
+        (F.max("latitude").over(w_grp) - F.min("latitude").over(w_grp)).alias("_dlat"),
+        (F.max("longitude").over(w_grp) - F.min("longitude").over(w_grp)).alias("_dlon"),
         F.row_number().over(w_best).alias("_rn"),
     )
     .where("_rn = 1")
@@ -603,7 +611,7 @@ merged = (
     .drop("_coords", "_rn")
     .withColumn("dup_coord_spread_km",
                 F.round(F.sqrt(F.pow(F.col("_dlat") * 111.0, 2) +
-                               F.pow(F.col("_dlon") * 111.0 * F.cos(F.radians("latitude_clean")), 2)), 2))
+                               F.pow(F.col("_dlon") * 111.0 * F.cos(F.radians("latitude")), 2)), 2))
     .drop("_dlat", "_dlon")
 )
 
@@ -631,15 +639,15 @@ stage = (
 
 key_fields = [
     qc(COL["name"]).isNotNull(),
-    F.col("latitude_clean").isNotNull(),
-    F.col("pincode_clean").isNotNull(),
-    F.col("state_clean").isNotNull(),
-    F.col("city_clean").isNotNull(),
+    F.col("latitude").isNotNull(),
+    F.col("pincode").isNotNull(),
+    F.col("state").isNotNull(),
+    F.col("city").isNotNull(),
     desc_col.isNotNull() if COL.get("description") else F.lit(False),
     F.col("n_specialties") > 0, F.col("n_capability") > 0, F.col("n_procedure") > 0, F.col("n_equipment") > 0,
-    F.col("year_established_clean").isNotNull(),
-    F.col("num_doctors_clean").isNotNull(),
-    F.col("capacity_clean").isNotNull(),
+    F.col("year_established").isNotNull(),
+    F.col("num_doctors").isNotNull(),
+    F.col("capacity").isNotNull(),
 ]
 stage = stage.withColumn(
     "completeness_score",
@@ -658,11 +666,11 @@ stage = (stage
     .withColumn("address_landmark", F.col("_addr.landmark"))
     # If the PIN field was unusable but a valid PIN appears inside the address text, use that
     .withColumn("pincode_from_address_text",
-                F.col("pincode_clean").isNull() & F.coalesce(F.col("_addr.pin_from_text").rlike(r"^[1-9]\d{5}$"), F.lit(False)))
-    .withColumn("pincode_clean", F.when(F.col("pincode_from_address_text"), F.col("_addr.pin_from_text"))
-                                  .otherwise(F.col("pincode_clean")))
-    .withColumn("_state_pin", F.concat_ws(" ", "state_clean", "pincode_clean"))
-    .withColumn("address_full", F.concat_ws(", ", "address_street", "address_region", "city_clean",
+                F.col("pincode").isNull() & F.coalesce(F.col("_addr.pin_from_text").rlike(r"^[1-9]\d{5}$"), F.lit(False)))
+    .withColumn("pincode", F.when(F.col("pincode_from_address_text"), F.col("_addr.pin_from_text"))
+                                  .otherwise(F.col("pincode")))
+    .withColumn("_state_pin", F.concat_ws(" ", "state", "pincode"))
+    .withColumn("address_full", F.concat_ws(", ", "address_street", "address_region", "city",
                                             F.when(F.col("_state_pin") != "", F.col("_state_pin"))))
     .drop("_state_pin")
     .drop("_addr")
@@ -685,7 +693,7 @@ stage = stage.withColumn(
     "_reject_reason",
     F.when(name_c.isNull(), "NAME_MISSING")
      .when(F.trim(name_c).startswith("["), "NAME_IS_LIST")
-     .when(F.col("latitude_clean").isNull() & ~has_address, "NO_COORDS_OR_ADDRESS")
+     .when(F.col("latitude").isNull() & ~has_address, "NO_COORDS_OR_ADDRESS")
      .when(F.col("source_fill_share") < MIN_FILLED_SHARE, "UNDER_MIN_FILLED_SHARE"),
 )
 rejected_rules = stage.where(F.col("_reject_reason").isNotNull()).select(
@@ -696,10 +704,12 @@ rejected_rules = stage.where(F.col("_reject_reason").isNotNull()).select(
 )
 stage = stage.where(F.col("_reject_reason").isNull()).drop("_reject_reason")
 
+assert_no_clean_columns(rejected_invalid_id.unionByName(rejected_rules), "silver_rejected_facilities")
 rejected_invalid_id.unionByName(rejected_rules).write.mode("overwrite").option("overwriteSchema", "true") \
     .saveAsTable("silver_rejected_facilities")
 display(spark.sql("SELECT reject_reason, count(*) AS records FROM silver_rejected_facilities GROUP BY 1 ORDER BY 2 DESC"))
 
+assert_no_clean_columns(stage, "_facilities_silver_stage")
 stage.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_facilities_silver_stage")
 stage = spark.table("_facilities_silver_stage")
 n_stage = stage.count()
@@ -728,10 +738,10 @@ name_norm = F.trim(F.regexp_replace(
     r"\b(pvt|private|ltd|limited|the|and)\b|\s+", " "))
 base = (stage
         .select("facility_id", qc(COL["name"]).alias("name"), F.regexp_replace(name_norm, r"\s+", " ").alias("name_norm"),
-                "pincode_clean", "latitude_clean", "longitude_clean")
+                "pincode", "latitude", "longitude")
         .where(F.col("name_norm").isNotNull() & (F.length("name_norm") > 0))
-        .withColumn("cell", F.when(F.col("latitude_clean").isNotNull(),
-                                   F.concat_ws(",", F.round("latitude_clean", 2), F.round("longitude_clean", 2)))))
+        .withColumn("cell", F.when(F.col("latitude").isNotNull(),
+                                   F.concat_ws(",", F.round("latitude", 2), F.round("longitude", 2)))))
 
 cell_sizes = base.groupBy("cell").count().where("cell IS NOT NULL AND count <= 500").select("cell")
 base_cell = base.join(cell_sizes, "cell")
@@ -739,10 +749,10 @@ base_cell = base.join(cell_sizes, "cell")
 def pairs_on(left, right, key):
     a, b = left.alias("a"), right.alias("b")
     return a.join(b, (F.col(f"a.{key}") == F.col(f"b.{key}")) & (F.col("a.facility_id") < F.col("b.facility_id"))) \
-            .select(*[F.col(f"a.{c}").alias(f"{c.replace('_clean', '')}_a") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]],
-                    *[F.col(f"b.{c}").alias(f"{c.replace('_clean', '')}_b") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]])
+            .select(*[F.col(f"a.{c}").alias(f"{c}_a") for c in ["facility_id", "name", "name_norm", "pincode", "latitude", "longitude"]],
+                    *[F.col(f"b.{c}").alias(f"{c}_b") for c in ["facility_id", "name", "name_norm", "pincode", "latitude", "longitude"]])
 
-pairs = (pairs_on(base.where("pincode_clean IS NOT NULL"), base.where("pincode_clean IS NOT NULL"), "pincode_clean")
+pairs = (pairs_on(base.where("pincode IS NOT NULL"), base.where("pincode IS NOT NULL"), "pincode")
          .unionByName(pairs_on(base_cell, base_cell, "cell"))
          .dropDuplicates(["facility_id_a", "facility_id_b"]))
 
@@ -761,6 +771,7 @@ pairs = (pairs
     .select("facility_id_a", "name_a", "facility_id_b", "name_b", "name_similarity", "distance_km",
             "same_pincode", "pincode_a", "pincode_b", "match_reason")
 )
+assert_no_clean_columns(pairs, "silver_possible_duplicates")
 pairs.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_possible_duplicates")
 pairs = spark.table("silver_possible_duplicates")
 print(f"Possible near-duplicate pairs: {pairs.count():,}")
@@ -788,23 +799,23 @@ FLAGS = [
     ("COORDS_OUTSIDE_INDIA",          F.col("coord_status") == "outside_india"),
     ("COORDS_SWAPPED_FIXED",          F.col("coord_status") == "swapped_fixed"),
     ("COORDS_LOW_PRECISION",          F.col("coords_low_precision") == True),
-    ("PINCODE_MISSING_OR_INVALID",    F.col("pincode_clean").isNull()),
+    ("PINCODE_MISSING_OR_INVALID",    F.col("pincode").isNull()),
     ("PINCODE_FROM_ADDRESS_TEXT",     F.col("pincode_from_address_text")),
     ("ADDRESS_NO_STREET",             F.col("address_street").isNull()),
-    ("STATE_UNRECOGNIZED",            F.col("state_clean").isNull()),
+    ("STATE_UNRECOGNIZED",            F.col("state").isNull()),
     ("STATE_INFERRED_FROM_PIN",       F.col("state_from_pin").isNotNull()),
     ("PIN_STATE_MISMATCH",            F.col("pin_state_consistent") == False),
-    ("YEAR_IMPLAUSIBLE",              raw_present_but_clean_null("year", "year_established_clean")),
-    ("DOCTORS_IMPLAUSIBLE",           raw_present_but_clean_null("doctors", "num_doctors_clean")),
-    ("CAPACITY_IMPLAUSIBLE",          raw_present_but_clean_null("capacity", "capacity_clean")),
+    ("YEAR_IMPLAUSIBLE",              raw_present_but_clean_null("year", "year_established")),
+    ("DOCTORS_IMPLAUSIBLE",           raw_present_but_clean_null("doctors", "num_doctors")),
+    ("CAPACITY_IMPLAUSIBLE",          raw_present_but_clean_null("capacity", "capacity")),
     ("NO_SERVICE_CLAIMS",             F.col("n_service_claims") == 0),
     ("DUPLICATE_ID_MERGED",           F.col("n_source_rows") > 1),
     ("DUP_ROWS_COORD_CONFLICT",       F.col("dup_coord_spread_km") > 1.0),
     ("DUP_ROWS_STATE_CONFLICT",       F.size("state_variants") > 1),
     ("DUP_ROWS_PINCODE_CONFLICT",     F.size("pincode_variants") > 1),
     ("TEXT_MENTIONS_MULTIPLE_STATES", F.size("states_mentioned_in_text") >= 2),
-    ("TEXT_STATE_DIFFERS",            (F.size("states_mentioned_in_text") >= 1) & F.col("state_clean").isNotNull() &
-                                      ~F.array_contains("states_mentioned_in_text", F.col("state_clean"))),
+    ("TEXT_STATE_DIFFERS",            (F.size("states_mentioned_in_text") >= 1) & F.col("state").isNotNull() &
+                                      ~F.array_contains("states_mentioned_in_text", F.col("state"))),
     ("POSSIBLE_NEAR_DUPLICATE",       F.size(F.coalesce("possible_duplicate_ids", EMPTY_STR_ARRAY)) > 0),
 ]
 
@@ -816,8 +827,8 @@ silver = (silver
           .withColumn("dq_flag_count", F.size("dq_flags")))
 
 FRONT = ["facility_id", COL["name"], "address_full", "address_street", "address_region", "address_landmark",
-         "city_clean", "state_clean", "pincode_clean", "pincode_from_address_text", "latitude_clean", "longitude_clean",
-         "coord_status", "coords_low_precision", "year_established_clean", "num_doctors_clean", "capacity_clean",
+         "city", "state", "pincode", "pincode_from_address_text", "latitude", "longitude",
+         "coord_status", "coords_low_precision", "year_established", "num_doctors", "capacity",
          "n_specialties", "n_capability", "n_procedure", "n_equipment", "n_service_claims",
          "completeness_score", "source_fill_share", "dq_flag_count", "dq_flags", "possible_duplicate_ids",
          "n_source_rows", "name_variants", "state_from_pin", "pin_state_consistent", "state_variants",
@@ -826,14 +837,14 @@ FRONT = list(dict.fromkeys(FRONT))  # keep order, drop repeats
 internal = [c for c in silver.columns if c.startswith("_") and c not in META_COLS]
 # Raw address columns are replaced by their cleaned columns and dropped from silver:
 #   address_line1/2/3      -> address_full / address_street / address_region / address_landmark
-#   address_city           -> city_clean
-#   address_stateOrRegion  -> state_clean
-#   address_zipOrPostcode  -> pincode_clean
+#   address_city           -> city
+#   address_stateOrRegion  -> state
+#   address_zipOrPostcode  -> pincode
 # A value that can't be standardized stays NULL in the cleaned column (it is NOT copied over);
 # dq_flags records it (STATE_UNRECOGNIZED, PINCODE_MISSING_OR_INVALID). The originals stay in facilities_bronze.
 lost = silver.select(*[
     F.sum(F.when(qc(COL[k]).isNotNull() & F.col(clean).isNull(), 1).otherwise(0)).alias(clean)
-    for k, clean in [("city", "city_clean"), ("state", "state_clean"), ("pincode", "pincode_clean")]
+    for k, clean in [("city", "city"), ("state", "state"), ("pincode", "pincode")]
     if COL.get(k) and COL[k] in silver.columns
 ]).first().asDict()
 for clean, n in lost.items():
@@ -846,17 +857,9 @@ REPLACED_BY_PARSED = [COL[k] for k in ["line1", "line2", "line3", "city", "state
 print(f"Dropping from silver (replaced by cleaned columns): {REPLACED_BY_PARSED}")
 rest = [c for c in silver.columns if c not in FRONT and c not in internal and c not in REPLACED_BY_PARSED]
 
-# Being in silver means a column is clean, so cleaned columns get the plain name (no "_clean" suffix)
-SILVER_RENAME = {
-    "city_clean": "city", "state_clean": "state", "pincode_clean": "pincode",
-    "latitude_clean": "latitude", "longitude_clean": "longitude",
-    "year_established_clean": "year_established", "num_doctors_clean": "num_doctors", "capacity_clean": "capacity",
-}
-final_cols = FRONT + rest
-clash = {SILVER_RENAME[c] for c in final_cols if c in SILVER_RENAME} & {c for c in final_cols if c not in SILVER_RENAME}
-assert not clash, f"Renamed columns would collide with existing columns: {clash}"
-silver = silver.select(*[qc(c).alias(SILVER_RENAME.get(c, c)) for c in final_cols])
+silver = silver.select(*[qc(c) for c in FRONT + rest])
 
+assert_no_clean_columns(silver, "facilities_silver")
 silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_silver")
 silver = spark.table("facilities_silver")
 
@@ -884,6 +887,7 @@ if claim_parts:
         "claim_norm",
         F.trim(F.regexp_replace(F.regexp_replace(F.lower("claim_text"), r"[^a-z0-9+/ ]", " "), r"\s+", " ")),
     )
+    assert_no_clean_columns(claims, "silver_facility_claims")
     claims.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_facility_claims")
     print(f"silver_facility_claims: {spark.table('silver_facility_claims').count():,} rows")
 
@@ -899,6 +903,7 @@ dq = (silver.select(F.explode("dq_flags").alias("flag")).groupBy("flag").count()
       .withColumn("pct_of_facilities", F.round(100.0 * F.col("count") / n_silver, 1))
       .withColumnRenamed("count", "n_facilities")
       .orderBy(F.desc("n_facilities")))
+assert_no_clean_columns(dq, "silver_dq_summary")
 dq.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_dq_summary")
 
 spark.sql("DROP TABLE IF EXISTS _facilities_silver_stage")

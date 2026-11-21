@@ -22,6 +22,22 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:43: No script creates `*_clean` columns anymore, and a guard enforces it
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`, `notebooks/04_pincode_bronze_to_silver.py`, `notebooks/common/reference_data.py`.
+  - `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops's script: minimal rename plus a header note).
+  - `CLAUDE.md`.
+- **How:**
+  - **Notebook 01:** cleaned columns are built under plain names from the start (`city`, `state`, `pincode`, `latitude`, `longitude`, `year_established`, `num_doctors`, `capacity`). Raw source columns with those names (raw `latitude`, `longitude`, `capacity`) are renamed `src_<name>` by the existing collision step and left out of silver. The end-of-pipeline rename block is removed. This means the temporary `_facilities_silver_stage` table no longer has `*_clean` columns either.
+  - **Notebook 04:** raw `latitude`, `longitude` and `district` are renamed `*_raw` right after the duplicate collapse, and the cleaned values use the plain names throughout. The end rename block is removed.
+  - **elliotl-ops's script:** `latitude_clean`/`longitude_clean`/`office_name_clean` → `latitude`/`longitude`/`office_name` (its raw values were already `*_raw`).
+  - **Guard:** `assert_no_clean_columns()` runs before every silver write: inside `write_table()` (used by 02, 03, 04), inline before notebook 01's six writes, and before 04's direct writes. A write fails if any column ends in `_clean`.
+- **Why:** Sophia asked that no script ever produce `*_clean` columns in silver tables. The previous change only renamed them at the end, and notebook 01's staging table still had them. The guard makes the rule hold for future edits too.
+- **Notes / follow-ups:**
+  - Local unit tests pass; all notebooks compile. Not yet run on Databricks.
+  - elliotl-ops should know their script's output column names changed.
+
 ### 2026-11-21 16:27: No `_clean` suffix on silver column names
 - **Who:** Claude (for Sophia)
 - **What:**
