@@ -21,7 +21,7 @@
 # MAGIC
 # MAGIC **Columns dropped from silver** (still in `facilities_bronze`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
 # MAGIC
-# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`. The raw `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are dropped from silver **only if every value has a cleaned equivalent**. If any row would lose information, the raw column is kept, and section 7 prints which columns were kept and why. Bronze always keeps them.
+# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`. The raw `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are **dropped** from silver. A value that can't be standardized is left NULL in the cleaned column (not copied over) and flagged; section 7 prints how many. Bronze always keeps the originals.
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -824,30 +824,24 @@ FRONT = ["facility_id", COL["name"], "address_full", "address_street", "address_
          "pincode_variants", "dup_coord_spread_km", "states_mentioned_in_text", "description_all"]
 FRONT = list(dict.fromkeys(FRONT))  # keep order, drop repeats
 internal = [c for c in silver.columns if c.startswith("_") and c not in META_COLS]
-# Raw address columns are dropped from silver ONLY if they have a cleaned equivalent AND no row would lose
-# information, i.e. every row with a raw value also has a cleaned value. Otherwise the raw column is kept.
-#   address_line1/2/3      -> address_full (built from address_street / address_region / address_landmark)
+# Raw address columns are replaced by their cleaned columns and dropped from silver:
+#   address_line1/2/3      -> address_full / address_street / address_region / address_landmark
 #   address_city           -> city_clean
 #   address_stateOrRegion  -> state_clean
 #   address_zipOrPostcode  -> pincode_clean
-# The raw columns are still used above (cleaning, address parsing, the NO_COORDS_OR_ADDRESS rule),
-# and the originals always stay in facilities_bronze.
-CLEANED_EQUIVALENT = {"line1": "address_full", "line2": "address_full", "line3": "address_full",
-                      "city": "city_clean", "state": "state_clean", "pincode": "pincode_clean"}
-pairs = {COL[k]: clean for k, clean in CLEANED_EQUIVALENT.items()
-         if COL.get(k) and COL[k] in silver.columns and clean in silver.columns}
-uncovered = silver.select(*[
-    F.sum(F.when(qc(raw).isNotNull() & F.col(clean).isNull(), 1).otherwise(0)).alias(raw)
-    for raw, clean in pairs.items()
-]).first().asDict() if pairs else {}
-REPLACED_BY_PARSED = []
-for raw, clean in pairs.items():
-    n = int(uncovered.get(raw) or 0)
-    if n == 0:
-        REPLACED_BY_PARSED.append(raw)
-        print(f"Dropping {raw} from silver: every value is covered by {clean}")
-    else:
-        print(f"Keeping {raw} in silver: {n:,} rows have a {raw} value but no {clean}")
+# A value that can't be standardized stays NULL in the cleaned column (it is NOT copied over);
+# dq_flags records it (STATE_UNRECOGNIZED, PINCODE_MISSING_OR_INVALID). The originals stay in facilities_bronze.
+lost = silver.select(*[
+    F.sum(F.when(qc(COL[k]).isNotNull() & F.col(clean).isNull(), 1).otherwise(0)).alias(clean)
+    for k, clean in [("city", "city_clean"), ("state", "state_clean"), ("pincode", "pincode_clean")]
+    if COL.get(k) and COL[k] in silver.columns
+]).first().asDict()
+for clean, n in lost.items():
+    print(f"{clean}: {int(n or 0):,} rows had a raw value that could not be standardized -> left NULL")
+
+REPLACED_BY_PARSED = [COL[k] for k in ["line1", "line2", "line3", "city", "state", "pincode"]
+                      if COL.get(k) and COL[k] in silver.columns]
+print(f"Dropping from silver (replaced by cleaned columns): {REPLACED_BY_PARSED}")
 rest = [c for c in silver.columns if c not in FRONT and c not in internal and c not in REPLACED_BY_PARSED]
 silver = silver.select(*[qc(c) for c in FRONT + rest])
 

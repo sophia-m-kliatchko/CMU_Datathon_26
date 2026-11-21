@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py` (section 7 and header) and `docs/silver-tables.md`.
+  - Replaces the "drop only when fully covered" rule from 16:18.
+- **How:** `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are always left out of `facilities_silver`. Where a value can't be standardized, `city_clean` / `state_clean` / `pincode_clean` stay NULL, and the notebook prints how many per column. The existing flags `STATE_UNRECOGNIZED` and `PINCODE_MISSING_OR_INVALID` still mark those rows.
+- **Why:** Sophia's decision: a non-standard value (e.g. "Mumbai" in the state field, or "56" as a PIN) should not be kept in silver, either as a raw column or copied into a cleaned column. A briefly considered "copy the raw value into the cleaned column" approach was dropped before being committed. The originals remain in `facilities_bronze`.
+- **Notes / follow-ups:** about 300 rows will have `state_clean` NULL unless the PIN fallback fills it, and about 70 will have `pincode_clean` NULL (local estimate). Not yet run on Databricks.
+
 ### 2026-11-21 16:18: Raw address columns dropped from silver only when fully covered by a cleaned column
 - **Who:** Claude (for Sophia)
 - **What:**
