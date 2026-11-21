@@ -22,6 +22,25 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:27: No `_clean` suffix on silver column names
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01`–`04` and the docs.
+  - **`facilities_silver`:** `city_clean`→`city`, `state_clean`→`state`, `pincode_clean`→`pincode`, `latitude_clean`→`latitude`, `longitude_clean`→`longitude`, `year_established_clean`→`year_established`, `num_doctors_clean`→`num_doctors`, `capacity_clean`→`capacity`.
+    - The raw `latitude`, `longitude`, `coordinates`, `yearEstablished`, `numberDoctors` and `capacity` columns are now left out of silver; bronze keeps them.
+    - `silver_possible_duplicates`: `pincode_clean_a/b`→`pincode_a/b` (latitude/longitude likewise).
+  - **`nqas_silver`, `kayakalp_silver`:** `state_clean`→`state`, `district_clean`→`district` (raw stays in `state_raw`/`district_raw`).
+  - **`pincode_silver`:** `latitude`, `longitude`, `state`, `district`, `office_name`; the raw district column is renamed `district_raw`.
+  - `CLAUDE.md`: naming rule added.
+- **How:**
+  - **Notebooks 01 and 04:** the code keeps the `_clean` names internally and renames only at the final select, with an assertion that no names collide. This is because their raw columns use the same plain names.
+  - **Notebooks 02 and 03:** a word-boundary rename, since raw values there are already `*_raw`.
+  - Downstream code, comments and SQL checks were updated to the new names.
+- **Why:** Sophia: being in a silver table already implies a column is clean. Raw columns that would clash with the plain names are dropped from `facilities_silver`, consistent with the earlier address decision ("if it is not standard, drop it"). In the outside-data tables, raw text is kept as `*_raw` because their `row_citation` and source checks rely on it.
+- **Notes / follow-ups:**
+  - Earlier `facilities_silver` drafts kept the raw `coordinates`/`latitude`/`longitude`. The validated coordinates now carry those names instead; the raw ones are in bronze.
+  - **Anything already querying `*_clean` columns must be updated.** Not yet run on Databricks.
+
 ### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
 - **Who:** Claude (for Sophia)
 - **What:**

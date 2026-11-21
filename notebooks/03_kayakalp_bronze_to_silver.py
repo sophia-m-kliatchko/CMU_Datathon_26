@@ -9,8 +9,8 @@
 # MAGIC |---|---|
 # MAGIC | Types fixed (`s_no`, `source_page` → int; `district_repaired` → boolean) | The CSV upload may read everything as text |
 # MAGIC | `award_rank_order` (1 = Best … 6 = Commendation) | To sort and compare awards |
-# MAGIC | District field split: the **last** comma-separated part becomes `district_clean`; the rest becomes `locality` | Some states wrote "village, block, district" in the district column |
-# MAGIC | State standardized (`state_clean`) | To join with `facilities_silver` |
+# MAGIC | District field split: the **last** comma-separated part becomes `district`; the rest becomes `locality` | Some states wrote "village, block, district" in the district column |
+# MAGIC | State standardized (`state`) | To join with `facilities_silver` |
 # MAGIC | Facility type kept as reported (`SDH/CHC`, `PHC`…), plus a type guessed from the name and a level (primary/secondary) | For filtering and like-for-like matching |
 # MAGIC | `name_norm`, `name_core` | For fuzzy matching to Virtue Foundation facilities |
 # MAGIC | `dq_flags` | Problems are flagged, never silently dropped |
@@ -109,9 +109,9 @@ district = F.trim(F.regexp_replace(last_part, r"(?i)\s+health\s+district$", ""))
 silver = (df
     .withColumn("award_id", F.concat_ws("-", F.lit("kayakalp"), F.col("financial_year"), F.col("s_no").cast("string")))
     .withColumn("award_rank_order", rank_map[F.col("award_rank")])
-    .withColumn("district_clean", F.when(F.size(parts) > 0, F.initcap(district)))
+    .withColumn("district", F.when(F.size(parts) > 0, F.initcap(district)))
     .withColumn("locality", F.when(F.size(parts) > 1, F.array_join(F.slice(parts, 1, F.size(parts) - 1), ", ")))
-    .withColumn("state_clean", state_from_text(F.coalesce(F.col("state_pdf"), F.col("state_raw"))))
+    .withColumn("state", state_from_text(F.coalesce(F.col("state_pdf"), F.col("state_raw"))))
     .withColumn("facility_type_from_name", facility_type_from_text(F.col("facility_name")))
     .withColumn("facility_level", F.coalesce(facility_level(F.col("facility_type_reported")),
                                              facility_level(F.col("facility_type_from_name"))))
@@ -121,7 +121,7 @@ silver = (df
 
 # Same facility listed twice for the same award category = likely a PDF duplicate (flagged, not removed)
 from pyspark.sql import Window
-w = Window.partitionBy("financial_year", "award_category", "name_norm", "district_clean", "state_clean")
+w = Window.partitionBy("financial_year", "award_category", "name_norm", "district", "state")
 silver = silver.withColumn("_n_same", F.count(F.lit(1)).over(w))
 
 # COMMAND ----------
@@ -132,8 +132,8 @@ silver = silver.withColumn("_n_same", F.count(F.lit(1)).over(w))
 # COMMAND ----------
 
 FLAGS = [
-    ("STATE_UNRECOGNIZED",           F.col("state_clean").isNull()),
-    ("MISSING_DISTRICT",             F.col("district_clean").isNull()),
+    ("STATE_UNRECOGNIZED",           F.col("state").isNull()),
+    ("MISSING_DISTRICT",             F.col("district").isNull()),
     ("MISSING_FACILITY_NAME",        F.col("facility_name").isNull()),
     ("DISTRICT_REPAIRED_FROM_PDF",   F.col("district_repaired")),
     ("DISTRICT_FIELD_HAD_LOCALITY",  F.col("locality").isNotNull()),
@@ -161,7 +161,7 @@ silver = silver.withColumn(
 )
 
 ORDER = ["award_id", "financial_year", "facility_name", "facility_type_reported", "facility_type_from_name", "facility_level",
-         "locality", "district_clean", "state_clean", "award_category", "award_rank", "award_rank_order",
+         "locality", "district", "state", "award_category", "award_rank", "award_rank_order",
          "name_norm", "name_core", "dq_flags", "row_citation", "s_no", "source_page", "award_raw", "district_raw",
          "state_pdf", "state_raw", "district_repaired", "source_file",
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
@@ -183,7 +183,7 @@ if SOURCE_URL is None:
 silver = spark.table(SILVER)
 assert silver.count() == silver.select("award_id").distinct().count(), "award_id is not unique"
 display(spark.sql(f"""
-  SELECT award_category, award_rank, count(*) AS awards, count_if(state_clean IS NULL) AS state_unrecognized
+  SELECT award_category, award_rank, count(*) AS awards, count_if(state IS NULL) AS state_unrecognized
   FROM {SILVER} GROUP BY ALL ORDER BY award_category, min(award_rank_order)"""))
 
 # COMMAND ----------
@@ -195,5 +195,5 @@ display(spark.sql(f"""
 # COMMAND ----------
 
 display(spark.sql(f"""
-  SELECT state_clean, facility_type_reported, count(*) AS awards
-  FROM {SILVER} GROUP BY ALL ORDER BY state_clean, awards DESC"""))
+  SELECT state, facility_type_reported, count(*) AS awards
+  FROM {SILVER} GROUP BY ALL ORDER BY state, awards DESC"""))

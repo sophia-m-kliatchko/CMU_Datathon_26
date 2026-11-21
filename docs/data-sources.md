@@ -52,7 +52,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 - **Processing:** `scripts/kayakalp_pdf_to_csv.py` (pdfplumber) → CSV → upload as `kayakalp_bronze` → `notebooks/03_kayakalp_bronze_to_silver.py` → `kayakalp_silver`.
 - **Known limitations:**
   - In 17 rows, district text had spilled into the State column; this was repaired and flagged `DISTRICT_REPAIRED_FROM_PDF`.
-  - Some states wrote "village, block, district" in the district field; it's split into `locality` and `district_clean`.
+  - Some states wrote "village, block, district" in the district field; it's split into `locality` and `district`.
   - Public facilities only, and FY 2021-22 only.
 - **Cite as:** National Health Systems Resource Centre. *List of Kayakalp Winner Facilities FY 2021-22.* Ministry of Health and Family Welfare, Government of India. https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf. Accessed 2026-11-21.
 - **Per-row citation:** the `row_citation` column in `kayakalp_silver`, which gives the PDF page and S.No.

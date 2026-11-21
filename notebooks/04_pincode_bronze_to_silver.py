@@ -18,6 +18,7 @@
 # MAGIC * Offices more than **50 km** from their PIN's median point are flagged `COORDS_FAR_FROM_PIN` and left out of the PIN centroid.
 # MAGIC * **PIN ambiguity:** a PIN can span several districts or states. This is exposed (`pin_n_districts`, `pin_n_states`, `pin_ambiguous`), not "fixed".
 # MAGIC * State standardized with `common/reference_data`; district title-cased plus a join key.
+# MAGIC * In `pincode_silver`, cleaned columns have plain names (`latitude`, `longitude`, `state`, `district`, `office_name`); the raw text is in `latitude_raw`, `longitude_raw`, `statename`, `district_raw`, `officename`.
 # MAGIC
 # MAGIC Builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`: the "NA" handling, junk-latitude findings, PIN ambiguity, office-name suffix cleaning and deterministic `office_id` come from there.
 # MAGIC Every change to this notebook must be logged in `DEVLOG.md`; the source is cited in `docs/data-sources.md`.
@@ -195,7 +196,13 @@ ORDER = ["office_id", "pincode", "officename", "office_name_clean", "office_type
          "row_citation", "circlename", "regionname", "divisionname", "district", "district_key", "statename",
          "officetype", "delivery", "latitude_raw", "longitude_raw", "lat_how", "lon_how", "n_listings", "source_row_ids",
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
-write_table(silver.select(*ORDER), "pincode_silver",
+# Being in silver means a column is clean: cleaned columns get the plain name, and the raw column they would
+# collide with is renamed *_raw (district) so the original text stays available for citations.
+SILVER_RENAME = {"district": "district_raw", "district_clean": "district", "state_clean": "state",
+                 "latitude_clean": "latitude", "longitude_clean": "longitude", "office_name_clean": "office_name"}
+silver_out = silver.select(*[F.col(c).alias(SILVER_RENAME.get(c, c)) for c in ORDER])
+assert len(set(silver_out.columns)) == len(silver_out.columns), f"duplicate column names: {silver_out.columns}"
+write_table(silver_out, "pincode_silver",
             "India Post offices (All India Pincode Directory), one row per office, cleaned coordinates and PIN ambiguity. "
             "Built by notebooks/04_pincode_bronze_to_silver.")
 silver = spark.table("pincode_silver")
@@ -209,20 +216,20 @@ assert silver.count() == silver.select("office_id").distinct().count(), "office_
 
 # COMMAND ----------
 
-good = F.col("latitude_clean").isNotNull() & ~F.coalesce(F.col("coords_far_from_pin"), F.lit(False))
-by_district = (silver.groupBy("pincode", "district_clean", "state_clean").count()
-               .withColumn("_r", F.row_number().over(Window.partitionBy("pincode").orderBy(F.desc("count"), "district_clean")))
-               .where("_r = 1").select("pincode", F.col("district_clean").alias("main_district"),
-                                       F.col("state_clean").alias("main_state")))
+good = F.col("latitude").isNotNull() & ~F.coalesce(F.col("coords_far_from_pin"), F.lit(False))
+by_district = (silver.groupBy("pincode", "district", "state").count()
+               .withColumn("_r", F.row_number().over(Window.partitionBy("pincode").orderBy(F.desc("count"), "district")))
+               .where("_r = 1").select("pincode", F.col("district").alias("main_district"),
+                                       F.col("state").alias("main_state")))
 cent = (silver.groupBy("pincode").agg(
             F.count(F.lit(1)).alias("n_offices"),
             F.sum(F.when(good, 1).otherwise(0)).alias("n_offices_used_for_centroid"),
-            F.percentile_approx(F.when(good, F.col("latitude_clean")), 0.5).alias("latitude"),
-            F.percentile_approx(F.when(good, F.col("longitude_clean")), 0.5).alias("longitude"),
+            F.percentile_approx(F.when(good, F.col("latitude")), 0.5).alias("latitude"),
+            F.percentile_approx(F.when(good, F.col("longitude")), 0.5).alias("longitude"),
             F.max(F.when(good, F.col("km_from_pin_median"))).alias("max_office_distance_km"),
-            F.sort_array(F.collect_set("district_clean")).alias("districts"),
-            F.sort_array(F.collect_set("state_clean")).alias("states"),
-            F.first(F.when(F.col("office_type") == "HO", F.col("office_name_clean")), ignorenulls=True).alias("head_office"),
+            F.sort_array(F.collect_set("district")).alias("districts"),
+            F.sort_array(F.collect_set("state")).alias("states"),
+            F.first(F.when(F.col("office_type") == "HO", F.col("office_name")), ignorenulls=True).alias("head_office"),
             F.max("pin_ambiguous").alias("pin_ambiguous"))
         .join(by_district, "pincode", "left")
         .withColumn("centroid_quality",
@@ -256,7 +263,7 @@ dq.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("pincod
 
 COLUMN_COMMENTS = {
     "office_id": "Deterministic key (hash of PIN, office name, type, district, division), stable across reloads.",
-    "latitude_clean": "Parsed, validated latitude (inside India, swaps fixed). NULL if unusable.",
+    "latitude": "Parsed, validated latitude (inside India, swaps fixed). NULL if unusable.",
     "coord_status": "ok | swapped_fixed | missing | unparseable | zero | out_of_range",
     "km_from_pin_median": "Distance from the median point of offices sharing this PIN.",
     "pin_ambiguous": "True if this PIN spans more than one district or state. Join on PIN with care.",
