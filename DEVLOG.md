@@ -22,6 +22,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 17:55: Decision: `source_urls` stays out of silver
+- **Who:** Sophia (decision), Claude (logged it)
+- **What:** no code change. `source_urls` remains dropped from `silver_facilities`, as implemented in `notebooks/01_bronze_to_silver.py`.
+- **How:** Sophia answered "Drop it as asked" when asked whether to keep it for evidence citations.
+- **Why:** to keep silver to the agreed column set. The URLs are not lost: they remain in `bronze_facilities` and can be joined back on `unique_id` (documented in `docs/silver-tables.md`, watch-out 24) if a recommendation needs to show the web pages a record came from.
+
 ### 2026-11-21 17:45: Merged `main` into `sophia-wip`; citations updated for the teammate additions
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -60,7 +66,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Notes / follow-ups:**
   - **Not yet run on Databricks;** the numbers above are from the local CSV. The Marketplace table may differ.
   - The real record that each fragment belongs to may be missing its tail fields (it was cut at the line break). Stitching fragments back is possible but not done.
-  - Consider keeping `source_urls` in silver for evidence citations; this needs Sophia's decision.
+  - ~~Consider keeping `source_urls` in silver~~: decided 2026-11-21 17:55, see the entry above.
 
 ### 2026-11-21 16:40: Added the Kayakalp PDF source URL to the citations
 - **Who:** Claude (for Sophia)
