@@ -22,6 +22,39 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 17:18: Silver-vs-bronze validation for facilities, pincode and NQAS; coordinates nulled when they don't match the address
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/common/validation.py`: `run_validations()`, `mismatch_rows()`, `haversine_km_col()`, `same_number()`.
+  - Notebooks `01`, `02` and `04` updated.
+  - New `scripts/dryrun_coordinate_checks.py`.
+  - Docs: `docs/silver-tables.md`, `scripts/README.md`, `CLAUDE.md` (run order and validation rule).
+  - New tables: `facilities_validation`, `pincode_validation`, `nqas_validation`.
+- **How:**
+  - **Pincode (04):** an office's coordinates are set to NULL if they're more than 50 km from its PIN's median point (`coord_status = nulled_far_from_pin`).
+    - Silver and centroids are staged and checked against `pincode_bronze`: row reconciliation; PIN, office name and raw coordinate text equal bronze; coordinates equal the re-parsed bronze values; state and district derived from bronze; no kept coordinate far from its PIN; unique `office_id`; each centroid inside its offices' box.
+    - Then published.
+  - **Facilities (01):** coordinates must be within 25 km plus the PIN's spread of the PIN centroid, and inside the state's box (from `pincode_silver`, padded 0.25°); otherwise set to NULL (`nulled_pin_mismatch` / `nulled_state_mismatch`).
+    - New columns: `km_from_pin_centre`, `pin_in_directory`, `state_matches_pin`.
+    - New flags: `COORDS_NULLED_PIN_MISMATCH`, `COORDS_NULLED_STATE_MISMATCH`, `PIN_NOT_IN_DIRECTORY`, `STATE_NOT_SERVED_BY_PIN`.
+    - Checks against `facilities_bronze`: row reconciliation (merged + rejected); IDs in bronze, UUID-shaped and unique; name, PIN, coordinates (exact, or swapped back), state and the numbers all come from the facility's bronze rows; no kept coordinate breaks the PIN or state rule.
+  - **NQAS (02):** the district must exist in that state in `pincode_silver` (flag `DISTRICT_NOT_IN_STATE`; there are no coordinates to null).
+    - Checks: row reconciliation; every listing exists in bronze; dates match the bronze day/month/year; state and district come from bronze; status matches the dates; unique ID.
+  - **All three** write the candidate silver to a staging table and validate it. If a check fails, the run stops and the existing silver table is left untouched.
+- **Why:** Sophia wants all silver data accurate to bronze, with PINs, addresses/regions and coordinates consistent with each other, and coordinates set to NULL when they don't match.
+- **Tradeoffs:**
+  - The PIN check allows each PIN's own spread, so large rural PINs aren't penalized.
+  - The state check uses a padded bounding box (cheap, no polygons), so it only catches clearly wrong states.
+  - NQAS district matching is exact on a letters-only key, so old or alternate district names will be flagged.
+- **Dry-run results (local CSVs):**
+  - **Facilities:** about 1,492 lose their coordinates for PIN mismatch (e.g. "Aravind Eye Hospital": Delhi PIN 110002, point ~1,870 km away, consistent with merged records), 5 for being outside their state; 8,467 keep theirs.
+  - **Post offices:** 12,102 lose their coordinates.
+  - **NQAS:** 236 of 989 listings are flagged `DISTRICT_NOT_IN_STATE`.
+- **Notes / follow-ups:**
+  - **Run order is now 04 → 01, 02** (enforced by an assertion).
+  - Not yet run on Databricks.
+  - Kayakalp (03) wasn't in scope; it could get the same treatment.
+
 ### 2026-11-21 16:43: No script creates `*_clean` columns anymore, and a guard enforces it
 - **Who:** Claude (for Sophia)
 - **What:**

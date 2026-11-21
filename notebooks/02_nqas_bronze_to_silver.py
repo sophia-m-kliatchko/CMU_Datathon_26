@@ -16,6 +16,8 @@
 # MAGIC | Department scope parsed (`n_departments_assessed`, `covers_all_departments`) | A partial certification covers only some departments |
 # MAGIC | Exact duplicate listings collapsed (`n_listings`) | The website repeats a few rows |
 # MAGIC | `dq_flags` | Problems are flagged, never silently dropped |
+# MAGIC | `district_in_state`: the district exists in that state in the India Post directory (`pincode_silver`) | Catches a district/state pair that don't belong together (flag `DISTRICT_NOT_IN_STATE`). Run notebook 04 first |
+# MAGIC | **Validation** against bronze before publishing (results in `nqas_validation`) | Row counts, every listing, dates, state, district must match bronze, or `nqas_silver` is not overwritten |
 # MAGIC | **Citation columns** (`source_*`, `row_citation`) | Every row can be cited back to the NHSRC website (see `docs/data-sources.md`) |
 # MAGIC
 # MAGIC Every change to this notebook must be logged in `DEVLOG.md`.
@@ -23,6 +25,10 @@
 # COMMAND ----------
 
 # MAGIC %run ./common/reference_data
+
+# COMMAND ----------
+
+# MAGIC %run ./common/validation
 
 # COMMAND ----------
 
@@ -122,6 +128,20 @@ silver = (df
     .withColumn("certification_year", F.year("validity_from"))
 )
 
+# ---- District must belong to the state (India Post directory, built by notebook 04) ----
+PIN_OFFICES = f"{CATALOG}.{SCHEMA}.pincode_silver"
+assert spark.catalog.tableExists(PIN_OFFICES), (
+    "Run notebooks/04_pincode_bronze_to_silver first: the district/state check needs pincode_silver.")
+district_ref = (spark.table(PIN_OFFICES).where("state IS NOT NULL AND district_key IS NOT NULL")
+                .select(F.col("state").alias("_ref_state"), F.col("district_key").alias("_ref_district_key")).distinct())
+silver = (silver
+    .withColumn("_district_key", F.regexp_replace(F.lower(F.col("district")), r"[^a-z0-9]", ""))
+    .join(F.broadcast(district_ref),
+          (F.col("state") == F.col("_ref_state")) & (F.col("_district_key") == F.col("_ref_district_key")), "left")
+    .withColumn("district_in_state",
+                F.when(F.col("state").isNotNull() & F.col("district").isNotNull(), F.col("_ref_state").isNotNull()))
+    .drop("_district_key", "_ref_state", "_ref_district_key"))
+
 # COMMAND ----------
 
 # MAGIC %md
@@ -132,6 +152,7 @@ silver = (df
 FLAGS = [
     ("STATE_UNRECOGNIZED",          F.col("state").isNull()),
     ("MISSING_DISTRICT",            F.col("district").isNull()),
+    ("DISTRICT_NOT_IN_STATE",       F.col("district_in_state") == False),
     ("MISSING_FACILITY_NAME",       F.col("facility_name").isNull()),
     ("DATE_UNPARSEABLE",            (F.col("validity_from_raw").isNotNull() & F.col("validity_from").isNull()) |
                                     (F.col("validity_to_raw").isNotNull() & F.col("validity_to").isNull())),
@@ -157,15 +178,64 @@ silver = silver.withColumn(
 ).drop("_source_url", "_scraped_on")
 
 ORDER = ["certification_id", "facility_name", "facility_type", "facility_level", "district", "state",
-         "certification_type", "department_assessed", "n_departments_assessed", "covers_all_departments",
+         "district_in_state", "certification_type", "department_assessed", "n_departments_assessed", "covers_all_departments",
          "validity_from", "validity_to", "certification_year", "certification_status", "name_norm", "name_core",
          "n_listings", "dq_flags", "row_citation", "state_raw", "district_raw", "validity_from_raw", "validity_to_raw",
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
 silver = silver.select(*ORDER)
+assert_no_clean_columns(silver, "_nqas_silver_check")
+silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_nqas_silver_check")
+silver = spark.table("_nqas_silver_check")
 
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Validation: `nqas_silver` must be accurate to the bronze table
+# MAGIC Each check lists listings that break a rule; all must be empty. Results go to `nqas_validation`.
+# MAGIC If any check fails, the notebook stops and `nqas_silver` is **not** overwritten.
+
+# COMMAND ----------
+
+b_keys = bronze.select(
+    col("state").alias("state_raw"), col("district").alias("district_raw"), col("facility_name").alias("facility_name"),
+    col("department_assessed").alias("department_assessed"), col("validity_from").alias("validity_from_raw"),
+    col("validity_to").alias("validity_to_raw"), F.lower(col("certification_type")).alias("certification_type"))
+DATE_PARTS = r"^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$"
+
+def date_differs(date_col, raw_col):
+    d, m, y = [F.regexp_extract(F.col(raw_col), DATE_PARTS, i) for i in (1, 2, 3)]
+    return F.col(date_col).isNotNull() & ((F.dayofmonth(date_col) != d.cast("int")) |
+                                          (F.month(date_col) != m.cast("int")) | (F.year(date_col) != y.cast("int")))
+
+n_listed = silver.agg(F.sum("n_listings")).first()[0] or 0
+checks = [
+    ("ROW_RECONCILIATION", "Bronze rows = listings collapsed into silver",
+     mismatch_rows("bronze_rows", n_bronze, n_listed)),
+    ("LISTING_FROM_BRONZE", "Every silver listing (state, district, name, departments, dates, type) exists in bronze",
+     silver.alias("s").join(b_keys.alias("b"),
+                            [F.col(f"s.{c}").eqNullSafe(F.col(f"b.{c}")) for c in key_cols], "left_anti")),
+    ("VALIDITY_FROM_MATCHES_BRONZE", "validity_from has the same day, month and year as the bronze text",
+     silver.where(date_differs("validity_from", "validity_from_raw"))),
+    ("VALIDITY_TO_MATCHES_BRONZE", "validity_to has the same day, month and year as the bronze text",
+     silver.where(date_differs("validity_to", "validity_to_raw"))),
+    ("STATE_FROM_BRONZE", "state is NULL or the standardized bronze state",
+     silver.where(~F.col("state").eqNullSafe(state_from_text(F.col("state_raw"))))),
+    ("DISTRICT_FROM_BRONZE", "district is the bronze district, title-cased",
+     silver.where(~F.col("district").eqNullSafe(F.initcap(F.regexp_replace(F.col("district_raw"), r"\s+", " "))))),
+    ("STATUS_MATCHES_DATES", "certification_status is 'expired' exactly when validity_to is before today",
+     silver.where(F.col("validity_to").isNotNull() &
+                  ((F.col("certification_status") == "expired") != (F.col("validity_to") < F.current_date())))),
+    ("CERTIFICATION_ID_UNIQUE", "certification_id is unique",
+     silver.groupBy("certification_id").count().where("count > 1")),
+]
+run_validations(checks, "nqas_validation")
+
+# All checks passed: publish
 write_table(silver, SILVER,
             f"NQAS certified facility listings from NHSRC ({SOURCE_LANDING_URL}), one row per listing. "
-            "Historical: all certificates in the 2026-11 scrape had expired. Built by notebooks/02_nqas_bronze_to_silver.")
+            "Historical: all certificates in the 2026-11 scrape had expired. Validated against bronze (see nqas_validation). "
+            "Built by notebooks/02_nqas_bronze_to_silver.")
+spark.sql("DROP TABLE IF EXISTS _nqas_silver_check")
 
 # COMMAND ----------
 

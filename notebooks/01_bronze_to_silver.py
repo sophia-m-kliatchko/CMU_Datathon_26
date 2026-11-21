@@ -12,6 +12,7 @@
 # MAGIC | `silver_possible_duplicates` | 1 row per suspected duplicate pair | Facilities with different IDs that look like the same place. They are flagged, never deleted. |
 # MAGIC | `silver_dq_summary` | 1 row per flag | How many facilities carry each data-quality flag. |
 # MAGIC | `silver_rejected_facilities` | 1 row per removed record | Every row the rules below removed, with the reason, so nothing disappears silently. |
+# MAGIC | `facilities_validation` | 1 row per check | Silver-vs-bronze accuracy checks (all must pass) |
 # MAGIC
 # MAGIC **Rows removed from silver** (logged in `silver_rejected_facilities`):
 # MAGIC 1. `unique_id` is not a real ID (UUID). These rows are fragments of other records, created where a description contained line breaks (e.g. an "ID" of *oculoplasty*).
@@ -22,6 +23,12 @@
 # MAGIC **Columns dropped from silver** (still in `facilities_bronze`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
 # MAGIC
 # MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city`, `state`, `pincode`, plus a combined `address_full`. The raw `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are **dropped** from silver. A value that can't be standardized is left NULL in the cleaned column (not copied over) and flagged; section 7 prints how many. Bronze always keeps the originals.
+# MAGIC
+# MAGIC **Coordinates must match the address.** Using the India Post directory (`pincode_*` tables from notebook 04), a facility's point must be within 25 km (+ the PIN's own spread) of its PIN's centre and inside its state's area. If not, `latitude`/`longitude` are set to NULL (`coord_status` = `nulled_pin_mismatch` / `nulled_state_mismatch`).
+# MAGIC
+# MAGIC **Validation:** before `facilities_silver` is written, it is checked against `facilities_bronze` (row counts, IDs, names, PINs, coordinates, state, numbers) and against the coordinate rules. Results go to `facilities_validation`; any failure stops the run and leaves the old `facilities_silver` in place.
+# MAGIC
+# MAGIC **Run order:** `04_pincode_bronze_to_silver` first, then this notebook.
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -66,6 +73,11 @@ DROP_AFTER_COLUMN = "recency_of_page_update"
 KEEP_AFTER_CUTOFF = ["coordinates", "latitude", "longitude"]
 # A facility needs at least this share of the kept source columns filled in
 MIN_FILLED_SHARE = 0.30
+# Coordinates must match the address (uses notebook 04's India Post tables): a facility's point must be within
+# PIN_MATCH_KM of its PIN's centre point (plus that PIN's own spread) and inside its state's area (padded box).
+# If not, latitude/longitude are set to NULL.
+PIN_MATCH_KM = 25.0
+STATE_BOX_PAD_DEG = 0.25
 # A valid unique_id looks like 2b8d1c3e-9f4a-4c1d-8e2f-0a1b2c3d4e5f
 ID_PATTERN = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 
@@ -109,6 +121,10 @@ CAPACITY_MAX = 10000     # beds
 # COMMAND ----------
 
 # MAGIC %run ./common/address_parsing
+
+# COMMAND ----------
+
+# MAGIC %run ./common/validation
 
 # COMMAND ----------
 
@@ -215,6 +231,7 @@ COL = {
     "coords_json": resolve("coordinates", "geometry", "location"),
 }
 COL.update(COLUMN_OVERRIDES)
+COL_BRONZE = dict(COL)   # original bronze column names, for the validation checks in section 7
 
 for k, v in COL.items():
     print(f"  {k:<12} -> {v if v else '!! NOT FOUND'}")
@@ -241,7 +258,7 @@ DERIVED_NAMES = {
     "dq_flags", "dq_flag_count", "completeness_score", "states_mentioned_in_text",
     "n_specialties", "n_capability", "n_procedure", "n_equipment", "n_service_claims",
     "address_street", "address_region", "address_landmark", "address_full", "pincode_from_address_text",
-    "source_fill_share",
+    "source_fill_share", "km_from_pin_centre", "pin_in_directory", "state_matches_pin",
     # Cleaned columns use plain names, so raw source columns with these names are renamed src_<name>
     # (e.g. raw latitude -> src_latitude) and later left out of silver. Silver never has *_clean columns.
     "city", "state", "pincode", "latitude", "longitude", "year_established", "num_doctors", "capacity",
@@ -676,6 +693,49 @@ stage = (stage
     .drop("_addr")
 )
 
+# ---- Coordinates must match the PIN and state (India Post directory, built by notebook 04) ----
+PIN_CENTROIDS = f"{CATALOG}.{SCHEMA}.pincode_centroids_silver"
+PIN_OFFICES = f"{CATALOG}.{SCHEMA}.pincode_silver"
+assert spark.catalog.tableExists(PIN_CENTROIDS) and spark.catalog.tableExists(PIN_OFFICES), (
+    "Run notebooks/04_pincode_bronze_to_silver first: checking coordinates against PIN and state "
+    "needs pincode_centroids_silver and pincode_silver.")
+pin_ref = spark.table(PIN_CENTROIDS).select(
+    F.col("pincode").alias("_ref_pin"), F.col("latitude").alias("_ref_lat"), F.col("longitude").alias("_ref_lon"),
+    F.coalesce(F.col("max_office_distance_km"), F.lit(0.0)).alias("_ref_spread"), F.col("states").alias("_ref_states"))
+state_box = (spark.table(PIN_OFFICES).where("latitude IS NOT NULL AND state IS NOT NULL")
+             .groupBy(F.col("state").alias("_box_state"))
+             .agg((F.min("latitude") - STATE_BOX_PAD_DEG).alias("_box_lat_min"),
+                  (F.max("latitude") + STATE_BOX_PAD_DEG).alias("_box_lat_max"),
+                  (F.min("longitude") - STATE_BOX_PAD_DEG).alias("_box_lon_min"),
+                  (F.max("longitude") + STATE_BOX_PAD_DEG).alias("_box_lon_max")))
+
+def outside_state_box(lat, lon):
+    return ~(lat.between(F.col("_box_lat_min"), F.col("_box_lat_max")) &
+             lon.between(F.col("_box_lon_min"), F.col("_box_lon_max")))
+
+stage = (stage
+    .join(F.broadcast(pin_ref), F.col("pincode") == F.col("_ref_pin"), "left")
+    .join(F.broadcast(state_box), F.col("state") == F.col("_box_state"), "left")
+    .withColumn("km_from_pin_centre",
+                F.round(haversine_km_col(F.col("latitude"), F.col("longitude"), F.col("_ref_lat"), F.col("_ref_lon")), 2))
+    .withColumn("_pin_mismatch", F.col("latitude").isNotNull() & F.col("_ref_lat").isNotNull() &
+                                 (F.col("km_from_pin_centre") > F.lit(PIN_MATCH_KM) + F.col("_ref_spread")))
+    .withColumn("_state_mismatch", F.col("latitude").isNotNull() & F.col("_box_state").isNotNull() &
+                                   outside_state_box(F.col("latitude"), F.col("longitude")))
+    .withColumn("pin_in_directory", F.when(F.col("pincode").isNotNull(), F.col("_ref_pin").isNotNull()))
+    .withColumn("state_matches_pin", F.when(F.col("state").isNotNull() & F.col("_ref_states").isNotNull(),
+                                            F.array_contains(F.col("_ref_states"), F.col("state"))))
+    .withColumn("coord_status", F.when(F.coalesce(F.col("_pin_mismatch"), F.lit(False)), F.lit("nulled_pin_mismatch"))
+                                 .when(F.coalesce(F.col("_state_mismatch"), F.lit(False)), F.lit("nulled_state_mismatch"))
+                                 .otherwise(F.col("coord_status")))
+    .withColumn("_bad", F.col("coord_status").isin("nulled_pin_mismatch", "nulled_state_mismatch"))
+    .withColumn("latitude", F.when(F.col("_bad"), F.lit(None).cast("double")).otherwise(F.col("latitude")))
+    .withColumn("longitude", F.when(F.col("_bad"), F.lit(None).cast("double")).otherwise(F.col("longitude")))
+    .withColumn("coords_low_precision", F.when(F.col("_bad"), F.lit(None).cast("boolean")).otherwise(F.col("coords_low_precision")))
+    .drop("_ref_pin", "_ref_lat", "_ref_lon", "_ref_spread", "_ref_states",
+          "_box_state", "_box_lat_min", "_box_lat_max", "_box_lon_min", "_box_lon_max", "_pin_mismatch", "_state_mismatch", "_bad")
+)
+
 # ---- Row rules: name, location, completeness ----
 kept_src_cols = [c for c in src_cols if c in stage.columns]
 def is_filled(c):
@@ -795,6 +855,10 @@ def raw_present_but_clean_null(key, clean_col):
 
 FLAGS = [
     ("MISSING_COORDS",                F.col("coord_status") == "missing"),
+    ("COORDS_NULLED_PIN_MISMATCH",    F.col("coord_status") == "nulled_pin_mismatch"),
+    ("COORDS_NULLED_STATE_MISMATCH",  F.col("coord_status") == "nulled_state_mismatch"),
+    ("PIN_NOT_IN_DIRECTORY",          F.col("pin_in_directory") == False),
+    ("STATE_NOT_SERVED_BY_PIN",       F.col("state_matches_pin") == False),
     ("COORDS_ZERO",                   F.col("coord_status") == "zero"),
     ("COORDS_OUTSIDE_INDIA",          F.col("coord_status") == "outside_india"),
     ("COORDS_SWAPPED_FIXED",          F.col("coord_status") == "swapped_fixed"),
@@ -859,9 +923,99 @@ rest = [c for c in silver.columns if c not in FRONT and c not in internal and c 
 
 silver = silver.select(*[qc(c) for c in FRONT + rest])
 
-assert_no_clean_columns(silver, "facilities_silver")
+assert_no_clean_columns(silver, "_facilities_silver_check")
+silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_facilities_silver_check")
+silver = spark.table("_facilities_silver_check")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### Validation: `facilities_silver` must be accurate to `facilities_bronze`
+# MAGIC Each check lists the facilities that break a rule; all must be empty. Results go to `facilities_validation`.
+# MAGIC If any check fails, the notebook stops and `facilities_silver` is **not** overwritten.
+
+# COMMAND ----------
+
+CB = COL_BRONZE
+def braw(key):
+    return F.col(f"`{CB[key]}`").cast("string") if CB.get(key) else F.lit(None).cast("string")
+
+b_lat = F.expr(f"try_cast(`{CB['lat']}` AS DOUBLE)") if CB.get("lat") else F.lit(None).cast("double")
+b_lon = F.expr(f"try_cast(`{CB['lon']}` AS DOUBLE)") if CB.get("lon") else F.lit(None).cast("double")
+if CB.get("coords_json"):
+    b_lat = F.coalesce(b_lat, F.expr(f"try_cast(get_json_object(`{CB['coords_json']}`, '$.coordinates[1]') AS DOUBLE)"))
+    b_lon = F.coalesce(b_lon, F.expr(f"try_cast(get_json_object(`{CB['coords_json']}`, '$.coordinates[0]') AS DOUBLE)"))
+
+bsrc = spark.table("facilities_bronze").select(
+    F.lower(F.trim(braw("id"))).alias("facility_id"),
+    clean_str(braw("name")).alias("b_name"),
+    F.regexp_replace(F.concat_ws(" ", braw("pincode"), braw("line1"), braw("line2"), braw("line3")),
+                     r"(?<=\d)[\s-](?=\d)", "").alias("b_address_text"),
+    F.struct(b_lat.alias("lat"), b_lon.alias("lon")).alias("b_point"),
+    state_from_text(clean_str(braw("state"))).alias("b_state"),
+    F.regexp_replace(F.concat_ws(" ", braw("year"), braw("doctors"), braw("capacity")), r"(?<=\d),(?=\d)", "").alias("b_numbers"),
+)
+bagg = bsrc.groupBy("facility_id").agg(
+    F.collect_set("b_name").alias("b_names"),
+    F.concat_ws(" | ", F.collect_list("b_address_text")).alias("b_address_text"),
+    F.collect_list("b_point").alias("b_points"),
+    F.collect_set("b_state").alias("b_states"),
+    F.concat_ws(" | ", F.collect_list("b_numbers")).alias("b_numbers"),
+)
+chk = silver.join(bagg, "facility_id", "left")
+
+def matches_a_bronze_point(lat, lon):
+    return F.exists("b_points", lambda pt: (same_number(pt["lat"], lat) & same_number(pt["lon"], lon)) |
+                                           (same_number(pt["lat"], lon) & same_number(pt["lon"], lat)))
+
+n_rejected_rows = spark.table("silver_rejected_facilities").agg(F.sum(F.size("source_row_ids"))).first()[0] or 0
+n_merged_rows = silver.agg(F.sum("n_source_rows")).first()[0] or 0
+num_cols = [c for c in ["year_established", "num_doctors", "capacity"] if c in silver.columns]
+
+checks = [
+    ("ROW_RECONCILIATION", "Bronze rows = rows merged into silver facilities + rows in silver_rejected_facilities",
+     mismatch_rows("bronze_rows", n_bronze, n_merged_rows + n_rejected_rows)),
+    ("ID_FROM_BRONZE", "Every facility_id exists as a unique_id in bronze",
+     silver.select("facility_id").join(bagg, "facility_id", "left_anti")),
+    ("ID_IS_UUID", "Every facility_id is a real ID (UUID)",
+     silver.where(~F.col("facility_id").rlike(ID_PATTERN))),
+    ("FACILITY_ID_UNIQUE", "facility_id is unique",
+     silver.groupBy("facility_id").count().where("count > 1")),
+    ("NAME_FROM_BRONZE", "Name is not NULL and equals the (trimmed) bronze name of one of its source rows",
+     chk.where(qc(COL["name"]).isNull() | ~F.array_contains("b_names", qc(COL["name"])))
+        .select("facility_id", qc(COL["name"]), "b_names")),
+    ("PINCODE_FROM_BRONZE", "PIN is NULL or appears in the bronze PIN field or address lines",
+     chk.where(F.col("pincode").isNotNull() & (F.instr("b_address_text", F.col("pincode")) == 0))
+        .select("facility_id", "pincode", "b_address_text")),
+    ("COORDS_FROM_BRONZE", "Coordinates are NULL or exactly a bronze point (or that point with lat/lon swapped back)",
+     chk.where(F.col("latitude").isNotNull() & ~matches_a_bronze_point(F.col("latitude"), F.col("longitude")))
+        .select("facility_id", "latitude", "longitude", "b_points")),
+    ("COORDS_MATCH_PIN", f"No kept coordinate is more than {PIN_MATCH_KM:.0f} km (+ the PIN's spread) from its PIN's centre",
+     silver.join(F.broadcast(pin_ref), F.col("pincode") == F.col("_ref_pin"))
+           .where(F.col("latitude").isNotNull() &
+                  (haversine_km_col(F.col("latitude"), F.col("longitude"), F.col("_ref_lat"), F.col("_ref_lon"))
+                   > F.lit(PIN_MATCH_KM) + F.col("_ref_spread")))
+           .select("facility_id", "pincode", "latitude", "longitude")),
+    ("COORDS_IN_STATE", "No kept coordinate lies outside its state's area (from the India Post directory)",
+     silver.join(F.broadcast(state_box), F.col("state") == F.col("_box_state"))
+           .where(F.col("latitude").isNotNull() & outside_state_box(F.col("latitude"), F.col("longitude")))
+           .select("facility_id", "state", "latitude", "longitude")),
+    ("STATE_FROM_BRONZE", "State is NULL, the standardized bronze state, or inferred from the PIN (state_from_pin)",
+     chk.where(F.col("state").isNotNull() & ~F.array_contains("b_states", F.col("state")) &
+               ~F.col("state").eqNullSafe(F.col("state_from_pin")))
+        .select("facility_id", "state", "state_from_pin", "b_states")),
+] + [
+    (f"{c.upper()}_FROM_BRONZE", f"{c} is NULL or its number appears in the bronze text",
+     chk.where(F.col(c).isNotNull() & (F.instr("b_numbers", F.col(c).cast("string")) == 0))
+        .select("facility_id", c, "b_numbers"))
+    for c in num_cols
+]
+run_validations(checks, "facilities_validation")
+
+# All checks passed: publish
 silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_silver")
 silver = spark.table("facilities_silver")
+spark.sql("DROP TABLE IF EXISTS _facilities_silver_check")
 
 # COMMAND ----------
 

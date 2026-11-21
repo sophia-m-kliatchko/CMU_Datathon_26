@@ -13,7 +13,21 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | `silver_facility_claims` | facility × field × claimed item | Matching a service (e.g. dialysis) and **quoting the evidence**. |
 | `silver_possible_duplicates` | suspected duplicate pair | Avoiding recommending the same place twice. |
 | `silver_dq_summary` | data-quality flag | How common each problem is (good for the presentation). |
+| `facilities_validation` | check | Silver-vs-bronze accuracy checks; all must pass or `facilities_silver` isn't overwritten. |
 | `silver_rejected_facilities` | removed record | Every record removed from silver and why (`INVALID_ID`, `NAME_MISSING`, `NAME_IS_LIST`, `NO_COORDS_OR_ADDRESS`, `UNDER_MIN_FILLED_SHARE`). |
+
+## Coordinates must match the address
+Using the India Post directory (`pincode_silver` / `pincode_centroids_silver`, built by notebook 04, **which must run first**):
+- A facility's coordinates must be within **25 km plus the PIN's own spread** of its PIN's centre point, and inside its state's area (the box around that state's post offices, padded 0.25°).
+- **If not, `latitude`/`longitude` are set to NULL.** `coord_status` becomes `nulled_pin_mismatch` or `nulled_state_mismatch`, with the matching `dq_flags`. `km_from_pin_centre` keeps the distance of the original point.
+- Also flagged (coordinates kept): `PIN_NOT_IN_DIRECTORY` (the PIN doesn't exist in the directory) and `STATE_NOT_SERVED_BY_PIN` (the PIN doesn't serve that state).
+- Local dry run (`scripts/dryrun_coordinate_checks.py`): about 1,490 facilities (~15%) lose their coordinates this way, many of them merged records (e.g. a Delhi PIN with a Puducherry point).
+
+## Validation against bronze
+Before writing, the notebook checks the new silver table against `facilities_bronze`, and stops without overwriting `facilities_silver` if anything fails (results in `facilities_validation`):
+- **Rows:** bronze rows = merged + rejected rows.
+- **Values:** every ID exists in bronze and is a UUID; IDs are unique; names, PINs, coordinates, state and numbers all come from that facility's bronze rows.
+- **Coordinate rule:** no kept coordinate breaks the PIN or state rule.
 
 ## What is removed from silver
 **Rows** (each logged in `silver_rejected_facilities`):
@@ -39,7 +53,7 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | `source_fill_share` | Share of kept source columns that are filled in (0–1). Always ≥ 0.30 in silver. |
 | original columns (`name`, `description`, `capability`…) | The source text with whitespace trimmed and "null"-like values set to NULL. **Quote these as evidence.** |
 | `latitude`, `longitude` | Coordinates checked to be inside India, with swapped lat/lon fixed (from `latitude`/`longitude`, falling back to the `coordinates` GeoJSON). NULL if the location can't be used. The raw columns are only in bronze. |
-| `coord_status` | `ok`, `swapped_fixed`, `missing`, `zero`, `outside_india` |
+| `coord_status` | `ok`, `swapped_fixed`, `missing`, `zero`, `outside_india`, `nulled_pin_mismatch`, `nulled_state_mismatch` |
 | `coords_low_precision` | Both coordinates have 2 or fewer decimal places (about ±1 km or worse, often a city-centre point). |
 | `pincode` | A valid 6-digit PIN code, or NULL. |
 | `state` | The standardized state or union territory. Taken from the reported state; if that's missing, inferred from the PIN code (`state_from_pin`). |
@@ -58,6 +72,9 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | Flag | Meaning |
 |---|---|
 | `MISSING_COORDS` / `COORDS_ZERO` / `COORDS_OUTSIDE_INDIA` | The location can't be used for distance. |
+| `COORDS_NULLED_PIN_MISMATCH` / `COORDS_NULLED_STATE_MISMATCH` | The coordinates didn't match the PIN or state, so they were set to NULL. |
+| `PIN_NOT_IN_DIRECTORY` | The PIN isn't in the India Post directory. |
+| `STATE_NOT_SERVED_BY_PIN` | The facility's state isn't one the PIN serves. |
 | `COORDS_SWAPPED_FIXED` | Latitude and longitude were swapped in the source; we swapped them back. |
 | `COORDS_LOW_PRECISION` | Coordinates are probably approximate (city-centre point). |
 | `PINCODE_MISSING_OR_INVALID` | No valid 6-digit PIN code. |

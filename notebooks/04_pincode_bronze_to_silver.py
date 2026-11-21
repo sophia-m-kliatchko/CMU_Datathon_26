@@ -11,11 +11,13 @@
 # MAGIC | `pincode_centroids_silver` | 1 row per PIN code | **Turns a user's PIN into a location**: median point of the PIN's offices, spread, main district/state |
 # MAGIC | `pincode_rejected` | 1 row per removed row | Rows removed (invalid PIN), with the reason |
 # MAGIC | `pincode_dq_summary` | 1 row per flag | How many offices carry each flag |
+# MAGIC | `pincode_validation` | 1 row per check | Silver-vs-bronze accuracy checks (all must pass) |
 # MAGIC
 # MAGIC **Main cleaning steps**
 # MAGIC * `"NA"` text becomes NULL; text is trimmed. Exact duplicate rows are collapsed (`n_listings`).
 # MAGIC * **Coordinates** (`common/coordinate_parsing`): degree signs and N/E letters removed, degree-minute-second values converted, stray spaces in decimals removed, swapped lat/lon fixed, values outside India set to NULL. `lat_how`/`lon_how` record how each value was read.
-# MAGIC * Offices more than **50 km** from their PIN's median point are flagged `COORDS_FAR_FROM_PIN` and left out of the PIN centroid.
+# MAGIC * Offices more than **50 km** from their PIN's median point **don't match their PIN: their coordinates are set to NULL** (`coord_status = nulled_far_from_pin`, flag `COORDS_NULLED_FAR_FROM_PIN`).
+# MAGIC * **Validation:** before publishing, `pincode_silver` and `pincode_centroids_silver` are checked against `pincode_bronze` (row counts, PINs, names, coordinates, state, district); results in `pincode_validation`. Any failure stops the run before the silver tables are overwritten.
 # MAGIC * **PIN ambiguity:** a PIN can span several districts or states. This is exposed (`pin_n_districts`, `pin_n_states`, `pin_ambiguous`), not "fixed".
 # MAGIC * State standardized with `common/reference_data`; district title-cased plus a join key.
 # MAGIC * In `pincode_silver`, cleaned columns have plain names (`latitude`, `longitude`, `state`, `district`, `office_name`); the raw text is in `latitude_raw`, `longitude_raw`, `statename`, `district_raw`, `officename`.
@@ -33,6 +35,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./common/validation
+
+# COMMAND ----------
+
 dbutils.widgets.text("catalog", "workspace", "1. Catalog")
 dbutils.widgets.text("schema", "datathon", "2. Schema")
 dbutils.widgets.text("source", "/Volumes/workspace/datathon/external/india_post_pincode_directory.csv",
@@ -46,7 +52,7 @@ RETRIEVED_ON = dbutils.widgets.get("retrieved_on").strip()
 spark.sql(f"USE CATALOG `{CATALOG}`")
 spark.sql(f"USE SCHEMA `{SCHEMA}`")
 
-FAR_FROM_PIN_KM = 50.0   # office further than this from its PIN's median point -> flagged, left out of the centroid
+FAR_FROM_PIN_KM = 50.0   # office further than this from its PIN's median point -> coordinates don't match the PIN -> set to NULL
 
 SOURCE_NAME = "All India Pincode Directory"
 SOURCE_PUBLISHER = "Department of Posts, Ministry of Communications, Government of India (via Open Government Data Platform India)"
@@ -154,6 +160,14 @@ df = (df
     .withColumn("coords_far_from_pin", F.col("km_from_pin_median") > FAR_FROM_PIN_KM)
     .drop("_pin_med_lat", "_pin_med_lon"))
 
+# Coordinates that don't match their PIN (over FAR_FROM_PIN_KM from the PIN's median point) are set to NULL.
+# km_from_pin_median keeps the distance of the original point, so the reason stays visible.
+far = F.coalesce(F.col("coords_far_from_pin"), F.lit(False))
+df = (df
+    .withColumn("coord_status", F.when(far, F.lit("nulled_far_from_pin")).otherwise(F.col("coord_status")))
+    .withColumn("latitude", F.when(far, F.lit(None).cast("double")).otherwise(F.col("latitude")))
+    .withColumn("longitude", F.when(far, F.lit(None).cast("double")).otherwise(F.col("longitude"))))
+
 # Deterministic office_id (stable across reloads; tie-breaker for offices sharing the natural key)
 key_cols = ["pincode", "office_name", "office_type", "district_key", "divisionname"]
 df = df.withColumn("_k", F.sha2(F.concat_ws("|", *[F.coalesce(F.col(c), F.lit("")) for c in key_cols]), 256))
@@ -164,7 +178,8 @@ df = (df.withColumn("office_id", F.substring(F.sha2(F.concat_ws("|", "_k", F.row
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 3 · Flags, citations, write `pincode_silver`
+# MAGIC ## 3 · Flags, citations, stage `pincode_silver`
+# MAGIC Written to a staging table first; it only becomes `pincode_silver` after the bronze checks in section 5 pass.
 
 # COMMAND ----------
 
@@ -176,7 +191,7 @@ FLAGS = [
     ("COORDS_SWAPPED_FIXED",        F.col("coord_status") == "swapped_fixed"),
     ("COORDS_TEXT_REPAIRED",        F.col("lat_how").isin("symbols_removed", "dms_converted", "space_removed") |
                                     F.col("lon_how").isin("symbols_removed", "dms_converted", "space_removed")),
-    ("COORDS_FAR_FROM_PIN",         F.col("coords_far_from_pin")),
+    ("COORDS_NULLED_FAR_FROM_PIN",  F.col("coords_far_from_pin")),
     ("PIN_SPANS_DISTRICTS",         F.col("pin_n_districts") > 1),
     ("PIN_SPANS_STATES",            F.col("pin_n_states") > 1),
     ("MISSING_DISTRICT",            F.col("district_raw").isNull()),
@@ -200,17 +215,15 @@ ORDER = ["office_id", "pincode", "officename", "office_name", "office_type", "of
          "officetype", "delivery", "latitude_raw", "longitude_raw", "lat_how", "lon_how", "n_listings", "source_row_ids",
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
 silver_out = silver.select(*ORDER)
-write_table(silver_out, "pincode_silver",
-            "India Post offices (All India Pincode Directory), one row per office, cleaned coordinates and PIN ambiguity. "
-            "Built by notebooks/04_pincode_bronze_to_silver.")
-silver = spark.table("pincode_silver")
-assert silver.count() == silver.select("office_id").distinct().count(), "office_id is not unique"
+assert_no_clean_columns(silver_out, "_pincode_silver_stage")
+silver_out.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_pincode_silver_stage")
+silver = spark.table("_pincode_silver_stage")
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ## 4 · `pincode_centroids_silver`: one row per PIN
-# MAGIC The centroid is the **median** latitude/longitude of the PIN's offices with usable coordinates, leaving out offices flagged `COORDS_FAR_FROM_PIN`. `main_district`/`main_state` are the ones with the most offices; all of them are listed in `districts`/`states`.
+# MAGIC The centroid is the **median** latitude/longitude of the PIN's offices with usable coordinates (offices whose coordinates didn't match their PIN were already set to NULL). `main_district`/`main_state` are the ones with the most offices; all of them are listed in `districts`/`states`.
 
 # COMMAND ----------
 
@@ -241,14 +254,77 @@ cent = cent.withColumn("row_citation", F.concat(
     F.lit("Median location of "), F.col("n_offices_used_for_centroid").cast("string"),
     F.lit(" post offices with PIN "), F.col("pincode"),
     F.lit(", India Post All India Pincode Directory, "), F.lit(SOURCE_URL), F.lit(", obtained "), F.lit(RETRIEVED_ON), F.lit(".")))
-write_table(cent, "pincode_centroids_silver",
-            "One row per PIN code: median location of its post offices (outliers over 50 km excluded), main district/state, ambiguity. "
-            "Use to turn a user PIN into coordinates. Built by notebooks/04_pincode_bronze_to_silver.")
+assert_no_clean_columns(cent, "_pincode_centroids_stage")
+cent.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_pincode_centroids_stage")
+cent = spark.table("_pincode_centroids_stage")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 5 · Rejected rows, data-quality summary
+# MAGIC ## 5 · Validation: silver must be accurate to `pincode_bronze`
+# MAGIC Every check lists the rows that break a rule; all must be empty. Results go to `pincode_validation`.
+# MAGIC If any check fails, the notebook stops here and `pincode_silver` / `pincode_centroids_silver` are **not** overwritten.
+
+# COMMAND ----------
+
+b = spark.table("pincode_bronze").select("_bronze_row_id", *[txt(c).alias(f"b_{c}") for c in EXPECTED])
+s_rows = silver.select("office_id", "pincode", "officename", "state", "district", "latitude", "longitude",
+                       "latitude_raw", "longitude_raw", "coord_status", F.explode("source_row_ids").alias("_bronze_row_id"))
+j = s_rows.join(b, "_bronze_row_id", "inner")
+reparsed = silver.withColumn("_p", fix_pair_udf(F.col("latitude_raw"), F.col("longitude_raw")))
+office_box = (silver.where("latitude IS NOT NULL").groupBy("pincode")
+              .agg(F.min("latitude").alias("_min_lat"), F.max("latitude").alias("_max_lat"),
+                   F.min("longitude").alias("_min_lon"), F.max("longitude").alias("_max_lon")))
+n_rejected = rejected.count()
+n_listed = silver.agg(F.sum("n_listings")).first()[0] or 0
+
+checks = [
+    ("ROW_RECONCILIATION", "Bronze rows = rows collapsed into silver offices + rejected rows",
+     mismatch_rows("bronze_rows", n_bronze, n_listed + n_rejected)),
+    ("ROWS_FROM_BRONZE", "Every silver office points to bronze rows that exist",
+     s_rows.join(b, "_bronze_row_id", "left_anti")),
+    ("PINCODE_FROM_BRONZE", "Silver PIN equals the bronze PIN of every source row",
+     j.where(~F.col("pincode").eqNullSafe(F.col("b_pincode")))),
+    ("OFFICE_NAME_FROM_BRONZE", "Silver office name equals the bronze office name",
+     j.where(~F.col("officename").eqNullSafe(F.col("b_officename")))),
+    ("COORD_TEXT_FROM_BRONZE", "latitude_raw / longitude_raw equal the bronze text",
+     j.where(~F.col("latitude_raw").eqNullSafe(F.col("b_latitude")) | ~F.col("longitude_raw").eqNullSafe(F.col("b_longitude")))),
+    ("COORDS_FROM_BRONZE", "Silver latitude/longitude are NULL or exactly the parsed bronze values",
+     reparsed.where(F.col("latitude").isNotNull() &
+                    ~(same_number(F.col("latitude"), F.col("_p.latitude")) & same_number(F.col("longitude"), F.col("_p.longitude"))))
+             .drop("_p")),
+    ("COORDS_MATCH_PIN", f"No kept coordinate is more than {FAR_FROM_PIN_KM:.0f} km from its PIN's median point",
+     silver.where(F.col("latitude").isNotNull() & (F.col("km_from_pin_median") > FAR_FROM_PIN_KM))),
+    ("STATE_FROM_BRONZE", "Silver state is NULL or the standardized bronze state",
+     j.where(~F.col("state").eqNullSafe(state_from_text(F.col("b_statename"))))),
+    ("DISTRICT_FROM_BRONZE", "Silver district is the bronze district, title-cased",
+     j.where(~F.col("district").eqNullSafe(F.initcap(F.lower(F.col("b_district")))))),
+    ("OFFICE_ID_UNIQUE", "office_id is unique",
+     silver.groupBy("office_id").count().where("count > 1")),
+    ("CENTROID_PIN_EXISTS", "Every centroid PIN exists in the office table",
+     cent.select("pincode").join(silver.select("pincode").distinct(), "pincode", "left_anti")),
+    ("CENTROID_INSIDE_OFFICES", "Each PIN centroid lies within the box around that PIN's kept office coordinates",
+     cent.where("latitude IS NOT NULL").join(office_box, "pincode", "left")
+         .where(~F.col("latitude").between(F.col("_min_lat"), F.col("_max_lat")) |
+                ~F.col("longitude").between(F.col("_min_lon"), F.col("_max_lon")) | F.col("_min_lat").isNull())),
+]
+run_validations(checks, "pincode_validation")
+
+# All checks passed: publish
+write_table(silver, "pincode_silver",
+            "India Post offices (All India Pincode Directory), one row per office. Coordinates that don't match their PIN are NULL. "
+            "Validated against pincode_bronze (see pincode_validation). Built by notebooks/04_pincode_bronze_to_silver.")
+write_table(cent, "pincode_centroids_silver",
+            "One row per PIN code: median location of its post offices, main district/state, ambiguity. "
+            "Use to turn a user PIN into coordinates. Built by notebooks/04_pincode_bronze_to_silver.")
+silver = spark.table("pincode_silver")
+spark.sql("DROP TABLE IF EXISTS _pincode_silver_stage")
+spark.sql("DROP TABLE IF EXISTS _pincode_centroids_stage")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## 6 · Rejected rows, data-quality summary
 
 # COMMAND ----------
 
@@ -264,8 +340,8 @@ dq.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("pincod
 COLUMN_COMMENTS = {
     "office_id": "Deterministic key (hash of PIN, office name, type, district, division), stable across reloads.",
     "latitude": "Parsed, validated latitude (inside India, swaps fixed). NULL if unusable.",
-    "coord_status": "ok | swapped_fixed | missing | unparseable | zero | out_of_range",
-    "km_from_pin_median": "Distance from the median point of offices sharing this PIN.",
+    "coord_status": "ok | swapped_fixed | missing | unparseable | zero | out_of_range | nulled_far_from_pin",
+    "km_from_pin_median": "Distance of the original point from the median point of offices sharing this PIN. Over 50 km -> coordinates set to NULL.",
     "pin_ambiguous": "True if this PIN spans more than one district or state. Join on PIN with care.",
 }
 for c, comment in COLUMN_COMMENTS.items():
