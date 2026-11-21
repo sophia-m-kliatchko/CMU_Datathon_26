@@ -1,0 +1,16 @@
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Raw and generated datasets
+data/processed/
+
+# Agent runtime output
+shared/runs/
+shared/handoffs/
+
+# Local secrets
+.env
+.env.*
