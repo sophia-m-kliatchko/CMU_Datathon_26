@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:17: `address_line1/2/3` removed from `facilities_silver`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`: the final select leaves out the three address-line columns, the header text is updated, and the address spot-check SQL now joins to `facilities_bronze` for the original lines.
+  - `docs/silver-tables.md`: dropped-columns list and watch-out 22.
+- **How:** a `REPLACED_BY_PARSED` list removes them only in the last step, because the lines are still needed earlier, for address parsing and for the `NO_COORDS_OR_ADDRESS` rule.
+- **Why:** Sophia: once `address_full` and the split `address_street` / `address_region` / `address_landmark` exist, the raw lines are redundant in silver. They remain in `facilities_bronze` for exact quoting.
+- **Notes / follow-ups:** `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are still in silver next to `city_clean`, `state_clean` and `pincode_clean`; they could be removed the same way if wanted. Notebook 01 is still unverified on Databricks; the last run there appears to have stopped before section 5.
+
 ### 2026-11-21 16:03: PIN directory notebook producing `pincode_*` tables
 - **Who:** Claude (for Sophia)
 - **What:**

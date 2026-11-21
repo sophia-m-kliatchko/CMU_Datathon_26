@@ -21,7 +21,7 @@
 # MAGIC
 # MAGIC **Columns dropped from silver** (still in `facilities_bronze`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
 # MAGIC
-# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`.
+# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`. The original `address_line1/2/3` are **not** carried into silver (they stay in `facilities_bronze`).
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -824,7 +824,10 @@ FRONT = ["facility_id", COL["name"], "address_full", "address_street", "address_
          "pincode_variants", "dup_coord_spread_km", "states_mentioned_in_text", "description_all"]
 FRONT = list(dict.fromkeys(FRONT))  # keep order, drop repeats
 internal = [c for c in silver.columns if c.startswith("_") and c not in META_COLS]
-rest = [c for c in silver.columns if c not in FRONT and c not in internal]
+# address_line1/2/3 are replaced by address_street / address_region / address_landmark / address_full.
+# They were still used above (address parsing, the NO_COORDS_OR_ADDRESS rule); the originals stay in facilities_bronze.
+REPLACED_BY_PARSED = [COL[k] for k in ["line1", "line2", "line3"] if COL.get(k)]
+rest = [c for c in silver.columns if c not in FRONT and c not in internal and c not in REPLACED_BY_PARSED]
 silver = silver.select(*[qc(c) for c in FRONT + rest])
 
 silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_silver")
@@ -963,7 +966,8 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- Spot-check the reorganized addresses against the original lines
-# MAGIC SELECT name, address_line1, address_line2, address_line3,
-# MAGIC        address_street, address_region, address_landmark, city_clean, state_clean, pincode_clean
-# MAGIC FROM facilities_silver TABLESAMPLE (30 ROWS)
+# MAGIC -- Spot-check the reorganized addresses against the original lines (which only bronze still has)
+# MAGIC SELECT s.name, b.address_line1, b.address_line2, b.address_line3,
+# MAGIC        s.address_street, s.address_region, s.address_landmark, s.city_clean, s.state_clean, s.pincode_clean
+# MAGIC FROM (SELECT * FROM facilities_silver TABLESAMPLE (30 ROWS)) s
+# MAGIC JOIN facilities_bronze b ON lower(trim(b.unique_id)) = s.facility_id
