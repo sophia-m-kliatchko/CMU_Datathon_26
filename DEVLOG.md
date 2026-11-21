@@ -22,6 +22,25 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 14:45: Scripts to turn outside quality datasets into CSVs (NQAS website, Kayakalp PDF)
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `scripts/scrape_nqas.py`, `scripts/kayakalp_pdf_to_csv.py` and `scripts/README.md` (includes how to upload to Databricks).
+  - New `data/external/kayakalp_2021_22.csv` (1,197 rows).
+  - `CLAUDE.md` layout updated.
+- **How:**
+  - **NQAS:** standard-library Python scraper for qps.nhsrcindia.org (10 rows per page; "full" and "partial" certification lists), with a 0.5 s delay between requests.
+  - **Kayakalp:** `pdfplumber` table extraction from Sophia's downloaded PDF. pdfplumber was installed with pip; the PDF is locked against editing but readable.
+- **Why:** Sophia wants these quality signals (government quality certification, Kayakalp cleanliness and infection-control awards) as CSVs to upload to Databricks and match against our facilities. Findings and decisions:
+  - **The NQAS site's paging is unstable.** A simple page-by-page walk gave 994 rows with 122 repeats, meaning other rows were silently skipped. The script now splits queries by state, then district, until each query's unique rows match the count the site reports.
+  - **The NQAS list looks like an old snapshot.** In the first pass every certificate expired between 2019 and 2023, and the list has about 1k rows versus about 21k certified facilities on the NHSRC dashboard. Treat it as historical, and look for a current source.
+  - **Kayakalp:** in 17 rows, long district names spilled into the State column, garbling it (e.g. "aGrUJARAT"). Because the state's letters stay in order, the script recovers the state and moves the leftover letters back to the district. Those rows are flagged `district_repaired`.
+  - **Award rank and category** (Kayakalp vs Eco-friendly) are parsed into separate columns; the raw text is kept.
+- **Notes / follow-ups:**
+  - The full NQAS scrape was still running at commit time, so its CSV will follow in a later commit.
+  - The PDF itself is not committed; only the CSV is.
+  - Kayakalp covers public facilities only (PHC, HWC, UPHC, CHC, DH). Matching to Virtue Foundation facilities is still to do.
+
 ### 2026-11-21 14:10: Listed outside datasets for checking care quality, with links
 - **Who:** Claude (for Sophia)
 - **What:** Added the section "Outside datasets for checking care quality and reliability" to `docs/dataset-notes.md`, with about 25 sources in four groups (priority 1, specific services, existence and location, context) and links.

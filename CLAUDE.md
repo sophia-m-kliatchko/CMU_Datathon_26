@@ -8,6 +8,8 @@ CMU Datathon Fall 2026, "Find the right care": given a medical service and a loc
 
 ## Layout
 - `notebooks/`: Databricks notebooks (source `.py` format). `01_bronze_to_silver.py` builds the bronze/silver tables.
+- `scripts/`: local Python scripts that fetch or convert outside datasets (see `scripts/README.md`).
+- `data/external/`: CSVs those scripts produce, for upload to Databricks.
 - `docs/`: dataset notes (`dataset-notes.md`) and the silver-table reference with filtering watch-outs (`silver-tables.md`).
 
 ## Change logging (required)
