@@ -1,31 +1,51 @@
 # Silver Tables: What They Contain and How to Use Them Safely
 
+> **Naming rule:** a column being in a silver table means it is clean, so cleaned columns have plain names (`state`, `pincode`, `latitude`…) with no `_clean` suffix. Raw versions they replace are kept only in the bronze table.
+
 Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_catalog>.<target_schema>`, which defaults to `workspace.datathon`.
 
 ## Tables
 
 | Table | One row per | Use it for |
 |---|---|---|
-| `bronze_facilities` | source row | Raw copy of the Marketplace table. Control characters such as NUL bytes are removed, nothing else is changed. |
-| `silver_facilities` | facility (`facility_id`) | Everything: filtering, distance, scoring, display. |
+| `facilities_bronze` | source row | Raw copy of the Marketplace table. Control characters such as NUL bytes are removed, nothing else is changed. |
+| `facilities_silver` | facility (`facility_id`) | Everything: filtering, distance, scoring, display. |
 | `silver_facility_claims` | facility × field × claimed item | Matching a service (e.g. dialysis) and **quoting the evidence**. |
 | `silver_possible_duplicates` | suspected duplicate pair | Avoiding recommending the same place twice. |
 | `silver_dq_summary` | data-quality flag | How common each problem is (good for the presentation). |
+| `silver_rejected_facilities` | removed record | Every record removed from silver and why (`INVALID_ID`, `NAME_MISSING`, `NAME_IS_LIST`, `NO_COORDS_OR_ADDRESS`, `UNDER_MIN_FILLED_SHARE`). |
 
-## Key columns in `silver_facilities`
+## What is removed from silver
+**Rows** (each logged in `silver_rejected_facilities`):
+1. `unique_id` is not a UUID. In the raw file these are fragments of other records, created where a description had line breaks and the rest of the row spilled into new rows with shifted columns. There are 88 in `data/raw/facilities.csv`, and they include every blank or list-shaped name.
+2. Name is missing, or is a list of strings.
+3. No usable coordinates and no address at all.
+4. Fewer than 30% of the kept source columns are filled in (`source_fill_share < 0.30`).
+
+**Columns** (still in `facilities_bronze` if you need them): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
+
+**Raw address columns, replaced by cleaned ones:** `address_line1/2/3` → `address_full`/`address_street`/`address_region`/`address_landmark`, `address_city` → `city`, `address_stateOrRegion` → `state`, `address_zipOrPostcode` → `pincode`. The raw columns are dropped from silver. **If a value can't be standardized, the cleaned column is left NULL**: e.g. "Mumbai" typed in the state field gives `state = NULL` with the `STATE_UNRECOGNIZED` flag, and a broken PIN like "56" gives `pincode = NULL` with `PINCODE_MISSING_OR_INVALID`. The originals stay in `facilities_bronze`.
+
+## Key columns in `facilities_silver`
 
 | Column | Meaning |
 |---|---|
-| `facility_id` | Source `unique_id`, after merging rows that shared it. A `gen_…` value means the source had no ID and one was generated. |
+| `facility_id` | Source `unique_id` (always a UUID, lower case), after merging rows that shared it. |
+| `address_full` | Formatted address: street, region, city, state PIN. Use this for display. |
+| `address_street` | House/plot/building number plus street, road or lane ("#422, 1st Floor, 27th Main Road"). |
+| `address_region` | Locality, neighbourhood, sector or area ("Hsr Layout, Sector-1"). |
+| `address_landmark` | Directions ("Next To Icici Bank; Near Byculla Station"). |
+| `pincode_from_address_text` | True if the PIN field was invalid and `pincode` was found inside the address lines. |
+| `source_fill_share` | Share of kept source columns that are filled in (0–1). Always ≥ 0.30 in silver. |
 | original columns (`name`, `description`, `capability`…) | The source text with whitespace trimmed and "null"-like values set to NULL. **Quote these as evidence.** |
-| `latitude_clean`, `longitude_clean` | Coordinates checked to be inside India, with swapped lat/lon fixed. NULL if the location can't be used. |
+| `latitude`, `longitude` | Coordinates checked to be inside India, with swapped lat/lon fixed (from `latitude`/`longitude`, falling back to the `coordinates` GeoJSON). NULL if the location can't be used. The raw columns are only in bronze. |
 | `coord_status` | `ok`, `swapped_fixed`, `missing`, `zero`, `outside_india` |
 | `coords_low_precision` | Both coordinates have 2 or fewer decimal places (about ±1 km or worse, often a city-centre point). |
-| `pincode_clean` | A valid 6-digit PIN code, or NULL. |
-| `state_clean` | The standardized state or union territory. Taken from the reported state; if that's missing, inferred from the PIN code (`state_from_pin`). |
+| `pincode` | A valid 6-digit PIN code, or NULL. |
+| `state` | The standardized state or union territory. Taken from the reported state; if that's missing, inferred from the PIN code (`state_from_pin`). |
 | `pin_state_consistent` | Whether the reported state fits the PIN prefix. NULL if either is missing. |
-| `city_clean` | Title-cased city name, with old names replaced by current ones (Bombay → Mumbai, Bangalore → Bengaluru…). |
-| `year_established_clean`, `num_doctors_clean`, `capacity_clean` | Numbers; implausible values are set to NULL. |
+| `city` | Title-cased city name, with old names replaced by current ones (Bombay → Mumbai, Bangalore → Bengaluru…). |
+| `year_established`, `num_doctors`, `capacity` | Numbers; implausible values are set to NULL. (The raw `yearEstablished`, `numberDoctors` and `capacity` text are only in bronze.) |
 | `n_specialties`, `n_capability`, `n_procedure`, `n_equipment`, `n_service_claims` | How many items each list contains. |
 | `completeness_score` | 0–1: the share of 13 key fields that are filled in. |
 | `dq_flags`, `dq_flag_count` | Data-quality issue codes (see below). |
@@ -37,11 +57,12 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 
 | Flag | Meaning |
 |---|---|
-| `MISSING_NAME` | No facility name. |
 | `MISSING_COORDS` / `COORDS_ZERO` / `COORDS_OUTSIDE_INDIA` | The location can't be used for distance. |
 | `COORDS_SWAPPED_FIXED` | Latitude and longitude were swapped in the source; we swapped them back. |
 | `COORDS_LOW_PRECISION` | Coordinates are probably approximate (city-centre point). |
 | `PINCODE_MISSING_OR_INVALID` | No valid 6-digit PIN code. |
+| `PINCODE_FROM_ADDRESS_TEXT` | The PIN code came from the address text, not the PIN field. |
+| `ADDRESS_NO_STREET` | No street-level address could be parsed, only locality or city. |
 | `STATE_UNRECOGNIZED` | We couldn't work out the state (it was missing or unreadable, and the PIN didn't settle it). |
 | `STATE_INFERRED_FROM_PIN` | The state came from the PIN code, not from the record. |
 | `PIN_STATE_MISMATCH` | The reported state and the PIN prefix disagree, so one of them is wrong. |
@@ -50,7 +71,7 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | `DUPLICATE_ID_MERGED` | Several source rows shared this ID and were merged. |
 | `DUP_ROWS_COORD_CONFLICT` / `DUP_ROWS_STATE_CONFLICT` / `DUP_ROWS_PINCODE_CONFLICT` | The merged rows disagreed on location, so this may be two different places. |
 | `TEXT_MENTIONS_MULTIPLE_STATES` | The name or description mentions 2 or more states. Possibly a merged record or a chain. |
-| `TEXT_STATE_DIFFERS` | The text mentions a state that isn't `state_clean`. |
+| `TEXT_STATE_DIFFERS` | The text mentions a state that isn't `state`. |
 | `POSSIBLE_NEAR_DUPLICATE` | Another facility ID looks like the same place. |
 
 ---
@@ -59,7 +80,7 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 
 ### Lists and missing values
 1. **Lists are never NULL; they're empty.** Use `size(capability) > 0` or `n_capability > 0`, never `capability IS NOT NULL`, which is always true.
-2. **Missing doesn't mean zero.** Year established, number of doctors and beds are missing for 50–75% of facilities. Don't treat a missing value as 0 in a score, and don't filter on `capacity_clean > 50` unless you're happy to drop three-quarters of the data. Treat missing values as "unknown" and say so.
+2. **Missing doesn't mean zero.** Year established, number of doctors and beds are missing for 50–75% of facilities. Don't treat a missing value as 0 in a score, and don't filter on `capacity > 50` unless you're happy to drop three-quarters of the data. Treat missing values as "unknown" and say so.
 3. **Don't treat `completeness_score` as quality.** A well-documented facility isn't necessarily a better one. Use it to express *confidence*, not *rank*.
 
 ### Service matching
@@ -71,10 +92,10 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 9. **The equipment list backs up claims.** A dialysis claim plus "dialysis machine" in `equipment` is stronger than the claim alone.
 
 ### Location and distance
-10. **Use `latitude_clean`/`longitude_clean`, never the raw columns.** Raw columns may hold swapped, zero or out-of-India values.
-11. **When `latitude_clean` is NULL, don't silently drop the facility.** Decide deliberately: fall back to a PIN-code centroid, or show it as "location unknown".
+10. **`latitude`/`longitude` in silver are already validated.** The raw values (which may be swapped, zero or outside India) are only in `facilities_bronze`.
+11. **When `latitude` is NULL, don't silently drop the facility.** Decide deliberately: fall back to a PIN-code centroid, or show it as "location unknown".
 12. **Low-precision coordinates (`coords_low_precision`) can be ±1 km or more.** Many facilities may share one city-centre point, so treat small distance differences as ties.
-13. **Filter on `state_clean`, distance or PIN code, not on city text.** City spellings vary even after cleaning (the alias list only covers common renames), and the city field is self-reported.
+13. **Prefer filtering on `state`, distance or PIN code over `city`.** City spellings vary even after cleaning (the alias list only covers common renames), and the city field is self-reported.
 14. **`STATE_INFERRED_FROM_PIN` and `PIN_STATE_MISMATCH` mean the location is uncertain.** Say so to the user.
 
 ### Duplicates
@@ -89,5 +110,6 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 ### Running it as a team
 20. **Re-run the notebook; don't edit silver tables by hand.** Every run overwrites all tables.
 21. **Each teammate has their own workspace and tables.** Results only match if everyone runs the same notebook version from the same branch.
-22. **Generated IDs (`gen_…`) can change** if the facility's name, PIN or coordinates change in the source. Don't hard-code them.
+22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). The raw address columns are not in silver; when exact wording matters, join to `facilities_bronze` on `lower(trim(unique_id)) = facility_id`.
+24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `facilities_bronze` on `unique_id`.
 23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.
