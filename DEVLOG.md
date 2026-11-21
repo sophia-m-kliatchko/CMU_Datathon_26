@@ -22,6 +22,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:23: Scraped National Cancer Grid members; blood bank directory blocked
+- **Who:** Claude (for William)
+- **What:** New `scrapers/ncg_members.py`, new `docs/ncg-members.md`, and new `datasets/external/ncg_bronze/ncg_members_bronze.csv` (421 rows). The raw HTML fragments are in `raw/`, which is git-ignored. `docs/dataset-notes.md` gets a new NCG row and a note on the blood bank blocker.
+- **How:**
+  - NCG members: the ncgindia.org member page loads its table from `/hospitalsandinstitutions/_index`; robots.txt allows everything. The script made 5 requests, 1 s apart: all Indian members, then one per member type to label them. It takes the PIN code from each address and maps states to the silver names.
+  - Blood banks: AIKosh's page only links to `info.nhp.gov.in/api/blood-banks.csv` (GODL licence). That host doesn't connect from here, AIKosh has no direct download, and its API returns 403.
+  - tmc.gov.in/ncg is behind a firewall that rejects scripted requests. It wasn't worked around; the official ncgindia.org was used instead.
+- **Why:** William asked for the next dataset. The blood bank directory was first in line but is blocked, so the next reachable source was used. NCG cancer centres give evidence for cancer care and partly cover the blocked AERB radiotherapy list. Decisions:
+  - Only the `cancer_centre` type is tagged `cancer_care`.
+  - Membership is rated medium strength: it isn't a licence or an inspection.
+- **Notes / follow-ups:**
+  - Blood bank directory: needs an Indian connection, or a download by hand from AIKosh or data.gov.in.
+  - NCG: not yet matched to `silver_facilities`. Use PIN + name.
+
 ### 2026-11-21 16:18: ANBAI and NMC scrapers now write to the bronze names
 - **Who:** Claude (for William)
 - **What:**
