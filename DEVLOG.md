@@ -22,6 +22,29 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:20: NQAS and Kayakalp bronze → silver notebooks; data-citation rule and `docs/data-sources.md`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/02_nqas_bronze_to_silver.py` (`nqas_bronze` → `nqas_silver`) and `notebooks/03_kayakalp_bronze_to_silver.py` (`kayakalp_bronze` → `kayakalp_silver`).
+  - New shared helper `notebooks/common/reference_data.py`: states, name cleaning, facility-type patterns, provenance.
+  - New `docs/data-sources.md`: citations for every table.
+  - `CLAUDE.md`: new "Data citations (required)" rule and updated layout.
+  - `scripts/README.md`: bronze upload steps.
+  - Re-ran `scripts/scrape_nqas.py`: 989 rows, identical to the committed CSV.
+- **How:** PySpark + SQL Databricks notebooks that load the shared helper with `%run ./common/reference_data`. Local Python syntax check only. The facility-type patterns were tested in plain Python on the real CSV names, which led to adding FHC (Kerala Family Health Centre), GH (General Hospital) and taluk hospital patterns.
+- **Why:** Sophia asked for bronze → silver scripts for both outside tables, and for every scraped or assembled table to have citations in GitHub. Design decisions:
+  - **Grain:** `nqas_silver` has one row per certification listing; `kayakalp_silver` has one row per award. A facility can have several of each, so they are not collapsed to one row per facility.
+  - **Citations:** every row carries citation columns, including a ready-to-quote `row_citation`. For Kayakalp this gives the PDF page and S.No, which meets the challenge rule to cite the underlying text.
+  - **NQAS status:** `certification_status` is computed from the run date. All listings are expired, so `CERTIFICATION_EXPIRED` is expected on every row.
+  - **Kayakalp district field:** the last comma-separated part becomes `district_clean` and the rest `locality`, because some states wrote "village, block, district".
+  - **Duplicates:** exact duplicate NQAS listings are collapsed, with the count kept in `n_listings`. Possible duplicate Kayakalp awards are only flagged.
+  - **Matching:** `name_norm` / `name_core` follow the normalization in notebook 01. `name_core` drops facility-type words so "PHC Majri" can match "Majri Primary Health Centre".
+- **Notes / follow-ups:**
+  - **Not yet run on Databricks.**
+  - The Kayakalp PDF's download URL is unknown. Sophia to supply it for `docs/data-sources.md` and notebook 03's `source_url` widget.
+  - JhK830 to confirm the source and date of the PIN and NFHS-5 files in `data/raw/`.
+  - Notebook 01 still has its own copy of the state lookup; consider switching it to `common/reference_data`.
+
 ### 2026-11-21 15:30: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
 - **Who:** Claude (for Sophia)
 - **What:**
