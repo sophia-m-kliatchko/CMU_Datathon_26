@@ -22,6 +22,50 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:07: Built the LaQshya maternity certification dataset
+- **Who:** Claude (for William)
+- **What:** New `scrapers/nhsrc_laqshya.py`, new `docs/laqshya.md`, and new outputs in `datasets/external/laqshya_bronze/`:
+  - `laqshya_certifications_bronze.csv` (2,173 rows)
+  - `laqshya_facilities_bronze.csv` (1,343 rows)
+
+  The source PDF is in `raw/`, which is git-ignored. Updated the LaQshya row in `docs/dataset-notes.md`. Installed `pdfplumber` (0.11.11) with `pip install pdfplumber`.
+- **How:**
+  - Downloaded the NHSRC "LaQshya Master data" PDF dated 2026-04-08, a public government document. The site's robots.txt returns "forbidden", so it sets no rules.
+  - Read the table with `pdfplumber`, which follows the grid lines; that's the only way to tell the Certified and Conditional columns apart.
+  - Repaired cells where text overflows into the next column and the letters interleave:
+    - 129 type/district cells, with a rule that reads the type code in order within the cell;
+    - state overflow;
+    - 3 department cells;
+    - 9 facility names fixed by hand.
+
+    Every repair is flagged, and the raw values are kept.
+  - Rolled certifications up to facilities, and checked validity against the build date.
+  - Validation: serials 1–2,173 complete and unique, all dates parsed, all states mapped.
+- **Why:** William picked LaQshya as the next outside source. A certified maternity OT is direct government evidence of C-section capability, which also covers the FRU gap. Decisions:
+  - Expired certifications are kept, with two strengths: valid now, or had the capability. Only 200 of the 901 maternity OT facilities are currently valid, and dropping the rest would throw away real evidence.
+  - Conditional certifications are kept and flagged.
+  - Rows with no department are never counted as C-section evidence.
+- **Notes / follow-ups:** Not yet matched to `silver_facilities`. Match on state + district, then fuzzy name.
+
+### 2026-11-21 15:27: Built the trauma care facilities dataset from a Rajya Sabha answer
+- **Who:** Claude (for William)
+- **What:** New `scrapers/mohfw_trauma_centres.py`, new `docs/trauma-care-facilities.md`, and new `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv` (196 rows). The source PDF is in `raw/`, which is git-ignored. Updated the trauma centres row in `docs/dataset-notes.md`. Installed `pypdf` (7.1.1) on William's machine with `pip install pypdf`.
+- **How:**
+  - Downloaded Rajya Sabha Unstarred Q. 2048 (10 Mar 2026), a public Parliament PDF; sansad.in has no robots.txt.
+  - Read Annexure-I with `pypdf`, grouped the lines into rows by serial number, and carried the merged state cells forward across page breaks.
+  - Took the trauma level (I/II/III) from the end of each row.
+  - Added a hand-checked `place` column (corrected spellings, current names) and a keyword-based `facility_type`.
+  - The script refuses to write output unless it finds 196 rows, each with a state, level and place.
+- **Why:** William wanted outside evidence for trauma and emergency care. These are the government's designated Level I–III trauma facilities. Decisions:
+  - The printed name is kept unchanged (typos included) for quoting.
+  - Corrected place names go in a separate column, to help matching.
+  - Every row is marked `sanctioned`, because the answer doesn't confirm which facilities are functional.
+  - The output is bronze, following William's convention.
+- **Notes / follow-ups:**
+  - Not yet matched to `silver_facilities`.
+  - Many Level I/II facilities are medical colleges that can be cross-linked to the NMC data.
+  - The FRU list is still open: no facility-level source has been found yet.
+
 ### 2026-11-21 15:14: Renamed scraped datasets to bronze
 - **Who:** William (renamed the files), Claude (logged and committed)
 - **What:**
