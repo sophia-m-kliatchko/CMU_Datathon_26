@@ -22,6 +22,22 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 17:12: Data-source citations for William's scraped datasets
+- **Who:** Claude (for William)
+- **What:** `docs/data-sources.md` gets five summary rows and entries 6–10:
+  - DNB/ANBAI
+  - NMC colleges and courses
+  - MoHFW trauma care facilities
+  - LaQshya
+  - National Cancer Grid
+
+  Each has the publisher, URL, retrieval date, licence or terms, processing chain, limitations, "cite as" line and per-row citation columns.
+- **How:** Wrote the entries from the scraper docs (`docs/anbai-dnb.md`, `nmc-colleges.md`, `trauma-care-facilities.md`, `laqshya.md`, `ncg-members.md`), following the file's template. Checked that each cited column exists in its CSV.
+- **Why:** CLAUDE.md (merged from main) requires a citation entry for every outside dataset. These five were committed before that rule reached this branch. Notes:
+  - **NABH** gets its entry in the same commit as its data; its download is still running.
+  - **NCG:** the site footer says "All rights reserved", so the entry asks the team to check with the organizers before redistributing it outside the datathon.
+  - **NMC:** the entry records that personal staff contacts were dropped.
+
 ### 2026-11-21 17:08: Merged `main` into `Will_branch`
 - **Who:** Claude (for William)
 - **What:** Merged `origin/main` (26 commits, up to b5aba4d) into `Will_branch`. It brings in:
