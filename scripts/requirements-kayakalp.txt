@@ -1,0 +1,4 @@
+# Local audit/test environment used for this handoff (Python 3.10, Java 17).
+pdfplumber==0.11.10
+pyspark==4.2.1
+pytest==9.2.0

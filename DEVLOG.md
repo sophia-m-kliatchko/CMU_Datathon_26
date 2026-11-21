@@ -22,6 +22,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 16:13: Isolated Kayakalp validation and integration handoff
+- **Who:** Codex (for Alice), with independent Claude CLI analysis/review.
+- **What:** notebook 03 validation/write guards (default target now `kayakalp_silver_validation`, writing disabled), two PDF-verified Silver district spacing fixes and uncertainty flags; `scripts/validate_kayakalp.py`, local requirements, regression tests, and `docs/kayakalp-validation-handoff.md`; source/table docs linked.
+- **How:** fetched origin, isolated `codex/kayakalp-validation` from `eb813a7`; reproduced all 1,197 PDF awards and audited raw cells, Poppler page renders and old/new local Spark transforms. Used existing orchestration/direct read-only Claude CLI. Results and limitations are in the handoff and `shared/runs/kayakalp-validation/`.
+- **Why:** preserve all awards and provenance while making validation repeatable and preventing writes before validation or shared-table overwrites. No shared schema/ID changes, source edits, Databricks execution or push.
+- **Notes / follow-ups:** Elliot owns geographic matching; unresolved health jurisdictions, type conflicts and duplicate candidates stay flagged. Notion token unavailable. Review/test status is recorded in the handoff after execution.
+
 ### 2026-11-21 15:47: Corrected DEVLOG timestamps
 - **Who:** Claude (for Sophia)
 - **What:** the times in the headings of the entries from 12:28 to 15:45 in this file.

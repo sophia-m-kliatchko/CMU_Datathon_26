@@ -40,7 +40,12 @@ Items marked **⚠ TODO** still need information from the person who added the d
 - **Per-row citation:** the `row_citation` column in `nqas_silver`.
 
 ## 3. Kayakalp Winner Facilities, FY 2021-22
-- **What:** 1,197 public facilities that won Kayakalp awards (cleanliness, hygiene and infection control) in FY 2021-22, including Eco-friendly awards.
+
+### Kayakalp validation handoff (2026-11-21)
+
+See [validation and integration handoff](kayakalp-validation-handoff.md) for reproducible PDF/CSV checks, two page-10 spacing repairs, unchanged award-level schema, additional uncertainty flags, local Spark results and sandbox-first Databricks instructions. Notebook 03 now defaults to validation only and can create new tables without overwriting existing targets. Source PDF and Bronze CSV remain unchanged.
+
+- **What:** 1,197 public-facility award records (not necessarily distinct facilities) for Kayakalp (cleanliness, hygiene and infection control) in FY 2021-22, including Eco-friendly awards.
 - **Publisher:** National Health Systems Resource Centre (NHSRC), Ministry of Health and Family Welfare, Government of India (Kayakalp Award Scheme).
 - **Where:**
   - Landing page: [List of Kayakalp winner facilities (NHSRC)](https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF)

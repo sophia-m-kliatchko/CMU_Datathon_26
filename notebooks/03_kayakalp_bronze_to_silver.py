@@ -27,7 +27,8 @@
 dbutils.widgets.text("catalog", "workspace", "1. Catalog")
 dbutils.widgets.text("schema", "datathon", "2. Schema")
 dbutils.widgets.text("bronze_table", "kayakalp_bronze", "3. Bronze table")
-dbutils.widgets.text("silver_table", "kayakalp_silver", "4. Silver table")
+dbutils.widgets.text("silver_table", "kayakalp_silver_validation", "4. New validation table")
+dbutils.widgets.dropdown("write_output", "false", ["false", "true"], "6. Create NEW output table")
 # Official PDF link, from the NHSRC page "List of Kayakalp winner facilities"
 # (https://qps.nhsrcindia.org/kayakalp-swachh-swasth-sarvatra/quality-LOKWF). See docs/data-sources.md.
 dbutils.widgets.text(
@@ -41,9 +42,14 @@ SCHEMA = dbutils.widgets.get("schema").strip()
 BRONZE = dbutils.widgets.get("bronze_table").strip()
 SILVER = dbutils.widgets.get("silver_table").strip()
 SOURCE_URL = dbutils.widgets.get("source_url").strip() or None
+WRITE_OUTPUT = dbutils.widgets.get("write_output") == "true"
+# Identifiers are interpolated below; accept only simple catalog/schema/table names.
+import re
+assert all(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", x) for x in (CATALOG, SCHEMA, BRONZE, SILVER)), "Use simple SQL identifiers"
 spark.sql(f"USE CATALOG `{CATALOG}`")
 spark.sql(f"USE SCHEMA `{SCHEMA}`")
 
+# Stable test/export markers: SOURCE_NAME, bronze read, pre-write validation, and final view read.
 SOURCE_NAME = "Kayakalp Winner Facilities of FY 2021-22 (PDF)"
 SOURCE_PUBLISHER = "National Health Systems Resource Centre (NHSRC), Ministry of Health and Family Welfare, Government of India (Kayakalp Award Scheme)"
 SOURCE_LICENSE = "Government publication. No explicit open-data licence found; cite MoHFW/NHSRC as the source."
@@ -103,8 +109,14 @@ df = bronze.select(
 
 # District column: "village, block, district" -> district = last part, locality = the rest
 parts = F.filter(F.transform(F.split(F.col("district_raw"), ","), lambda x: F.trim(x)), lambda x: x != "")
-last_part = F.element_at(parts, -1)
+last_part = F.try_element_at(parts, F.lit(-1))
 district = F.trim(F.regexp_replace(last_part, r"(?i)\s+health\s+district$", ""))
+# PDF p.10, S.No 607/608: spill reconstruction joined the district's final words.
+# Exact text replacements only; retain district_raw and flag the two verified repairs.
+spacing_repair = (F.col("state_pdf") == "Meghalaya") & last_part.isin("North Garohills", "East Khasihills")
+district = (F.when(spacing_repair & (last_part == "North Garohills"), F.lit("North Garo Hills"))
+            .when(spacing_repair & (last_part == "East Khasihills"), F.lit("East Khasi Hills"))
+            .otherwise(district))
 
 silver = (df
     .withColumn("award_id", F.concat_ws("-", F.lit("kayakalp"), F.col("financial_year"), F.col("s_no").cast("string")))
@@ -119,7 +131,8 @@ silver = (df
     .withColumn("name_core", name_core(F.col("facility_name")))
 )
 
-# Same facility listed twice for the same award category = likely a PDF duplicate (flagged, not removed)
+# Same name/geography/category marks a review candidate, including cross-type awards.
+# It does not establish a duplicate facility or award; no records are removed.
 from pyspark.sql import Window
 w = Window.partitionBy("financial_year", "award_category", "name_norm", "district_clean", "state_clean")
 silver = silver.withColumn("_n_same", F.count(F.lit(1)).over(w))
@@ -132,12 +145,24 @@ silver = silver.withColumn("_n_same", F.count(F.lit(1)).over(w))
 # COMMAND ----------
 
 FLAGS = [
+    ("INVALID_SERIAL",               F.col("s_no").isNull() | (F.col("s_no") <= 0)),
+    ("INVALID_SOURCE_PAGE",          F.col("source_page").isNull() | (F.col("source_page") <= 0)),
+    ("FINANCIAL_YEAR_UNEXPECTED",     ~F.coalesce(F.col("financial_year") == "2021-22", F.lit(False))),
+    ("AWARD_CATEGORY_UNRECOGNIZED",   ~F.coalesce(F.col("award_category").isin("Kayakalp", "Eco-friendly"), F.lit(False))),
+    ("MISSING_SOURCE_FILE",          F.col("source_file").isNull()),
+    ("MISSING_SOURCE_URL",           F.lit(SOURCE_URL is None)),
+    ("DISTRICT_HEALTH_JURISDICTION",  F.col("district_raw").rlike(r"(?i)(health\s+district|\bHD\b|municipal\s+corporation)")),
     ("STATE_UNRECOGNIZED",           F.col("state_clean").isNull()),
     ("MISSING_DISTRICT",             F.col("district_clean").isNull()),
     ("MISSING_FACILITY_NAME",        F.col("facility_name").isNull()),
+    ("DISTRICT_SPACING_VERIFIED",      spacing_repair),
     ("DISTRICT_REPAIRED_FROM_PDF",   F.col("district_repaired")),
     ("DISTRICT_FIELD_HAD_LOCALITY",  F.col("locality").isNotNull()),
     ("AWARD_RANK_UNRECOGNIZED",      F.col("award_rank_order").isNull()),
+    ("AWARD_ORDINAL_IN_RAW",          F.col("award_raw").rlike(r"(?i)\b[12](st|nd)\b")),
+    ("FACILITY_TYPE_CONFLICT",        F.col("facility_type_from_name").isNotNull() &
+                                      ~F.col("facility_type_reported").contains("/") &
+                                      (F.col("facility_type_reported") != F.col("facility_type_from_name"))),
     ("FACILITY_LEVEL_UNKNOWN",       F.col("facility_level").isNull()),
     ("POSSIBLE_DUPLICATE_AWARD",     F.col("_n_same") > 1),
 ]
@@ -167,9 +192,25 @@ ORDER = ["award_id", "financial_year", "facility_name", "facility_type_reported"
          "source_name", "source_publisher", "source_url", "retrieved_on", "source_license", "produced_by"]
 silver = silver.select(*ORDER)
 
-write_table(silver, SILVER,
-            "Kayakalp award winners FY 2021-22 (MoHFW PDF), one row per award, with page and S.No citations. "
-            "Public facilities only. Built by notebooks/03_kayakalp_bronze_to_silver.")
+# Validate BEFORE any write. No row filtering/deduplication is permitted here.
+assert silver.count() == bronze.count(), "Award rows were lost or multiplied"
+assert silver.filter(F.col("s_no").isNull() | (F.col("s_no") <= 0) |
+                     F.col("financial_year").isNull()).count() == 0, "Invalid award identity"
+# This notebook and its citation metadata intentionally support only the supplied FY 2021-22 PDF.
+assert silver.filter(F.col("financial_year") != "2021-22").count() == 0, "Source citation supports FY 2021-22 only"
+assert silver.count() == silver.select("award_id").distinct().count(), "award_id is not unique"
+if WRITE_OUTPUT:
+    # Creation only: never overwrite a shared table or change its schema.
+    silver.write.mode("errorifexists").saveAsTable(SILVER)
+    spark.sql(f"COMMENT ON TABLE `{SILVER}` IS 'Kayakalp FY 2021-22 award-level evidence; PDF page and serial citations; historical public-facility cleanliness awards.'")
+    persisted = spark.table(SILVER)
+    assert persisted.count() == silver.count(), "Persisted row count differs"
+    assert persisted.schema.simpleString() == silver.schema.simpleString(), "Persisted column names/types differ"
+    silver = persisted
+    print(f"Created and verified {SILVER}")
+else:
+    print("Validation only; no Databricks tables written. Inspect the silver DataFrame.")
+silver.createOrReplaceTempView("kayakalp_validation_result")
 if SOURCE_URL is None:
     print("NOTE: source_url widget is empty; row citations will have no link. Default is the NHSRC PDF URL.")
 
@@ -180,20 +221,20 @@ if SOURCE_URL is None:
 
 # COMMAND ----------
 
-silver = spark.table(SILVER)
+silver = spark.table("kayakalp_validation_result")
 assert silver.count() == silver.select("award_id").distinct().count(), "award_id is not unique"
 display(spark.sql(f"""
   SELECT award_category, award_rank, count(*) AS awards, count_if(state_clean IS NULL) AS state_unrecognized
-  FROM {SILVER} GROUP BY ALL ORDER BY award_category, min(award_rank_order)"""))
+  FROM kayakalp_validation_result GROUP BY ALL ORDER BY award_category, min(award_rank_order)"""))
 
 # COMMAND ----------
 
 display(spark.sql(f"""
   SELECT flag, count(*) AS awards
-  FROM (SELECT explode(dq_flags) AS flag FROM {SILVER}) GROUP BY flag ORDER BY awards DESC"""))
+  FROM (SELECT explode(dq_flags) AS flag FROM kayakalp_validation_result) GROUP BY flag ORDER BY awards DESC"""))
 
 # COMMAND ----------
 
 display(spark.sql(f"""
   SELECT state_clean, facility_type_reported, count(*) AS awards
-  FROM {SILVER} GROUP BY ALL ORDER BY state_clean, awards DESC"""))
+  FROM kayakalp_validation_result GROUP BY ALL ORDER BY state_clean, awards DESC"""))

@@ -109,3 +109,22 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). Quote `address_line1-3` when exact wording matters.
 24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `facilities_bronze` on `unique_id`.
 23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.
+
+
+### Kayakalp validation handoff (2026-11-21)
+
+See the [Kayakalp validation and integration handoff](kayakalp-validation-handoff.md) for verified metrics, unchanged schema, reproducibility and Databricks instructions.
+
+Kayakalp flag additions (all retain award records):
+
+- `INVALID_SERIAL`: null/unparseable/nonpositive serial. Blocks notebook output before writing.
+- `FINANCIAL_YEAR_UNEXPECTED`: missing or non-2021-22 year. Blocks output; the notebook's PDF metadata only supports 2021-22.
+- `INVALID_SOURCE_PAGE`: null/unparseable/nonpositive PDF page; citation needs review.
+- `AWARD_CATEGORY_UNRECOGNIZED`: missing or unsupported category; inspect `award_raw`.
+- `MISSING_SOURCE_FILE`, `MISSING_SOURCE_URL`: incomplete provenance; inspect the Bronze import or URL widget.
+- `DISTRICT_HEALTH_JURISDICTION`: health district, HD abbreviation or municipal corporation in the source district field; not automatically a civil district.
+- `DISTRICT_SPACING_VERIFIED`: exact source-verified Meghalaya spacing repair for North Garo Hills / East Khasi Hills; original retained.
+- `AWARD_ORDINAL_IN_RAW`: first/second rank distinction in `award_raw`; simplified rank is insufficient for detailed comparison.
+- `FACILITY_TYPE_CONFLICT`: a single reported type differs from the inferred name type; neither automatically establishes the correct type.
+
+`POSSIBLE_DUPLICATE_AWARD` remains a name/geography/category candidate flag, including cross-type awards. All 20 flagged rows in this PDF form ten UPHC/HWC pairs; preserve them until reviewed. Flags are review evidence, not identity or quality conclusions. The notebook's default output is now `kayakalp_silver_validation`, with `write_output=false`; it no longer refreshes a shared Silver table automatically.
