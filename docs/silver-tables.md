@@ -11,12 +11,28 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | `silver_facility_claims` | facility × field × claimed item | Matching a service (e.g. dialysis) and **quoting the evidence**. |
 | `silver_possible_duplicates` | suspected duplicate pair | Avoiding recommending the same place twice. |
 | `silver_dq_summary` | data-quality flag | How common each problem is (good for the presentation). |
+| `silver_rejected_facilities` | removed record | Every record removed from silver and why (`INVALID_ID`, `NAME_MISSING`, `NAME_IS_LIST`, `NO_COORDS_OR_ADDRESS`, `UNDER_MIN_FILLED_SHARE`). |
+
+## What is removed from silver
+**Rows** (each logged in `silver_rejected_facilities`):
+1. `unique_id` is not a UUID. In the raw file these are fragments of other records, created where a description had line breaks and the rest of the row spilled into new rows with shifted columns. There are 88 in `data/raw/facilities.csv`, and they include every blank or list-shaped name.
+2. Name is missing, or is a list of strings.
+3. No usable coordinates and no address at all.
+4. Fewer than 30% of the kept source columns are filled in (`source_fill_share < 0.30`).
+
+**Columns** (still in `bronze_facilities` if you need them): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
 
 ## Key columns in `silver_facilities`
 
 | Column | Meaning |
 |---|---|
-| `facility_id` | Source `unique_id`, after merging rows that shared it. A `gen_…` value means the source had no ID and one was generated. |
+| `facility_id` | Source `unique_id` (always a UUID, lower case), after merging rows that shared it. |
+| `address_full` | Formatted address: street, region, city, state PIN. Use this for display. |
+| `address_street` | House/plot/building number plus street, road or lane ("#422, 1st Floor, 27th Main Road"). |
+| `address_region` | Locality, neighbourhood, sector or area ("Hsr Layout, Sector-1"). |
+| `address_landmark` | Directions ("Next To Icici Bank; Near Byculla Station"). |
+| `pincode_from_address_text` | True if the PIN field was invalid and `pincode_clean` was found inside the address lines. |
+| `source_fill_share` | Share of kept source columns that are filled in (0–1). Always ≥ 0.30 in silver. |
 | original columns (`name`, `description`, `capability`…) | The source text with whitespace trimmed and "null"-like values set to NULL. **Quote these as evidence.** |
 | `latitude_clean`, `longitude_clean` | Coordinates checked to be inside India, with swapped lat/lon fixed. NULL if the location can't be used. |
 | `coord_status` | `ok`, `swapped_fixed`, `missing`, `zero`, `outside_india` |
@@ -37,11 +53,12 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 
 | Flag | Meaning |
 |---|---|
-| `MISSING_NAME` | No facility name. |
 | `MISSING_COORDS` / `COORDS_ZERO` / `COORDS_OUTSIDE_INDIA` | The location can't be used for distance. |
 | `COORDS_SWAPPED_FIXED` | Latitude and longitude were swapped in the source; we swapped them back. |
 | `COORDS_LOW_PRECISION` | Coordinates are probably approximate (city-centre point). |
 | `PINCODE_MISSING_OR_INVALID` | No valid 6-digit PIN code. |
+| `PINCODE_FROM_ADDRESS_TEXT` | The PIN code came from the address text, not the PIN field. |
+| `ADDRESS_NO_STREET` | No street-level address could be parsed, only locality or city. |
 | `STATE_UNRECOGNIZED` | We couldn't work out the state (it was missing or unreadable, and the PIN didn't settle it). |
 | `STATE_INFERRED_FROM_PIN` | The state came from the PIN code, not from the record. |
 | `PIN_STATE_MISMATCH` | The reported state and the PIN prefix disagree, so one of them is wrong. |
@@ -89,5 +106,6 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 ### Running it as a team
 20. **Re-run the notebook; don't edit silver tables by hand.** Every run overwrites all tables.
 21. **Each teammate has their own workspace and tables.** Results only match if everyone runs the same notebook version from the same branch.
-22. **Generated IDs (`gen_…`) can change** if the facility's name, PIN or coordinates change in the source. Don't hard-code them.
+22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). Quote `address_line1-3` when exact wording matters.
+24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `bronze_facilities` on `unique_id`.
 23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.

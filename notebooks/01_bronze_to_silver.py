@@ -11,6 +11,17 @@
 # MAGIC | `silver_facility_claims` | 1 row per facility × field × claimed item | Every specialty, capability, procedure and equipment claim, one per row. Use this for service matching and for quoting evidence. |
 # MAGIC | `silver_possible_duplicates` | 1 row per suspected duplicate pair | Facilities with different IDs that look like the same place. They are flagged, never deleted. |
 # MAGIC | `silver_dq_summary` | 1 row per flag | How many facilities carry each data-quality flag. |
+# MAGIC | `silver_rejected_facilities` | 1 row per removed record | Every row the rules below removed, with the reason, so nothing disappears silently. |
+# MAGIC
+# MAGIC **Rows removed from silver** (logged in `silver_rejected_facilities`):
+# MAGIC 1. `unique_id` is not a real ID (UUID). These rows are fragments of other records, created where a description contained line breaks (e.g. an "ID" of *oculoplasty*).
+# MAGIC 2. Name is missing, or is a list of strings.
+# MAGIC 3. No usable coordinates **and** no address at all.
+# MAGIC 4. Fewer than 30% of the kept source columns are filled in.
+# MAGIC
+# MAGIC **Columns dropped from silver** (still in `bronze_facilities`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
+# MAGIC
+# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`.
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -43,6 +54,21 @@ COLUMN_OVERRIDES = {
     # "doctors": "numberDoctors",
 }
 
+# ---- Row and column rules (Sophia, 2026-11-21) ----
+# Source columns not carried into silver (matched case-insensitively; they stay in bronze_facilities)
+DROP_COLUMNS = [
+    "source_types", "source_ids", "source_content_id", "organization_type", "content_table_id", "phone_numbers",
+    "websites", "acceptsVolunteers", "facebookLink", "address_country", "address_countryCode", "countries",
+    "affiliationTypeIds", "area",
+]
+# Every column to the right of this one is dropped too, except KEEP_AFTER_CUTOFF
+DROP_AFTER_COLUMN = "recency_of_page_update"
+KEEP_AFTER_CUTOFF = ["coordinates", "latitude", "longitude"]
+# A facility needs at least this share of the kept source columns filled in
+MIN_FILLED_SHARE = 0.30
+# A valid unique_id looks like 2b8d1c3e-9f4a-4c1d-8e2f-0a1b2c3d4e5f
+ID_PATTERN = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS `{CATALOG}`.`{SCHEMA}`")
 spark.sql(f"USE CATALOG `{CATALOG}`")
 spark.sql(f"USE SCHEMA `{SCHEMA}`")
@@ -74,6 +100,10 @@ THIS_YEAR = date.today().year
 YEAR_MIN = 1800          # Some Indian mission and government hospitals date from the 1800s
 DOCTORS_MAX = 10000      # Above this is treated as an extraction error
 CAPACITY_MAX = 10000     # beds
+
+# COMMAND ----------
+
+# MAGIC %run ./common/address_parsing
 
 # COMMAND ----------
 
@@ -174,6 +204,10 @@ COL = {
     "capability":  resolve("capability", "capabilities", pattern=r"capabilit"),
     "procedure":   resolve("procedure", "procedures", pattern=r"procedure"),
     "equipment":   resolve("equipment", pattern=r"equipment"),
+    "line1":       resolve("address_line1", "address1", "street"),
+    "line2":       resolve("address_line2", "address2"),
+    "line3":       resolve("address_line3", "address3"),
+    "coords_json": resolve("coordinates", "geometry", "location"),
 }
 COL.update(COLUMN_OVERRIDES)
 
@@ -201,13 +235,30 @@ DERIVED_NAMES = {
     "description_all", "state_variants", "pincode_variants", "dup_coord_spread_km", "possible_duplicate_ids",
     "dq_flags", "dq_flag_count", "completeness_score", "states_mentioned_in_text",
     "n_specialties", "n_capability", "n_procedure", "n_equipment", "n_service_claims",
+    "address_street", "address_region", "address_landmark", "address_full", "pincode_from_address_text",
+    "source_fill_share",
 }
-df = bronze
+
+# ---- Drop the columns we don't carry into silver ----
+src_order = [c for c in bronze.columns if c not in META_COLS]
+drop_lower = {d.lower() for d in DROP_COLUMNS}
+keep_after = {k.lower() for k in KEEP_AFTER_CUTOFF}
+cut = next((i for i, c in enumerate(src_order) if c.lower() == DROP_AFTER_COLUMN.lower()), None)
+if cut is None:
+    print(f"!! {DROP_AFTER_COLUMN} not found: no columns dropped by position")
+TO_DROP = [c for i, c in enumerate(src_order)
+           if c.lower() in drop_lower or (cut is not None and i > cut and c.lower() not in keep_after)]
+TO_DROP = [c for c in TO_DROP if c not in {COL.get("lat"), COL.get("lon")}]  # never drop the coordinates
+print(f"Dropping {len(TO_DROP)} columns from silver: {TO_DROP}")
+
+df = bronze.drop(*TO_DROP)
 for c in list(df.columns):
     if c in DERIVED_NAMES:
         df = df.withColumnRenamed(c, f"src_{c}")
         COL = {k: (f"src_{c}" if v == c else v) for k, v in COL.items()}
         print(f"Renamed source column {c} -> src_{c} (name collision)")
+print(f"Keeping {len([c for c in df.columns if c not in META_COLS])} source columns: "
+      f"{[c for c in df.columns if c not in META_COLS]}")
 
 schema = {f.name: f.dataType for f in df.schema.fields}
 src_cols = [c for c in df.columns if c not in META_COLS]
@@ -393,14 +444,25 @@ def first_number(col):
 def try_double(name):
     return F.expr(f"try_cast(`{name}` AS DOUBLE)")
 
-# ---- facility_id: the source ID, or a stable hash when the ID is missing ----
-id_src = clean_str(qc(COL["id"]).cast("string")) if COL.get("id") else F.lit(None).cast("string")
-def opt(key):
-    return qc(COL[key]).cast("string") if COL.get(key) else F.lit("")
-df = df.withColumn(
-    "facility_id",
-    F.coalesce(id_src, F.concat(F.lit("gen_"), F.sha2(F.concat_ws("|", opt("name"), opt("pincode"), opt("lat"), opt("lon")), 256).substr(1, 16))),
+# ---- facility_id: must be a real ID (UUID). Anything else is a fragment of another record -> removed ----
+assert COL.get("id"), "No ID column found; set COLUMN_OVERRIDES['id']."
+id_src = F.trim(qc(COL["id"]).cast("string"))
+df = df.withColumn("facility_id", F.when(id_src.rlike(ID_PATTERN), F.lower(id_src)))
+
+def _short(c, n=200):
+    return F.substring(c.cast("string"), 1, n)
+
+# Rejected rows are kept (with the reason) in silver_rejected_facilities
+REJECT_COLS = ["facility_id", "source_row_ids", "id_raw", "name_raw", "reject_reason", "reject_detail"]
+rejected_invalid_id = df.where(F.col("facility_id").isNull()).select(
+    F.lit(None).cast("string").alias("facility_id"),
+    F.array(F.col("_bronze_row_id")).alias("source_row_ids"),
+    _short(qc(COL["id"])).alias("id_raw"),
+    _short(qc(COL["name"])).alias("name_raw"),
+    F.lit("INVALID_ID").alias("reject_reason"),
+    F.lit("unique_id is not a UUID; the row is a fragment of another record (columns shifted)").alias("reject_detail"),
 )
+df = df.where(F.col("facility_id").isNotNull())
 
 # ---- PIN code: the first valid 6-digit code (first digit 1-9) ----
 if COL.get("pincode"):
@@ -439,6 +501,10 @@ else:
 # ---- Coordinates: must fall inside India; swapped lat/lon gets fixed ----
 lat0 = try_double(COL["lat"]) if COL.get("lat") else F.lit(None).cast("double")
 lon0 = try_double(COL["lon"]) if COL.get("lon") else F.lit(None).cast("double")
+if COL.get("coords_json"):
+    # Fallback: GeoJSON point {"coordinates":[lon, lat], "type":"Point"} when latitude/longitude are empty
+    lat0 = F.coalesce(lat0, F.expr(f"try_cast(get_json_object(`{COL['coords_json']}`, '$.coordinates[1]') AS DOUBLE)"))
+    lon0 = F.coalesce(lon0, F.expr(f"try_cast(get_json_object(`{COL['coords_json']}`, '$.coordinates[0]') AS DOUBLE)"))
 df = df.withColumn("_lat0", lat0).withColumn("_lon0", lon0)
 in_lat = lambda c: c.between(LAT_MIN, LAT_MAX)
 in_lon = lambda c: c.between(LON_MIN, LON_MAX)
@@ -580,6 +646,60 @@ stage = stage.withColumn(
     F.round(sum(F.when(k, 1).otherwise(0) for k in key_fields) / F.lit(len(key_fields)), 3),
 )
 
+# ---- Addresses: split line1/2/3 into street / region / landmark (common/address_parsing) ----
+def raw_or_null(key):
+    return qc(COL[key]).cast("string") if COL.get(key) else F.lit(None).cast("string")
+
+stage = (stage
+    .withColumn("_addr", parse_address_udf(raw_or_null("line1"), raw_or_null("line2"), raw_or_null("line3"),
+                                           raw_or_null("city"), raw_or_null("state"), raw_or_null("pincode")))
+    .withColumn("address_street", F.col("_addr.street"))
+    .withColumn("address_region", F.col("_addr.region"))
+    .withColumn("address_landmark", F.col("_addr.landmark"))
+    # If the PIN field was unusable but a valid PIN appears inside the address text, use that
+    .withColumn("pincode_from_address_text",
+                F.col("pincode_clean").isNull() & F.coalesce(F.col("_addr.pin_from_text").rlike(r"^[1-9]\d{5}$"), F.lit(False)))
+    .withColumn("pincode_clean", F.when(F.col("pincode_from_address_text"), F.col("_addr.pin_from_text"))
+                                  .otherwise(F.col("pincode_clean")))
+    .withColumn("_state_pin", F.concat_ws(" ", "state_clean", "pincode_clean"))
+    .withColumn("address_full", F.concat_ws(", ", "address_street", "address_region", "city_clean",
+                                            F.when(F.col("_state_pin") != "", F.col("_state_pin"))))
+    .drop("_state_pin")
+    .drop("_addr")
+)
+
+# ---- Row rules: name, location, completeness ----
+kept_src_cols = [c for c in src_cols if c in stage.columns]
+def is_filled(c):
+    return (F.size(qc(c)) > 0) if c in LIST_COLS else qc(c).isNotNull()
+stage = stage.withColumn(
+    "source_fill_share",
+    F.round(sum(F.when(is_filled(c), 1).otherwise(0) for c in kept_src_cols) / F.lit(len(kept_src_cols)), 3),
+)
+name_c = qc(COL["name"])
+has_address = F.lit(False)
+for key in ["line1", "line2", "line3", "city", "state", "pincode"]:
+    if COL.get(key):
+        has_address = has_address | qc(COL[key]).isNotNull()
+stage = stage.withColumn(
+    "_reject_reason",
+    F.when(name_c.isNull(), "NAME_MISSING")
+     .when(F.trim(name_c).startswith("["), "NAME_IS_LIST")
+     .when(F.col("latitude_clean").isNull() & ~has_address, "NO_COORDS_OR_ADDRESS")
+     .when(F.col("source_fill_share") < MIN_FILLED_SHARE, "UNDER_MIN_FILLED_SHARE"),
+)
+rejected_rules = stage.where(F.col("_reject_reason").isNotNull()).select(
+    "facility_id", "source_row_ids", _short(qc(COL["id"])).alias("id_raw"), _short(name_c).alias("name_raw"),
+    F.col("_reject_reason").alias("reject_reason"),
+    F.concat(F.lit("source_fill_share="), F.col("source_fill_share").cast("string"),
+             F.lit(f" (minimum {MIN_FILLED_SHARE}); coord_status="), F.col("coord_status")).alias("reject_detail"),
+)
+stage = stage.where(F.col("_reject_reason").isNull()).drop("_reject_reason")
+
+rejected_invalid_id.unionByName(rejected_rules).write.mode("overwrite").option("overwriteSchema", "true") \
+    .saveAsTable("silver_rejected_facilities")
+display(spark.sql("SELECT reject_reason, count(*) AS records FROM silver_rejected_facilities GROUP BY 1 ORDER BY 2 DESC"))
+
 stage.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_silver_facilities_stage")
 stage = spark.table("_silver_facilities_stage")
 n_stage = stage.count()
@@ -663,13 +783,14 @@ def raw_present_but_clean_null(key, clean_col):
     return qc(COL[key]).isNotNull() & F.col(clean_col).isNull()
 
 FLAGS = [
-    ("MISSING_NAME",                  qc(COL["name"]).isNull()),
     ("MISSING_COORDS",                F.col("coord_status") == "missing"),
     ("COORDS_ZERO",                   F.col("coord_status") == "zero"),
     ("COORDS_OUTSIDE_INDIA",          F.col("coord_status") == "outside_india"),
     ("COORDS_SWAPPED_FIXED",          F.col("coord_status") == "swapped_fixed"),
     ("COORDS_LOW_PRECISION",          F.col("coords_low_precision") == True),
     ("PINCODE_MISSING_OR_INVALID",    F.col("pincode_clean").isNull()),
+    ("PINCODE_FROM_ADDRESS_TEXT",     F.col("pincode_from_address_text")),
+    ("ADDRESS_NO_STREET",             F.col("address_street").isNull()),
     ("STATE_UNRECOGNIZED",            F.col("state_clean").isNull()),
     ("STATE_INFERRED_FROM_PIN",       F.col("state_from_pin").isNotNull()),
     ("PIN_STATE_MISMATCH",            F.col("pin_state_consistent") == False),
@@ -694,10 +815,11 @@ silver = (silver
           .withColumn("dq_flags", F.filter(flag_arr, lambda x: x.isNotNull()))
           .withColumn("dq_flag_count", F.size("dq_flags")))
 
-FRONT = ["facility_id", COL["name"], "city_clean", "state_clean", "pincode_clean", "latitude_clean", "longitude_clean",
+FRONT = ["facility_id", COL["name"], "address_full", "address_street", "address_region", "address_landmark",
+         "city_clean", "state_clean", "pincode_clean", "pincode_from_address_text", "latitude_clean", "longitude_clean",
          "coord_status", "coords_low_precision", "year_established_clean", "num_doctors_clean", "capacity_clean",
          "n_specialties", "n_capability", "n_procedure", "n_equipment", "n_service_claims",
-         "completeness_score", "dq_flag_count", "dq_flags", "possible_duplicate_ids",
+         "completeness_score", "source_fill_share", "dq_flag_count", "dq_flags", "possible_duplicate_ids",
          "n_source_rows", "name_variants", "state_from_pin", "pin_state_consistent", "state_variants",
          "pincode_variants", "dup_coord_spread_km", "states_mentioned_in_text", "description_all"]
 FRONT = list(dict.fromkeys(FRONT))  # keep order, drop repeats
@@ -757,13 +879,20 @@ TABLE_COMMENTS = {
     "silver_facility_claims": "One row per facility x field x claimed item (specialties, capability, procedure, equipment). claim_text is verbatim.",
     "silver_possible_duplicates": "Facility pairs with different IDs that look like the same place. Flagged, not removed.",
     "silver_dq_summary": "Count of facilities per data-quality flag in silver_facilities.",
+    "silver_rejected_facilities": "Records removed from silver_facilities, with the reason (INVALID_ID, NAME_MISSING, NAME_IS_LIST, NO_COORDS_OR_ADDRESS, UNDER_MIN_FILLED_SHARE).",
 }
 for t, comment in TABLE_COMMENTS.items():
     if spark.catalog.tableExists(f"{CATALOG}.{SCHEMA}.{t}"):
         spark.sql(f"COMMENT ON TABLE {t} IS '{comment.replace(chr(39), '')}'")
 
 COLUMN_COMMENTS = {
-    "facility_id": "Source unique_id (merged across duplicate rows). gen_ prefix = generated because the source ID was missing.",
+    "facility_id": "Source unique_id (a UUID, lower case), merged across duplicate rows. Rows without a valid UUID are removed (see silver_rejected_facilities).",
+    "address_full": "Formatted address: street, region, city, state PIN.",
+    "address_street": "House/plot/building number and street, road or lane, parsed from address_line1-3.",
+    "address_region": "Locality, neighbourhood, sector or area, parsed from address_line1-3.",
+    "address_landmark": "Directions such as near/opposite/behind, parsed from address_line1-3.",
+    "pincode_from_address_text": "True if pincode_clean was recovered from the address text because the PIN field was invalid.",
+    "source_fill_share": "Share (0 to 1) of the kept source columns that are filled in. Facilities under 0.30 are removed.",
     "latitude_clean": "Validated latitude (inside India, swapped values fixed). NULL if unusable. Use for distance.",
     "longitude_clean": "Validated longitude. NULL if unusable.",
     "coords_low_precision": "True if both coordinates have 2 or fewer decimals (about 1 km or worse; possibly a city-centre point).",
@@ -823,3 +952,18 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # MAGIC WHERE c.claim_norm RLIKE 'dialys|haemodialys|hemodialys'
 # MAGIC ORDER BY f.state_clean, f.city_clean
 # MAGIC LIMIT 50
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC -- Which records were removed, and why? (examples per reason)
+# MAGIC SELECT reject_reason, count(*) AS records, slice(collect_list(coalesce(name_raw, id_raw)), 1, 5) AS examples
+# MAGIC FROM silver_rejected_facilities GROUP BY reject_reason ORDER BY records DESC
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC -- Spot-check the reorganized addresses against the original lines
+# MAGIC SELECT name, address_line1, address_line2, address_line3,
+# MAGIC        address_street, address_region, address_landmark, city_clean, state_clean, pincode_clean
+# MAGIC FROM silver_facilities TABLESAMPLE (30 ROWS)

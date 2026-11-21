@@ -22,6 +22,37 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 17:30: Silver facilities: row-removal rules, column drops, standardized addresses
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`: new rule settings in section 0, `%run ./common/address_parsing`, column drop, UUID check, a coordinates fallback, address parsing, the row rules, a new table `silver_rejected_facilities`, flags, column comments, and 2 SQL check cells.
+  - New `notebooks/common/address_parsing.py` (plain-Python parser plus Spark UDF).
+  - New `scripts/test_address_parsing.py` (5 unit tests, plus a dry run of the rules on `data/raw/facilities.csv`).
+  - `docs/silver-tables.md` updated.
+- **How:**
+  - Profiled the real `data/raw/facilities.csv` first. It escapes quotes with backslashes (`\"`); with the right parser it gives 10,088 rows × 51 columns.
+  - Rules, in order:
+    1. `unique_id` must match the UUID pattern (`INVALID_ID`, checked before merging).
+    2. Name must not be missing (`NAME_MISSING`) or list-shaped (`NAME_IS_LIST`).
+    3. A facility must have usable coordinates or at least one address field (`NO_COORDS_OR_ADDRESS`).
+    4. `source_fill_share` must be ≥ 0.30 over the 25 kept source columns (`UNDER_MIN_FILLED_SHARE`).
+
+    Rules 2–4 run on the merged record. Removed rows go to `silver_rejected_facilities` with the reason.
+  - **Dropped columns:** the 14 named columns, plus everything after `recency_of_page_update` except `coordinates`, `latitude` and `longitude`. They are dropped from silver only; bronze is unchanged.
+  - **The `coordinates` GeoJSON** is now a fallback when latitude/longitude are empty.
+  - **Addresses:** line1–3 are split on commas, and each piece is classified as landmark (near/opp/behind…), street (road/lane/marg/NH-x, a house number, or a building/floor), or region (nagar/colony/sector/layout…). Pieces that repeat the city, state, PIN or an earlier piece are dropped. A valid PIN found inside the text replaces an invalid PIN field.
+- **Why:** Sophia's rules. Garbage IDs like "oculoplasty" turned out to be fragments of *other* records: where a description had line breaks, the rest of the row spilled into new rows with shifted columns (88 rows). Dry run on the CSV:
+  - **Rows:** 88 removed (all `INVALID_ID`, including all 54 blank-name and 9 list-name rows), 0 by the other rules, 10,000 kept.
+  - **Address coverage:** street filled for 93% of facilities, region 78%, landmark 50%; 13 PINs recovered from address text.
+  - **Tradeoffs:**
+    - Removed rows are logged, not silently deleted.
+    - Bronze keeps every column, so dropping `source_urls` (useful for citations) is reversible by joining to bronze on `unique_id`.
+    - "Region" was read as the locality/neighbourhood; the state is in `state_clean`. A separate `address_landmark` column keeps the directions rather than discarding them.
+- **Notes / follow-ups:**
+  - **Not yet run on Databricks;** the numbers above are from the local CSV. The Marketplace table may differ.
+  - The real record that each fragment belongs to may be missing its tail fields (it was cut at the line break). Stitching fragments back is possible but not done.
+  - Consider keeping `source_urls` in silver for evidence citations; this needs Sophia's decision.
+
 ### 2026-11-21 16:40: Added the Kayakalp PDF source URL to the citations
 - **Who:** Claude (for Sophia)
 - **What:** `docs/data-sources.md` (Kayakalp entry: landing page, PDF URL, checksum, "cite as"); `notebooks/03_kayakalp_bronze_to_silver.py` (`source_url` widget default, publisher now NHSRC, `row_citation` now ends with the URL and retrieval date); `scripts/README.md` (link to the PDF).
