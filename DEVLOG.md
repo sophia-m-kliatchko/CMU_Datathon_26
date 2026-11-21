@@ -27,6 +27,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **What:** Committed `DEVLOG.md`, `CLAUDE.md` and `docs/dataset-notes.md`, then pushed them to `origin/main`. This creates the `main` branch on GitHub.
 - **How:** `git add`, `git commit`, then `git push -u origin main`.
 - **Why:** So all collaborators can see the log, the logging rule and the dataset notes, and build on them.
+- **Notes / follow-ups:** Claude's push failed because Git wasn't signed in to GitHub yet. Sophia then ran `git push -u origin main` herself and signed in through the browser using Git Credential Manager. The push worked, and the login is now saved on this machine.
 
 ### 2026-11-21 12:45: Set Git identity on Sophia's machine
 - **Who:** Sophia
