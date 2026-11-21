@@ -20,7 +20,9 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 3. No usable coordinates and no address at all.
 4. Fewer than 30% of the kept source columns are filled in (`source_fill_share < 0.30`).
 
-**Columns** (still in `facilities_bronze` if you need them): address_line1, address_line2, address_line3 (replaced by the parsed `address_*` columns), source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
+**Columns** (still in `facilities_bronze` if you need them): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
+
+**Raw address columns, dropped only when fully covered:** `address_line1/2/3` (covered by `address_full`), `address_city` (`city_clean`), `address_stateOrRegion` (`state_clean`), `address_zipOrPostcode` (`pincode_clean`). Each is dropped only if every row with a raw value also has the cleaned value; otherwise it stays in silver so no information is lost. The notebook prints the decision for each. On the local CSV this drops `address_city`, while state (~300 rows, e.g. "Mumbai" in the state field) and PIN (~70 invalid values) are likely to stay.
 
 ## Key columns in `facilities_silver`
 
@@ -106,6 +108,6 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 ### Running it as a team
 20. **Re-run the notebook; don't edit silver tables by hand.** Every run overwrites all tables.
 21. **Each teammate has their own workspace and tables.** Results only match if everyone runs the same notebook version from the same branch.
-22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). `address_line1-3` are not in silver; when exact wording matters, join to `facilities_bronze` on `lower(trim(unique_id)) = facility_id`.
+22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). Raw address columns may not be in silver (see "Raw address columns, dropped only when fully covered"); when exact wording matters, join to `facilities_bronze` on `lower(trim(unique_id)) = facility_id`.
 24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `facilities_bronze` on `unique_id`.
 23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.
