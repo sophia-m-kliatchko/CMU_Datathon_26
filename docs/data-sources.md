@@ -8,7 +8,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 
 | Table(s) | Source | Publisher | Retrieved | Built by |
 |---|---|---|---|---|
-| `bronze_facilities`, `silver_facilities`, `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`; file `data/raw/facilities.csv` | Virtue Foundation India healthcare facilities dataset (Databricks Marketplace) | Virtue Foundation | 2026-11-21 | `notebooks/01_bronze_to_silver.py` |
+| `facilities_bronze`, `facilities_silver`, `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`; file `data/raw/facilities.csv` | Virtue Foundation India healthcare facilities dataset (Databricks Marketplace) | Virtue Foundation | 2026-11-21 | `notebooks/01_bronze_to_silver.py` |
 | `nqas_bronze`, `nqas_silver`; file `data/external/nqas_certified_facilities.csv` | NQAS Certified Facilities list | NHSRC, MoHFW | 2026-11-21 | `scripts/scrape_nqas.py` → `notebooks/02_nqas_bronze_to_silver.py` |
 | `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
 | file `data/raw/india_post_pincode_directory.csv`; table `india_post_offices_silver` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO | `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops) |

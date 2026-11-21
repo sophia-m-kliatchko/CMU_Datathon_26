@@ -6,8 +6,8 @@
 # MAGIC
 # MAGIC | Output table | Grain | What it's for |
 # MAGIC |---|---|---|
-# MAGIC | `bronze_facilities` | 1 row per source row | Raw copy of the Marketplace table. The only changes: invisible control characters (NUL bytes) removed, plus load metadata. |
-# MAGIC | `silver_facilities` | 1 row per `facility_id` | Cleaned, typed, merged facilities with `*_clean` columns, data-quality flags, and the original text kept for citations. |
+# MAGIC | `facilities_bronze` | 1 row per source row | Raw copy of the Marketplace table. The only changes: invisible control characters (NUL bytes) removed, plus load metadata. |
+# MAGIC | `facilities_silver` | 1 row per `facility_id` | Cleaned, typed, merged facilities with `*_clean` columns, data-quality flags, and the original text kept for citations. |
 # MAGIC | `silver_facility_claims` | 1 row per facility × field × claimed item | Every specialty, capability, procedure and equipment claim, one per row. Use this for service matching and for quoting evidence. |
 # MAGIC | `silver_possible_duplicates` | 1 row per suspected duplicate pair | Facilities with different IDs that look like the same place. They are flagged, never deleted. |
 # MAGIC | `silver_dq_summary` | 1 row per flag | How many facilities carry each data-quality flag. |
@@ -19,7 +19,7 @@
 # MAGIC 3. No usable coordinates **and** no address at all.
 # MAGIC 4. Fewer than 30% of the kept source columns are filled in.
 # MAGIC
-# MAGIC **Columns dropped from silver** (still in `bronze_facilities`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
+# MAGIC **Columns dropped from silver** (still in `facilities_bronze`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
 # MAGIC
 # MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`.
 # MAGIC
@@ -55,7 +55,7 @@ COLUMN_OVERRIDES = {
 }
 
 # ---- Row and column rules (Sophia, 2026-11-21) ----
-# Source columns not carried into silver (matched case-insensitively; they stay in bronze_facilities)
+# Source columns not carried into silver (matched case-insensitively; they stay in facilities_bronze)
 DROP_COLUMNS = [
     "source_types", "source_ids", "source_content_id", "organization_type", "content_table_id", "phone_numbers",
     "websites", "acceptsVolunteers", "facebookLink", "address_country", "address_countryCode", "countries",
@@ -127,17 +127,17 @@ bronze = (
     .withColumn("_ingested_at", F.current_timestamp())
     .withColumn("_source_table", F.lit(SOURCE_TABLE))
 )
-bronze.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("bronze_facilities")
+bronze.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_bronze")
 
-bronze = spark.table("bronze_facilities")
+bronze = spark.table("facilities_bronze")
 META_COLS = ["_bronze_row_id", "_ingested_at", "_source_table"]
-print(f"bronze_facilities: {bronze.count():,} rows, {len(bronze.columns) - len(META_COLS)} source columns")
+print(f"facilities_bronze: {bronze.count():,} rows, {len(bronze.columns) - len(META_COLS)} source columns")
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC -- Every column the source table really has (the challenge brief says 51 attributes)
-# MAGIC DESCRIBE TABLE bronze_facilities
+# MAGIC DESCRIBE TABLE facilities_bronze
 
 # COMMAND ----------
 
@@ -700,8 +700,8 @@ rejected_invalid_id.unionByName(rejected_rules).write.mode("overwrite").option("
     .saveAsTable("silver_rejected_facilities")
 display(spark.sql("SELECT reject_reason, count(*) AS records FROM silver_rejected_facilities GROUP BY 1 ORDER BY 2 DESC"))
 
-stage.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_silver_facilities_stage")
-stage = spark.table("_silver_facilities_stage")
+stage.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("_facilities_silver_stage")
+stage = spark.table("_facilities_silver_stage")
 n_stage = stage.count()
 print(f"{n_bronze:,} bronze rows -> {n_stage:,} unique facilities")
 
@@ -772,7 +772,7 @@ dup_ids = (pairs.select(F.col("facility_id_a").alias("facility_id"), F.col("faci
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 7 · Data-quality flags and the final `silver_facilities` table
+# MAGIC ## 7 · Data-quality flags and the final `facilities_silver` table
 # MAGIC `dq_flags` is an array of short codes; see `docs/silver-tables.md` for what each means. **Flags are information, not filters.** Decide per use case which ones matter.
 
 # COMMAND ----------
@@ -827,8 +827,8 @@ internal = [c for c in silver.columns if c.startswith("_") and c not in META_COL
 rest = [c for c in silver.columns if c not in FRONT and c not in internal]
 silver = silver.select(*[qc(c) for c in FRONT + rest])
 
-silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_facilities")
-silver = spark.table("silver_facilities")
+silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_silver")
+silver = spark.table("facilities_silver")
 
 # COMMAND ----------
 
@@ -871,15 +871,15 @@ dq = (silver.select(F.explode("dq_flags").alias("flag")).groupBy("flag").count()
       .orderBy(F.desc("n_facilities")))
 dq.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_dq_summary")
 
-spark.sql("DROP TABLE IF EXISTS _silver_facilities_stage")
+spark.sql("DROP TABLE IF EXISTS _facilities_silver_stage")
 
 TABLE_COMMENTS = {
-    "bronze_facilities": f"Raw copy of {SOURCE_TABLE}. Only control characters removed. Built by notebooks/01_bronze_to_silver.",
-    "silver_facilities": "One row per facility_id. Cleaned and merged, with dq_flags. Original text columns kept for citation. Built by notebooks/01_bronze_to_silver.",
+    "facilities_bronze": f"Raw copy of {SOURCE_TABLE}. Only control characters removed. Built by notebooks/01_bronze_to_silver.",
+    "facilities_silver": "One row per facility_id. Cleaned and merged, with dq_flags. Original text columns kept for citation. Built by notebooks/01_bronze_to_silver.",
     "silver_facility_claims": "One row per facility x field x claimed item (specialties, capability, procedure, equipment). claim_text is verbatim.",
     "silver_possible_duplicates": "Facility pairs with different IDs that look like the same place. Flagged, not removed.",
-    "silver_dq_summary": "Count of facilities per data-quality flag in silver_facilities.",
-    "silver_rejected_facilities": "Records removed from silver_facilities, with the reason (INVALID_ID, NAME_MISSING, NAME_IS_LIST, NO_COORDS_OR_ADDRESS, UNDER_MIN_FILLED_SHARE).",
+    "silver_dq_summary": "Count of facilities per data-quality flag in facilities_silver.",
+    "silver_rejected_facilities": "Records removed from facilities_silver, with the reason (INVALID_ID, NAME_MISSING, NAME_IS_LIST, NO_COORDS_OR_ADDRESS, UNDER_MIN_FILLED_SHARE).",
 }
 for t, comment in TABLE_COMMENTS.items():
     if spark.catalog.tableExists(f"{CATALOG}.{SCHEMA}.{t}"):
@@ -903,9 +903,9 @@ COLUMN_COMMENTS = {
     "possible_duplicate_ids": "Other facility_ids that look like the same place (see silver_possible_duplicates).",
 }
 for c, comment in COLUMN_COMMENTS.items():
-    spark.sql(f"ALTER TABLE silver_facilities ALTER COLUMN `{c}` COMMENT '{comment.replace(chr(39), '')}'")
+    spark.sql(f"ALTER TABLE facilities_silver ALTER COLUMN `{c}` COMMENT '{comment.replace(chr(39), '')}'")
 
-assert n_silver == silver.select("facility_id").distinct().count(), "facility_id is not unique in silver_facilities!"
+assert n_silver == silver.select("facility_id").distinct().count(), "facility_id is not unique in facilities_silver!"
 print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 
 # COMMAND ----------
@@ -933,14 +933,14 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # MAGIC   count_if(n_service_claims = 0)                      AS no_service_claims,
 # MAGIC   count_if(size(possible_duplicate_ids) > 0)          AS possible_near_duplicates,
 # MAGIC   round(avg(completeness_score), 3)                   AS avg_completeness
-# MAGIC FROM silver_facilities
+# MAGIC FROM facilities_silver
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC -- Facilities per state (check for odd spellings that slipped through as NULL)
 # MAGIC SELECT state_clean, count(*) AS facilities
-# MAGIC FROM silver_facilities GROUP BY state_clean ORDER BY facilities DESC
+# MAGIC FROM facilities_silver GROUP BY state_clean ORDER BY facilities DESC
 
 # COMMAND ----------
 
@@ -948,7 +948,7 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # MAGIC -- Example: which facilities claim anything dialysis-related? (match on claim_norm, quote claim_text)
 # MAGIC SELECT f.facility_id, f.name, f.city_clean, f.state_clean, c.claim_field, c.claim_text, f.dq_flags
 # MAGIC FROM silver_facility_claims c
-# MAGIC JOIN silver_facilities f USING (facility_id)
+# MAGIC JOIN facilities_silver f USING (facility_id)
 # MAGIC WHERE c.claim_norm RLIKE 'dialys|haemodialys|hemodialys'
 # MAGIC ORDER BY f.state_clean, f.city_clean
 # MAGIC LIMIT 50
@@ -966,4 +966,4 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # MAGIC -- Spot-check the reorganized addresses against the original lines
 # MAGIC SELECT name, address_line1, address_line2, address_line3,
 # MAGIC        address_street, address_region, address_landmark, city_clean, state_clean, pincode_clean
-# MAGIC FROM silver_facilities TABLESAMPLE (30 ROWS)
+# MAGIC FROM facilities_silver TABLESAMPLE (30 ROWS)

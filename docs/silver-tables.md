@@ -6,8 +6,8 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 
 | Table | One row per | Use it for |
 |---|---|---|
-| `bronze_facilities` | source row | Raw copy of the Marketplace table. Control characters such as NUL bytes are removed, nothing else is changed. |
-| `silver_facilities` | facility (`facility_id`) | Everything: filtering, distance, scoring, display. |
+| `facilities_bronze` | source row | Raw copy of the Marketplace table. Control characters such as NUL bytes are removed, nothing else is changed. |
+| `facilities_silver` | facility (`facility_id`) | Everything: filtering, distance, scoring, display. |
 | `silver_facility_claims` | facility × field × claimed item | Matching a service (e.g. dialysis) and **quoting the evidence**. |
 | `silver_possible_duplicates` | suspected duplicate pair | Avoiding recommending the same place twice. |
 | `silver_dq_summary` | data-quality flag | How common each problem is (good for the presentation). |
@@ -20,9 +20,9 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 3. No usable coordinates and no address at all.
 4. Fewer than 30% of the kept source columns are filled in (`source_fill_share < 0.30`).
 
-**Columns** (still in `bronze_facilities` if you need them): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
+**Columns** (still in `facilities_bronze` if you need them): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, distinct_social_media_presence_count, affiliated_staff_presence, custom_logo_presence, number_of_facts_about_the_organization, post_metrics_*, engagement_metrics_*, source, cluster_id, source_urls. The `coordinates`, `latitude` and `longitude` columns are kept.
 
-## Key columns in `silver_facilities`
+## Key columns in `facilities_silver`
 
 | Column | Meaning |
 |---|---|
@@ -107,5 +107,5 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 20. **Re-run the notebook; don't edit silver tables by hand.** Every run overwrites all tables.
 21. **Each teammate has their own workspace and tables.** Results only match if everyone runs the same notebook version from the same branch.
 22. **Address parsing is rule-based.** `address_street`, `address_region` and `address_landmark` are a best effort (e.g. an unlabelled place name on line 1 is treated as part of the street). Quote `address_line1-3` when exact wording matters.
-24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `bronze_facilities` on `unique_id`.
+24. **`source_urls` is not in silver** (it was dropped on request). To show the web pages a record came from, join back to `facilities_bronze` on `unique_id`.
 23. **The source table name depends on what each person named the catalog** when they added the Marketplace listing. Set it in the `source_table` box at the top of the notebook.

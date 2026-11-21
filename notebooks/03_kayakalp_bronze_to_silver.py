@@ -10,7 +10,7 @@
 # MAGIC | Types fixed (`s_no`, `source_page` → int; `district_repaired` → boolean) | The CSV upload may read everything as text |
 # MAGIC | `award_rank_order` (1 = Best … 6 = Commendation) | To sort and compare awards |
 # MAGIC | District field split: the **last** comma-separated part becomes `district_clean`; the rest becomes `locality` | Some states wrote "village, block, district" in the district column |
-# MAGIC | State standardized (`state_clean`) | To join with `silver_facilities` |
+# MAGIC | State standardized (`state_clean`) | To join with `facilities_silver` |
 # MAGIC | Facility type kept as reported (`SDH/CHC`, `PHC`…), plus a type guessed from the name and a level (primary/secondary) | For filtering and like-for-like matching |
 # MAGIC | `name_norm`, `name_core` | For fuzzy matching to Virtue Foundation facilities |
 # MAGIC | `dq_flags` | Problems are flagged, never silently dropped |

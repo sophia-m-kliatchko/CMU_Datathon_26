@@ -10,7 +10,7 @@
 # MAGIC | Text trimmed, blanks set to NULL | The CSV upload keeps stray spaces |
 # MAGIC | `validity_from` / `validity_to` parsed from `dd-mm-yyyy` into real dates | So you can filter "certified in 2022" or "still valid" |
 # MAGIC | `certification_status` = current / expired (as of the run date) | **Every certificate in the 2026-11 scrape has expired (2019–2023)**. Treat it as "was certified", not "is certified" |
-# MAGIC | State standardized (`state_clean`), district title-cased (`district_clean`) | To join with `silver_facilities` |
+# MAGIC | State standardized (`state_clean`), district title-cased (`district_clean`) | To join with `facilities_silver` |
 # MAGIC | Facility type (PHC, CHC, DH, …) guessed from the name, with a level (primary/secondary) | For filtering and for matching like with like |
 # MAGIC | `name_norm` and `name_core` (the name with type words such as "PHC" removed) | For fuzzy matching to Virtue Foundation facilities |
 # MAGIC | Department scope parsed (`n_departments_assessed`, `covers_all_departments`) | A partial certification covers only some departments |

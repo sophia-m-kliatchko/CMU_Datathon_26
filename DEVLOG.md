@@ -22,6 +22,17 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 18:05: Renamed tables: `bronze_facilities` → `facilities_bronze`, `silver_facilities` → `facilities_silver`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`: table writes, reads, comments and SQL checks. The internal staging table is now `_facilities_silver_stage`.
+  - Text references in `notebooks/02_*` and `03_*`, `docs/silver-tables.md` and `docs/data-sources.md`.
+- **How:** word-boundary `sed` replacement; older DEVLOG entries are left as written, since they record history.
+- **Why:** Sophia's naming convention puts the dataset first and the layer second, matching `nqas_bronze`/`nqas_silver` and `kayakalp_bronze`/`kayakalp_silver`.
+- **Notes / follow-ups:**
+  - Anyone who already ran notebook 01 will still have the old `bronze_facilities` / `silver_facilities` tables in their workspace. Drop them by hand (`DROP TABLE IF EXISTS workspace.datathon.bronze_facilities`, and the same for `silver_facilities`).
+  - The other outputs of notebook 01 keep their names: `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`, `silver_rejected_facilities`.
+
 ### 2026-11-21 17:55: Decision: `source_urls` stays out of silver
 - **Who:** Sophia (decision), Claude (logged it)
 - **What:** no code change. `source_urls` remains dropped from `silver_facilities`, as implemented in `notebooks/01_bronze_to_silver.py`.
