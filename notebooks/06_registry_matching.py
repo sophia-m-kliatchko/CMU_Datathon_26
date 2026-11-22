@@ -13,6 +13,10 @@
 # MAGIC **How a match is found**
 # MAGIC 1. **Candidates:** same `state`, **and** at least one shared distinctive name word (words in more than `max_token_freq` names, e.g. "sri", "care", are ignored here), **and** close by: site coordinates within `max_distance_km`, or same PIN, or the site's PIN centroid within `max_pin_distance_km`, or the site's town/district named in the facility's address.
 # MAGIC 2. **Distinctive-word check:** after removing common/generic words (medical, college, cardiac, eye…) and place names, if both names still have words and none match (typo-tolerant), the pair is rejected; if only one name has such words, the link goes to review. This stops "ESIC Medical College" matching "Osmania Medical College".
+# MAGIC    **Kind-of-place check** (dental, eye, blood bank, diagnostics/lab, dialysis, fertility, physiotherapy, read from the full names):
+# MAGIC    - both names name a kind and they share none (e.g. "Fertility Foundation" vs "Eye Foundation"): different places, rejected;
+# MAGIC    - the **facility** names a kind the registry name doesn't (e.g. "Neo Dental Care" vs "Neo Hospital", "Blood Bank, Lal Bahadur Shastri Hospital" vs "Lal Bahadur Shastri Hospital"): review, never automatic. A department or specialist clinic shouldn't inherit a whole hospital's certificates without a person confirming;
+# MAGIC    - the **registry** name adds a specialty (eye, dental, fertility, physiotherapy; e.g. "Manocha Hospital" vs "Manocha Eye Hospital"): review, since these are often separate places. A registry name that only adds a hospital department (blood bank, dialysis, diagnostics/lab, e.g. "Kasturba Hospital Blood Bank") is left to the normal score: the hospital runs it.
 # MAGIC 3. **Score (0–100)** = name similarity (`rapidfuzz`: average of token-set and token-sort ratio on `name_core`, so being contained in a longer name isn't a perfect match) + location bonus (up to +20) + facility-type agreement (+5 / −10) + ownership agreement (government registry vs private facility −10, vs public +5) − 10 if a clinic/dentist is matched to a teaching-hospital, trauma, LaQshya or NCG listing.
 # MAGIC    Registry names that are only a type plus a place (e.g. "DH Faridabad") need the facility type to agree, or the facility name to be just as generic.
 # MAGIC 4. **Decide:** per site, the best candidate is linked if score ≥ `link_threshold`; `review_threshold` ≤ score < `link_threshold`, or a near-tie with a different facility, is linked **with `needs_review = true`**. A near-tie with a facility listed in the best one's `possible_duplicate_ids` is linked too (same place, two records). Name similarity below `min_name_score` is never linked.
@@ -79,6 +83,31 @@ GENERIC_NAME_WORDS = [
     "referral", "taluk", "area", "rural", "urban", "teaching", "mission", "society", "global", "life", "speciality",
     "surgical", "surgery", "trauma", "emergency", "fertility", "ivf", "laser", "vision", "nethralaya", "hosp", "medicity",
     "institution", "national", "regional", "state", "academy", "university", "society", "group", "enterprise", "enterprises"]
+# Kinds of place a name can name. Compared between facility and registry names (see the "Kind-of-place check" at the
+# top): disjoint kinds = different places; a kind only the facility names = review (a dental clinic or a hospital's
+# blood bank shouldn't silently inherit the hospital's registry evidence).
+KIND_PATTERNS = {
+    "dental": r"\bdent(al|ist|istry|o)",
+    "eye": r"\b(eye\w*|netra\w*|nethra\w*|ophthalm\w*|lasik|retina\w*)",
+    "blood bank": r"\bblood\s*(bank|centre|center)\b",
+    "diagnostics/lab": r"\b(diagnostics?|imaging|scans?|mri|radiology|pathology|laborator(y|ies)|labs?)\b",
+    "dialysis": r"\bdialysis\b",
+    "fertility": r"\b(ivf|(in)?fertility|test\s*tube)\b",
+    "physiotherapy": r"\bphysiother",
+}
+
+
+# Hospital departments: a registry entry naming one (e.g. "X Hospital Blood Bank") still belongs to hospital X.
+DEPARTMENT_KINDS = ["blood bank", "dialysis", "diagnostics/lab"]
+
+
+def kinds(col):
+    """Sorted list of the kinds of place a name mentions (see KIND_PATTERNS)."""
+    low = F.lower(col)
+    return F.filter(F.array(*[F.when(low.rlike(p), F.lit(k)) for k, p in sorted(KIND_PATTERNS.items())]),
+                    lambda x: x.isNotNull())
+
+
 GENERIC_PLACE_WORDS = ["district", "dist", "nagar", "city", "road", "rural", "urban", "east", "west", "north", "south",
                        "new", "old", "taluk", "block", "sector", "india"]
 
@@ -241,14 +270,22 @@ scored = (cand
     .withColumn("distinct_conflict", (F.col("n_f_distinct") > 0) & (F.col("n_s_distinct") > 0) & (F.col("distinct_overlap") == 0))
     # Only one name has distinctive words (e.g. "ESI Medical College, Coimbatore" vs "Coimbatore Medical College"): review
     .withColumn("distinct_one_sided", (F.col("n_f_distinct") > 0) != (F.col("n_s_distinct") > 0))
+    # Different kinds of place in the two full names (e.g. "Neo Dental Care" vs "Neo Hospital"): review, never automatic
+    .withColumn("f_kinds", kinds(F.col("f_name"))).withColumn("s_kinds", kinds(F.col("s_name")))
+    .withColumn("kind_conflict", (F.size("f_kinds") > 0) & (F.size("s_kinds") > 0) &
+                                 (F.size(F.array_intersect("f_kinds", "s_kinds")) == 0))
+    .withColumn("kind_mismatch", (F.size(F.array_except("f_kinds", "s_kinds")) > 0) |
+                (F.size(F.array_except(F.array_except("s_kinds", "f_kinds"),
+                                       F.array(*[F.lit(k) for k in DEPARTMENT_KINDS]))) > 0))
     .withColumn("match_score", F.round(F.least(F.lit(100.0), F.greatest(F.lit(0.0),
                 F.col("name_score") + loc_bonus + type_adj + own_adj + kind_adj)), 1))
-    .withColumn("match_score", F.when(F.col("distinct_one_sided"), F.least(F.col("match_score"), F.lit(LINK_T - 0.1)))
+    .withColumn("match_score", F.when(F.col("distinct_one_sided") | F.col("kind_mismatch"),
+                                      F.least(F.col("match_score"), F.lit(LINK_T - 0.1)))
                                 .otherwise(F.col("match_score")))
     .withColumn("distance_km", F.round(F.coalesce("d_site", "d_pin"), 2))
     .withColumn("distance_basis", F.when(F.col("d_site").isNotNull(), "site_coordinates")
                                    .when(F.col("d_pin").isNotNull(), "site_pin_centroid"))
-    .where((F.col("name_score") >= MIN_NAME) & F.col("generic_ok") & ~F.col("distinct_conflict") &
+    .where((F.col("name_score") >= MIN_NAME) & F.col("generic_ok") & ~F.col("distinct_conflict") & ~F.col("kind_conflict") &
            (F.col("match_score") >= REVIEW_T)))
 
 # COMMAND ----------
@@ -276,7 +313,11 @@ links = (ranked.join(best.select("site_id"), "site_id")
     .join(ambiguous, "site_id", "left")
     .withColumn("review_reason", F.concat_ws("; ", F.filter(F.array(
         F.when(F.col("distinct_one_sided"), F.lit("distinctive name words on one side only")),
-        F.when((F.col("match_score") < LINK_T) & ~F.col("distinct_one_sided"), F.lit("score below link threshold")),
+        F.when(F.col("kind_mismatch"), F.concat(F.lit("different kind of place in the names (facility: "),
+               F.coalesce(F.nullif(F.array_join("f_kinds", ", "), F.lit("")), F.lit("general")), F.lit("; registry: "),
+               F.coalesce(F.nullif(F.array_join("s_kinds", ", "), F.lit("")), F.lit("general")), F.lit(")"))),
+        F.when((F.col("match_score") < LINK_T) & ~F.col("distinct_one_sided") & ~F.col("kind_mismatch"),
+               F.lit("score below link threshold")),
         F.when(F.col("n_rivals") > 0, F.concat(F.lit("near-tie with "), F.col("n_rivals").cast("string"), F.lit(" other facility(ies)"))),
         F.when(F.col("s_generic") & ~F.coalesce(F.col("type_match"), F.lit(False)),
                F.lit("registry name is generic (type + place) and the type isn't confirmed")),

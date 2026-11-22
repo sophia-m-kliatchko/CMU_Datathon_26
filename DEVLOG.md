@@ -61,6 +61,126 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Notes / follow-ups:**
   - **Pull** in the Databricks Git folder `/Datathon Fall 26/CMU_Datathon_26`, then run the job "CMU Datathon pipeline 00-06".
   - `main` and `sophia-wip` now differ only by the two unverified Databricks files, plus this entry until the next sync.
+### 2026-11-22 01:02: Merged `Will_branch` and `main` into `website`
+- **Who:** Claude (for William)
+- **What:** `website` now includes:
+  - `Will_branch` (70c2e6f): the notebook 06 kind-of-place check and its docs;
+  - `origin/main` (73facd8): Sophia's Databricks-verified pipeline, `setup_pipeline.py`, `run_pipeline.py`, NFHS notebook 04, the project README and the pre-processed silver CSVs.
+- **How:** `git merge Will_branch`, then `git merge origin/main`. The only conflicts were in `DEVLOG.md`, where both sides had added entries at the top. I kept all 23 entries (no duplicates) and ordered them by timestamp, newest first. CLAUDE.md merged automatically and keeps the `app/` line and main's updated run order.
+- **Why:** Keep the website branch current with the pipeline it reads. The app code is unchanged, so the deployed app still matches.
+
+### 2026-11-22 00:52: End-to-end Databricks run (00 → 07) with main's notebooks + the 06 kind-of-place fix
+- **Who:** Claude (for William)
+- **What:**
+  - New workspace folder `/Users/<William>/e2e/CMU_Datathon_26`: main @ 73facd8's notebooks and input CSVs, plus this branch's `06_registry_matching.py` and Elliot's `notebooks/common/pin_nearby_facilities.py` copied as `notebooks/07_pin_nearby_facilities`.
+  - Helper notebook `/Users/<William>/e2e/00b_load_missing_bronze`: the bronze section of `setup_pipeline.py`, verbatim. It created the missing `facilities` and `nqas_certified_facilities` bronze tables; existing tables were kept.
+  - New job 681912826573850, "E2E check: 00-07 from main + 06 kind fix": tasks bronze → 00 → 01 → 02 → 03 → 04 → 05 → 06 → 07 on serverless, using the same parameters as `setup_pipeline.py`.
+  - The app `find-the-right-care` had stopped (the compute stops when idle on Free Edition), so I restarted and redeployed it from the same workspace code (`website` 71c20c1).
+- **How:** `databricks workspace import-dir`, `jobs create`, `jobs run-now` (run 218502582054949). The outputs were then checked through the SQL warehouse.
+- **Why:** Verify the whole pipeline end to end on the real datasets, including `facility_geo_ready` (07) and the website on fresh tables.
+- **Results:**
+  - Every task succeeded (about 8 minutes of compute).
+  - Validations passed: facilities 13/13, pincode 12/12, nqas 8/8, nfhs 7/7, facility_geo_ready 7/7.
+  - Row counts: `facilities` bronze 10,088; `facilities_silver` 9,989; `facility_geo_ready` 9,989 (8,350 high, 1,634 PIN centroid, 5 none), all IDs in `facilities_silver`; `registry_sites_silver` 24,961; `registry_services_silver` 22,757; `nqas_silver` 989; `nfhs_silver` 705.
+  - `facility_registry_links_silver`: 4,226 links (4,241 before; 15 rejected by the kind check). 1,197 need review, 165 of them because of the kind check.
+  - "Blood Bank, LBS Hospital" and Government Dental College Raipur are now review links. Kasturba Hospital ↔ Kasturba Hospital Blood Bank stays automatic.
+  - Deployed website on the fresh tables, adapter PASS on each search:
+    - Delhi C-section (100 km): T1 1, T3 3, R 3, U 854. The LBS blood bank moved from T2 to R.
+    - Patna dialysis: IGIMS T3.
+    - Mumbai blood bank (25 km): Lilavati T1.
+- **Notes / follow-ups:** The job and the e2e folder are a one-off check, separate from Sophia's "CMU Datathon pipeline 00-06" job; delete them after Elliot adds 07 to the pipeline. The 06 fix is still uncommitted on `Will_branch`.
+
+### 2026-11-22 00:15: Notebook 06: kind-of-place check for registry matches
+- **Who:** Claude (for William)
+- **What:** `notebooks/06_registry_matching.py` and `docs/registries-silver.md`. Added `KIND_PATTERNS` (dental, eye, blood bank, diagnostics/lab, dialysis, fertility, physiotherapy), `DEPARTMENT_KINDS`, `kinds()`, and the `kind_conflict` / `kind_mismatch` columns:
+  - Both names name kinds and share none: candidate rejected.
+  - The facility names a kind the registry name lacks, or the registry name adds a specialty (eye, dental, fertility, physiotherapy): score capped below the link threshold, so the link goes to review. The review reason names both kinds.
+  - The registry name only adds a department (blood bank, dialysis, diagnostics/lab): unchanged.
+- **How:**
+  - Found by the web app: "Blood Bank, Lal Bahadur Shastri Hospital" was auto-linked (score 98.8) to LBS Hospital's LaQshya maternity OT certificate.
+  - Queried the 4,241 live links. 248 had a kind word on one side only. Auto-accepted ones included Government Dental College Raipur → Pt. JNM Medical College (24 service rows) and Narayana Dental College → Narayana Medical College (27).
+  - Simulated the final rule on those links: 61 auto links go to review and 15 pairs are rejected, all of them clearly different places.
+  - Tested the Spark expressions on 8 sample pairs with local PySpark; `py_compile` passes.
+- **Why:**
+  - A department or specialist clinic was inheriting a whole hospital's registry evidence (and so its tiers in the app) with no review.
+  - Matching hospital departments in the registry (e.g. "Kasturba Hospital Blood Bank") stay automatic, because the hospital runs them.
+  - The rule is direction-aware, so true hospital ↔ blood-bank links aren't lost.
+- **Notes / follow-ups:** Not yet run on Databricks. Rerun notebook 06 to update `facility_registry_links_silver`, `facility_registry_summary_silver` and `registry_match_review`. The app reads the links live, so it picks up the change without a redeploy.
+
+### 2026-11-22 00:00: Redeployed the Databricks App with Alice's engine
+- **Who:** Claude (for William)
+- **What:** Databricks App `find-the-right-care` redeployed from `website` commit 71c20c1 (evidence and ranking by `evidence_confidence@2368382`).
+- **How:** `databricks sync` to the app's workspace folder, then `databricks apps deploy`.
+- **Why:** Make the deployed site match the integration. Checked on the deployed URL:
+  - `/api/health` reports `evidence_confidence@2368382`;
+  - Delhi C-section (100 km) gives 861 candidates, T1 1 / T2 1 / T3 3 / R 2 / U 854, with the adapter at PASS;
+  - Patna C-section (emergency) gives urgent mode, 0 recommended and 5 unconfirmed cards. These match the local runs.
+
+### 2026-11-21 23:51: Web app wired to Alice's evidence_confidence package
+- **Who:** Claude (for William)
+- **What:**
+  - `app/evidence_confidence/` (new): Alice's package copied unchanged from `alice-evidence-confidence` at commit 2368382. `app/EVIDENCE_CONFIDENCE_VERSION` records the commit and how to update it.
+  - `app/backend/engine.py` (new):
+    - loads the links, sites and service rows (one service) for the candidate facilities;
+    - drops service rows from empanelment or general-accreditation sites;
+    - calls her `silver.adapt_registry_tables()` and `build_recommendation_response()`;
+    - reshapes her response for the page: plain-language warnings, evidence items with "counted" / "match under review", per-facility ranking text, and urgent-mode grouping.
+  - `app/main.py`: `EVIDENCE_PROVIDER=evidence_confidence` (new default) routes searches through `engine.py`; health reports the package commit and a provisional note.
+  - `app/backend/config.py`, `app.yaml`: new default; `EVIDENCE_TABLE` and `RANKER` settings removed from `app.yaml`.
+  - `app/backend/evidence.py`: removed `TableEvidence` (gold-table plan dropped); tier labels follow Alice's definitions; the placeholder stays as a fallback and for mock mode.
+  - `app/backend/services.py`: `best_tier` per service (T1 possible for C-section, obstetrics, dialysis, blood bank, emergency, stroke and eye care; T3 at most for NICU, ICU, trauma, cancer and cardiac care).
+  - `app/static/*`: new legend (Alice's tiers, her R wording), service hint and results note on the best possible tier, urgent section "Nearest facilities, emergency capability not confirmed", evidence status labels.
+  - `app/README.md`, `CLAUDE.md`: describe the built integration.
+- **How:**
+  - Ran her tests at 2368382 in a separate worktree: 193 pass, 2 skipped.
+  - Tested live against `workspace.datathon`:
+    - Delhi C-section within 100 km: 861 candidates, T1 1 / T2 1 / T3 3 / R 2 / U 854;
+    - Patna C-section, emergency: 0 recommended, 5 T3 cards;
+    - Delhi ICU within 25 km: T3 2, R 2.
+    - Her adapter report was PASS in each; about 1–1.6 s per search.
+  - Checked the explainer, mock mode, and Playwright screenshots (no console errors).
+- **Why:**
+  - The team computes evidence and ranking per request in Alice's package instead of gold tables. A Databricks App only uploads `app/`, so the package is copied in at a fixed commit.
+  - Following Alice's answers:
+    - emergency maps to her urgent mode;
+    - capability eligibility is never invented;
+    - sites are passed so their flags count;
+    - service rows from empanelment and general-accreditation sites are filtered out.
+  - The display only filters her order, without re-scoring or re-sorting.
+- **Notes / follow-ups:**
+  - Self-reported claims aren't counted (no reviewed claim-to-service matcher yet), so most facilities are U.
+  - Urgent searches recommend nothing until an emergency-capability source exists.
+  - Notebook 06 linked "Blood Bank, Lal Bahadur Shastri Hospital" to LBS Hospital's LaQshya certificate (a name-match issue to review in 06).
+  - Not yet redeployed to Databricks.
+
+### 2026-11-21 23:28: Test deploy of the web app as a Databricks App
+- **Who:** Claude (for William)
+- **What:**
+  - New Databricks App `find-the-right-care` (compute MEDIUM), with resources `sql-warehouse` (Serverless Starter Warehouse, CAN_USE) and `serving-endpoint` (`databricks-meta-llama-3-3-70b-instruct`, CAN_QUERY).
+  - Code uploaded to `/Workspace/Users/<William>/apps/find-the-right-care` from the `website` branch (commit 7f5b751).
+  - Granted the app's service principal `USE CATALOG` on `workspace` and `USE SCHEMA, SELECT` on `workspace.datathon`.
+- **How:** `databricks apps create --json` (resources attached at creation, so no UI step), `databricks sync`, GRANTs through the SQL warehouse, `databricks apps deploy`.
+- **Why:** Check that the app runs on Databricks before the evidence engine is ready. Verified on the deployed URL:
+  - `/api/health` reports live data;
+  - a PIN lookup for 800001 works;
+  - a dialysis search within 100 km of Patna returns 204 candidates (IGIMS T2 first);
+  - the Llama explainer answers.
+- **Notes / follow-ups:**
+  - It still uses the placeholder evidence and ranking.
+  - Teammates need workspace access plus *Can use* on the app to open it.
+  - An app's compute runs until stopped (`databricks apps stop find-the-right-care`).
+  - Added `.databricks/` (the CLI's sync state) to `.gitignore`.
+
+### 2026-11-21 23:22: README rewritten for the no-gold-table plan
+- **Who:** Claude (for William)
+- **What:** In `app/README.md`, rewrote:
+  - the pipeline diagram and status line;
+  - "Tables the app reads today" note;
+  - "What we need from each owner" items 1, 2 and 4;
+  - replaced the "Plugging in the real evidence engine" and "Plugging in the real ranker" sections with "Plugging in Alice's package".
+- **How:** Edited the README. No code changed.
+- **Why:** The team decided against gold tables. Evidence and ranking will be computed per request by Alice's `evidence_confidence` package, so the proposed `facility_service_evidence_gold` contract and the separate ranker contract were out of date.
+- **Notes / follow-ups:** `TableEvidence` and `EVIDENCE_PROVIDER=table` in the code are now obsolete; remove them when wiring in Alice's package.
 
 ### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
 - **Who:** Claude (for Sophia)
@@ -88,6 +208,17 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - Test folder `/Users/<me>/datathon_verify` and schema `workspace.datathon_verify` are left in place for inspection; they can be dropped later.
   - `run_pipeline.py` still can't orchestrate on serverless notebook compute; the Lakeflow Job is the runner.
   - Teammates who already built `workspace.datathon.facilities` with the old `setup_pipeline` should drop it and re-run setup.
+
+### 2026-11-21 23:15: README: planned integration with Alice's evidence engine
+- **Who:** Claude (for William)
+- **What:** Added "Planned integration with Alice's evidence engine" to `app/README.md`. It covers:
+  - the call sequence per search;
+  - the rows her adapters need, checked against the live table schemas (`DESCRIBE` on the workspace tables);
+  - how her tier rules differ from the placeholder's;
+  - 10 open questions for Alice.
+- **How:** Read `origin/alice-evidence-confidence` (commit 9962ceb: `evidence_confidence/`, `docs/evidence-confidence-integration.md`, `TIERS.md`) read-only; described the workspace tables through the SQL warehouse. No code changed.
+- **Why:** The team decided against gold tables. Evidence and ranking will run per request through Alice's Python package, so the app needs an agreed call sequence and answers to the open questions before wiring it in.
+- **Notes / follow-ups:** `kayakalp_silver` isn't in the workspace (only `kayakalp_silver_validation`); no NQAS-to-facility link exists; nothing yet produces the reviewed service and yes/no for claims, or `capability_eligible`.
 
 ### 2026-11-21 22:58: Project README; merged `main` (PR #15) into `sophia-wip`, keeping the verified notebook 01
 - **Who:** Claude (for Sophia)
@@ -122,6 +253,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Why:** keep the bronze table as uploaded; the same notebook must run against the local harness's text CSVs and the workspace's typed table.
 - **Notes / follow-ups:** fix committed on branch `pipeline-fixes`.
 
+### 2026-11-21 22:40: Team section in app/README.md; new `website` branch
+- **Who:** Claude (for William)
+- **What:** Added "For the team" section to `app/README.md` (request flow, tables read today, what is needed from the evidence, ranking, geography and job owners). Created branch `website` from `Will_branch` (uncommitted work carried over).
+- **How:** Edited the README; `git checkout -b website`.
+- **Why:** Teammates need to know which tables the app reads, that no gold table is used yet, and which contracts (evidence table, ranker) are unagreed proposals.
+
 ### 2026-11-21 22:35: Pipeline as a Lakeflow Job; missing bronze inputs created; GPU env headers removed
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -133,6 +270,36 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **How:** job created and configured via the Jobs API (7 sequential tasks, 60-min timeout each); bronze tables loaded with Spark CSV reads (all-string, same read options as the notebooks' loaders); headers removed with an exact-match patch script; then a job-level `environment_key` ("default", CPU environment version 5) was added to all 7 tasks.
 - **Why:** Sophia asked for a script that runs all pipeline code sequentially. The first two job runs failed instantly with "The selected GPU base environment is incompatible with the selected accelerator (CPU)": the notebooks' environment setting persists server-side (Environment panel), so removing the source headers alone wasn't enough — the job-level CPU environment on every task overrides it, and the third run is executing.
 - **Notes / follow-ups:** step 03 runs in validation mode by default (`write_output=false`), so it does not create `kayakalp_silver`; create that separately if analysis needs it. `run_pipeline` stays for reference but can't orchestrate on serverless notebook compute.
+
+### 2026-11-21 22:26: "Find the Right Care" web app with placeholder evidence and ranking
+- **Who:** Claude (for William)
+- **What:**
+  - New `app/` folder:
+    - FastAPI backend: `main.py`, `backend/{config,db,services,geography,evidence,ranking,explain,mock}.py`;
+    - one web page: `static/index.html`, `styles.css`, `app.js`;
+    - `app.yaml` (Databricks App config), `requirements.txt`, and `README.md` (how to run and deploy, plus the plug-in contracts).
+  - `CLAUDE.md` layout line added.
+  - In William's workspace: ran Elliot's `07_pin_nearby_facilities` (from main, `notebooks/common/pin_nearby_facilities`) once to build `facility_geo_ready`. The copy was placed at `pipeline_check/notebooks/07_pin_nearby_facilities`, because its `%run ./common/...` paths only resolve from `notebooks/`.
+- **How:**
+  - The request flow follows the team's end-to-end diagram: geography (Elliot's search, ported to SQL) → evidence (LEFT JOIN; no evidence = U) → rank the full set → only then pick the top 5 + alternatives → optional AI explainer.
+  - **Evidence and ranking are plug-in points:**
+    - `EVIDENCE_PROVIDER=placeholder|table` (the table contract is in the README);
+    - the placeholder ranker scores evidence tier minus distance minus location uncertainty.
+  - **AI explainer:** `databricks-meta-llama-3-3-70b-instruct`, grounded in the cited evidence only, with a template fallback.
+  - **Tests:**
+    - Mock mode with FastAPI's TestClient.
+    - Live mode against `workspace.datathon` through the CLI profile: Delhi 110001 (737 candidates) and Patna 800001; about 1.5–3.5 s per search.
+    - Screenshots of desktop and mobile with headless Chromium (Playwright, in a scratchpad virtualenv; browser cached in `~/Library/Caches/ms-playwright`). No console errors.
+  - **Bugs fixed during testing:**
+    - Array columns come back as JSON text without pyarrow, so they were being split into characters (`db.as_list`).
+    - The candidate cap was raised from 500 to 5,000, so evidence is added before anything is cut.
+    - On mobile, the emergency notice moved above the form, and the banner margins were fixed.
+- **Why:** William asked for a website that uses the team's Databricks pipeline. The model and scoring belong to teammates, so the app defines their interfaces and runs on placeholders until their parts exist. The page shows "Provisional results" while any placeholder is active. Design aims: calm and trustworthy, accessible type, tiers shown as text as well as colour, honest uncertainty (straight-line distance, location certainty per facility, "call ahead" on every card, 112/108 for emergencies).
+- **Notes / follow-ups:**
+  - Needs from teammates: the evidence table (contract in `app/README.md`), the tier definitions, and a ranker.
+  - Not yet deployed as a Databricks App (steps in the README; the app's service principal needs `SELECT` on `workspace.datathon` and use of the SQL warehouse and serving endpoint).
+  - The placeholder's keyword matching over facility claims is loose (e.g. an eye centre matched "C-section"); it's only for the demo.
+  - For Elliot: `notebooks/common/pin_nearby_facilities` should probably live at `notebooks/07_pin_nearby_facilities`, since its `%run ./common/...` lines fail from inside `common/`.
 
 ### 2026-11-21 22:18: PR #14 merged: pipeline runner and NFHS notebook 04 are on `main`
 - **Who:** Sophia (approved), Claude (merged)
@@ -179,6 +346,72 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - `03_kayakalp` runs in validation-only mode under the runner (`write_output` defaults to false), as it does when opened directly.
   - The runner needs `04_nfhs_bronze_to_silver.py`, which is on `main` only after PR #14 merges; until then step 04 shows MISSING on `main`.
   - Not yet run on Databricks.
+
+### 2026-11-21 22:01: Pipeline check re-run on main's verified pipeline (00 → 01 + 05 → 06, plus 02 and 03)
+- **Who:** Claude (for William)
+- **What:**
+  - Job 413468616877500 updated to "Pipeline check: 00 -> 01 + 05 -> 06, plus 02 and 03". It uses unchanged copies of `Will_branch` `427dc75` (main + 2 commits), with notebook 02 also depending on 00.
+  - Dropped `kayakalp_silver_validation` beforehand (notebook 03 is create-only).
+  - Run 253038959423039: 00, 02, 03 and 05 succeeded.
+  - **Notebook 01 failed:** `InvalidRunConfiguration: The selected GPU base environment is incompatible with the selected accelerator (CPU)`. Its file starts with a `# /// script … base_environment = "databricks_ai_v6" … # ///` header, from commit `4297f3c`. That's a GPU environment, while serverless jobs run on CPU.
+  - Fix, **in the workspace copy only:** deleted notebook 01 and re-imported it without those 5 lines. Overwriting in place wasn't enough: the environment recorded at first import stayed. Then repaired 01 and 06, which **succeeded**.
+- **How:**
+  - `workspace delete` + `workspace import` (new object, no environment metadata, checked by a Jupyter export).
+  - `jobs repair-run` with `latest_repair_id`: a second repair is silently not created without it.
+  - Counts checked with the SQL Statements API.
+- **Results, with the previous run (patched old main) for comparison:**
+  - `facilities_silver` 9,989 (=). **Facilities with coordinates: 8,350**. Main's notebook 01 now nulls coordinates that don't match the PIN: 1,598 `nulled_pin_mismatch`, 5 `nulled_state_mismatch`.
+  - `pincode_*`, `registry_*`, `nqas_silver` (989) and `kayakalp_silver_validation` (1,197) all unchanged.
+  - **Links:** 4,241 (was 4,482). Needing review: 1,154 (was 1,444). Confident: 3,087 (was 3,038).
+  - Facilities in at least one registry: 2,639 (was 2,745).
+  - Confident evidence: C-section 118 (114), trauma 130 (126), cancer 98 (90), dialysis 37 (36), blood bank 21 (19), NICU 4 (4).
+  - Teammates' validation tables written and passed: `facilities_validation`, `pincode_validation`, `nqas_validation`.
+- **Why:** Main now has Sophia's verified pipeline, with both reported bugs fixed and the PIN notebook renamed 04 → 00. William wanted the job verified on the current code. Reading the change: with bad facility coordinates removed, fewer pairs qualify on distance, so there are fewer links overall. But fewer links get flagged "more than 10 km apart", so more of them are confident.
+- **Notes for Sophia:**
+  - Remove the `# /// script … # ///` header (lines 2–6) from `notebooks/01_bronze_to_silver.py`. It makes notebook 01 fail in any serverless or CPU job.
+  - Databricks adds this header when the notebook is exported or committed from a workspace where the AI/GPU environment was selected.
+
+### 2026-11-21 21:31: Notebooks 02 (NQAS) and 03 (Kayakalp) added to the Databricks pipeline check
+- **Who:** Claude (for William)
+- **What:**
+  - Uploaded `data/external/nqas_certified_facilities.csv` and `kayakalp_2021_22.csv` to the Volume, and created `workspace.datathon.nqas_bronze` (989 rows) and `kayakalp_bronze` (1,197 rows), all text columns, as `scripts/README.md` describes.
+  - Added unchanged copies of notebooks 02 and 03 to `/Users/<William>/pipeline_check/notebooks/`.
+  - Job 413468616877500 renamed "Pipeline check: 04 -> 01 + 05 -> 06, plus 02 and 03", with tasks `nb02_nqas` and `nb03_kayakalp` running in parallel with the main chain.
+  - Run 183485095627632: **all 6 tasks succeeded** (about 5 minutes).
+- **How:**
+  - Bronze tables built with `read_files(…, format => 'csv', header => true, inferColumnTypes => false)` through the SQL Statements API.
+  - Job updated with `databricks jobs reset`, then `jobs run-now`.
+- **Results:**
+  - `nqas_silver` 989 (all `expired`, as documented; 1 with an unrecognized state).
+  - `kayakalp_silver_validation` 1,197 (equal to bronze, Alice's check).
+  - Registry and link tables unchanged (4,482 links).
+- **Why:** William wanted every notebook so far checked on Databricks.
+- **Notes for teammates:**
+  - **Notebook 03 (Alice):**
+    - With `write_output = true` it creates `kayakalp_silver_validation` and refuses to run if that table already exists, so the job's next **Run now** will fail at `nb03` unless that table is dropped first. That's intended on her side; the job description says so.
+    - With the default `write_output = false`, the first and last check cells query `FROM {SILVER}`, a table never created in that mode. They should probably read the temp view `kayakalp_validation_result`, as the middle check does.
+  - **Naming:** the Kayakalp output is now `kayakalp_silver_validation`, not the `kayakalp_silver` that `docs/data-sources.md` and the scripts README mention.
+
+### 2026-11-21 21:15: Full pipeline verified on Databricks (04 → 01 → 05 → 06)
+- **Who:** Claude (for William)
+- **What:**
+  - Created the saved Databricks job **"Registry pipeline check (04 -> 01 -> 05 -> 06)"** (job ID 413468616877500) in William's workspace. It runs notebooks from `/Users/<William>/pipeline_check/notebooks/`, a copy of `Will_branch` (`f0c78e2`) plus `common/`.
+  - **One change in that copy only:** `01_bronze_to_silver` line 753 calls `haversine_km(F.col("latitude_a"), …)` instead of passing strings. That's the same fix as on `sophia-wip`. The repo is unchanged; William is telling Sophia.
+  - Run 1017643203247717: all 4 tasks succeeded in about 5 minutes on serverless.
+- **How:**
+  - `databricks workspace import-dir`, `jobs create` (04 first; 01 and 05 in parallel after it; 06 after both), `jobs run-now`.
+  - Counts checked with the SQL Statements API.
+- **Results** (identical to the local test):
+  - `facilities_silver` 9,989; `silver_facility_claims` 549,841
+  - `pincode_silver` 165,625; `pincode_centroids_silver` 19,586
+  - `registry_sites_silver` 24,961; `registry_services_silver` 22,757
+  - `facility_registry_links_silver` 4,482; `facility_registry_summary_silver` 9,989; `registry_match_review` 1,444
+  - Facilities in at least one registry: 2,745. Confident evidence: C-section 114, trauma 126, cancer 90, dialysis 36, blood bank 19, NICU 4.
+  - Registry sites now have PIN locations (e.g. 16,675 / 21,480 NABH sites).
+- **Why:** William wanted to check that everything so far runs end to end on Databricks, not just locally. The job is kept so it can be re-run from **Jobs & Pipelines → Run now**.
+- **Notes / follow-ups:**
+  - Once Sophia's notebook 01 fix reaches main, re-upload or point the job at the Git folder, so it no longer uses the patched copy.
+  - Notebooks 02 (NQAS) and 03 (Kayakalp) aren't in the job yet; they need `nqas_bronze` and `kayakalp_bronze` loaded first.
 
 ### 2026-11-21 21:05: NFHS notebook fixed and fitted into the pipeline as `04_nfhs_bronze_to_silver.py`
 - **Who:** Claude (for Sophia; notebook written by elliotl-ops)
@@ -239,6 +472,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Notes / follow-ups:**
   - **`main` and `sophia-wip` now differ only by the two unverified Databricks files** (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`), plus this DEVLOG entry until the next sync.
   - **Next:** Pull `main` (or `sophia-wip`) in the Databricks Git folder, then run 00 → 01 → 02 → 03 → 05 → 06 once on Databricks to catch anything serverless-specific.
+
 
 ### 2026-11-21 20:45: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
 - **Who:** Claude (for Sophia)

@@ -1,0 +1,5 @@
+# Vendored copy of Alice's evidence_confidence package. Do not edit files in app/evidence_confidence/.
+# To update: copy it again from Alice's branch at a new commit and change the commit below.
+#   git fetch origin && rm -rf app/evidence_confidence && git archive <commit> evidence_confidence | tar -x -C app
+source_branch: alice-evidence-confidence
+commit: 236838212f1af6e389b46dd354700b76223051ef

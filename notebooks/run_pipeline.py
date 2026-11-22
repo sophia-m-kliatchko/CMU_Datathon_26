@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Run the whole pipeline: 00 → 06
+# MAGIC # Run the whole pipeline: 00 → 07
 # MAGIC
 # MAGIC Runs each notebook in order with `dbutils.notebook.run`, and records what happened in **`pipeline_run_log`** (one row per step per run):
 # MAGIC
@@ -14,7 +14,7 @@
 # MAGIC | `failed_checks` | for steps with a `<dataset>_validation` table: the checks that failed in this run |
 # MAGIC
 # MAGIC **Dependencies** (a failed step skips the steps that need it; the others still run):
-# MAGIC `00` → `01`, `02`, `04`, `05`; `01` + `05` → `06`; `03` is independent.
+# MAGIC `00` → `01`, `02`, `04`, `05`; `01` + `05` → `06`; `01` + `06` → `07`; `03` is independent.
 # MAGIC
 # MAGIC **How to use:** set the widgets, then **Run all**. A summary prints at the end, and the notebook fails at the end if any step failed, so a scheduled job shows red.
 # MAGIC To see past runs: `SELECT * FROM pipeline_run_log ORDER BY run_started_at DESC, step`.
@@ -30,7 +30,7 @@ from pyspark.sql import functions as F
 
 dbutils.widgets.text("catalog", "workspace", "1. Catalog")
 dbutils.widgets.text("schema", "datathon", "2. Schema")
-dbutils.widgets.text("steps", "00,01,02,03,04,05,06", "3. Steps to run (comma-separated)")
+dbutils.widgets.text("steps", "00,01,02,03,04,05,06,07", "3. Steps to run (comma-separated)")
 dbutils.widgets.dropdown("stop_on_failure", "no", ["no", "yes"], "4. Stop everything at the first failure")
 dbutils.widgets.text("timeout_minutes", "60", "5. Timeout per notebook (minutes)")
 # Optional input overrides; leave blank to use each notebook's own default
@@ -62,6 +62,7 @@ PIPELINE = [
     ("04", "04_nfhs_bronze_to_silver", _opt("nfhs_source", "source"), ["00"], "nfhs_validation"),
     ("05", "05_registries_bronze_to_silver", {}, ["00"], None),
     ("06", "06_registry_matching", {}, ["01", "05"], None),
+    ("07", "07_pin_nearby_facilities", {"rebuild_geo_ready": "yes", "pincode": "110001", "radius_km": "50", "max_results": "25"}, ["01", "06"], "facility_geo_ready_validation"),
 ]
 
 # COMMAND ----------
