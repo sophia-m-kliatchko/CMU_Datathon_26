@@ -47,6 +47,8 @@ class EvidenceFlags:
     missing_citation: bool = False
     temporal_uncertainty: bool = False
     rejected_candidate_match: bool = False
+    related_specialty: bool = False  # credited support includes specialty training (expertise, not availability)
+    attribution_unresolved: bool = False  # some self-reported claims on this record describe another named facility
 
 
 @dataclass(frozen=True)
@@ -85,10 +87,13 @@ class TierAssessment:
     identity_evidence_ids: tuple
     assumptions: tuple
     contradiction_max_age_days: int
-    framework_version: str = 'evidence-tiers/1'
+    framework_version: str = 'evidence-tiers/2'
     pending_stronger_tier: Optional[Tier] = None
     pending_source_families: tuple = ()
     identity_review_required: bool = False
+    related_specialty: tuple = ()  # credited specialty-training statements: clinical expertise, not service availability
+    t2_basis: tuple = ()  # tiers/2 routes to T2 (see T2_BASIS_TEXT); empty unless base is T2
+    evidence_nature: tuple = ()  # 'operational' and/or 'expertise' for the credited evidence
 
     def to_dict(self):
         return _jsonable(self)
@@ -102,6 +107,78 @@ NON_SERVICE = {'nqas': Scope.QUALITY, 'kayakalp': Scope.CLEANLINESS, 'hfr': Scop
 INDIRECT_BASIS = {'nmc': 'training', 'dnb': 'training', 'ncg': 'membership',
                   'trauma': 'sanctioned_not_confirmed_functional', 'virtue_foundation': 'self_report'}
 DIRECT_FAMILIES = {'laqshya', 'nabh'}
+SPECIALTY_ONLY_FLAG = 'INDIRECT_VIA_SPECIALTY'  # notebook 05: tag inferred from a specialty department/course
+ATTRIBUTION_FLAG = 'RECORD_ATTRIBUTION_UNRESOLVED'  # set by service_claims on records with other-facility claims
+
+# --- Tier framework tiers/2 (variant C, approved 2026-11-22) ---------------------------------
+# Services that are a procedure or a staffed unit: specialist training alone is expertise, not the unit.
+PROCEDURE_OR_UNIT_SERVICES = frozenset({
+    'dialysis', 'emergency_c_section', 'normal_delivery', 'high_risk_pregnancy', 'nicu', 'picu', 'icu',
+    'neonatal_care', 'blood_bank', 'cath_lab', 'ct_mri', 'imaging', 'emergency', 'trauma', 'stroke_care',
+    'chemotherapy', 'radiotherapy', 'transplant', 'joint_replacement', 'laparoscopy', 'endoscopy',
+    'interventional_radiology', 'nuclear_medicine', 'lab_services', 'burns', 'fertility'})
+# Weakly related disciplines in notebook 05's course->service tags: T3 only, never corroborate.
+BROAD_SPECIALTY_HINTS = {
+    'icu': ('anaesthesiology', 'organ transplant anaesthesia'),
+    'trauma': ('orthopaedic', 'neuro surgery', 'hand surgery'),
+    'cardiac_care': ('cardiac anaesthesia',), 'cardiac_surgery': ('cardiac anaesthesia',),
+    'neurosurgery': ('neuro anaesthesia',), 'gynaecology': ('gynaecologic oncology',),
+    'lab_services': ('onco-pathology',),
+    'paediatrics': ('paediatric surgery', 'pediatric cardiology', 'pediatric hemato', 'pediatric intensive',
+                    'paediatric nephrology'),
+}
+T2_BASIS_TEXT = {
+    'expired_certification': 'a direct certification that has expired (inspected in the past)',
+    'membership': 'membership of a service-specific network (e.g. National Cancer Grid), not an inspection',
+    'designation': 'a service-specific government designation',
+    'specialist_department': 'an NMC-approved specialist training department in this discipline '
+                             '(clinical expertise; not confirmation that the service is currently offered)',
+    'corroborated_self_report': "the facility's own listing, corroborated by an independent registry record",
+}
+
+
+def _evidence_class(e, family, candidate, service):
+    if family in DIRECT_FAMILIES and candidate in (Tier.T1, Tier.T2):
+        return 'direct_current' if candidate == Tier.T1 else 'direct_expired'
+    if family == 'ncg':
+        return 'membership'
+    if family == 'trauma':
+        return 'designation_sanctioned' if 'SANCTIONED_NOT_CONFIRMED_FUNCTIONAL' in e.qualifiers else 'designation'
+    if family in ('nmc', 'dnb'):
+        if any(h in e.statement.lower() for h in BROAD_SPECIALTY_HINTS.get(service, ())):
+            return 'training_broad'
+        if service in PROCEDURE_OR_UNIT_SERVICES:
+            return 'training_unit'
+        return 'training_department' if family == 'nmc' else 'training_undated'
+    if family == 'virtue_foundation':
+        return 'self_report'
+    return 'other'
+
+
+_CORROBORATES = {'direct_expired', 'membership', 'designation', 'training_unit', 'training_department', 'training_undated'}
+
+
+def _tier_from_classes(base, items):
+    """tiers/2: upgrade (never downgrade) a credited base tier from the evidence classes present."""
+    classes = {c for c, _ in items}
+    nature = tuple(sorted({'expertise' if c.startswith('training') else 'operational' for c in classes}))
+    basis = []
+    if 'direct_expired' in classes:
+        basis.append('expired_certification')
+    if 'membership' in classes:
+        basis.append('membership')
+    if 'designation' in classes:
+        basis.append('designation')
+    if 'training_department' in classes:
+        basis.append('specialist_department')
+    if 'self_report' in classes and any(c in _CORROBORATES and f != 'virtue_foundation' for c, f in items):
+        basis.append('corroborated_self_report')
+    registry = {f for c, f in items if c in ('direct_expired', 'membership', 'designation')}
+    if base == Tier.T1 or len(registry) >= 2:
+        return Tier.T1, tuple(), nature
+    if basis:
+        return Tier.T2, tuple(basis), nature
+    return base, tuple(), nature
 
 
 def source_family(e):
@@ -257,6 +334,7 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
         fingerprints[fingerprint] = e.evidence_id
         relevant.append(e)
     decisions, supporters, candidates, support_matches, negatives, assumptions = [], [], [], [], [], []
+    related = []
     for e in relevant:
         family, match = source_family(e), identity_status(e)
         basis = _basis(e, family)
@@ -272,6 +350,8 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
                 supporters.append(e)
                 candidates.append(candidate)
                 credit = True
+                if SPECIALTY_ONLY_FLAG in e.qualifiers:
+                    related.append(e.statement)  # clinical expertise (training), not service availability
             elif match != 'accepted':
                 reasons.append(f'Identity {match}; candidate evidence cannot establish verification at this facility.')
         elif e.polarity == Polarity.CONTRADICTS:
@@ -286,6 +366,13 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
                                           credit, contradiction, tuple(reasons)))
     order = {Tier.T1: 0, Tier.T2: 1, Tier.T3: 2}
     base = min(candidates, key=order.__getitem__) if candidates else Tier.U
+    by_id = {e.evidence_id: e for e in relevant}
+    items = [(_evidence_class(by_id[d.evidence_id], d.source_family, d.candidate_tier, service), d.source_family)
+             for d in decisions if d.credited]
+    if base != Tier.U:
+        base, t2_basis, nature = _tier_from_classes(base, items)
+    else:
+        t2_basis, nature = (), ()
     pending = [d for d in decisions if d.match_status in ('pending', 'unknown')
                and d.candidate_tier is not None]
     stronger = [d.candidate_tier for d in pending
@@ -303,6 +390,8 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
         expired_certification=any(source_family(e) in DIRECT_FAMILIES and temporal[e.evidence_id].status == 'historical' for e in positive_records),
         identity_review=any(status != 'accepted' for status in support_matches),
         rejected_candidate_match=any(identity_status(e) == 'rejected' for e in relevant),
+        related_specialty=bool(related),
+        attribution_unresolved=any(ATTRIBUTION_FLAG in e.qualifiers for e in supporters),
         conflicting_evidence=conflict,
         missing_citation=any(not e.citations for e in positive_records),
         temporal_uncertainty=any(
@@ -318,6 +407,10 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
     explanation = [f'Base {base.value}; effective {effective.value}; identity review status: {review}.']
     if base == Tier.U:
         explanation.append('No accepted, eligible service support. Retain the facility; unknown is not unavailable.')
+    if related:
+        explanation.append('Includes specialist training in a related specialty: evidence of clinical expertise, not confirmation that this service is currently offered.')
+    if flags.attribution_unresolved:
+        explanation.append('Some self-reported claims on this record describe another named facility; attribution unresolved.')
     if effective == Tier.R:
         explanation.append('All applicable supporting associations are unresolved; no verification credit. Rejected links are excluded from support.')
     if pending:
@@ -327,7 +420,11 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
     if effective == Tier.X:
         explanation.append(f'Credible unresolved counterevidence overlays {base.value}; base tier and source statements remain available.')
     if base == Tier.T2:
-        explanation.append('Historical direct verification supports past capability only; expiry does not establish service absence.')
+        if 'expired_certification' in t2_basis:
+            explanation.append('Historical direct verification supports past capability only; expiry does not establish service absence.')
+        explanation.append('T2 because of ' + '; '.join(T2_BASIS_TEXT[b] for b in t2_basis) + '.')
+        if nature == ('expertise',):
+            explanation.append('This T2 rests on clinical expertise only; it does not confirm that the service is currently offered.')
     if flags.current_listing_undated:
         explanation.append('Authoritative current-listing assertion is undated; no scrape/snapshot freshness inferred.')
     explanation.append('Certification/listing is not proof of current staffing, operational readiness or patient acceptance.')
@@ -340,4 +437,6 @@ def evidence_tier(facility_id: str, service: str, evidence_records: Iterable[Evi
         pending_stronger_tier=min(stronger, key=order.__getitem__) if stronger else None,
         pending_source_families=tuple(sorted({d.source_family for d in pending})),
         identity_review_required=flags.identity_review,
+        related_specialty=tuple(dict.fromkeys(related)),
+        t2_basis=t2_basis, evidence_nature=nature,
     )

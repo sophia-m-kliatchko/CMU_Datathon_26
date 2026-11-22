@@ -22,6 +22,26 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 14:30: Tier framework evidence-tiers/2 (variant C) integrated in production (Alice)
+- **Who:** Claude (for Alice). Uncommitted, for review.
+- **What:** `tiers.py` applies the approved variant C upgrade (`_evidence_class`, `_tier_from_classes`, `PROCEDURE_OR_UNIT_SERVICES`, `BROAD_SPECIALTY_HINTS`); new assessment fields `t2_basis`, `evidence_nature`; framework `evidence-tiers/2`. `pipeline.py`: route-specific T2 explanation, `tier_label`, `t2_basis`, `evidence_nature`. `evidence_review_audit.py` mirrors the rule. `service_claims.py`: guard skipped (and reported) when callers pass no facility names, for the website's current call.
+- **Result:** all 5,619 evidence pairs: T1 281 / T2 942 / T3 2,641 / R 1,754 / U 1 (was T2 77 / T3 3,506). Four validation queries: only 400001 dialysis changes (Lilavati T3→T2 corroborated, #9→#2).
+- **Tests:** 269 run, 268 pass, 1 error (SparkTests: pyspark). Simulated merge with origin/main a93dd99: same result; website `shape()` consumes the response but labels every T2 "Expired certification" (website change documented).
+
+### 2026-11-22 13:00: Tier policy revision: specialty training restored; revised framework proposed (Alice)
+- **Who:** Claude (for Alice). Uncommitted, for review.
+- **Production (`tiers.py`):** the 11:30 specialty-only exclusion is reverted at Alice's request; NMC/DNB training is again T3, now labelled as clinical expertise (`related_specialty`, explanation: not confirmation the service is offered). Kept: future/planned claim fix (`service-claims/2`), attribution guard (`service-claims/3`), `evidence_freshness`, `attribution` output. Snapshot re-baselines from 11:30 reverted. Ranking unchanged.
+- **Proposal (`experimental_tiers.py`, analysis only):** T1 current direct; T2 expired direct, NCG membership, NMC training for specialty-level services, or self-report corroborated by independent registry evidence; T3 self-report, training for procedure/unit services, undated DNB training, sanctioned trauma designation; `evidence_nature` operational/expertise.
+- **Result on all 5,619 evidence-bearing facility-service pairs (61 services):** production T1 281 / T2 77 / T3 3,506 / R 1,754 / U 1 → proposal T1 281 / T2 942 / T3 2,641 / R 1,754 / U 1 (865 T3→T2, no demotions).
+- **Tests:** 260 run, 259 pass, 1 error (SparkTests: pyspark).
+
+### 2026-11-22 09:00: Diagnosed suspicious Mumbai dialysis recommendations; fixed future-tense claim matching (Alice)
+- **Who:** Claude (for Alice).
+- **What:** `service_claims.py` → `service-claims/2`: claims stating a plan or future capability (`plans to`, `under construction`, `will be/open`, `being set up`, `to be set up/started…`) are skipped like negations (never counterevidence). Two regression tests in `tests/test_pipeline.py`.
+- **Why:** Municipal Hospital (Mumbai) was T3 for dialysis only from "Plans to convert into a 17-floor multispeciality hospital … including dialysis". 5 dialysis claims across the dataset were future-tense; "dialysis planning, initiation and maintenance" (clinical) stays matched.
+- **Result (local snapshot):** 400001 dialysis T3 56→55, U 641→642, Municipal Hospital leaves the top 5; 110001 dialysis/C-section and 600001 C-section unchanged. 251 tests: 250 pass, 1 error (SparkTests needs pyspark).
+- **Not code bugs (data quality, reported):** J J Eye Hospital and Saifee Hospital VF records are conflated with other facilities (claims describe a JJDB dialysis centre in Santacruz; Saifee's website/description are Prince Aly Khan Hospital); 10 Mumbai-area dialysis registry sites (9 Apex Kidney Care branches, Grant Medical College) are not linked to any facility by notebook 06. Live Databricks links (4,226) not available locally to compare with 4,482.
+
 ### 2026-11-22 09:22: Website: evidence key stays visible next to the results
 - **Who:** Claude (for William)
 - **What:**
