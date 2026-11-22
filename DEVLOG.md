@@ -22,6 +22,65 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:22: README rewritten for the no-gold-table plan
+- **Who:** Claude (for William)
+- **What:** In `app/README.md`, rewrote:
+  - the pipeline diagram and status line;
+  - "Tables the app reads today" note;
+  - "What we need from each owner" items 1, 2 and 4;
+  - replaced the "Plugging in the real evidence engine" and "Plugging in the real ranker" sections with "Plugging in Alice's package".
+- **How:** Edited the README. No code changed.
+- **Why:** The team decided against gold tables. Evidence and ranking will be computed per request by Alice's `evidence_confidence` package, so the proposed `facility_service_evidence_gold` contract and the separate ranker contract were out of date.
+- **Notes / follow-ups:** `TableEvidence` and `EVIDENCE_PROVIDER=table` in the code are now obsolete; remove them when wiring in Alice's package.
+
+### 2026-11-21 23:15: README: planned integration with Alice's evidence engine
+- **Who:** Claude (for William)
+- **What:** Added "Planned integration with Alice's evidence engine" to `app/README.md`. It covers:
+  - the call sequence per search;
+  - the rows her adapters need, checked against the live table schemas (`DESCRIBE` on the workspace tables);
+  - how her tier rules differ from the placeholder's;
+  - 10 open questions for Alice.
+- **How:** Read `origin/alice-evidence-confidence` (commit 9962ceb: `evidence_confidence/`, `docs/evidence-confidence-integration.md`, `TIERS.md`) read-only; described the workspace tables through the SQL warehouse. No code changed.
+- **Why:** The team decided against gold tables. Evidence and ranking will run per request through Alice's Python package, so the app needs an agreed call sequence and answers to the open questions before wiring it in.
+- **Notes / follow-ups:** `kayakalp_silver` isn't in the workspace (only `kayakalp_silver_validation`); no NQAS-to-facility link exists; nothing yet produces the reviewed service and yes/no for claims, or `capability_eligible`.
+
+### 2026-11-21 22:40: Team section in app/README.md; new `website` branch
+- **Who:** Claude (for William)
+- **What:** Added "For the team" section to `app/README.md` (request flow, tables read today, what is needed from the evidence, ranking, geography and job owners). Created branch `website` from `Will_branch` (uncommitted work carried over).
+- **How:** Edited the README; `git checkout -b website`.
+- **Why:** Teammates need to know which tables the app reads, that no gold table is used yet, and which contracts (evidence table, ranker) are unagreed proposals.
+
+### 2026-11-21 22:26: "Find the Right Care" web app with placeholder evidence and ranking
+- **Who:** Claude (for William)
+- **What:**
+  - New `app/` folder:
+    - FastAPI backend: `main.py`, `backend/{config,db,services,geography,evidence,ranking,explain,mock}.py`;
+    - one web page: `static/index.html`, `styles.css`, `app.js`;
+    - `app.yaml` (Databricks App config), `requirements.txt`, and `README.md` (how to run and deploy, plus the plug-in contracts).
+  - `CLAUDE.md` layout line added.
+  - In William's workspace: ran Elliot's `07_pin_nearby_facilities` (from main, `notebooks/common/pin_nearby_facilities`) once to build `facility_geo_ready`. The copy was placed at `pipeline_check/notebooks/07_pin_nearby_facilities`, because its `%run ./common/...` paths only resolve from `notebooks/`.
+- **How:**
+  - The request flow follows the team's end-to-end diagram: geography (Elliot's search, ported to SQL) → evidence (LEFT JOIN; no evidence = U) → rank the full set → only then pick the top 5 + alternatives → optional AI explainer.
+  - **Evidence and ranking are plug-in points:**
+    - `EVIDENCE_PROVIDER=placeholder|table` (the table contract is in the README);
+    - the placeholder ranker scores evidence tier minus distance minus location uncertainty.
+  - **AI explainer:** `databricks-meta-llama-3-3-70b-instruct`, grounded in the cited evidence only, with a template fallback.
+  - **Tests:**
+    - Mock mode with FastAPI's TestClient.
+    - Live mode against `workspace.datathon` through the CLI profile: Delhi 110001 (737 candidates) and Patna 800001; about 1.5–3.5 s per search.
+    - Screenshots of desktop and mobile with headless Chromium (Playwright, in a scratchpad virtualenv; browser cached in `~/Library/Caches/ms-playwright`). No console errors.
+  - **Bugs fixed during testing:**
+    - Array columns come back as JSON text without pyarrow, so they were being split into characters (`db.as_list`).
+    - The candidate cap was raised from 500 to 5,000, so evidence is added before anything is cut.
+    - On mobile, the emergency notice moved above the form, and the banner margins were fixed.
+- **Why:** William asked for a website that uses the team's Databricks pipeline. The model and scoring belong to teammates, so the app defines their interfaces and runs on placeholders until their parts exist. The page shows "Provisional results" while any placeholder is active. Design aims: calm and trustworthy, accessible type, tiers shown as text as well as colour, honest uncertainty (straight-line distance, location certainty per facility, "call ahead" on every card, 112/108 for emergencies).
+- **Notes / follow-ups:**
+  - Needs from teammates: the evidence table (contract in `app/README.md`), the tier definitions, and a ranker.
+  - Not yet deployed as a Databricks App (steps in the README; the app's service principal needs `SELECT` on `workspace.datathon` and use of the SQL warehouse and serving endpoint).
+  - The placeholder's keyword matching over facility claims is loose (e.g. an eye centre matched "C-section"); it's only for the demo.
+  - For Elliot: `notebooks/common/pin_nearby_facilities` should probably live at `notebooks/07_pin_nearby_facilities`, since its `%run ./common/...` lines fail from inside `common/`.
+
+
 ### 2026-11-21 22:01: Pipeline check re-run on main's verified pipeline (00 → 01 + 05 → 06, plus 02 and 03)
 - **Who:** Claude (for William)
 - **What:**

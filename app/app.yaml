@@ -1,0 +1,24 @@
+# Databricks App configuration (https://docs.databricks.com/dev-tools/databricks-apps/)
+command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+env:
+  # The SQL warehouse added to the app as a resource named "sql-warehouse"
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: APP_CATALOG
+    value: workspace
+  - name: APP_SCHEMA
+    value: datathon
+  - name: DATA_MODE
+    value: live
+  # placeholder until the teammate's evidence engine table exists; then: table
+  - name: EVIDENCE_PROVIDER
+    value: placeholder
+  - name: EVIDENCE_TABLE
+    value: facility_service_evidence_gold
+  - name: RANKER
+    value: placeholder
+  - name: LLM_ENDPOINT
+    value: databricks-meta-llama-3-3-70b-instruct
+  - name: EXPLAINER_ENABLED
+    value: "true"
