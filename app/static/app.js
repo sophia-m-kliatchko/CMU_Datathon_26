@@ -142,7 +142,7 @@
       frag.append(el("div", { class: "error", role: "status" },
         el("strong", { text: "No facility here has a confirmed emergency-capability record, so none is recommended for an emergency. " }),
         "No source provides that record yet. Facilities are listed by distance instead; confirm by phone before travelling."));
-    } else if (!d.recommendations.length) {
+    } else if (!d.recommendations.some(r => ["T1", "T2", "T3"].includes(r.tier))) {
       frag.append(el("div", { class: "error", role: "status" },
         el("strong", { text: "No facility nearby has documentary evidence for this service. " }),
         "Try a larger radius. The nearest facilities are listed below, but no record shows they offer it."));
@@ -159,7 +159,7 @@
 
   function card(r, i, service, listedOnly) {
     const node = $("#card-tpl").content.firstElementChild.cloneNode(true);
-    if (listedOnly) $(".why summary", node).textContent = "Why is this listed?";
+    if (listedOnly || !["T1", "T2", "T3"].includes(r.tier)) $(".why summary", node).textContent = "Why is this listed?";
     node.style.animationDelay = `${i * 70}ms`;
     $(".card__rank", node).textContent = String(i + 1);
     $(".card__name", node).textContent = r.facility_name;
@@ -191,7 +191,7 @@
 
     const btn = $(".js-explain", node);
     const out = $(".why__text", node);
-    btn.addEventListener("click", async () => {
+    const explainNow = async () => {
       btn.disabled = true; btn.textContent = "Writing explanation…";
       try {
         const x = await api("/api/explain", { method: "POST", headers: { "Content-Type": "application/json" },
@@ -203,7 +203,10 @@
         out.textContent = `Couldn't generate an explanation: ${e.message}`;
         btn.disabled = false; btn.textContent = "Try again";
       }
-    });
+    };
+    btn.addEventListener("click", explainNow);
+    $(".why", node).open = true;
+    explainNow();
     return node;
   }
 

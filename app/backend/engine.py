@@ -235,6 +235,13 @@ def shape(response, candidates, tier_label, top_n, alternatives_n):
         top = [f for f in response["recommendations"] if f["service_evidence"]["effective_tier"] in DOCUMENTARY][:top_n]
         chosen = {f["facility_id"] for f in top}
         rest = [f for f in response["recommendations"] if f["facility_id"] not in chosen]
+        # Always show top_n cards: if fewer have documentary evidence, fill with the next best in her order
+        # (some evidence first, then the nearest unknowns). Their tier stamp and ledger say what's missing.
+        fill = ([f for f in rest if f["service_evidence"]["effective_tier"] != "U"]
+                + [f for f in rest if f["service_evidence"]["effective_tier"] == "U"])[:top_n - len(top)]
+        top += fill
+        filled = {f["facility_id"] for f in fill}
+        rest = [f for f in rest if f["facility_id"] not in filled]
         unconfirmed = []
     else:
         # Urgent: recommended = her capability-eligible list (empty until a capability source exists).

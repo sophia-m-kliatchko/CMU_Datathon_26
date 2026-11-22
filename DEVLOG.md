@@ -22,6 +22,67 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 07:44: App title in DM Sans with a real italic "right"
+- **Who:** Claude (for Sophia)
+- **What:** `app/static/index.html` loads DM Sans 700 (roman and italic) from Google Fonts. In `app/static/styles.css`, the `h1` uses DM Sans and `h1 em` is italic again. Redeployed `find-the-right-care`.
+- **How:** edited the font link and two CSS rules, then ran `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia wants "right" in italics, but in a better-looking font. The previous Atkinson Hyperlegible title had no bold italic loaded, so the browser would have faked a slanted one. DM Sans ships a true bold italic.
+
+### 2026-11-22 07:42: App shows the top 3 results, each with its own explanation; plainer title font
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `main` (the app from PR #17) into `sophia-wip`. Conflicts in `.gitignore`, `README.md` and `DEVLOG.md` were resolved by keeping both sides.
+  - `app/backend/config.py`: `TOP_N` defaults to 3 (was 5).
+  - `app/backend/engine.py` `shape()`, routine mode: when fewer than 3 facilities have documentary evidence (T1–T3), the cards are filled with the next best in the engine's order. Facilities with some evidence come first, then the nearest with none. The cards used to fill are removed from the alternatives table.
+  - `app/static/app.js`:
+    - Every card's "Why is this recommended?" menu opens with its plain-language explanation already generated, so you no longer click a button.
+    - Cards without documentary evidence say "Why is this listed?".
+    - The "no documentary evidence" notice now checks the tiers instead of whether the list is empty.
+  - `app/static/styles.css`: the title "Find the right care" uses the body font (Atkinson Hyperlegible, bold) instead of the italic Newsreader serif. "right" is no longer italic and keeps the accent colour.
+  - Redeployed the Databricks App `find-the-right-care` from `sophia-wip`'s `app/`.
+- **How:** edited the files, ran `databricks sync --full` to the app folder, then `databricks apps deploy`. Checked with authenticated calls to `/api/recommend` (dialysis, PIN 800020, 50 km), which returned 3 cards (T3, U, U), and to `/api/explain` on card 3, which returned text from the LLM.
+- **Why:** Sophia asked for the top 3 results, each with the same explanation menu, and a less ornate title font: the italic "right" looked bad.
+- **Tradeoff:** padding to 3 can show facilities with no evidence for the service. Their stamp reads "U / No evidence", the ledger says "No evidence found", and the menu says "listed", not "recommended", so they aren't presented as confirmed. Each search now makes up to 3 LLM calls instead of 0 until a click.
+
+### 2026-11-22 07:33: App `find-the-right-care` deployed in Sophia's workspace; live tables refreshed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Job "CMU Datathon pipeline 00-06" run on `main` (run 1088698257596279): all 7 steps SUCCESS.
+  - Notebook `07_pin_nearby_facilities` (Part A) run to build `workspace.datathon.facility_geo_ready` (run 903388580739811).
+  - New Databricks App `find-the-right-care` from `main`'s `app/` (commit 01e348c), with resources `sql-warehouse` (Serverless Starter Warehouse, CAN_USE) and `serving-endpoint` (`databricks-meta-llama-3-3-70b-instruct`, CAN_QUERY).
+  - The app's service principal was granted `USE CATALOG` on `workspace` and `USE SCHEMA, SELECT` on `workspace.datathon`.
+  - URL: https://find-the-right-care-7474649081384549.aws.databricksapps.com
+- **How:** `git archive` of `origin/main:app` → `databricks apps create --json` (resources attached) → `databricks sync --full` to `/Users/<me>/apps/find-the-right-care` → GRANTs through the SQL Statements API → `databricks apps deploy`.
+- **Why:** Sophia asked to deploy the app in her workspace for the demo.
+- **Result:** deployment SUCCEEDED; app RUNNING; uvicorn started with no errors. The log's "Security scan failed: scanner run failed" is Databricks' optional scanner, not a deploy failure.
+- **Notes / follow-ups:**
+  - Not yet clicked through in a browser.
+  - Stop the app between demos (`databricks apps stop find-the-right-care --profile datathon`).
+  - `facility_geo_ready` isn't built by the job, so re-run notebook 07 after future job runs.
+
+### 2026-11-21 23:31: `notebooks/export_silver_csv.py`: silver tables to CSV
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/export_silver_csv.py`: writes one CSV per silver table to the Volume `workspace.<schema>.exports`, plus `_export_manifest.csv`, then reads each file back and checks the row and column counts.
+  - `.gitignore`: `silver_csv/`.
+  - README: export section.
+- **How:** list and struct columns (e.g. `dq_flags`) become JSON text, since CSV can't hold them. Each table is written with `coalesce(1)` and its part file moved to `<table>.csv`.
+  - Tested on Databricks only (run 1098749705351954, schema `datathon_verify`): SUCCESS. 13 tables exported, about 340 MB, and the read-back check passed.
+  - Downloaded to the local folder `silver_csv/` (not committed).
+- **Why:** Sophia asked for all the silver datasets as CSV on her computer. From now on testing is on Databricks only, keeping checks to what's necessary (time pressure).
+- **Notes / follow-ups:** the downloaded files come from `workspace.datathon_verify` (the verified code's output). Run the export with `schema=datathon` after the live job has re-run with the merged code to export the live tables.
+
+### 2026-11-21 23:20: PR #16 merged: `main` has the Databricks-verified pipeline
+- **Who:** Sophia (approved), Claude (merged)
+- **What:**
+  - PR #16 (`databricks-verified` → `main`) merged as `e11e2d9`: the full notebook 01, the `setup_pipeline` CSV fix, `README.md` and `scripts/databricks/`.
+  - `main` merged back into `sophia-wip`.
+  - Remote branch `databricks-verified` deleted.
+- **How:** `gh pr merge 16 --merge --match-head-commit a5ed199` (merged only if the head was still the verified commit).
+- **Why:** Sophia approved after the serverless verification (runs 69185514918504 and 330170087354586).
+- **Notes / follow-ups:**
+  - **Pull** in the Databricks Git folder `/Datathon Fall 26/CMU_Datathon_26`, then run the job "CMU Datathon pipeline 00-06".
+  - `main` and `sophia-wip` now differ only by the two unverified Databricks files, plus this entry until the next sync.
 ### 2026-11-22 01:02: Merged `Will_branch` and `main` into `website`
 - **Who:** Claude (for William)
 - **What:** `website` now includes:

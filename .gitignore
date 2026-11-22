@@ -18,5 +18,7 @@ shared/handoffs/
 .env
 .env.*
 
+# Downloaded silver CSV exports (large; regenerate with notebooks/export_silver_csv.py)
+silver_csv/
 # Databricks CLI sync state (databricks sync)
 .databricks/
