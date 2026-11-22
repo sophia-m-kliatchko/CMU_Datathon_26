@@ -22,6 +22,23 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:58: Re-checked Elliot's updated NFHS notebook (PR #11): still fails
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `main` (PR #11, `a0033bc` "Update NFHS_Bronze_to_Silver.py") into `sophia-wip`.
+  - `scripts/local_spark/run_all.sh`: two NFHS runs, `nfhs_asis` (unchanged notebook) and `nfhs` (repo data and local schema added to its candidate lists, as its own comment suggests).
+- **How:** local Spark run (see the 20:44 entry).
+- **Results:**
+  - **`nfhs_asis`:** stops at once with `ValueError: No readable bronze source found`. Its inputs are `/Volumes/main/default/bronze_data/NFR.csv`, `dbfs:/FileStore/tables/NFR.csv` and Elliot's personal upload, and none exist outside his workspace. Its output targets (`main.default`, `labuser_elliotl.silver`) don't exist in a Free Edition workspace either, where the catalog is `workspace`, so it would then stop with "No usable (catalog, schema) target".
+  - **`nfhs` (repo file `data/raw/nfhs_5_district_health_indicators.csv`):** its quality gate fails with 706/706 rows unparseable and 706/706 rows with a NULL indicator. The parsing logic didn't change: counts written like `882.0` fail its `^\d+$` pattern.
+- **Why:** Sophia asked to check whether the newly pulled NFHS notebook works.
+- **Suggested fixes for Elliot (not applied; it's his notebook):**
+  1. Add `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv` (or a `source` widget) to the inputs and `("workspace", "datathon")` to the targets.
+  2. Accept whole numbers written as `882.0`: pattern `^\d+(\.0+)?$`, cast via double to int.
+  3. Drop `df.cache()` (may not be supported on serverless).
+  4. Follow the pipeline conventions: number it `04`, write `nfhs_*` tables, and add a `<dataset>_validation` check and citation columns.
+- **Notes / follow-ups:** `main` and `sophia-wip` still differ only by the two unverified Databricks files and recent DEVLOG entries.
+
 ### 2026-11-21 20:47: PR #10 merged: `main` now has the verified pipeline
 - **Who:** Sophia (approved the merge), Claude (merged)
 - **What:**

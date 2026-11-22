@@ -56,6 +56,7 @@ for n in $WANT; do
     06) run 06_matching "$NB/06_registry_matching.py" ;;
     audit_links) "$PY" "$REPO/scripts/local_spark/audit_links.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
     audit) echo "================ audit ================"; "$PY" "$REPO/scripts/local_spark/audit.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
-    nfhs) run nfhs "$NB/NFHS_Bronze_to_Silver.py"             --replace "$(grep -m1 '^BRONZE_PATH = ' "$NB/NFHS_Bronze_to_Silver.py")=>BRONZE_PATH = \"$REPO/data/raw/nfhs_5_district_health_indicators.csv\""             --replace "$(grep -m1 '^SILVER_TABLE = ' "$NB/NFHS_Bronze_to_Silver.py")=>SILVER_TABLE = \"spark_catalog.datathon.nfhs_district_indicators_silver\"" ;;
+    nfhs_asis) run nfhs_asis "$NB/NFHS_Bronze_to_Silver.py" ;;
+    nfhs) run nfhs "$NB/NFHS_Bronze_to_Silver.py"             --replace 'BRONZE_CANDIDATES = [=>BRONZE_CANDIDATES = ["'"$REPO"'/data/raw/nfhs_5_district_health_indicators.csv",'             --replace 'TARGET_CANDIDATES = [=>TARGET_CANDIDATES = [("spark_catalog", "datathon"),' ;;
   esac
 done
