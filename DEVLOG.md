@@ -22,6 +22,34 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:44: Verified the whole pipeline by running it on a local Spark; merged Elliot's NFHS notebook into `sophia-wip`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `scripts/local_spark/`: `nbrun.py` (runs Databricks source notebooks locally), `run_all.sh`, `setup_wsl.sh`, `audit.py`, `audit_links.py`, `summary.sh`, `README.md`.
+  - `CLAUDE.md`: full run order and the local verification step.
+  - Merge of `main` (PR #9, `notebooks/NFHS_Bronze_to_Silver.py`) into `sophia-wip`.
+  - A draft `notebooks/04_nfhs_bronze_to_silver.py` was written and then deleted unused: Sophia said Elliot owns the NFHS notebook.
+- **How:**
+  - **Environment:** WSL Ubuntu, Java 17, Python 3.12, PySpark 4.0.1 + Delta 4.0, ANSI mode on, local Hive metastore so tables persist between notebooks. Each notebook ran in order against the repo CSVs; Databricks widgets, `%run`, `%sql`, `%pip` and `display` were emulated.
+  - **Audit:** a separate pass checked the outputs: key uniqueness, NULLs, coordinates inside India, staging leftovers, `_clean` columns, orphan rows and link quality.
+- **Results** (`sophia-wip` versions):
+  - **00 pincode OK, 12/12 checks pass.** 165,627 → 165,625 offices; 19,586 PINs. Coordinates nulled as far from their PIN: 12,070, separate from 12,009 missing, confirming the 20,015 km fix.
+  - **01 facilities OK, 13/13 pass.** 10,088 → 88 invalid IDs → 9,989 facilities. 1,598 coordinates nulled for PIN mismatch, 5 for state; 8,350 keep coordinates. 53 near-duplicate pairs.
+  - **02 NQAS OK, 8/8 pass.** **03 Kayakalp OK.** **05 registries OK** (24,961 sites).
+  - **06 matching OK.** 4,241 links: all 3,087 accepted links are within 25 km; the wrong-looking pairs are all `needs_review`.
+  - **Audit:** all keys unique and non-NULL, no coordinates outside India, no half-missing coordinate pairs, no orphan claims, no leftover staging tables, no `_clean` columns.
+- **Findings for teammates:**
+  - **`NFHS_Bronze_to_Silver.py` (Elliot) fails on the repo's NFHS file.**
+    - Its quality gate reports 706/706 rows unparseable and 100% NULL indicators: counts are written like `882.0`, which its whole-number pattern rejects.
+    - It reads a file in Elliot's personal workspace and writes to `labuser_elliotl.silver…`, so it won't run for others or into `workspace.datathon`.
+    - It uses `df.cache()`, which serverless compute may not support.
+    - It has no `<dataset>_validation` table or citation columns (CLAUDE.md rules). Left unchanged for Elliot.
+  - **Notebook 06 (Will):** 800 facilities are linked to more than one NABH site; possibly separate NABH programmes per hospital, to confirm.
+- **Why:** Sophia asked to verify that `main` and `sophia-wip` are consistent, and that every notebook runs in order without errors in cleaning or filtering.
+- **Notes / follow-ups:**
+  - `main` lacks the `sophia-wip` fixes (NULL-distance fix, notebook 01 validation and coordinate checks, etc.); they'll go to `main` through a PR.
+  - Two files from the Databricks commit `e7f701b` (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`) are unverified and stay on `sophia-wip` only.
+
 ### 2026-11-21 20:19: Merged `main` (Will_branch: registries, notebooks 05/06, PIN notebook renamed to 00) into `sophia-wip`; resolved PR #8 conflicts
 - **Who:** Claude (for Sophia)
 - **What:**
