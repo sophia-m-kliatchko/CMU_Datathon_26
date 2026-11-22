@@ -22,6 +22,18 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:35: Pipeline as a Lakeflow Job; missing bronze inputs created; GPU env headers removed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New job `CMU Datathon pipeline 00-06` (id 448999964395839): notebooks 00–06 as sequential tasks (00 → 01 → … → 06) on serverless job compute. This replaces `run_pipeline`'s `dbutils.notebook.run` calls, which cannot run from this workspace's serverless notebook compute ("NOT_FOUND: Cluster … does not exist").
+  - Job parameters: 00 and 04 read the shared UC tables (`…dais_2026.virtue_foundation_dataset.india_post_pincode_directory` and `.nfhs_5_district_health_indicators`) because their volume widget defaults don't exist; 03 gets `bronze_table=kayakalp_bronze`; 05 runs with `reload_bronze=no` (uses existing bronze tables).
+  - Created `workspace.datathon.kayakalp_bronze` (1,197 rows) from `data/external/kayakalp_2021_22.csv`.
+  - Created the 9 registry bronze tables (laqshya ×2, trauma, nmc ×2, dnb ×2, ncg, nabh) from the `datasets/external/**` CSVs, all-string columns plus `_ingested_at`/`_source_file`, matching notebook 05's loader.
+  - Removed the `# /// script` environment headers (`base_environment = "databricks_ai_v6"`, a GPU environment) from notebooks 00, 01, 02, 04; staged in git.
+- **How:** job created and configured via the Jobs API (7 sequential tasks, 60-min timeout each); bronze tables loaded with Spark CSV reads (all-string, same read options as the notebooks' loaders); headers removed with an exact-match patch script; then a job-level `environment_key` ("default", CPU environment version 5) was added to all 7 tasks.
+- **Why:** Sophia asked for a script that runs all pipeline code sequentially. The first two job runs failed instantly with "The selected GPU base environment is incompatible with the selected accelerator (CPU)": the notebooks' environment setting persists server-side (Environment panel), so removing the source headers alone wasn't enough — the job-level CPU environment on every task overrides it, and the third run is executing.
+- **Notes / follow-ups:** step 03 runs in validation mode by default (`write_output=false`), so it does not create `kayakalp_silver`; create that separately if analysis needs it. `run_pipeline` stays for reference but can't orchestrate on serverless notebook compute.
+
 ### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
 - **Who:** Claude (for Sophia)
 - **What:**

@@ -1,8 +1,4 @@
 # Databricks notebook source
-# /// script
-# [tool.databricks.environment]
-# environment_version = "6"
-# ///
 # MAGIC %md
 # MAGIC # 02 · NQAS: `nqas_bronze` → `nqas_silver`
 # MAGIC
