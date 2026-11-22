@@ -22,6 +22,16 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:22: Website: evidence key stays visible next to the results
+- **Who:** Claude (for William)
+- **What:**
+  - `app/static/index.html`: an "Evidence key" panel (`#key`, a `<details>`) in the sidebar under the search form, with the six tiers, a short definition each, and a count.
+  - `app/static/app.js`: `updateKey()` shows the key after each search with the count per tier over all candidates (tiers with none are dimmed); `linkToKey()` highlights a card's or table row's tier in the key on hover or keyboard focus. Collapsed by default on narrow screens.
+  - `app/static/styles.css`: `.key*` styles. The sidebar now stretches to the results' height and only the key is sticky (the form was sticky before and scrolls with the page now).
+- **How:** edited the three files; checked with Playwright in live mode (Delhi C-section: counts T1 1, T2 0, T3 46, R 3, U 699, X 0; hovering a T3 table row highlights T3) at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a key that stays on screen; the tier definitions only appeared on the start screen and disappeared once results loaded.
+- **Tradeoff:** the full form no longer follows you down the page; pinning both didn't fit a 900 px-tall window and cut off the key.
+
 ### 2026-11-22 09:05: Website: "Data sources and references" section
 - **Who:** Claude (for William)
 - **What:** `app/static/index.html`: a numbered references list in the footer (`#references`, entries `#ref-1`…`#ref-12`) replaces the one-line source sentence; a "Data sources and references" link under the intro jumps to it. `app/static/styles.css`: `.refs*` and `.lede__refs` styles.
