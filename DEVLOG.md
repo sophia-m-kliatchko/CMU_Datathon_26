@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 00:00: Redeployed the Databricks App with Alice's engine
+- **Who:** Claude (for William)
+- **What:** Databricks App `find-the-right-care` redeployed from `website` commit 71c20c1 (evidence and ranking by `evidence_confidence@2368382`).
+- **How:** `databricks sync` to the app's workspace folder, then `databricks apps deploy`.
+- **Why:** Make the deployed site match the integration. Checked on the deployed URL:
+  - `/api/health` reports `evidence_confidence@2368382`;
+  - Delhi C-section (100 km) gives 861 candidates, T1 1 / T2 1 / T3 3 / R 2 / U 854, with the adapter at PASS;
+  - Patna C-section (emergency) gives urgent mode, 0 recommended and 5 unconfirmed cards. These match the local runs.
+
 ### 2026-11-21 23:51: Web app wired to Alice's evidence_confidence package
 - **Who:** Claude (for William)
 - **What:**
