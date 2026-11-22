@@ -22,6 +22,38 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 21:05: NFHS notebook fixed and fitted into the pipeline as `04_nfhs_bronze_to_silver.py`
+- **Who:** Claude (for Sophia; notebook written by elliotl-ops)
+- **What:**
+  - `notebooks/NFHS_Bronze_to_Silver.py` renamed with `git mv` to `notebooks/04_nfhs_bronze_to_silver.py` and edited.
+  - `scripts/local_spark/run_all.sh` (runs it as `04`) and new `scripts/local_spark/audit_nfhs.py`.
+  - `CLAUDE.md` (run order, layout) and `docs/data-sources.md` (NFHS entry).
+- **How:** applied the four suggested fixes; Elliot's cleaning rules, quality report, gate, history, quarantine, copied-row detection and quality view are kept as written.
+  1. **Locations:** widgets `catalog` / `schema` / `source` (defaults `workspace.datathon` and `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv`) replace the candidate-path lists.
+  2. **Numbers:** whole numbers may be written `882.0` (pattern `^\d+(\.0+)?$`, cast via double to int).
+  3. **Caching:** `df.cache()` / `unpersist()` replaced by a staging table `_nfhs_stage`, dropped at the end.
+  4. **Pipeline conventions:**
+     - Notebook format with `%run` of the common helpers.
+     - Tables `nfhs_bronze` (raw copy of the whole file), `nfhs_silver`, `nfhs_quarantine`, `nfhs_quality_history` and the view `nfhs_quality_current`.
+     - `nfhs_validation` with 7 checks against bronze, run before writing.
+     - Citation columns plus `row_citation`.
+     - Writes go through `write_table()`, which blocks any `_clean` column.
+     - New columns `state` (standardized, for joins), `district_join_key` and `district_in_pin_directory` (optional check against `pincode_silver`).
+  - Also: `OPTIMIZE` / `ANALYZE` made best-effort. `ANALYZE … FOR ALL COLUMNS` isn't supported by open-source Delta, and it's housekeeping on a ~700-row table.
+  - Correction to my earlier claim: Elliot's PR #11 version already read the columns by name, so the column-order bug was already fixed there.
+- **Why:** Sophia asked to apply the fixes so the NFHS notebook works in the shared pipeline.
+- **Local run** (`run_all.sh 04` on `data/raw/nfhs_5_district_health_indicators.csv`):
+  - **Runs end to end.** Elliot's quality gate passes and all 7 validation checks pass.
+  - **Rows:** 706 bronze rows → 705 silver plus 1 quarantined (Mizoram "Chandel").
+  - **Values:** sex ratios 755–1,332 (at birth 658–1,485), percentages 16–100.
+  - **Flags:** 8 districts are low-sample, 2 have estimates, and 36 state names were fixed (Maharastra).
+  - **Directory match:** 613 of 705 districts match the India Post directory; the rest are mostly spelling variants (e.g. Koch Bihar / Cooch Behar), flagged only.
+- **Notes / follow-ups:**
+  - Upload the CSV to `/Volumes/workspace/datathon/external/` before running on Databricks.
+  - `nfhs_silver` keeps Elliot's 8 indicators; the other ~99 indicators are only in `nfhs_bronze`.
+  - Elliot should know his file was renamed and adapted.
+  - Not on `main` yet.
+
 ### 2026-11-21 20:58: Re-checked Elliot's updated NFHS notebook (PR #11): still fails
 - **Who:** Claude (for Sophia)
 - **What:**
