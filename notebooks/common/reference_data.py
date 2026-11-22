@@ -7,7 +7,7 @@
 # MAGIC %run ./common/reference_data
 # MAGIC ```
 # MAGIC Defines: `STATES`, `state_from_text()`, `name_norm()`, `name_core()`, `facility_type_from_text()`,
-# MAGIC `FACILITY_LEVEL`, `add_provenance()`, `write_table()`.
+# MAGIC `FACILITY_LEVEL`, `add_provenance()`, `write_table()` (which refuses to write any `*_clean` column), `assert_no_clean_columns()`.
 # MAGIC
 # MAGIC Note: `01_bronze_to_silver.py` still has its own copy of the state lookup. Keep the two in sync, or switch 01 to this notebook later.
 
@@ -134,7 +134,14 @@ def add_provenance(df, source_name, publisher, source_url, retrieved_on, license
             .withColumn("produced_by", F.lit(produced_by)))
 
 
+def assert_no_clean_columns(df, table):
+    """Silver tables never have *_clean columns: being in silver already means clean."""
+    bad = [c for c in df.columns if c.lower().endswith("_clean")]
+    assert not bad, f"{table} would get *_clean columns {bad}; use the plain name instead"
+
+
 def write_table(df, name, comment):
+    assert_no_clean_columns(df, name)
     df.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(name)
     spark.sql(f"COMMENT ON TABLE {name} IS '{comment.replace(chr(39), '')}'")
     print(f"Wrote {name}: {spark.table(name).count():,} rows")
