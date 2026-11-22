@@ -1,0 +1,2 @@
+total_records,unique_pins,valid_latitude,unparseable_latitude,out_of_range_latitude,missing_latitude,ambiguous_pin_records,ambiguous_pin_count,missing_district_count,missing_state_count,invalid_pincode_count,bronze_rows,rows_dropped_as_duplicates,source_files,gate_passed,gate_failures,run_timestamp
+165625,19586,151840,3,1775,12007,15524,1258,715,715,0,165627,2,databricks_virtue_foundation_dataset_dais_2026.virtue_foundation_dataset.india_post_pincode_directory,true,"",2026-11-21T21:23:30.722Z

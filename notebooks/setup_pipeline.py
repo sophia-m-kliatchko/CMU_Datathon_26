@@ -7,7 +7,7 @@
 # MAGIC Creates (only when missing - existing tables are never overwritten):
 # MAGIC * schema `workspace.datathon`
 # MAGIC * bronze tables `nqas_certified_facilities`, `kayakalp_bronze`, the 9 registry `*_bronze` tables, and `facilities` (all text, from this repo's CSVs)
-# MAGIC * the Lakeflow Job **CMU Datathon pipeline 00-06**: notebooks 00-06 as sequential tasks on serverless job compute
+# MAGIC * the Lakeflow Job **CMU Datathon pipeline 00-07**: notebooks 00-07 as sequential tasks on serverless job compute
 # MAGIC
 # MAGIC Step sources default to this repo's CSVs, so no shared dataset catalog or Volume is needed.
 # MAGIC Do NOT use `run_pipeline.py` on serverless - `dbutils.notebook.run` cannot start from serverless notebook compute; the Job is the runner.
@@ -17,7 +17,7 @@
 
 dbutils.widgets.text("catalog", "workspace", "1. Catalog for the tables")
 dbutils.widgets.text("schema", "datathon", "2. Schema for the tables")
-dbutils.widgets.text("job_name", "CMU Datathon pipeline 00-06", "3. Job name")
+dbutils.widgets.text("job_name", "CMU Datathon pipeline 00-07", "3. Job name")
 dbutils.widgets.text("repo_root", "", "4. Repo folder (blank = auto-detect)")
 dbutils.widgets.dropdown("run_job_after", "no", ["no", "yes"], "5. Trigger the first job run when setup finishes")
 
@@ -105,7 +105,7 @@ for _name, _path in SOURCES.items():
 
 # COMMAND ----------
 
-# MAGIC %md ## 3 - Create or update the pipeline Job (00 -> 06, sequential, serverless)
+# MAGIC %md ## 3 - Create or update the pipeline Job (00 -> 07, sequential, serverless)
 
 # COMMAND ----------
 
@@ -139,8 +139,11 @@ tasks = [
     NT("step_05_registries", "05_registries_bronze_to_silver",
        {**CS, "reload_bronze": "no"}, "step_04_nfhs"),
     NT("step_06_matching", "06_registry_matching", CS, "step_05_registries"),
+    NT("step_07_nearby", "07_pin_nearby_facilities",
+       {**CS, "rebuild_geo_ready": "yes", "pincode": "110001", "radius_km": "50", "max_results": "25"},
+       "step_06_matching"),
     NT("validate_silver", "validate_silver_persistence",
-       {**CS, "repo_root": REPO_ROOT, "kayakalp_table": "kayakalp_silver_validation"}, "step_06_matching"),
+       {**CS, "repo_root": REPO_ROOT, "kayakalp_table": "kayakalp_silver_validation"}, "step_07_nearby"),
 ]
 settings = {
     "name": JOB_NAME,

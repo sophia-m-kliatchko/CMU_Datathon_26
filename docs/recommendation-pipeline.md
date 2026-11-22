@@ -66,9 +66,8 @@ Returns the `recommendation-pipeline/1` dict above (JSON-safe). The bundle is lo
 directory and cached in-process; later calls only do the per-query work. Bad PIN / unknown service
 come back as `status`; bad argument types (e.g. `max_results=0`) raise `ValueError`. Extra keyword
 options: `mode`, `as_of`, `include_self_reported_claims`. `geography_notebook=` (or
-`EVIDENCE_GEO_NOTEBOOK`) picks the 07 notebook; **until Elliot's branch is merged the default falls back
-to `notebooks/common/pin_nearby_facilities.py`, which uses the old `distance_km <= radius` rule**, so pass
-the 07 path explicitly before then. Local CSV bundle only: on Databricks the
+`EVIDENCE_GEO_NOTEBOOK`) overrides the notebook; since the merge of `origin/Elliot_New_Branch` the default
+is `notebooks/07_pin_nearby_facilities.py` (uncertainty-aware radius rule). Local CSV bundle only: on Databricks the
 same tables must be exported or read into dicts first (not yet verified there).
 
 ## Website (`origin/website`, `app/backend/`) — handoff, files not edited
