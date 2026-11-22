@@ -46,6 +46,7 @@ Notebooks in `notebooks/` run in this order. Each reads **bronze** (raw) tables 
 | 04 | `04_nfhs_bronze_to_silver.py` | NFHS-5 district health indicators (`nfhs_silver`) | 00 (optional check) |
 | 05 | `05_registries_bronze_to_silver.py` | LaQshya, trauma centres, NMC, DNB, NCG and NABH as `registry_sites_silver` + `registry_services_silver` | 00 (recommended) |
 | 06 | `06_registry_matching.py` | Links registry sites to facilities, with match scores and review flags | 01, 05 |
+| 07 | `07_pin_nearby_facilities.py` | Builds `facility_geo_ready` and searches facilities near a PIN code | 00, 01 |
 
 Shared code lives in `notebooks/common/` and is loaded with `%run`:
 - `reference_data.py`: state names and aliases, facility types, name cleaning, provenance columns, and the `write_table()` helper.
@@ -63,18 +64,18 @@ Shared code lives in `notebooks/common/` and is loaded with `%run`:
 3. **Run `notebooks/setup_pipeline.py` once** (Run all, serverless). It:
    - creates the schema `workspace.datathon`;
    - creates any missing bronze tables from this repo's CSVs: NQAS, Kayakalp, the 9 registry tables, and facilities. Existing tables are never overwritten.
-   - creates or updates the Lakeflow Job **"CMU Datathon pipeline 00-06"**: notebooks 00 → 06 as sequential tasks on serverless job compute.
+   - creates or updates the Lakeflow Job **"CMU Datathon pipeline 00-07"**: notebooks 00 → 07 as sequential tasks on serverless job compute.
 
 ### Every time
 1. **Pull first:** in the Git folder, *Git → Pull*. Always pull before you commit from Databricks; committing from a stale Git folder has already overwritten newer work twice.
-2. **Run the job** "CMU Datathon pipeline 00-06" from *Jobs & Pipelines*. A failed task shows which notebook and cell broke; dependent tasks don't run.
+2. **Run the job** "CMU Datathon pipeline 00-07" from *Jobs & Pipelines*. A failed task shows which notebook and cell broke; dependent tasks don't run.
 3. **Check results:** each notebook also prints its checks and writes a `<dataset>_validation` table, for example:
    ```sql
    SELECT * FROM workspace.datathon.facilities_validation;
    SELECT * FROM workspace.datathon.silver_dq_summary ORDER BY n_facilities DESC;
    ```
 
-> `notebooks/run_pipeline.py` runs 00 → 06 with `dbutils.notebook.run` and writes a `pipeline_run_log` table. That doesn't work on **serverless notebook compute** ("Cluster … does not exist"), so on Free Edition use the job. `run_pipeline.py` still works with the local Spark check below and on classic clusters.
+> `notebooks/run_pipeline.py` runs 00 → 07 with `dbutils.notebook.run` and writes a `pipeline_run_log` table. That doesn't work on **serverless notebook compute** ("Cluster … does not exist"), so on Free Edition use the job. `run_pipeline.py` still works with the local Spark check below and on classic clusters.
 
 You can also run any single notebook by hand, in dependency order. Each has widgets at the top (catalog, schema, input path or table).
 
@@ -136,10 +137,11 @@ Full citations (publisher, URL, retrieval date, licence, processing chain, limit
 ## Repository layout
 
 ```
-notebooks/            Databricks notebooks (source .py format), in pipeline order 00-06
-  common/             shared helpers loaded with %run (and pin_nearby_facilities.py, see Known issues)
+notebooks/            Databricks notebooks (source .py format), in pipeline order 00-07
+  common/             shared helpers loaded with %run
+  07_pin_nearby_facilities.py  builds facility_geo_ready and performs PIN-based nearby search
   setup_pipeline.py   one-time workspace setup + the Lakeflow Job
-  run_pipeline.py     00->06 runner with pipeline_run_log (local Spark / classic clusters only)
+  run_pipeline.py     00->07 runner with pipeline_run_log (local Spark / classic clusters only)
 data/raw/             core raw datasets (facilities, PIN directory, NFHS-5)
 data/external/        CSVs produced by scripts/ (NQAS, Kayakalp) + the Kayakalp source PDF
 datasets/external/    registry bronze CSVs produced by scrapers/ (LaQshya, NABH, DNB, NMC, NCG, trauma)
@@ -160,7 +162,7 @@ Before pushing a notebook change, you can run the **whole pipeline on a local Sp
 
 ```powershell
 wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/setup_wsl.sh"     # once (~550 MB, no admin rights)
-wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/run_all.sh"       # notebooks 00-06 in order
+wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/run_all.sh"       # notebooks 00-07 in order
 wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/run_all.sh" audit # check the outputs
 ```
 
@@ -172,7 +174,7 @@ Details and limits are in [`scripts/local_spark/README.md`](scripts/local_spark/
 3. Wait for it with `scripts/databricks/watch_run.ps1`, which prints each task's state and error.
 4. Read the validation results back with the `scripts/databricks/verify_outputs.py` notebook.
 
-On 2026-11-21 the full pipeline (00 → 06) ran this way on serverless: every task succeeded, and every `*_validation` check passed. A local run can't catch serverless-only restrictions, such as `dbutils.notebook.run` and GPU environment settings. Quick checks without Spark:
+On 2026-11-21 the full pipeline (00 → 06) ran this way on serverless: every task succeeded, and every `*_validation` check passed. Step 07 must be included in the next job run. A local run can't catch serverless-only restrictions, such as `dbutils.notebook.run` and GPU environment settings. Quick checks without Spark:
 
 ```powershell
 python scripts/test_address_parsing.py
@@ -201,7 +203,6 @@ python scripts/dryrun_coordinate_checks.py
 
 ## Known issues
 
-- **`notebooks/common/pin_nearby_facilities.py`** (notebook "07": PIN → nearby facilities) lives in `common/`, so its `%run ./common/...` lines point to `notebooks/common/common/`, which doesn't exist. It belongs at `notebooks/07_pin_nearby_facilities.py`. It hasn't been run on Databricks yet.
 - **NQAS is historical:** every certificate in the scraped list expired between 2019 and 2023. Treat it as "was certified".
 - **Notebook 03** runs in validation-only mode by default, so it doesn't persist a Kayakalp silver table unless `write_output=true`.
 - **`setup_pipeline` before 2026-11-21 read `facilities.csv` with the wrong escape character,** which garbled `latitude` in about 9,700 rows. It's fixed now. If you built `workspace.datathon.facilities` with an older `setup_pipeline`, drop that table and run setup again.
@@ -212,3 +213,4 @@ python scripts/dryrun_coordinate_checks.py
 ---
 
 **Team:** Sophia, Alice, Elliot and William. Built for the CMU Datathon, Fall 2026.
+
