@@ -22,6 +22,33 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/setup_pipeline.py`: `facilities.csv` is now read with `escape='\'`.
+  - New `scripts/databricks/`: `watch_run.ps1`, `verify_outputs.py`, `check_facilities_csv.py`.
+  - New `scripts/local_spark/check_csv_reads.py`; `run_all.sh` gets a `csvcheck` option, and 03 now runs with its default `write_output=false` (as in the job).
+  - `README.md`: verification on Databricks and known issues.
+- **How:**
+  - Sophia installed the Databricks CLI (winget, v1.27.0) and signed in with OAuth (`databricks auth login --profile datathon`).
+  - Uploaded `sophia-wip`'s notebooks to `/Users/<me>/datathon_verify/` and created a test schema `workspace.datathon_verify`, with the bronze inputs copied from `workspace.datathon`. The live Git folder (`/Datathon Fall 26/CMU_Datathon_26`, on `main`), the live job and the live tables were not touched.
+  - Submitted one-time serverless runs (CPU environment v5) with the same inputs as the job (the Marketplace PIN, facilities and NFHS tables).
+- **Results on Databricks:**
+  - **Run 69185514918504:** prep, 00, 01, 02, 03, 04, 05 and 06 all SUCCESS.
+  - **Output check (run 330170087354586):** `pincode_validation` 12/12, `facilities_validation` 13/13, `nqas_validation` 8/8, `nfhs_validation` 7/7.
+    - **Facilities:** 9,989 (all UUIDs, 0 bad PINs, 0 coordinates outside India); 1,603 coordinates nulled for PIN/state mismatch; 88 rejected as `INVALID_ID`.
+    - **PIN offices:** 12,070 nulled as far from their PIN versus 12,009 missing.
+    - **NFHS:** 705 districts.
+    - **Registry links:** 4,241; 0 accepted links more than 25 km apart.
+    - **Hygiene:** no staging leftovers and no `_clean` columns in silver. Will's registry bronze tables contain `state_clean` / `pincode_clean` from the scraper CSVs, which is allowed in bronze.
+    - The numbers match the local runs exactly.
+  - **`setup_pipeline` bug proven on the platform (run 463510234196202):** reading `facilities.csv` with the old `escape='"'` gave 10,088 rows but **9,710 non-numeric latitudes** (columns shift inside rows); with `escape='\'`, 0. Sophia's job reads the Marketplace facilities table, so it was unaffected; teammates using `setup_pipeline` were affected.
+- **Why:** Sophia pointed out that the code had not been running successfully on Databricks itself and asked to make absolutely sure it runs on the actual platform.
+- **Notes / follow-ups:**
+  - Test folder `/Users/<me>/datathon_verify` and schema `workspace.datathon_verify` are left in place for inspection; they can be dropped later.
+  - `run_pipeline.py` still can't orchestrate on serverless notebook compute; the Lakeflow Job is the runner.
+  - Teammates who already built `workspace.datathon.facilities` with the old `setup_pipeline` should drop it and re-run setup.
+
 ### 2026-11-21 22:58: Project README; merged `main` (PR #15) into `sophia-wip`, keeping the verified notebook 01
 - **Who:** Claude (for Sophia)
 - **What:**

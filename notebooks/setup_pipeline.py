@@ -89,8 +89,11 @@ def load_bronze(name, path):
     if spark.catalog.tableExists(full):
         print(f"{name:34s} exists ({spark.table(full).count():,} rows) - kept")
         return
+    # facilities.csv escapes quotes with a backslash (\"); the other CSVs (written by Python's csv module)
+    # double them (""). Reading facilities.csv with escape='"' splits rows and shifts columns.
+    escape = "\\" if name == "facilities" else '"'
     r = (spark.read.option("header", True).option("inferSchema", False)
-         .option("multiLine", True).option("escape", '"').csv(path))
+         .option("multiLine", True).option("escape", escape).csv(path))
     df = r.select([F.col(f"`{c}`").cast("string").alias(c.strip()) for c in r.columns])
     (df.withColumn("_ingested_at", F.current_timestamp()).withColumn("_source_file", F.lit(path))
        .write.mode("overwrite").option("overwriteSchema", "true").saveAsTable(full))

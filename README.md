@@ -164,7 +164,15 @@ wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/run_all.sh"    
 wsl -d Ubuntu -- bash "/mnt/c/<path-to-repo>/scripts/local_spark/run_all.sh" audit # check the outputs
 ```
 
-Details and limits are in [`scripts/local_spark/README.md`](scripts/local_spark/README.md). A local run can't catch serverless-only restrictions, such as `dbutils.notebook.run` and GPU environment settings. Quick checks without Spark:
+Details and limits are in [`scripts/local_spark/README.md`](scripts/local_spark/README.md).
+
+**Then verify on Databricks itself.** A local run can't prove a notebook works on serverless, so test changes in a separate schema before they reach `main`. With the Databricks CLI signed in (`databricks auth login --profile datathon`):
+1. Upload the changed notebooks to a test folder.
+2. Submit a one-time serverless run with `catalog=workspace`, `schema=datathon_verify`.
+3. Wait for it with `scripts/databricks/watch_run.ps1`, which prints each task's state and error.
+4. Read the validation results back with the `scripts/databricks/verify_outputs.py` notebook.
+
+On 2026-11-21 the full pipeline (00 → 06) ran this way on serverless: every task succeeded, and every `*_validation` check passed. A local run can't catch serverless-only restrictions, such as `dbutils.notebook.run` and GPU environment settings. Quick checks without Spark:
 
 ```powershell
 python scripts/test_address_parsing.py
@@ -193,10 +201,10 @@ python scripts/dryrun_coordinate_checks.py
 
 ## Known issues
 
-- **`main` has an older notebook 01.** PR #15's "notebook 01 merge resolution" replaced it with a version that has `_clean` column names, no bronze validation, no coordinate-vs-PIN check, and the old near-duplicate distance bug. The full version is on `sophia-wip`. Until it's restored on `main`, `notebooks/common/pin_nearby_facilities` (which expects the plain `latitude`/`pincode` names) won't run there.
 - **`notebooks/common/pin_nearby_facilities`** (notebook "07": PIN → nearby facilities) has no `.py` extension, so Databricks won't treat it as a notebook. It also lives in `common/`, so its `%run ./common/...` lines point to the wrong folder. It belongs at `notebooks/07_pin_nearby_facilities.py`.
 - **NQAS is historical:** every certificate in the scraped list expired between 2019 and 2023. Treat it as "was certified".
 - **Notebook 03** runs in validation-only mode by default, so it doesn't persist a Kayakalp silver table unless `write_output=true`.
+- **`setup_pipeline` before 2026-11-21 read `facilities.csv` with the wrong escape character,** which garbled `latitude` in about 9,700 rows. It's fixed now. If you built `workspace.datathon.facilities` with an older `setup_pipeline`, drop that table and run setup again.
 - **Two files from a Databricks commit** (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`) are unverified and kept on `sophia-wip` only.
 - **A missing file:** `docs/kayakalp-validation-handoff.md` links to `docs/kayakalp-silver-audit.md`, which isn't in the repo.
 - **Some citations are incomplete:** `docs/data-sources.md` still has ⚠ TODOs for the exact source and date of the PIN-directory and NFHS-5 files.
