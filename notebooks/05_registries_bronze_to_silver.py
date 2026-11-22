@@ -443,7 +443,7 @@ services = reduce(lambda a, b: a.unionByName(b), [p[1].select(*SERVICE_COLS) for
 
 # MAGIC %md
 # MAGIC ## 3 · `registry_sites_silver`
-# MAGIC States re-standardized with the shared lookup; names normalized with the shared `name_norm` / `name_core`. If `pincode_centroids_silver` (notebook 04) exists, sites with a PIN get that PIN's location and a state cross-check.
+# MAGIC States re-standardized with the shared lookup; names normalized with the shared `name_norm` / `name_core`. If `pincode_centroids_silver` (notebook 00) exists, sites with a PIN get that PIN's location and a state cross-check.
 
 # COMMAND ----------
 
@@ -463,7 +463,7 @@ if HAS_PIN_CENTROIDS:
         F.col("states").alias("_pin_states"), F.col("main_district").alias("pin_main_district"))
     sites = sites.join(cent, "pincode", "left")
 else:
-    print("pincode_centroids_silver not found: run notebook 04 first to add PIN locations. Continuing without them.")
+    print("pincode_centroids_silver not found: run notebook 00 first to add PIN locations. Continuing without them.")
     sites = (sites.withColumn("pin_latitude", F.lit(None).cast("double")).withColumn("pin_longitude", F.lit(None).cast("double"))
                   .withColumn("_pin_states", F.lit(None).cast("array<string>")).withColumn("pin_main_district", lit_s()))
 

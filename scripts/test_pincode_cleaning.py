@@ -1,5 +1,5 @@
 """
-Local tests for notebooks/common/coordinate_parsing.py, plus a dry run of notebook 04's coordinate
+Local tests for notebooks/common/coordinate_parsing.py, plus a dry run of notebook 00's coordinate
 cleaning and PIN centroid logic on data/raw/india_post_pincode_directory.csv (no Spark needed).
 
 Usage:  python scripts/test_pincode_cleaning.py

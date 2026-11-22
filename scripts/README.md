@@ -14,6 +14,11 @@ python scripts/scrape_nqas.py
 python scripts/kayakalp_pdf_to_csv.py "C:\path\to\KAYAKALP WINNER FACILITIES 21-22.pdf"
 ```
 
+## Local checks (no Spark needed)
+- `python scripts/test_address_parsing.py`: address parser tests plus a dry run of notebook 01's row rules.
+- `python scripts/test_pincode_cleaning.py`: coordinate parser tests plus PIN centroid dry run.
+- `python scripts/dryrun_coordinate_checks.py`: how many facilities, post offices and NQAS listings the coordinate/district cross-checks will affect.
+
 ## Uploading a CSV to Databricks (Free Edition)
 1. In the workspace, open **Catalog**, then `workspace` → your schema (e.g. `datathon`) → **Create → Volume**, named for example `external`.
 2. Open the volume → **Upload to this volume** → pick the CSV.
