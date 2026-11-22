@@ -22,6 +22,18 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:20: PR #16 merged: `main` has the Databricks-verified pipeline
+- **Who:** Sophia (approved), Claude (merged)
+- **What:**
+  - PR #16 (`databricks-verified` → `main`) merged as `e11e2d9`: the full notebook 01, the `setup_pipeline` CSV fix, `README.md` and `scripts/databricks/`.
+  - `main` merged back into `sophia-wip`.
+  - Remote branch `databricks-verified` deleted.
+- **How:** `gh pr merge 16 --merge --match-head-commit a5ed199` (merged only if the head was still the verified commit).
+- **Why:** Sophia approved after the serverless verification (runs 69185514918504 and 330170087354586).
+- **Notes / follow-ups:**
+  - **Pull** in the Databricks Git folder `/Datathon Fall 26/CMU_Datathon_26`, then run the job "CMU Datathon pipeline 00-06".
+  - `main` and `sophia-wip` now differ only by the two unverified Databricks files, plus this entry until the next sync.
+
 ### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
 - **Who:** Claude (for Sophia)
 - **What:**
