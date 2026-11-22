@@ -11,8 +11,52 @@ from pyspark.sql.types import StructType, StructField, StringType
 # --------------------------------------------------------------------------- #
 # Config
 # --------------------------------------------------------------------------- #
-BRONZE_PATH = "file:/Workspace/Users/elliotl@andrew.cmu.edu/.db_internal/genie/002ce5e3947e4a71be97e9c6ddff5e48/file_uploads/csv/07062480-b6db-4a25-a062-36d6adce15d0"
-SILVER_TABLE = "labuser_elliotl.silver.nfhs_district_indicators_silver"
+# Portable config so this runs in any workspace after cloning from GitHub:
+# pick the first readable bronze source and the first usable (catalog, schema)
+# output target. Add/reorder entries per environment instead of hardcoding paths.
+BRONZE_CANDIDATES = [
+    "/Volumes/main/default/bronze_data/NFR.csv",  # UC volume (production)
+    "dbfs:/FileStore/tables/NFR.csv",             # DBFS (legacy)
+    "file:/Workspace/Users/elliotl@andrew.cmu.edu/.db_internal/genie/002ce5e3947e4a71be97e9c6ddff5e48/file_uploads/csv/07062480-b6db-4a25-a062-36d6adce15d0",  # this workspace
+]
+TARGET_CANDIDATES = [
+    ("main", "default"),            # production
+    ("labuser_elliotl", "silver"),  # this workspace
+]
+TABLE_NAME = "nfhs_district_indicators_silver"
+
+_spark = SparkSession.builder.getOrCreate()
+
+BRONZE_PATH = None
+for _p in BRONZE_CANDIDATES:
+    try:
+        _spark.read.option("header", "true").csv(_p).limit(1).count()
+        BRONZE_PATH = _p
+        break
+    except Exception:
+        continue
+if BRONZE_PATH is None:
+    raise ValueError(f"No readable bronze source found in: {BRONZE_CANDIDATES}")
+
+_catalogs = {r[0] for r in _spark.sql("SHOW CATALOGS").collect()}
+CATALOG = SCHEMA = None
+for _cat, _sch in TARGET_CANDIDATES:
+    if _cat not in _catalogs:
+        continue
+    try:
+        _schemas = {r[0] for r in _spark.sql(f"SHOW SCHEMAS IN {_cat}").collect()}
+    except Exception:
+        continue
+    if _sch in _schemas:
+        CATALOG, SCHEMA = _cat, _sch
+        break
+if CATALOG is None:
+    raise ValueError(f"No usable (catalog, schema) target found in: {TARGET_CANDIDATES}")
+
+print(f"Bronze source: {BRONZE_PATH}")
+print(f"Output target: {CATALOG}.{SCHEMA}")
+
+SILVER_TABLE = f"{CATALOG}.{SCHEMA}.{TABLE_NAME}"
 QUARANTINE_TABLE = f"{SILVER_TABLE}_quarantine"
 QUALITY_HISTORY_TABLE = f"{SILVER_TABLE}_quality_history"
 QUALITY_VIEW = f"{SILVER_TABLE}_quality_current"
