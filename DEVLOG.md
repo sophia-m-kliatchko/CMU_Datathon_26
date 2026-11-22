@@ -22,6 +22,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:26: New work for Sophia goes on the `aesthetics` branch
+- **Who:** Claude (for Sophia)
+- **What:** `CLAUDE.md`, Branches section: new work for Sophia now goes on `aesthetics` (tracking `origin/aesthetics`) instead of `sophia-wip`. Earlier work stays on `sophia-wip`.
+- **How:** edited the line, then committed and pushed to `aesthetics`.
+- **Why:** Sophia asked for all new updates to go to the aesthetics branch.
+
 ### 2026-11-22 05:00: Backend final validation (Alice)
 - **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
 - **What:** ran `recommend_facilities` on 4 real queries with Elliot's 07 notebook; corrected merge notes (only `setup_pipeline.py` conflicts, 1 hunk; the rename deletes the legacy notebook); re-measured website radius-rule loss.
