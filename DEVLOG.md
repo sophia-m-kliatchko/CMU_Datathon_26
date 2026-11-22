@@ -31,6 +31,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **How:** edited the three files; checked with Playwright in live mode (Delhi C-section: counts T1 1, T2 0, T3 46, R 3, U 699, X 0; hovering a T3 table row highlights T3) at 1360 px and 390 px, no console errors.
 - **Why:** William asked for a key that stays on screen; the tier definitions only appeared on the start screen and disappeared once results loaded.
 - **Tradeoff:** the full form no longer follows you down the page; pinning both didn't fit a 900 px-tall window and cut off the key.
+- **Deployed:** committed as 131c6ec, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e68050c21f028dc60446ca1b9703 SUCCEEDED); the live page serves the key.
 
 ### 2026-11-22 09:05: Website: "Data sources and references" section
 - **Who:** Claude (for William)
