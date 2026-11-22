@@ -17,6 +17,8 @@
 # MAGIC    Registry names that are only a type plus a place (e.g. "DH Faridabad") need the facility type to agree, or the facility name to be just as generic.
 # MAGIC 4. **Decide:** per site, the best candidate is linked if score ≥ `link_threshold`; `review_threshold` ≤ score < `link_threshold`, or a near-tie with a different facility, is linked **with `needs_review = true`**. A near-tie with a facility listed in the best one's `possible_duplicate_ids` is linked too (same place, two records). Name similarity below `min_name_score` is never linked.
 # MAGIC
+# MAGIC **Works with either naming of `facilities_silver`:** `state_clean`/`pincode_clean`/`city_clean`/`latitude_clean`/`longitude_clean` if present, otherwise `state`/`pincode`/`city`/`latitude`/`longitude` (printed at the start of section 1).
+# MAGIC
 # MAGIC **Silver, not gold:** this decides *which records are the same place*. It doesn't score services; that's done downstream from these links plus `registry_services_silver`.
 # MAGIC Every change to this notebook must be logged in `DEVLOG.md`.
 
@@ -92,13 +94,33 @@ def place_tokens(*cols):
     return F.array_distinct(F.filter(raw, lambda x: (F.length(x) >= 4) & ~x.isin(*GENERIC_PLACE_WORDS)))
 
 
+# facilities_silver has used two naming styles: plain names (state, pincode, latitude…) and *_clean names
+# (state_clean, pincode_clean, latitude_clean…). Accept either: if a *_clean column exists it's the cleaned
+# value, so it wins; otherwise the plain name is used. Columns that don't exist at all become NULL.
+FAC_COLS = set(spark.table("facilities_silver").columns)
+
+
+def fcol(name, cast=None):
+    for c in (f"{name}_clean", name):
+        if c in FAC_COLS:
+            col = F.col(f"`{c}`")
+            return col.cast(cast) if cast else col
+    print(f"NOTE: facilities_silver has no '{name}' or '{name}_clean' column; using NULL")
+    return F.lit(None).cast(cast or "string")
+
+
+print("facilities_silver columns used:",
+      {n: next((c for c in (f"{n}_clean", n) if c in FAC_COLS), None)
+       for n in ["name", "state", "pincode", "city", "latitude", "longitude"]})
+
 fac = (spark.table("facilities_silver")
-    .where(F.col("state").isNotNull() & F.col("name").isNotNull())
-    .select("facility_id", F.col("name").alias("f_name"), F.col("state"), F.col("pincode").alias("f_pin"),
-            F.col("city").alias("f_city"), "address_region", "address_full",
-            F.col("latitude").alias("f_lat"), F.col("longitude").alias("f_lon"),
-            F.lower(F.col("operatorTypeId")).alias("f_operator"), F.lower(F.col("facilityTypeId")).alias("f_kind"),
-            F.coalesce(F.col("possible_duplicate_ids"), F.array().cast("array<string>")).alias("f_dups"))
+    .select("facility_id", fcol("name").alias("f_name"), fcol("state").alias("state"), fcol("pincode").alias("f_pin"),
+            fcol("city").alias("f_city"), fcol("address_region").alias("address_region"),
+            fcol("address_full").alias("address_full"),
+            fcol("latitude", "double").alias("f_lat"), fcol("longitude", "double").alias("f_lon"),
+            F.lower(fcol("operatorTypeId")).alias("f_operator"), F.lower(fcol("facilityTypeId")).alias("f_kind"),
+            F.coalesce(fcol("possible_duplicate_ids", "array<string>"), F.array().cast("array<string>")).alias("f_dups"))
+    .where(F.col("state").isNotNull() & F.col("f_name").isNotNull())
     .withColumn("f_norm", name_norm(F.col("f_name")))
     .withColumn("f_core", name_core(F.col("f_name")))
     .withColumn("f_core_tokens", F.array_distinct(tokens(F.col("f_core"))))
@@ -237,7 +259,7 @@ scored = (cand
 # COMMAND ----------
 
 w = Window.partitionBy("site_id").orderBy(F.desc("match_score"), F.asc_nulls_last("distance_km"), "facility_id")
-ranked = scored.withColumn("match_rank", F.row_number().over(w)).cache()
+ranked = scored.withColumn("match_rank", F.row_number().over(w))  # no .cache(): not supported on serverless
 best = ranked.where("match_rank = 1").select("site_id", F.col("facility_id").alias("best_fid"),
                                               F.col("match_score").alias("best_score"), F.col("f_dups").alias("best_dups"))
 second = (ranked.where("match_rank > 1").join(best, "site_id")
@@ -284,7 +306,6 @@ links_out = (links.select(*[F.col(c).alias(RENAME.get(c, c)) for c in LINK_ORDER
 write_table(links_out, "facility_registry_links_silver",
             "Links between facilities_silver.facility_id and registry_sites_silver.site_id, with match score and the "
             "evidence for the match. needs_review = true means a person should confirm. Built by notebooks/06_registry_matching.")
-ranked.unpersist()
 
 # COMMAND ----------
 
@@ -304,7 +325,8 @@ per_fac = (L.join(svc, "site_id", "left")
         F.sort_array(F.collect_set(F.when(F.col("needs_review"), F.col("service")))).alias("services_evidenced_pending_review"),
         F.countDistinct(F.when(F.col("needs_review"), F.col("site_id"))).alias("n_links_needing_review"),
         F.max("match_score").alias("best_match_score")))
-summary = (spark.table("facilities_silver").select("facility_id", F.col("name").alias("facility_name"), "state", "city")
+summary = (spark.table("facilities_silver").select("facility_id", fcol("name").alias("facility_name"),
+                                                   fcol("state").alias("state"), fcol("city").alias("city"))
     .join(per_fac, "facility_id", "left")
     .withColumn("n_registry_links", F.coalesce("n_registry_links", F.lit(0)))
     .withColumn("n_links_needing_review", F.coalesce("n_links_needing_review", F.lit(0)))

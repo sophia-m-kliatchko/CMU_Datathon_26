@@ -22,6 +22,40 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:00: Registry silver tables built on Databricks; serverless fixes to notebooks 05 and 06
+- **Who:** Claude (for William)
+- **What:**
+  - **Databricks CLI:** v1.27.0 installed in `~/.local/bin`, from the official GitHub release with its SHA-256 checked. Homebrew was refused because Xcode/CLT are older than macOS 27. Profile `datathon` added.
+  - **William's workspace:** created schema `workspace.datathon` and Volume `workspace.datathon.external`; uploaded the 9 registry `*_bronze.csv` files and `india_post_pincode_directory.csv`; created the Git folder `/Users/<William>/CMU_Datathon_26` on `Will_branch`.
+  - **Ran notebook 05** as a one-off serverless job. It wrote `registry_sites_silver` (24,961 rows) and `registry_services_silver` (22,757), plus 8 raw bronze tables. Counts per source match the local test exactly.
+  - **Code fixes:**
+    - Notebook 05: `reduce(DataFrame.unionByName, …)` → `reduce(lambda a, b: a.unionByName(b), …)`.
+    - Notebook 06: `.cache()` / `.unpersist()` removed.
+- **How:**
+  - The CLI commands used: `databricks schemas create`, `volumes create`, `fs cp`, `repos create` / `repos update --branch Will_branch`, `jobs submit` (serverless notebook task), `jobs get-run-output`, and the SQL Statements API for the check.
+  - The fixed notebooks were uploaded into the Databricks Git folder with `workspace import --overwrite`, as uncommitted edits there.
+- **Why:** William wanted the registry silver tables as soon as possible. The first serverless run failed with `[JVM_ATTRIBUTE_NOT_SUPPORTED] … '_jdf'`: serverless uses Spark Connect, where the classic `DataFrame` class (and DataFrame caching) isn't available. The local tests use classic Spark, so they didn't catch it.
+- **Notes / follow-ups:**
+  - The serverless fixes and the notebook 06 dual-naming change are **not committed yet**. Once pushed, discard the matching uncommitted edits in the Databricks Git folder before pulling.
+  - Notebook 04 hasn't run yet, so `pin_latitude`/`pin_longitude` are empty. Run 04, then rerun 05, to add them.
+  - Notebook 06 needs `facilities_silver` (notebook 01, blocked by the line-753 bug on main).
+
+
+### 2026-11-21 19:53: Notebook 06 accepts either facilities_silver column naming
+- **Who:** Claude (for William)
+- **What:** `notebooks/06_registry_matching.py` now reads `facilities_silver` columns through a small `fcol()` helper:
+  - `<name>_clean` if that column exists (it's the cleaned value);
+  - otherwise the plain `<name>`;
+  - otherwise NULL, with a note printed.
+
+  It prints which columns it used. Notes added to the notebook header and `docs/registries-silver.md`.
+- **How:** Tested locally on two copies of `facilities_silver`: one with plain names (as on main) and one with `state_clean`, `pincode_clean`, `city_clean`, `latitude_clean`, `longitude_clean`. Both produced the same 4,482 links (no differences in either direction).
+- **Why:** `origin/main` has nothing new since our merge. But on `origin/sophia-wip`, the latest commit `e7f701b` ("minor corrections/adaptations to Databricks") brings back `*_clean` column names in notebook 01. That reverses the earlier "no `_clean` in silver" rule, and also removes the validation step and the PIN-based coordinate check. Until Sophia confirms which version is final, notebook 06 shouldn't depend on either. Also noted:
+  - `sophia-wip` fixes the line-753 `haversine_km` bug in notebook 01 (all its versions).
+  - The notebook 04 `F.least()` NULL bug is still present there.
+  - Nothing from `sophia-wip` was merged into this branch.
+
+
 ### 2026-11-21 18:28: Registry sites matched to facilities (notebook 06)
 - **Who:** Claude (for William)
 - **What:**

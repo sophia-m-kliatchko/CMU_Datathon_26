@@ -48,7 +48,7 @@ spark.sql(f"USE CATALOG `{CATALOG}`")
 spark.sql(f"USE SCHEMA `{SCHEMA}`")
 
 from functools import reduce
-from pyspark.sql import DataFrame, Window
+from pyspark.sql import Window
 PRODUCED_BY_NB = "notebooks/05_registries_bronze_to_silver.py (github.com/sophia-m-kliatchko/CMU_Datathon_26)"
 
 # COMMAND ----------
@@ -431,12 +431,13 @@ def nabh_parts():
 BUILDERS = {"laqshya": laqshya_parts, "trauma": trauma_parts, "nmc": nmc_parts, "dnb": dnb_parts, "ncg": ncg_parts,
             "nabh": nabh_parts}
 parts = [BUILDERS[s]() for s in available]
-sites = reduce(DataFrame.unionByName, [conform_sites(p[0]) for p in parts])
+# lambda (not DataFrame.unionByName): the classic DataFrame class isn't available on serverless (Spark Connect)
+sites = reduce(lambda a, b: a.unionByName(b), [conform_sites(p[0]) for p in parts])
 _ld_type = F.create_map(*[x for k, v in LISTING_DEFAULT.items() for x in (F.lit(k), F.lit(v[0]))])
 _ld_cat = F.create_map(*[x for k, v in LISTING_DEFAULT.items() for x in (F.lit(k), F.lit(v[1]))])
 sites = (sites.withColumn("listing_type", F.coalesce("listing_type", _ld_type[F.col("source")]))
               .withColumn("listing_category", F.coalesce("listing_category", _ld_cat[F.col("source")])))
-services = reduce(DataFrame.unionByName, [p[1].select(*SERVICE_COLS) for p in parts])
+services = reduce(lambda a, b: a.unionByName(b), [p[1].select(*SERVICE_COLS) for p in parts])
 
 # COMMAND ----------
 

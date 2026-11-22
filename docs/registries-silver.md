@@ -163,3 +163,4 @@ All thresholds are widgets.
 3. **A teaching hospital and its medical college often have different names**, so some true matches are missed (e.g. a district hospital that's the teaching hospital of a government medical college).
 4. **No link ≠ no service.** Most facilities are in no registry at all.
 5. Facilities with no state (157) and sites with no state (80) aren't matched.
+6. **Works with either `facilities_silver` naming:** notebook 06 reads `state_clean`, `pincode_clean`, `city_clean`, `latitude_clean`, `longitude_clean` if they exist, else `state`, `pincode`, `city`, `latitude`, `longitude`. It prints which ones it used. Tested on both styles, with identical links.
