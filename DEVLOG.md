@@ -22,6 +22,18 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:31: `notebooks/export_silver_csv.py`: silver tables to CSV
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/export_silver_csv.py`: writes one CSV per silver table to the Volume `workspace.<schema>.exports`, plus `_export_manifest.csv`, then reads each file back and checks the row and column counts.
+  - `.gitignore`: `silver_csv/`.
+  - README: export section.
+- **How:** list and struct columns (e.g. `dq_flags`) become JSON text, since CSV can't hold them. Each table is written with `coalesce(1)` and its part file moved to `<table>.csv`.
+  - Tested on Databricks only (run 1098749705351954, schema `datathon_verify`): SUCCESS. 13 tables exported, about 340 MB, and the read-back check passed.
+  - Downloaded to the local folder `silver_csv/` (not committed).
+- **Why:** Sophia asked for all the silver datasets as CSV on her computer. From now on testing is on Databricks only, keeping checks to what's necessary (time pressure).
+- **Notes / follow-ups:** the downloaded files come from `workspace.datathon_verify` (the verified code's output). Run the export with `schema=datathon` after the live job has re-run with the merged code to export the live tables.
+
 ### 2026-11-21 23:20: PR #16 merged: `main` has the Databricks-verified pipeline
 - **Who:** Sophia (approved), Claude (merged)
 - **What:**

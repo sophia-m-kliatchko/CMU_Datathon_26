@@ -97,6 +97,8 @@ Column-by-column reference and **watch-outs for filtering** (e.g. lists are neve
 
 **Naming:** tables are `<dataset>_<layer>` (e.g. `pincode_bronze`, `pincode_silver`). Silver columns never have a `_clean` suffix: being in silver means clean. Raw versions stay in bronze.
 
+**Download as CSV:** run `notebooks/export_silver_csv.py`. It writes one CSV per silver table to the Volume `workspace.datathon.exports`. Then download them from *Catalog → Volumes*, or all at once with `databricks fs cp -r dbfs:/Volumes/workspace/datathon/exports ./silver_csv --profile <profile>`. List columns are stored as JSON text.
+
 ---
 
 ## How we keep the data honest
@@ -139,6 +141,7 @@ Full citations (publisher, URL, retrieval date, licence, processing chain, limit
 notebooks/            Databricks notebooks (source .py format), in pipeline order 00-06
   common/             shared helpers loaded with %run (and pin_nearby_facilities.py, see Known issues)
   setup_pipeline.py   one-time workspace setup + the Lakeflow Job
+  export_silver_csv.py  every silver table -> one CSV in a Volume
   run_pipeline.py     00->06 runner with pipeline_run_log (local Spark / classic clusters only)
 data/raw/             core raw datasets (facilities, PIN directory, NFHS-5)
 data/external/        CSVs produced by scripts/ (NQAS, Kayakalp) + the Kayakalp source PDF

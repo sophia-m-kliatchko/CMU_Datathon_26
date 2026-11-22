@@ -17,3 +17,6 @@ shared/handoffs/
 # Local secrets
 .env
 .env.*
+
+# Downloaded silver CSV exports (large; regenerate with notebooks/export_silver_csv.py)
+silver_csv/
