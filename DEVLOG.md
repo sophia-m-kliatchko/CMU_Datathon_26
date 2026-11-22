@@ -22,6 +22,22 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 07:33: App `find-the-right-care` deployed in Sophia's workspace; live tables refreshed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Job "CMU Datathon pipeline 00-06" run on `main` (run 1088698257596279): all 7 steps SUCCESS.
+  - Notebook `07_pin_nearby_facilities` (Part A) run to build `workspace.datathon.facility_geo_ready` (run 903388580739811).
+  - New Databricks App `find-the-right-care` from `main`'s `app/` (commit 01e348c), with resources `sql-warehouse` (Serverless Starter Warehouse, CAN_USE) and `serving-endpoint` (`databricks-meta-llama-3-3-70b-instruct`, CAN_QUERY).
+  - The app's service principal was granted `USE CATALOG` on `workspace` and `USE SCHEMA, SELECT` on `workspace.datathon`.
+  - URL: https://find-the-right-care-7474649081384549.aws.databricksapps.com
+- **How:** `git archive` of `origin/main:app` → `databricks apps create --json` (resources attached) → `databricks sync --full` to `/Users/<me>/apps/find-the-right-care` → GRANTs through the SQL Statements API → `databricks apps deploy`.
+- **Why:** Sophia asked to deploy the app in her workspace for the demo.
+- **Result:** deployment SUCCEEDED; app RUNNING; uvicorn started with no errors. The log's "Security scan failed: scanner run failed" is Databricks' optional scanner, not a deploy failure.
+- **Notes / follow-ups:**
+  - Not yet clicked through in a browser.
+  - Stop the app between demos (`databricks apps stop find-the-right-care --profile datathon`).
+  - `facility_geo_ready` isn't built by the job, so re-run notebook 07 after future job runs.
+
 ### 2026-11-21 23:31: `notebooks/export_silver_csv.py`: silver tables to CSV
 - **Who:** Claude (for Sophia)
 - **What:**
