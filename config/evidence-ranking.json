@@ -1,0 +1,23 @@
+{
+  "distance_bands_km": [
+    10.0,
+    25.0,
+    50.0
+  ],
+  "tier_priority": {
+    "T1": 0,
+    "T2": 1,
+    "T3": 2,
+    "U": 3,
+    "R": 3,
+    "X": 3
+  },
+  "ordinal_flag_order": [
+    "conflicting_evidence",
+    "identity_review",
+    "expired_certification",
+    "current_listing_undated",
+    "date_year_only",
+    "conditional_certification"
+  ]
+}

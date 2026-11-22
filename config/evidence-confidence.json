@@ -1,0 +1,43 @@
+{
+  "version": "baseline-1",
+  "weights": {
+    "reliability": 0.4,
+    "facility_match": 0.35,
+    "recency": 0.25
+  },
+  "source_reliability": {
+    "self_report": 0.45,
+    "government_registry": 0.85,
+    "accreditation": 0.85,
+    "independent_check": 0.9,
+    "network": 0.6,
+    "unknown": 0.2
+  },
+  "source_overrides": {},
+  "directness": {
+    "direct": 1.0,
+    "indirect": 0.5,
+    "context": 0.25
+  },
+  "half_life_days": 365.0,
+  "current_evidence_days": 365,
+  "unknown_recency": 0.35,
+  "expired_multiplier": 0.2,
+  "pending_match_multiplier": 0.25,
+  "conditional_multiplier": 0.8,
+  "uncited_multiplier": 0.25,
+  "agreement_bonus": 0.15,
+  "contradiction_penalty": 1.0,
+  "conflict_threshold": 0.2,
+  "qualified_match_min": 0.85,
+  "qualified_strength_min": 0.65,
+  "self_report_cap": 0.55,
+  "indirect_cap": 0.6,
+  "unknown_date_cap": 0.45,
+  "historical_cap": 0.4,
+  "pending_cap": 0.25,
+  "uncited_cap": 0.25,
+  "conflict_cap": 0.35,
+  "medium_threshold": 0.4,
+  "high_threshold": 0.7
+}

@@ -225,6 +225,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The notebook 04 `F.least()` NULL bug is still present there.
   - Nothing from `sophia-wip` was merged into this branch.
 
+### 2026-11-21 19:51: Started modular Evidence Confidence baseline (Alice)
+- **Who:** Codex (for Alice).
+- **What:** new isolated `alice-evidence-confidence` worktree from `origin/main` b5aba4d; additive `evidence_confidence/`, `config/evidence-confidence.json`, focused unit tests/examples and integration documentation. No teammate notebooks, datasets or Silver contracts edited.
+- **How:** inspected current main, William registry normalization/matching at ab113d7, Sophia NQAS/Kayakalp and Elliot PIN/location contracts, plus the local Kayakalp audit. Pure standard-library scoring with explicit source/match/recency weights, bounded lineage-aware agreement, contradictions, scoped service vs quality/cleanliness/identity outputs, citations and fail-closed adapters. No Databricks execution or writes.
+- **Why:** provide a runnable, interpretable policy baseline while upstream schemas evolve; no calibrated-probability, current clinical-safety or missing-means-absent claims. Canonical matches and service assertions remain explicit upstream inputs. No commits, merges, pushes or shared-resource changes.
+- **Validation:** 57 focused tests passed on Python 3.10.4; 10 synthetic scenarios serialized/executed with default and file-loaded policy; 5 existing address and 12 coordinate parser cases passed; compile and whitespace checks passed. No live scoring deployment, probability calibration or clinical validation claimed; integration needs are in `docs/evidence-confidence.md`.
+
 ### 2026-11-21 18:28: Registry sites matched to facilities (notebook 06)
 - **Who:** Claude (for William)
 - **What:**
