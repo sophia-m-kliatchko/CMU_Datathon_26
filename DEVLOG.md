@@ -23,6 +23,94 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 ## Entries
 
 <<<<<<< Updated upstream
+### 2026-11-21 20:15: Fixed 20,015 km distances for missing coordinates; restored notebook 01 after an accidental rollback
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/common/validation.py` (`haversine_km_col`).
+  - `notebooks/04_pincode_bronze_to_silver.py` (`km_from_pin_median`, `coords_far_from_pin`).
+  - `notebooks/01_bronze_to_silver.py`: restored and fixed.
+  - `DEVLOG.md`: restored 3 entries.
+- **How:**
+  - **Bug:** Spark's `F.least()` skips NULLs, so `least(1.0, sqrt(NULL))` returned 1.0, i.e. 2 × 6371 × asin(1) = 20,015 km for any missing point.
+    - **Effects:** in 04, every office without coordinates was flagged far from its PIN and given status `nulled_far_from_pin`. In 01, near-duplicate pairs where one side had no coordinates got 20,015 km, so the "no coordinates → compare names only" rule never fired. `km_from_pin_centre` was 20,015 for facilities without coordinates.
+    - **Fix:** `haversine_km_col` returns NULL when its input is NULL. Notebook 04 uses it, with a NULL distance counting as "not far". Notebook 01's `haversine_km` now calls it.
+  - **Restore:** commit `e7f701b` ("minor corrections/adaptations to Databricks") was made from a Databricks Git folder that hadn't pulled. It replaced notebook 01 with the ~15:45 version, left a conflict marker, truncated the file at line 998 with "...", and deleted the 16:27, 16:43 and 17:18 DEVLOG entries.
+    - Notebook 01 was restored from `0b51ac7`, and that commit's three real changes were re-applied: the Databricks environment header, the cell title "Possible near-duplicates", and the near-duplicate `TypeError` fix (pass `F.col(...)` rather than column-name strings to `haversine_km`).
+    - The three entries were re-inserted from `0b51ac7`. The Databricks-side entries (13:45–16:35) were kept.
+    - Notebooks 02 and 04 were not rolled back; their new environment headers and 02's `nqas_certified_facilities` bronze default are kept.
+- **Why:** Sophia reported the 20,015 km bug and chose to restore the newer notebook 01 rather than keep the rolled-back one.
+- **Notes / follow-ups:**
+  - **In Databricks, always Pull before Commit & Push** in the Git dialog.
+  - Notebooks compile locally; not yet re-run on Databricks.
+
+### 2026-11-21 17:18: Silver-vs-bronze validation for facilities, pincode and NQAS; coordinates nulled when they don't match the address
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/common/validation.py`: `run_validations()`, `mismatch_rows()`, `haversine_km_col()`, `same_number()`.
+  - Notebooks `01`, `02` and `04` updated.
+  - New `scripts/dryrun_coordinate_checks.py`.
+  - Docs: `docs/silver-tables.md`, `scripts/README.md`, `CLAUDE.md` (run order and validation rule).
+  - New tables: `facilities_validation`, `pincode_validation`, `nqas_validation`.
+- **How:**
+  - **Pincode (04):** an office's coordinates are set to NULL if they're more than 50 km from its PIN's median point (`coord_status = nulled_far_from_pin`).
+    - Silver and centroids are staged and checked against `pincode_bronze`: row reconciliation; PIN, office name and raw coordinate text equal bronze; coordinates equal the re-parsed bronze values; state and district derived from bronze; no kept coordinate far from its PIN; unique `office_id`; each centroid inside its offices' box.
+    - Then published.
+  - **Facilities (01):** coordinates must be within 25 km plus the PIN's spread of the PIN centroid, and inside the state's box (from `pincode_silver`, padded 0.25°); otherwise set to NULL (`nulled_pin_mismatch` / `nulled_state_mismatch`).
+    - New columns: `km_from_pin_centre`, `pin_in_directory`, `state_matches_pin`.
+    - New flags: `COORDS_NULLED_PIN_MISMATCH`, `COORDS_NULLED_STATE_MISMATCH`, `PIN_NOT_IN_DIRECTORY`, `STATE_NOT_SERVED_BY_PIN`.
+    - Checks against `facilities_bronze`: row reconciliation (merged + rejected); IDs in bronze, UUID-shaped and unique; name, PIN, coordinates (exact, or swapped back), state and the numbers all come from the facility's bronze rows; no kept coordinate breaks the PIN or state rule.
+  - **NQAS (02):** the district must exist in that state in `pincode_silver` (flag `DISTRICT_NOT_IN_STATE`; there are no coordinates to null).
+    - Checks: row reconciliation; every listing exists in bronze; dates match the bronze day/month/year; state and district come from bronze; status matches the dates; unique ID.
+  - **All three** write the candidate silver to a staging table and validate it. If a check fails, the run stops and the existing silver table is left untouched.
+- **Why:** Sophia wants all silver data accurate to bronze, with PINs, addresses/regions and coordinates consistent with each other, and coordinates set to NULL when they don't match.
+- **Tradeoffs:**
+  - The PIN check allows each PIN's own spread, so large rural PINs aren't penalized.
+  - The state check uses a padded bounding box (cheap, no polygons), so it only catches clearly wrong states.
+  - NQAS district matching is exact on a letters-only key, so old or alternate district names will be flagged.
+- **Dry-run results (local CSVs):**
+  - **Facilities:** about 1,492 lose their coordinates for PIN mismatch (e.g. "Aravind Eye Hospital": Delhi PIN 110002, point ~1,870 km away, consistent with merged records), 5 for being outside their state; 8,467 keep theirs.
+  - **Post offices:** 12,102 lose their coordinates.
+  - **NQAS:** 236 of 989 listings are flagged `DISTRICT_NOT_IN_STATE`.
+- **Notes / follow-ups:**
+  - **Run order is now 04 → 01, 02** (enforced by an assertion).
+  - Not yet run on Databricks.
+  - Kayakalp (03) wasn't in scope; it could get the same treatment.
+
+### 2026-11-21 16:43: No script creates `*_clean` columns anymore, and a guard enforces it
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`, `notebooks/04_pincode_bronze_to_silver.py`, `notebooks/common/reference_data.py`.
+  - `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops's script: minimal rename plus a header note).
+  - `CLAUDE.md`.
+- **How:**
+  - **Notebook 01:** cleaned columns are built under plain names from the start (`city`, `state`, `pincode`, `latitude`, `longitude`, `year_established`, `num_doctors`, `capacity`). Raw source columns with those names (raw `latitude`, `longitude`, `capacity`) are renamed `src_<name>` by the existing collision step and left out of silver. The end-of-pipeline rename block is removed. This means the temporary `_facilities_silver_stage` table no longer has `*_clean` columns either.
+  - **Notebook 04:** raw `latitude`, `longitude` and `district` are renamed `*_raw` right after the duplicate collapse, and the cleaned values use the plain names throughout. The end rename block is removed.
+  - **elliotl-ops's script:** `latitude_clean`/`longitude_clean`/`office_name_clean` → `latitude`/`longitude`/`office_name` (its raw values were already `*_raw`).
+  - **Guard:** `assert_no_clean_columns()` runs before every silver write: inside `write_table()` (used by 02, 03, 04), inline before notebook 01's six writes, and before 04's direct writes. A write fails if any column ends in `_clean`.
+- **Why:** Sophia asked that no script ever produce `*_clean` columns in silver tables. The previous change only renamed them at the end, and notebook 01's staging table still had them. The guard makes the rule hold for future edits too.
+- **Notes / follow-ups:**
+  - Local unit tests pass; all notebooks compile. Not yet run on Databricks.
+  - elliotl-ops should know their script's output column names changed.
+
+### 2026-11-21 16:27: No `_clean` suffix on silver column names
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01`–`04` and the docs.
+  - **`facilities_silver`:** `city_clean`→`city`, `state_clean`→`state`, `pincode_clean`→`pincode`, `latitude_clean`→`latitude`, `longitude_clean`→`longitude`, `year_established_clean`→`year_established`, `num_doctors_clean`→`num_doctors`, `capacity_clean`→`capacity`.
+    - The raw `latitude`, `longitude`, `coordinates`, `yearEstablished`, `numberDoctors` and `capacity` columns are now left out of silver; bronze keeps them.
+    - `silver_possible_duplicates`: `pincode_clean_a/b`→`pincode_a/b` (latitude/longitude likewise).
+  - **`nqas_silver`, `kayakalp_silver`:** `state_clean`→`state`, `district_clean`→`district` (raw stays in `state_raw`/`district_raw`).
+  - **`pincode_silver`:** `latitude`, `longitude`, `state`, `district`, `office_name`; the raw district column is renamed `district_raw`.
+  - `CLAUDE.md`: naming rule added.
+- **How:**
+  - **Notebooks 01 and 04:** the code keeps the `_clean` names internally and renames only at the final select, with an assertion that no names collide. This is because their raw columns use the same plain names.
+  - **Notebooks 02 and 03:** a word-boundary rename, since raw values there are already `*_raw`.
+  - Downstream code, comments and SQL checks were updated to the new names.
+- **Why:** Sophia: being in a silver table already implies a column is clean. Raw columns that would clash with the plain names are dropped from `facilities_silver`, consistent with the earlier address decision ("if it is not standard, drop it"). In the outside-data tables, raw text is kept as `*_raw` because their `row_citation` and source checks rely on it.
+- **Notes / follow-ups:**
+  - Earlier `facilities_silver` drafts kept the raw `coordinates`/`latitude`/`longitude`. The validated coordinates now carry those names instead; the raw ones are in bronze.
+  - **Anything already querying `*_clean` columns must be updated.** Not yet run on Databricks.
+
 ### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
 - **Who:** Claude (for Sophia)
 - **What:**

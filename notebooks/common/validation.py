@@ -56,7 +56,9 @@ def haversine_km_col(lat1, lon1, lat2, lon2):
     p = 3.141592653589793 / 180
     h = (F.pow(F.sin((lat2 - lat1) * p / 2), 2) +
          F.cos(lat1 * p) * F.cos(lat2 * p) * F.pow(F.sin((lon2 - lon1) * p / 2), 2))
-    return 2 * 6371.0 * F.asin(F.least(F.lit(1.0), F.sqrt(h)))
+    # F.least() skips NULLs, so least(1.0, NULL) would be 1.0 -> 20,015 km for a missing point.
+    # h is NULL whenever any coordinate is NULL; keep the distance NULL in that case.
+    return F.when(h.isNotNull(), 2 * 6371.0 * F.asin(F.least(F.lit(1.0), F.sqrt(h))))
 
 
 def same_number(a, b, tol=1e-6):

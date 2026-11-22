@@ -155,13 +155,12 @@ df = (df
 df = (df
     .withColumn("_pin_med_lat", F.percentile_approx("latitude", 0.5).over(w_pin))
     .withColumn("_pin_med_lon", F.percentile_approx("longitude", 0.5).over(w_pin)))
-p = 3.141592653589793 / 180
-h = (F.pow(F.sin((F.col("latitude") - F.col("_pin_med_lat")) * p / 2), 2) +
-     F.cos(F.col("_pin_med_lat") * p) * F.cos(F.col("latitude") * p) *
-     F.pow(F.sin((F.col("longitude") - F.col("_pin_med_lon")) * p / 2), 2))
+# haversine_km_col (common/validation) returns NULL when a coordinate is missing, so offices without
+# coordinates get km_from_pin_median = NULL and are NOT marked as far from their PIN.
 df = (df
-    .withColumn("km_from_pin_median", F.round(2 * 6371.0 * F.asin(F.least(F.lit(1.0), F.sqrt(h))), 2))
-    .withColumn("coords_far_from_pin", F.col("km_from_pin_median") > FAR_FROM_PIN_KM)
+    .withColumn("km_from_pin_median", F.round(haversine_km_col(F.col("latitude"), F.col("longitude"),
+                                                               F.col("_pin_med_lat"), F.col("_pin_med_lon")), 2))
+    .withColumn("coords_far_from_pin", F.coalesce(F.col("km_from_pin_median") > FAR_FROM_PIN_KM, F.lit(False)))
     .drop("_pin_med_lat", "_pin_med_lon"))
 
 # Coordinates that don't match their PIN (over FAR_FROM_PIN_KM from the PIN's median point) are set to NULL.
