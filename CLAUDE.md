@@ -24,8 +24,8 @@ CMU Datathon Fall 2026, "Find the right care": given a medical service and a loc
 - `docs/`: data citations (`data-sources.md`), dataset notes (`dataset-notes.md`) and the silver-table reference with filtering watch-outs (`silver-tables.md`).
 
 ## Run order and validation (required)
-- **Run order:** `00_pincode` → `01_bronze_to_silver` (facilities) → `02_nqas` → `03_kayakalp` → `04_nfhs` → `05_registries` → `06_registry_matching`. 01, 02, 04 and 05 read the India Post tables from 00 (04 only for an optional district check); 06 needs 01 and 05.
-- **Run everything in order on Databricks:** open `notebooks/run_pipeline.py` and Run all. It runs 00 → 06 with `dbutils.notebook.run`, skips steps whose prerequisites failed, appends one row per step to `pipeline_run_log` (status, seconds, error, failed validation checks), and fails at the end if any step failed.
+- **Run order:** `00_pincode` → `01_bronze_to_silver` (facilities) → `02_nqas` → `03_kayakalp` → `04_nfhs` → `05_registries` → `06_registry_matching` → `07_pin_nearby_facilities`. 01, 02, 04 and 05 read the India Post tables from 00 (04 only for an optional district check); 06 needs 01 and 05; 07 needs 00 and 01 and rebuilds `facility_geo_ready`.
+- **Run everything in order on Databricks:** open `notebooks/setup_pipeline.py` and run its Job setup or open `notebooks/run_pipeline.py` on classic compute. The Job runs 00 → 07; `run_pipeline.py` runs 00 → 07 with `dbutils.notebook.run`, skips steps whose prerequisites failed, appends one row per step to `pipeline_run_log`, and fails at the end if any step failed.
 - **Verify locally before pushing notebook changes:** `scripts/local_spark/run_all.sh` runs every notebook in that order on a local Spark (WSL) against the repo CSVs, and `run_all.sh audit` checks the outputs (see `scripts/local_spark/README.md`).
 - Every silver notebook validates its output against its bronze table with `common/validation.py` (`run_validations()`), writes `<dataset>_validation`, and only publishes the silver table if every check passes. New silver notebooks must do the same.
 - Coordinates that don't match the record's PIN or state are set to NULL, never kept.
