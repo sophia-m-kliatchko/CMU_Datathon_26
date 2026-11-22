@@ -32,7 +32,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - Redeployed `find-the-right-care`.
 - **How:** text edits, then `databricks sync --full` and `databricks apps deploy`. On the live site, all five new key headings appear, and a cancer-care search at 800020 returns `evidence_level` "Moderate capability evidence", "Unknown" and "Review".
 - **Why:** Sophia asked for the website labels to match the key on the "Service Verification" slide.
-- **Branch:** `aesthetics` only; not pushed to `main`.
+- **Branch:** `aesthetics`, then pushed to `main` at Sophia's request (same commit, fast-forward).
 
 ### 2026-11-22 10:20: Final check of the website and repo; app README brought up to date
 - **Who:** Claude (for Sophia)
