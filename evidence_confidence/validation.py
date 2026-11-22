@@ -88,13 +88,15 @@ def validate_integration(*, canonical_facility_ids, canonical_services, evidence
         issue('CONFLICTING_SOURCE_RECORD', str(exc))
     try:
         unique([(r['facility_id'], r['service'], r['as_of'], r['framework_version']) for r in rows], 'DUPLICATE_EVIDENCE_GRAIN')
+        expected_rows = build_facility_service_rows(records, as_of=as_of,
+            facility_services=[(r['facility_id'], r['service']) for r in rows], policy=tier_policy)
+        expected_index = {(r['facility_id'], r['service']): r for r in expected_rows}
         for row in rows:
             if row['facility_id'] not in facility_ids:
                 issue('OUTPUT_FACILITY_ID', row['facility_id'])
             if row['service'] not in services:
                 issue('OUTPUT_SERVICE', row['service'])
-            expected = build_facility_service_rows(records, as_of=as_of,
-                facility_services=[(row['facility_id'], row['service'])], policy=tier_policy)[0]
+            expected = expected_index[(row['facility_id'], row['service'])]
             if row != expected:
                 issue('ASSESSMENT_MISMATCH', f"{row['facility_id']}: assessment/provenance differs from recomputation")
             for decision in row['decisions']:

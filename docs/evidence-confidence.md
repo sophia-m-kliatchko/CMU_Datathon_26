@@ -202,3 +202,5 @@ No end-to-end live Databricks scoring job, real facility match evaluation, sourc
 ## Facility–service integration phase
 
 The [integration contract](evidence-confidence-integration.md) documents corrected rejected-match handling, pending stronger evidence, deterministic aggregation, provenance-preserving export and the geographic LEFT JOIN. It includes synthetic examples, current verification and upstream Silver integration requirements.
+
+The [real Silver validation attempt](evidence-confidence-integration.md#real-silver-validation-attempt--2026-11-21) profiles the actual locally available Kayakalp snapshot and records the blocked end-to-end status, missing core Silver exports, main-branch schema mappings, upstream geographic truncation risk, component fixes and reproducible commands. No synthetic output is represented as real validation.

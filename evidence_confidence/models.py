@@ -1,6 +1,6 @@
 """Schema-independent, immutable input/output contracts. No database dependencies."""
 from dataclasses import dataclass, fields, is_dataclass
-from datetime import date
+from datetime import date, datetime
 from enum import Enum
 from collections.abc import Mapping
 from types import MappingProxyType
@@ -140,6 +140,7 @@ class Evidence:
     citations: Tuple[Citation, ...] = ()
     qualifiers: Tuple[str, ...] = ()
     source_record_id: Optional[str] = None  # Stable ID within source family; never a facility/site ID.
+    source_provenance: tuple = ()  # Immutable (field, original scalar value) pairs; no scoring effect.
 
     def __post_init__(self):
         for name in ('evidence_id', 'source_id', 'statement'):
@@ -161,6 +162,18 @@ class Evidence:
             day(getattr(self, name), name)
         if self.current_status is not None and type(self.current_status) is not bool:
             raise ValueError('current_status must be bool or None')
+        provenance = tuple(tuple(item) for item in self.source_provenance)
+        names = set()
+        for item in provenance:
+            if len(item) != 2 or not isinstance(item[0], str) or not item[0].strip() or item[0] in names:
+                raise ValueError('source_provenance requires unique nonblank field names')
+            value = item[1]
+            if value is not None and type(value) not in (str, int, float, bool, date, datetime):
+                raise ValueError('source_provenance values must be scalar or date')
+            if isinstance(value, float) and not math.isfinite(value):
+                raise ValueError('source_provenance requires finite numbers')
+            names.add(item[0])
+        object.__setattr__(self, 'source_provenance', tuple(sorted(provenance)))
         if self.source_record_id is not None:
             object.__setattr__(self, 'source_record_id', text(self.source_record_id, 'source_record_id'))
         if self.independence_group is not None:

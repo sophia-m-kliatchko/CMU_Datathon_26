@@ -69,6 +69,16 @@ def _citation(row, table, key, statement):
                      _optional(row.get('row_citation')) or statement),)
 
 
+def _provenance(row):
+    # Retain actual source metadata as immutable scalar pairs, including PDF row
+    # citations. No fallback publisher, licence, date or canonical ID is invented.
+    names = ('source_name', 'source_publisher', 'source_url', 'source_license',
+             'retrieved_on', 'produced_by', 'row_citation', 'source_file',
+             'source_page', 's_no', 'evidence_date', 'validity_from_raw',
+             'validity_to_raw', 'financial_year', 'award_raw')
+    return tuple((key, row[key]) for key in names if key in row)
+
+
 def _reference(match, key):
     if not isinstance(match, FacilityMatch) or match.reference_id != key:
         raise ValueError(f'explicit FacilityMatch.reference_id must equal {key!r}; no name-only join')
@@ -186,7 +196,7 @@ def from_registry_service(row, match, *, site=None):
                     observed_on=observed, valid_from=valid_from, valid_until=valid_until,
                     retrieved_on=_date(r.get('retrieved_on')), date_precision=precision,
                     current_status=current if valid_until is None else None,
-                    source_record_id=key, independence_group=f'registry:{source}', citations=_citation(r, 'registry_services_silver', key, statement),
+                    source_record_id=key, source_provenance=_provenance(r), independence_group=f'registry:{source}', citations=_citation(r, 'registry_services_silver', key, statement),
                     qualifiers=tuple(dict.fromkeys(flags + (('STATUS_UNRECOGNIZED',) if not supported_status else ()))))
 
 
@@ -211,7 +221,7 @@ def from_registry_site(row, match):
                     verification=Verification.INDEPENDENT if quality else Verification.UNKNOWN,
                     directness=Directness.DIRECT, observed_on=observed, date_precision=precision,
                     current_status=_bool(r.get('listing_current')), retrieved_on=_date(r.get('retrieved_on')),
-                    source_record_id=key, independence_group=f'registry:{source}', citations=_citation(r, 'registry_sites_silver', key, statement),
+                    source_record_id=key, source_provenance=_provenance(r), independence_group=f'registry:{source}', citations=_citation(r, 'registry_sites_silver', key, statement),
                     qualifiers=flags + ('LISTING_IS_NOT_SERVICE_VERIFICATION',))
 
 
@@ -257,7 +267,7 @@ def from_kayakalp(row, match):
                     Scope.CLEANLINESS, statement, _with_flags(match, flags),
                     verification=Verification.INDEPENDENT, directness=Directness.DIRECT,
                     observed_on=observed, retrieved_on=_date(r.get('retrieved_on')),
-                    date_precision=DatePrecision.FINANCIAL_YEAR, independence_group=f'nhsrc:kayakalp:{fy}',
+                    date_precision=DatePrecision.FINANCIAL_YEAR, source_record_id=key, source_provenance=_provenance(r), independence_group=f'nhsrc:kayakalp:{fy}',
                     citations=_citation(r, 'kayakalp_silver', key, statement), qualifiers=flags)
 
 
@@ -278,7 +288,7 @@ def from_nqas(row, match):
                     observed_on=_date(r.get('validity_from')), valid_from=_date(r.get('validity_from')),
                     valid_until=valid_until, retrieved_on=_date(r.get('retrieved_on')),
                     current_status=current if valid_until is None else None,
-                    independence_group='nhsrc:nqas', citations=_citation(r, 'nqas_silver', key, statement), qualifiers=flags)
+                    source_record_id=key, source_provenance=_provenance(r), independence_group='nhsrc:nqas', citations=_citation(r, 'nqas_silver', key, statement), qualifiers=flags)
 
 
 def _alias(row, current, legacy):
