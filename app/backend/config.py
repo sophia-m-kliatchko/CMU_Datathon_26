@@ -29,7 +29,7 @@ EXPLAINER_ENABLED = _env("EXPLAINER_ENABLED", "true").lower() == "true"
 
 DEFAULT_RADIUS_KM = float(_env("DEFAULT_RADIUS_KM", "50"))
 MAX_RADIUS_KM = float(_env("MAX_RADIUS_KM", "300"))
-TOP_N = int(_env("TOP_N", "5"))              # recommendations shown
+TOP_N = int(_env("TOP_N", "3"))              # recommendation cards shown
 ALTERNATIVES_N = int(_env("ALTERNATIVES_N", "5"))
 MAX_CANDIDATES = int(_env("MAX_CANDIDATES", "5000"))  # safety cap; evidence is added to ALL candidates up to this
 

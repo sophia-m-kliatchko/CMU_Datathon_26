@@ -22,6 +22,22 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 07:42: App shows the top 3 results, each with its own explanation; plainer title font
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `main` (the app from PR #17) into `sophia-wip`. Conflicts in `.gitignore`, `README.md` and `DEVLOG.md` were resolved by keeping both sides.
+  - `app/backend/config.py`: `TOP_N` defaults to 3 (was 5).
+  - `app/backend/engine.py` `shape()`, routine mode: when fewer than 3 facilities have documentary evidence (T1–T3), the cards are filled with the next best in the engine's order. Facilities with some evidence come first, then the nearest with none. The cards used to fill are removed from the alternatives table.
+  - `app/static/app.js`:
+    - Every card's "Why is this recommended?" menu opens with its plain-language explanation already generated, so you no longer click a button.
+    - Cards without documentary evidence say "Why is this listed?".
+    - The "no documentary evidence" notice now checks the tiers instead of whether the list is empty.
+  - `app/static/styles.css`: the title "Find the right care" uses the body font (Atkinson Hyperlegible, bold) instead of the italic Newsreader serif. "right" is no longer italic and keeps the accent colour.
+  - Redeployed the Databricks App `find-the-right-care` from `sophia-wip`'s `app/`.
+- **How:** edited the files, ran `databricks sync --full` to the app folder, then `databricks apps deploy`. Checked with authenticated calls to `/api/recommend` (dialysis, PIN 800020, 50 km), which returned 3 cards (T3, U, U), and to `/api/explain` on card 3, which returned text from the LLM.
+- **Why:** Sophia asked for the top 3 results, each with the same explanation menu, and a less ornate title font: the italic "right" looked bad.
+- **Tradeoff:** padding to 3 can show facilities with no evidence for the service. Their stamp reads "U / No evidence", the ledger says "No evidence found", and the menu says "listed", not "recommended", so they aren't presented as confirmed. Each search now makes up to 3 LLM calls instead of 0 until a click.
+
 ### 2026-11-22 07:33: App `find-the-right-care` deployed in Sophia's workspace; live tables refreshed
 - **Who:** Claude (for Sophia)
 - **What:**
