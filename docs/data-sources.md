@@ -13,6 +13,12 @@ Items marked **⚠ TODO** still need information from the person who added the d
 | `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
 | `pincode_bronze`, `pincode_silver`, `pincode_centroids_silver`, `pincode_rejected`, `pincode_dq_summary`; file `data/raw/india_post_pincode_directory.csv` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO (file received 2026-11-21) | `notebooks/04_pincode_bronze_to_silver.py` (builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`) |
 | file `data/raw/nfhs_5_district_health_indicators.csv` | NFHS-5 (2019-21) district factsheets | IIPS / MoHFW, via data.gov.in | ⚠ TODO | not yet processed |
+| files `datasets/external/anbai_dnb_bronze/*_bronze.csv` (+ `.sqlite`) | List of DNB accredited institutions | Association of National Board Accredited Institutions (ANBAI), mirroring NBEMS accreditation | 2026-11-21 | `scrapers/anbai_dnb.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| files `datasets/external/nmc_bronze/*_bronze.csv` (+ `.sqlite`) | Lists of colleges teaching MBBS and PG courses | National Medical Commission (NMC) | 2026-11-21 | `scrapers/nmc_colleges.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv` | Rajya Sabha Unstarred Q. 2048 (10 Mar 2026), Annexure-I | Ministry of Health and Family Welfare, via Rajya Sabha | 2026-11-21 | `scrapers/mohfw_trauma_centres.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| files `datasets/external/laqshya_bronze/laqshya_*_bronze.csv` | LaQshya Master data (8 Apr 2026) | NHSRC, MoHFW | 2026-11-21 | `scrapers/nhsrc_laqshya.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/ncg_bronze/ncg_members_bronze.csv` | National Cancer Grid member list | National Cancer Grid (Tata Memorial Centre, DAE) | 2026-11-21 | `scrapers/ncg_members.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
+| file `datasets/external/nabh_bronze/nabh_organisations_bronze.csv` | Find an Accredited Healthcare Organisation (directory) | NABH, Quality Council of India | 2026-11-21 | `scrapers/nabh_organisations.py` → `notebooks/05_registries_bronze_to_silver.py` → `registry_sites_silver`, `registry_services_silver` |
 
 ---
 
@@ -81,6 +87,130 @@ See [validation and integration handoff](kayakalp-validation-handoff.md) for rep
 - **Where:** `data/raw/nfhs_5_district_health_indicators.csv`, added by JhK830 on 2026-11-21. Column names are already snake_case, so it was probably pre-processed by the datathon or a teammate. **⚠ TODO (JhK830): confirm the exact source and date.**
 - **Licence:** GODL (data.gov.in), if it came from there.
 - **Cite as:** International Institute for Population Sciences (IIPS) and ICF. *National Family Health Survey (NFHS-5), 2019-21: District Fact Sheets.* Mumbai: IIPS, 2021.
+
+## 6. DNB-accredited hospitals and specialties (ANBAI / NBEMS)
+- **What:** hospitals accredited by the National Board of Examinations in Medical Sciences (NBEMS) to train DNB/DrNB/FNB specialists, with the specialties each is accredited for. 655 hospital listings and 2,596 hospital × specialty rows, in 28 states and 71 specialties.
+- **Publisher:** Association of National Board Accredited Institutions (ANBAI). The accreditation itself is granted by NBEMS, Ministry of Health and Family Welfare.
+- **Where:** https://anbai.org/DNB_accredited_institutions.php (one static HTML page). Files: `datasets/external/anbai_dnb_bronze/` — `dnb_hospitals_bronze.csv`, `dnb_hospital_specialties_bronze.csv`, `dnb_specialty_reference_bronze.csv`, `anbai_dnb_bronze.sqlite`. The page snapshot is in `raw/`, which is git-ignored.
+- **Retrieved:** 2026-11-21. The site has no robots.txt; the page was fetched with one request.
+- **Licence / terms:** none found; the website of a professional association. Cite ANBAI and NBEMS.
+- **Processing:** `scrapers/anbai_dnb.py`:
+  - specialty cells split on commas, with broken and missing commas repaired, then mapped to 71 canonical names;
+  - old state names updated, and Andhra Pradesh listings in Telangana cities moved to Telangana;
+  - a hand-written `related_services` tag added per specialty.
+
+  Details are in `docs/anbai-dnb.md`.
+- **Known limitations:**
+  - The page has **no "last updated" date**, and its Andhra Pradesh/Telangana listings suggest parts of it are out of date.
+  - No addresses or PIN codes. The city field is sometimes a district, locality or road.
+  - Covers DNB teaching hospitals only (about 650).
+  - `related_services` is our hint, not the source's.
+- **Cite as:** Association of National Board Accredited Institutions. *DNB Accredited Institutions.* https://anbai.org/DNB_accredited_institutions.php. Accessed 2026-11-21.
+- **Per-row citation:** `source_url` and `scraped_at` in `dnb_hospitals_bronze.csv`. A silver table should add `row_citation`.
+
+## 7. NMC medical colleges and courses
+- **What:** every medical college recognized by the National Medical Commission (911 colleges), with its MBBS and postgraduate courses (11,583 college × course rows: MD/MS, diploma, DM, M.Ch.) and approved seats. Address, city, PIN and website come from each college's detail record.
+- **Publisher:** National Medical Commission (NMC), Government of India.
+- **Where:**
+  - [List of colleges teaching MBBS](https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-mbbs) and [List of colleges teaching PG courses](https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-pg-courses).
+  - Data comes from the pages' own JSON endpoints: `/college-courses/list`, `/college-courses/pg-list`, `/college-courses/detail/<id>`.
+  - Files: `datasets/external/nmc_bronze/` — `nmc_colleges_bronze.csv`, `nmc_college_courses_bronze.csv`, `nmc_specialty_reference_bronze.csv`, `nmc_colleges_bronze.sqlite`. API responses are in `raw/`, which is git-ignored.
+- **Retrieved:** 2026-11-21. NMC's records show they were last updated 2026-11-04. robots.txt allows all paths; detail requests were spaced 0.5 s apart.
+- **Licence / terms:** a public government website; no explicit open-data licence found. Cite NMC.
+- **Personal data:** the detail endpoint also returns named staff contacts, mobile numbers and email addresses. **These were dropped before saving.** Only institutional fields are kept.
+- **Processing:** `scrapers/nmc_colleges.py`:
+  - degree prefixes and diploma suffixes removed to get specialty names;
+  - course level (MBBS / PG degree / PG diploma / DM / M.Ch.) recorded;
+  - service tags from regex rules;
+  - states mapped to the silver names.
+
+  Details are in `docs/nmc-colleges.md`.
+- **Known limitations:**
+  - 300 of 911 colleges have no valid PIN. `city` is sometimes a locality.
+  - A college and its teaching hospital may have different names.
+  - New colleges with only a recent Letter of Permission may not have a fully working hospital yet.
+  - `related_services` is our hint.
+- **Cite as:** National Medical Commission. *List of Colleges Teaching MBBS* and *List of Colleges Teaching PG Courses.* https://nmc.org.in/. Accessed 2026-11-21.
+- **Per-row citation:** `source_pages` and `snapshot_date` in `nmc_colleges_bronze.csv`.
+
+## 8. Trauma Care Facilities (MoHFW NPPMT&BI)
+- **What:** the 196 Trauma Care Facilities sanctioned in government hospitals and medical colleges under the National Programme for Prevention & Management of Trauma and Burn Injuries (11th and 12th Five Year Plans, 2007–2017), with trauma level I/II/III. 32 states/UTs.
+- **Publisher:** Ministry of Health and Family Welfare, in a written answer to the Rajya Sabha.
+- **Where:** Rajya Sabha Unstarred Question No. 2048, answered 10 March 2026, Annexure-I: https://sansad.in/getFile/annex/270/AU2048_OvVj2M.pdf?source=pqars. File: `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv`. The PDF is in `raw/`, which is git-ignored.
+- **Retrieved:** 2026-11-21 (one download).
+- **Licence / terms:** a public parliamentary record; no explicit licence. Cite the Rajya Sabha answer.
+- **Processing:** `scrapers/mohfw_trauma_centres.py`:
+  - Annexure-I read with `pypdf`, with state cells carried across page breaks;
+  - the trauma level taken from the end of each row;
+  - a hand-checked `place` column (corrected spellings, current names) and a keyword-based `facility_type` added;
+  - the script refuses to write unless it finds 196 rows, each with a state, level and place.
+
+  Details are in `docs/trauma-care-facilities.md`.
+- **Known limitations:**
+  - **"Sanctioned" doesn't mean "functional today"**: the answer doesn't confirm functionality, beds or staff.
+  - Government hospitals only.
+  - Names are informal. `place` and `facility_type` are our additions.
+- **Cite as:** Ministry of Health and Family Welfare. *Rajya Sabha Unstarred Question No. 2048: Establishment of Trauma Centres near National Highways*, Annexure-I. Answered 10 March 2026. https://sansad.in/getFile/annex/270/AU2048_OvVj2M.pdf?source=pqars. Accessed 2026-11-21.
+- **Per-row citation:** `source_doc`, `source_url`, `as_of_date` (and `sno_in_source`) in the CSV.
+
+## 9. LaQshya-certified labour rooms and maternity OTs
+- **What:** 2,173 LaQshya certifications (1,229 labour room, 902 maternity operating theatre, 42 department not stated) at 1,343 public facilities in 32 states/UTs. A certified maternity OT is government evidence of caesarean-section capability.
+- **Publisher:** National Health Systems Resource Centre (NHSRC), Ministry of Health and Family Welfare (LaQshya programme).
+- **Where:** "LaQshya Master data" PDF dated 08-04-2026: https://qps.nhsrcindia.org/sites/default/files/2026-04/LaQshya_Master_data-08-04-2026.pdf (linked from https://qps.nhsrcindia.org/laqshya/quality-Certification-Status). Files: `datasets/external/laqshya_bronze/` — `laqshya_certifications_bronze.csv` (one row per certification) and `laqshya_facilities_bronze.csv` (one row per facility). The PDF is in `raw/`, which is git-ignored.
+- **Retrieved:** 2026-11-21 (one download). The site's robots.txt returns "forbidden", so it sets no rules.
+- **Licence / terms:** a government publication; no explicit open-data licence found. Cite NHSRC/MoHFW.
+- **Processing:** `scrapers/nhsrc_laqshya.py`:
+  - the table read with `pdfplumber`, following its grid lines (needed to tell the Certified and Conditional columns apart);
+  - cells where text overflowed into the next column repaired: 129 type/district cells, state overflow, 3 department cells, and 9 facility names fixed by hand, all flagged `cells_repaired` / `name_repaired`;
+  - certifications rolled up to facilities, with validity checked against the build date;
+  - validation: serials 1–2,173 complete and unique.
+
+  Details are in `docs/laqshya.md`.
+- **Known limitations:**
+  - **Many certifications have expired.** Only 200 of the 901 maternity-OT facilities were valid on 2026-11-21.
+  - 531 certifications are conditional.
+  - 42 recent rows don't name a department.
+  - Public facilities only. Some districts are still truncated.
+- **Cite as:** National Health Systems Resource Centre. *LaQshya Master Data (certified labour rooms and maternity OTs), 08-04-2026.* Ministry of Health and Family Welfare, Government of India. https://qps.nhsrcindia.org/sites/default/files/2026-04/LaQshya_Master_data-08-04-2026.pdf. Accessed 2026-11-21.
+- **Per-row citation:** `source_url`, `list_date`, `source_page` and `sno_in_source` in `laqshya_certifications_bronze.csv`.
+
+## 10. National Cancer Grid members
+- **What:** 421 Indian member institutions of the National Cancer Grid: 376 cancer centres/units, 31 NGOs/charities, 8 professional societies and 6 research institutions. Each has an address (386 with a PIN), state and website.
+- **Publisher:** National Cancer Grid (NCG), set up by the Department of Atomic Energy, Government of India, and run from Tata Memorial Centre, Mumbai.
+- **Where:** https://www.ncgindia.org/hospitals-and-institutions/members. Data comes from the page's fragment endpoint `/hospitalsandinstitutions/_index`. File: `datasets/external/ncg_bronze/ncg_members_bronze.csv`. HTML fragments are in `raw/`, which is git-ignored.
+- **Retrieved:** 2026-11-21, with 5 requests 1 s apart. robots.txt allows all paths. (The older address, tmc.gov.in/ncg, rejects scripted requests and wasn't used.)
+- **Licence / terms:** the site footer says "© 2026 The National Cancer Grid (NCG). All rights reserved." We use only the factual member list (name, address, type), for non-commercial research, and cite NCG. Check with organizers before redistributing it outside the datathon.
+- **Processing:** `scrapers/ncg_members.py`: one request per member type to label each member; PIN taken from the address; states mapped to the silver names; only `cancer_centre` members tagged `cancer_care`. Details are in `docs/ncg-members.md`.
+- **Known limitations:**
+  - Membership is not a licence or an inspection.
+  - It doesn't say which cancer treatments a member offers.
+  - Some entries are hospital groups or head offices.
+  - Some addresses are cut short by the site.
+- **Cite as:** National Cancer Grid. *Member List: Hospitals & Institutions.* Tata Memorial Centre, Mumbai. https://www.ncgindia.org/hospitals-and-institutions/members. Accessed 2026-11-21.
+- **Per-row citation:** `source_url` and `snapshot_date` in the CSV.
+
+## 11. NABH accredited, certified and empanelled organisations
+- **What:** 21,582 listings from NABH's public directory, one per accreditation, certification or empanelment. Each has a name, address, state, PIN (79%), coordinates (93%), website, accreditation number, programme and status. Programmes include hospital and small-hospital accreditation, entry-level certification, CGHS/ECHS empanelment, and service-specific accreditation (blood bank, dialysis centre, emergency department, stroke centre, maternity care, imaging, lab, eye, dental).
+- **Publisher:** National Accreditation Board for Hospitals & Healthcare Providers (NABH), a constituent board of the Quality Council of India.
+- **Where:** https://nabh.co/find-a-healthcare-organisation/. Data comes from the page's search endpoint (`/wp-admin/admin-ajax.php`, `action=get_hospitals`, 25 results per page). File: `datasets/external/nabh_bronze/nabh_organisations_bronze.csv`. API pages are in `raw/pages/`, which is git-ignored.
+- **Retrieved:** 2026-11-21, with 865 requests 1.5 s apart. robots.txt explicitly allows `admin-ajax.php`.
+- **Licence / terms:** a public website directory; no open-data licence found. Cite NABH / Quality Council of India.
+- **Personal data:** contact phone numbers are shown on the site but not saved.
+- **Processing:** `scrapers/nabh_organisations.py`:
+  - programme taken from the accreditation-number prefix (checked against status text and certificate folder);
+  - state taken from the address, with a last-state-name-in-text fallback;
+  - PIN taken from the address; coordinates validated to India;
+  - `listing_current` set from the status text.
+
+  Then `notebooks/05` brings it to silver: travel facilitators and ethics committees are excluded, and for 389 listings the state is replaced by the PIN's state. Details are in `docs/nabh.md`.
+- **Known limitations:**
+  - NABH's appended "City, State" is often wrong; the PIN is more reliable.
+  - No validity dates are shown.
+  - Hospital accreditation is general quality, not evidence for a specific service.
+  - The ECHS/CGHS reading of the E/C letter in empanelment numbers is our inference.
+  - 33 fewer listings than the site's own total (repeated cards skipped).
+- **Cite as:** National Accreditation Board for Hospitals & Healthcare Providers. *Find an Accredited Healthcare Organisation.* Quality Council of India. https://nabh.co/find-a-healthcare-organisation/. Accessed 2026-11-21.
+- **Per-row citation:** `accreditation_no`, `certificate_url`, `source_url` and `snapshot_date` in the CSV; `row_citation` in the silver tables.
 
 ---
 

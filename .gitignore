@@ -1,3 +1,4 @@
+.DS_Store
 
 # Python
 .venv/
@@ -6,6 +7,8 @@ __pycache__/
 
 # Raw and generated datasets
 data/processed/
+# Raw scraper responses (large; rebuild with the scrapers)
+datasets/external/*/raw/
 
 # Agent runtime output
 shared/runs/

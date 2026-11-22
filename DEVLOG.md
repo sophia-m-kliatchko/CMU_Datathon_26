@@ -22,6 +22,145 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:05: Merged `main` (Kayakalp validation, PR #5) into `Will_branch`
+- **Who:** Claude (for William)
+- **What:** Merged `origin/main` up to `7daea47` into `Will_branch`. It brings in JhK830's Kayakalp validation: `notebooks/03_kayakalp_bronze_to_silver.py` changes, `scripts/validate_kayakalp.py`, `scripts/requirements-kayakalp.txt`, `tests/test_kayakalp.py`, `docs/kayakalp-validation-handoff.md`, and edits to `docs/silver-tables.md` and `docs/data-sources.md`.
+- **How:** `git merge --no-ff origin/main`. No conflicts. Alice's DEVLOG entry stays at the bottom of the file, where it is on main.
+- **Why:** So the pull request from `Will_branch` into `main` is clean and includes everyone's latest work. None of the incoming files are used by notebooks 05/06.
+
+
+### 2026-11-21 20:00: Registry silver tables built on Databricks; serverless fixes to notebooks 05 and 06
+- **Who:** Claude (for William)
+- **What:**
+  - **Databricks CLI:** v1.27.0 installed in `~/.local/bin`, from the official GitHub release with its SHA-256 checked. Homebrew was refused because Xcode/CLT are older than macOS 27. Profile `datathon` added.
+  - **William's workspace:** created schema `workspace.datathon` and Volume `workspace.datathon.external`; uploaded the 9 registry `*_bronze.csv` files and `india_post_pincode_directory.csv`; created the Git folder `/Users/<William>/CMU_Datathon_26` on `Will_branch`.
+  - **Ran notebook 05** as a one-off serverless job. It wrote `registry_sites_silver` (24,961 rows) and `registry_services_silver` (22,757), plus 8 raw bronze tables. Counts per source match the local test exactly.
+  - **Code fixes:**
+    - Notebook 05: `reduce(DataFrame.unionByName, …)` → `reduce(lambda a, b: a.unionByName(b), …)`.
+    - Notebook 06: `.cache()` / `.unpersist()` removed.
+- **How:**
+  - The CLI commands used: `databricks schemas create`, `volumes create`, `fs cp`, `repos create` / `repos update --branch Will_branch`, `jobs submit` (serverless notebook task), `jobs get-run-output`, and the SQL Statements API for the check.
+  - The fixed notebooks were uploaded into the Databricks Git folder with `workspace import --overwrite`, as uncommitted edits there.
+- **Why:** William wanted the registry silver tables as soon as possible. The first serverless run failed with `[JVM_ATTRIBUTE_NOT_SUPPORTED] … '_jdf'`: serverless uses Spark Connect, where the classic `DataFrame` class (and DataFrame caching) isn't available. The local tests use classic Spark, so they didn't catch it.
+- **Notes / follow-ups:**
+  - The serverless fixes and the notebook 06 dual-naming change are **not committed yet**. Once pushed, discard the matching uncommitted edits in the Databricks Git folder before pulling.
+  - Notebook 04 hasn't run yet, so `pin_latitude`/`pin_longitude` are empty. Run 04, then rerun 05, to add them.
+  - Notebook 06 needs `facilities_silver` (notebook 01, blocked by the line-753 bug on main).
+
+
+### 2026-11-21 19:53: Notebook 06 accepts either facilities_silver column naming
+- **Who:** Claude (for William)
+- **What:** `notebooks/06_registry_matching.py` now reads `facilities_silver` columns through a small `fcol()` helper:
+  - `<name>_clean` if that column exists (it's the cleaned value);
+  - otherwise the plain `<name>`;
+  - otherwise NULL, with a note printed.
+
+  It prints which columns it used. Notes added to the notebook header and `docs/registries-silver.md`.
+- **How:** Tested locally on two copies of `facilities_silver`: one with plain names (as on main) and one with `state_clean`, `pincode_clean`, `city_clean`, `latitude_clean`, `longitude_clean`. Both produced the same 4,482 links (no differences in either direction).
+- **Why:** `origin/main` has nothing new since our merge. But on `origin/sophia-wip`, the latest commit `e7f701b` ("minor corrections/adaptations to Databricks") brings back `*_clean` column names in notebook 01. That reverses the earlier "no `_clean` in silver" rule, and also removes the validation step and the PIN-based coordinate check. Until Sophia confirms which version is final, notebook 06 shouldn't depend on either. Also noted:
+  - `sophia-wip` fixes the line-753 `haversine_km` bug in notebook 01 (all its versions).
+  - The notebook 04 `F.least()` NULL bug is still present there.
+  - Nothing from `sophia-wip` was merged into this branch.
+
+
+### 2026-11-21 18:28: Registry sites matched to facilities (notebook 06)
+- **Who:** Claude (for William)
+- **What:**
+  - New `notebooks/06_registry_matching.py`. It writes:
+    - `facility_registry_links_silver` (facility ↔ registry site, with match score and evidence);
+    - `facility_registry_summary_silver` (one row per facility);
+    - `registry_match_review` (links for a person to confirm).
+  - Matching section added to `docs/registries-silver.md`; layout line added to `CLAUDE.md`.
+- **How:**
+  - **Candidates:** same state + a shared distinctive name word (join on state and word, ignoring words in more than 250 names) + nearby (coordinates within 3 km, same PIN, PIN area within 5 km, or the town/district named in the address).
+  - **Distinctive-word check:** after removing generic words and place names, mismatched distinctive words → rejected; words on one side only → review.
+  - **Score:** `rapidfuzz` name similarity + location, type, ownership and clinic adjustments.
+  - **Decision:** link at ≥ 85; review for 70–84, near-ties, distance over 10 km, or one-sided words. Known duplicates are linked together.
+  - **Tested locally:** notebooks 01 → 04 → 05 → 06 on local Spark 4.0. `facilities_silver` came from `data/raw/facilities.csv`, which uses **backslash-escaped quotes** (load it with Spark's default escape).
+  - **Result:** 4,482 links; 2,745 of 9,989 facilities (27%) linked; 1,444 links need review.
+  - **Hand checks:** NABH 15/15 correct; other sources 29/30.
+- **Why:** This makes all registry evidence joinable on `facility_id`, as the structure agreed with William requires (links table, not a list column on facilities). Decisions:
+  - Precision over recall: uncertain matches are kept but marked `needs_review`, not dropped.
+  - Generic-word-only matches were the main source of false links (e.g. "ESIC Medical College" vs "Osmania Medical College"); the distinctive-word check removes them.
+- **Bugs found in teammates' notebooks** (reported to William; not changed here, since the files are Sophia's/Elliot's):
+  1. **`notebooks/01_bronze_to_silver.py` line 753:** `haversine_km("latitude_a", …)` passes column **names** as plain strings, so Python fails with `TypeError: unsupported operand type(s) for -: 'str' and 'str'`. The near-duplicate step, and with it the whole notebook, can't finish. Fix: wrap each name in `F.col(...)`. The local test used a patched scratch copy.
+  2. **`notebooks/04_pincode_bronze_to_silver.py`:** `F.least(F.lit(1.0), F.sqrt(h))` returns 1.0 when coordinates are NULL (`least` skips NULLs). So every office **without coordinates** gets `km_from_pin_median` = 20,015 km and the `COORDS_FAR_FROM_PIN` flag: about 12k of the 12,102 flagged offices. The centroids are unaffected, but the flag counts and the note in `docs/data-sources.md` §4 are wrong. Fix: `F.when(h.isNotNull(), …)`. The same guard is used in notebook 06.
+
+
+### 2026-11-21 18:16: NABH directory scraped and added to the registries silver tables
+- **Who:** Claude (for William)
+- **What:**
+  - New `scrapers/nabh_organisations.py`, `datasets/external/nabh_bronze/nabh_organisations_bronze.csv` (21,582 listings) and `docs/nabh.md`. The API pages are in `raw/pages/` (82 MB, git-ignored).
+  - `notebooks/05_registries_bronze_to_silver.py` gains a `nabh` source, plus new site columns for every source: `latitude`, `longitude`, `listing_type`, `listing_category`, `listing_status`, `listing_current`, `state_listed`. `dental` is added to the service list.
+  - `docs/data-sources.md`: entry 11 and a summary row.
+  - `docs/registries-silver.md` updated.
+- **How:**
+  - NABH's directory posts its search form to `admin-ajax.php` (allowed by robots.txt). 865 requests, 1.5 s apart, each page cached; 2 dropped connections succeeded on retry. Phone numbers aren't saved.
+  - The programme comes from the accreditation-number prefix (35 prefixes, each checked against status text and certificate folder).
+  - The state comes from the address, with a last-state-in-text fallback: 79% → 99.4% coverage.
+  - Notebook 05 tested locally again, with all six sources: 24,961 sites, 22,757 service rows, all checks passed.
+- **Why:** NABH fills gaps the blocked sources left: 127 blood centres (blood bank directory blocked), 49 dialysis centres (PMNDP blocked), 90 emergency departments, 15 stroke centres. It also covers private hospitals, which the government sources miss. Decisions:
+  - **Only service-specific programmes become service rows.** Hospital, entry-level and empanelment listings are general quality and stay as site-level `listing_category`.
+  - **Travel facilitators and ethics committees are excluded**; they aren't care sites.
+  - **For NABH, the PIN's state wins** when it disagrees with NABH's listed state (389 sites; e.g. an Agra hospital listed as South Delhi). The original is kept in `state_listed`. Other sources are flagged only, because it's unclear there which side is wrong.
+  - Empanelment numbers' **E/C letter is read as ECHS/CGHS** (labelled "inferred"). This separates two listings of one hospital that aren't duplicates: duplicate flags went from 3,303 to 397.
+- **Notes / follow-ups:** Notebook 06 (matching to `facilities_silver`). NABH coordinates (93% of listings) should make matching much easier.
+
+
+### 2026-11-21 17:34: Service registries brought to silver (notebook 05)
+- **Who:** Claude (for William)
+- **What:**
+  - New `notebooks/05_registries_bronze_to_silver.py`. It loads each uploaded `*_bronze.csv` as a raw table of the same name, then builds `registry_sites_silver` (one row per registry place) and `registry_services_silver` (one row per place × service × evidence).
+  - New `docs/registries-silver.md`.
+  - `docs/data-sources.md`: the five summary rows now point to notebook 05 and its tables.
+  - `CLAUDE.md`: layout line for notebook 05.
+- **How:**
+  - Follows notebooks 02–04: `%run ./common/reference_data`, the shared `state_from_text` / `name_norm` / `name_core`, `dq_flags`, per-row `row_citation` and citation columns, `write_table`.
+  - One mapping function per source (LaQshya, trauma, NMC, DNB, NCG); all are unioned into the shared columns.
+  - Optional enrichment from `pincode_centroids_silver` (PIN location, `PIN_STATE_MISMATCH`).
+  - **Tested locally:** PySpark 4.0 in a scratchpad virtualenv, with a small harness that stubs `dbutils`, `display` and `%sql`. Notebook 04 ran first (building the PIN centroids), then 05, against the real CSVs. Results: 3,481 sites, 19,198 service rows, all assertions passed (unique IDs, no orphan services).
+  - The local run caught a summary query that Spark rejects (correlated subquery inside GROUP BY); it now joins two aggregates.
+- **Why:** William wants all his data at silver, ready for teammates, in a structure that makes confidence easy to calculate later. Decisions:
+  - **Facilities aren't given a list column of sources.** The registries are separate tables that link to `facility_id` through a links table (notebook 06), so each piece of evidence keeps its own detail, date, validity, citation and, later, match score. `facilities_silver` is unchanged.
+  - **Reliability is described per evidence row, not per dataset:** `evidence_type`, `service_specific`, `is_current`, `status`. That's because one dataset can hold both strong and weak evidence (current vs expired, DM vs MD). **No scores at silver**; points belong in gold.
+  - `surgery_support` (anaesthesiology) is dropped as not a patient-facing service. NCG NGOs, societies and research members are left out, as they aren't care sites.
+- **Notes / follow-ups:**
+  - Notebook 06 (matching to `facilities_silver`).
+  - Add NABH once its download finishes.
+  - 3 sites have a PIN from another state: source errors, flagged.
+
+
+### 2026-11-21 17:12: Data-source citations for William's scraped datasets
+- **Who:** Claude (for William)
+- **What:** `docs/data-sources.md` gets five summary rows and entries 6–10:
+  - DNB/ANBAI
+  - NMC colleges and courses
+  - MoHFW trauma care facilities
+  - LaQshya
+  - National Cancer Grid
+
+  Each has the publisher, URL, retrieval date, licence or terms, processing chain, limitations, "cite as" line and per-row citation columns.
+- **How:** Wrote the entries from the scraper docs (`docs/anbai-dnb.md`, `nmc-colleges.md`, `trauma-care-facilities.md`, `laqshya.md`, `ncg-members.md`), following the file's template. Checked that each cited column exists in its CSV.
+- **Why:** CLAUDE.md (merged from main) requires a citation entry for every outside dataset. These five were committed before that rule reached this branch. Notes:
+  - **NABH** gets its entry in the same commit as its data; its download is still running.
+  - **NCG:** the site footer says "All rights reserved", so the entry asks the team to check with the organizers before redistributing it outside the datathon.
+  - **NMC:** the entry records that personal staff contacts were dropped.
+
+### 2026-11-21 17:08: Merged `main` into `Will_branch`
+- **Who:** Claude (for William)
+- **What:** Merged `origin/main` (26 commits, up to b5aba4d) into `Will_branch`. It brings in:
+  - the NQAS, Kayakalp and PIN-directory notebooks;
+  - `notebooks/common/`;
+  - `scripts/` and `data/`;
+  - the renamed `facilities_bronze` / `facilities_silver` tables, and silver columns without the `_clean` suffix.
+- **How:** `git fetch`, then `git merge --no-ff origin/main`. Two conflicts were resolved by hand:
+  - `.gitignore`: kept the rules from both sides.
+  - `DEVLOG.md`: kept every entry from both branches, interleaved newest first by timestamp. One entry existed twice ("Listed outside datasets…", 14:10 on this branch and 13:24 on main, whose timestamps had been corrected); main's copy was kept.
+- **Why:** William asked to pull the teammates' new scripts into his branch so his work builds on them.
+- **Notes / follow-ups:** Main's conventions differ from this branch's scraper work:
+  - main uses `scripts/` and `data/external/`; this branch uses `scrapers/` and `datasets/external/`;
+  - `docs/data-sources.md` doesn't yet have entries for the ANBAI, NMC, trauma, LaQshya, NCG and NABH datasets, which CLAUDE.md now requires.
+
 ### 2026-11-21 16:27: No `_clean` suffix on silver column names
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -41,6 +180,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - Earlier `facilities_silver` drafts kept the raw `coordinates`/`latitude`/`longitude`. The validated coordinates now carry those names instead; the raw ones are in bronze.
   - **Anything already querying `*_clean` columns must be updated.** Not yet run on Databricks.
 
+### 2026-11-21 16:23: Scraped National Cancer Grid members; blood bank directory blocked
+- **Who:** Claude (for William)
+- **What:** New `scrapers/ncg_members.py`, new `docs/ncg-members.md`, and new `datasets/external/ncg_bronze/ncg_members_bronze.csv` (421 rows). The raw HTML fragments are in `raw/`, which is git-ignored. `docs/dataset-notes.md` gets a new NCG row and a note on the blood bank blocker.
+- **How:**
+  - NCG members: the ncgindia.org member page loads its table from `/hospitalsandinstitutions/_index`; robots.txt allows everything. The script made 5 requests, 1 s apart: all Indian members, then one per member type to label them. It takes the PIN code from each address and maps states to the silver names.
+  - Blood banks: AIKosh's page only links to `info.nhp.gov.in/api/blood-banks.csv` (GODL licence). That host doesn't connect from here, AIKosh has no direct download, and its API returns 403.
+  - tmc.gov.in/ncg is behind a firewall that rejects scripted requests. It wasn't worked around; the official ncgindia.org was used instead.
+- **Why:** William asked for the next dataset. The blood bank directory was first in line but is blocked, so the next reachable source was used. NCG cancer centres give evidence for cancer care and partly cover the blocked AERB radiotherapy list. Decisions:
+  - Only the `cancer_centre` type is tagged `cancer_care`.
+  - Membership is rated medium strength: it isn't a licence or an inspection.
+- **Notes / follow-ups:**
+  - Blood bank directory: needs an Indian connection, or a download by hand from AIKosh or data.gov.in.
+  - NCG: not yet matched to `silver_facilities`. Use PIN + name.
+
 ### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
 - **Who:** Claude (for Sophia)
 - **What:**
@@ -49,6 +202,20 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **How:** `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are always left out of `facilities_silver`. Where a value can't be standardized, `city_clean` / `state_clean` / `pincode_clean` stay NULL, and the notebook prints how many per column. The existing flags `STATE_UNRECOGNIZED` and `PINCODE_MISSING_OR_INVALID` still mark those rows.
 - **Why:** Sophia's decision: a non-standard value (e.g. "Mumbai" in the state field, or "56" as a PIN) should not be kept in silver, either as a raw column or copied into a cleaned column. A briefly considered "copy the raw value into the cleaned column" approach was dropped before being committed. The originals remain in `facilities_bronze`.
 - **Notes / follow-ups:** about 300 rows will have `state_clean` NULL unless the PIN fallback fills it, and about 70 will have `pincode_clean` NULL (local estimate). Not yet run on Databricks.
+
+### 2026-11-21 16:18: ANBAI and NMC scrapers now write to the bronze names
+- **Who:** Claude (for William)
+- **What:**
+  - `scrapers/anbai_dnb.py` now writes to `datasets/external/anbai_dnb_bronze/`, and `scrapers/nmc_colleges.py` to `datasets/external/nmc_bronze/`.
+  - Every output file has the `_bronze` suffix, e.g. `dnb_hospitals_bronze.csv` and `nmc_colleges_bronze.sqlite`.
+  - Updated `docs/anbai-dnb.md` and `docs/nmc-colleges.md` to match.
+  - Table names inside the SQLite files are unchanged, matching the files William renamed.
+- **How:**
+  - Replaced the default output folder and the output file names in both scripts and docs.
+  - Checked the result:
+    - NMC: `--offline` rebuilt into `nmc_bronze/` with no git diff, so it's identical.
+    - ANBAI: rebuilt from the saved HTML into a scratch folder; contents identical apart from the `scraped_at` timestamp.
+- **Why:** Closes the follow-up from the 15:14 bronze rename. Before this, re-running either scraper would have recreated the old `anbai_dnb/` and `nmc/` folders next to the bronze ones.
 
 ### 2026-11-21 16:18: Raw address columns dropped from silver only when fully covered by a cleaned column
 - **Who:** Claude (for Sophia)
@@ -71,6 +238,31 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **How:** a `REPLACED_BY_PARSED` list removes them only in the last step, because the lines are still needed earlier, for address parsing and for the `NO_COORDS_OR_ADDRESS` rule.
 - **Why:** Sophia: once `address_full` and the split `address_street` / `address_region` / `address_landmark` exist, the raw lines are redundant in silver. They remain in `facilities_bronze` for exact quoting.
 - **Notes / follow-ups:** `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are still in silver next to `city_clean`, `state_clean` and `pincode_clean`; they could be removed the same way if wanted. Notebook 01 is still unverified on Databricks; the last run there appears to have stopped before section 5.
+
+### 2026-11-21 16:07: Built the LaQshya maternity certification dataset
+- **Who:** Claude (for William)
+- **What:** New `scrapers/nhsrc_laqshya.py`, new `docs/laqshya.md`, and new outputs in `datasets/external/laqshya_bronze/`:
+  - `laqshya_certifications_bronze.csv` (2,173 rows)
+  - `laqshya_facilities_bronze.csv` (1,343 rows)
+
+  The source PDF is in `raw/`, which is git-ignored. Updated the LaQshya row in `docs/dataset-notes.md`. Installed `pdfplumber` (0.11.11) with `pip install pdfplumber`.
+- **How:**
+  - Downloaded the NHSRC "LaQshya Master data" PDF dated 2026-04-08, a public government document. The site's robots.txt returns "forbidden", so it sets no rules.
+  - Read the table with `pdfplumber`, which follows the grid lines; that's the only way to tell the Certified and Conditional columns apart.
+  - Repaired cells where text overflows into the next column and the letters interleave:
+    - 129 type/district cells, with a rule that reads the type code in order within the cell;
+    - state overflow;
+    - 3 department cells;
+    - 9 facility names fixed by hand.
+
+    Every repair is flagged, and the raw values are kept.
+  - Rolled certifications up to facilities, and checked validity against the build date.
+  - Validation: serials 1–2,173 complete and unique, all dates parsed, all states mapped.
+- **Why:** William picked LaQshya as the next outside source. A certified maternity OT is direct government evidence of C-section capability, which also covers the FRU gap. Decisions:
+  - Expired certifications are kept, with two strengths: valid now, or had the capability. Only 200 of the 901 maternity OT facilities are currently valid, and dropping the rest would throw away real evidence.
+  - Conditional certifications are kept and flagged.
+  - Rows with no department are never counted as C-section evidence.
+- **Notes / follow-ups:** Not yet matched to `silver_facilities`. Match on state + district, then fuzzy name.
 
 ### 2026-11-21 16:03: PIN directory notebook producing `pincode_*` tables
 - **Who:** Claude (for Sophia)
@@ -165,6 +357,25 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The real record that each fragment belongs to may be missing its tail fields (it was cut at the line break). Stitching fragments back is possible but not done.
   - ~~Consider keeping `source_urls` in silver~~: decided 2026-11-21 15:44, see the entry above.
 
+### 2026-11-21 15:27: Built the trauma care facilities dataset from a Rajya Sabha answer
+- **Who:** Claude (for William)
+- **What:** New `scrapers/mohfw_trauma_centres.py`, new `docs/trauma-care-facilities.md`, and new `datasets/external/trauma_care_bronze/trauma_care_facilities_bronze.csv` (196 rows). The source PDF is in `raw/`, which is git-ignored. Updated the trauma centres row in `docs/dataset-notes.md`. Installed `pypdf` (7.1.1) on William's machine with `pip install pypdf`.
+- **How:**
+  - Downloaded Rajya Sabha Unstarred Q. 2048 (10 Mar 2026), a public Parliament PDF; sansad.in has no robots.txt.
+  - Read Annexure-I with `pypdf`, grouped the lines into rows by serial number, and carried the merged state cells forward across page breaks.
+  - Took the trauma level (I/II/III) from the end of each row.
+  - Added a hand-checked `place` column (corrected spellings, current names) and a keyword-based `facility_type`.
+  - The script refuses to write output unless it finds 196 rows, each with a state, level and place.
+- **Why:** William wanted outside evidence for trauma and emergency care. These are the government's designated Level I–III trauma facilities. Decisions:
+  - The printed name is kept unchanged (typos included) for quoting.
+  - Corrected place names go in a separate column, to help matching.
+  - Every row is marked `sanctioned`, because the answer doesn't confirm which facilities are functional.
+  - The output is bronze, following William's convention.
+- **Notes / follow-ups:**
+  - Not yet matched to `silver_facilities`.
+  - Many Level I/II facilities are medical colleges that can be cross-linked to the NMC data.
+  - The FRU list is still open: no facility-level source has been found yet.
+
 ### 2026-11-21 15:18: Added the Kayakalp PDF source URL to the citations
 - **Who:** Claude (for Sophia)
 - **What:** `docs/data-sources.md` (Kayakalp entry: landing page, PDF URL, checksum, "cite as"); `notebooks/03_kayakalp_bronze_to_silver.py` (`source_url` widget default, publisher now NHSRC, `row_citation` now ends with the URL and retrieval date); `scripts/README.md` (link to the PDF).
@@ -194,6 +405,54 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The Kayakalp PDF's download URL is unknown. Sophia to supply it for `docs/data-sources.md` and notebook 03's `source_url` widget.
   - JhK830 to confirm the source and date of the PIN and NFHS-5 files in `data/raw/`.
   - Notebook 01 still has its own copy of the state lookup; consider switching it to `common/reference_data`.
+
+### 2026-11-21 15:14: Renamed scraped datasets to bronze
+- **Who:** William (renamed the files), Claude (logged and committed)
+- **What:**
+  - Folders: `datasets/external/anbai_dnb/` → `anbai_dnb_bronze/`, and `datasets/external/nmc/` → `nmc_bronze/`.
+  - Every CSV and SQLite file in them gained a `_bronze` suffix, e.g. `nmc_colleges.csv` → `nmc_colleges_bronze.csv`.
+  - The `raw/` folders moved with them and are still git-ignored.
+- **How:** William renamed the files by hand. Claude committed the renames with `git add -A` and pushed to `Will_branch`.
+- **Why:** The teammates haven't verified these datasets yet. Calling them bronze marks them as unverified, following the project's bronze → silver convention.
+- **Notes / follow-ups:** The scrapers (`scrapers/anbai_dnb.py`, `scrapers/nmc_colleges.py`) and the docs (`docs/anbai-dnb.md`, `docs/nmc-colleges.md`) still use the old folder and file names. Re-running a scraper will write to the old names until they're updated.
+
+### 2026-11-21 14:35: Added .gitignore; committed scraper work to `Will_branch`
+- **Who:** Claude (for William)
+- **What:** New `.gitignore` that ignores `.DS_Store` and `datasets/external/*/raw/`. Committed the ANBAI and NMC scrapers, outputs and docs, then pushed `Will_branch` to `origin`.
+- **How:** `git add -A`, `git commit`, then `git push -u origin Will_branch`.
+- **Why:** William asked to keep the raw scraper responses out of git (NMC `raw/` is about 23 MB). The CSV and SQLite outputs are committed so teammates can use them without re-scraping. Tradeoff: page snapshots stay only on William's machine, and `--offline` rebuilds need them. The scrape dates are recorded in the CSVs (`scraped_at` / `snapshot_date`).
+
+### 2026-11-21 14:27: Scraped NMC medical colleges and their MBBS/PG courses
+- **Who:** Claude (for William)
+- **What:** New `scrapers/nmc_colleges.py`, new `docs/nmc-colleges.md`, and new outputs in `datasets/external/nmc/`:
+  - `nmc_colleges.csv`
+  - `nmc_college_courses.csv`
+  - `nmc_specialty_reference.csv`
+  - `nmc_colleges.sqlite`, which holds those 3 tables plus the view `v_service_evidence`
+  - `raw/`, which holds the API responses
+
+  Also updated the NMC row in `docs/dataset-notes.md`.
+- **How:**
+  - The NMC pages load their tables with JavaScript from JSON endpoints. The script calls those endpoints directly; robots.txt allows all paths.
+    - `/college-courses/list`: MBBS, 1 request.
+    - `/college-courses/pg-list`: PG, 11 requests of 1,000 rows each.
+    - `/college-courses/detail/<id>`: one per college, 911 in total, 0.5 s apart and cached.
+  - Removed degree prefixes and diploma suffixes from the course names to get specialty names.
+  - Tagged related challenge services with regex rules, using the same tags as the ANBAI/DNB data.
+  - Mapped state names to the silver names.
+- **Result:**
+  - 911 colleges: 611 with a valid PIN, 219 with super-specialty courses.
+  - 11,583 course rows across 103 PG specialties.
+  - Super-specialty evidence: dialysis at 82 colleges, NICU at 36, ICU at 40.
+- **Why:** William wanted NMC as a second source of outside evidence that specialties are really practised. A PG course needs a working department with enough patients and faculty, and the detail records give the address and PIN, which makes matching easier than with the DNB names. Decisions:
+  - **Named staff contacts, mobile numbers and emails are dropped before saving.** We don't need personal data.
+  - Course levels are kept so evidence can be weighted (DM/M.Ch. strong, MD/MS broad, MBBS weak).
+  - `recognition_status` is kept as published text.
+  - Service tags are marked as our hints, not as claims by NMC.
+- **Notes / follow-ups:**
+  - Bugs caught while checking the output: "neurology" matched the urology rule, and Gynaecological Oncology was tagged as C-section. Both are fixed.
+  - Not yet matched to `silver_facilities`.
+  - `raw/` is about 23 MB; decide whether to keep it out of git.
 
 ### 2026-11-21 14:26: Added the NQAS certified-facilities CSV; synced sophia-wip with main; installed the GitHub CLI
 - **Who:** Claude (for Sophia)
@@ -229,7 +488,40 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The PDF itself is not committed; only the CSV is.
   - Kayakalp covers public facilities only (PHC, HWC, UPHC, CHC, DH). Matching to Virtue Foundation facilities is still to do.
 
+### 2026-11-21 13:58: William's work goes on `Will_branch`
+- **Who:** William (created the branch), Claude (recorded the rule)
+- **What:** Added a line to `CLAUDE.md` saying Claude's work for William goes on `Will_branch`. The ANBAI scraper work (entry below) moved to this branch uncommitted.
+- **How:** Edited `CLAUDE.md`.
+- **Why:** Each teammate works on their own branch, so `main` stays clean.
+
+### 2026-11-21 13:54: Scraped DNB-accredited hospitals and their specialties (ANBAI)
+- **Who:** Claude (for William)
+- **What:** New `scrapers/anbai_dnb.py`, new `docs/anbai-dnb.md`, and new outputs in `datasets/external/anbai_dnb/`:
+  - `dnb_hospitals.csv`
+  - `dnb_hospital_specialties.csv`
+  - `dnb_specialty_reference.csv`
+  - `anbai_dnb.sqlite`, which holds those 3 tables plus the view `v_service_evidence`
+  - `raw/anbai_dnb_2026-11-21.html`
+
+  Also updated the NBEMS row in `docs/dataset-notes.md`.
+- **How:**
+  - Fetched https://anbai.org/DNB_accredited_institutions.php in one request with `requests`. The site has no robots.txt.
+  - The page is static HTML with one collapsible section per state, and a Hospital | City | Specialties table in each. Parsed it with BeautifulSoup.
+  - Split the specialty cells on commas and repaired broken or missing commas against a 71-name canonical list, plus aliases.
+  - Fixed old state names, and moved 3 hospitals in Telangana cities that were listed under Andhra Pradesh.
+  - Added a hand-written `related_services` hint for each specialty (e.g. Nephrology → dialysis).
+- **Why:** William wanted DNB accreditation as outside evidence that a specialty is really practised at a hospital. Training accreditation needs real patient volume and faculty. Decisions:
+  - The ANBAI HTML page was used instead of the NBEMS PDFs, because it's one structured table.
+  - Raw text is kept next to the cleaned values.
+  - Same-name, same-city listings are kept separate (they have different specialty lists, so they're probably branches).
+  - Specialty → service links are marked as hints, not claims.
+- **Notes / follow-ups:**
+  - The page has no update date, and its Andhra Pradesh / Telangana listings look out of date, so cite the snapshot date.
+  - Not yet matched to `silver_facilities`; the suggested approach is in `docs/anbai-dnb.md`.
+  - Not yet loaded into Databricks.
+
 ### 2026-11-21 13:24: Listed outside datasets for checking care quality, with links
+
 - **Who:** Claude (for Sophia)
 - **What:** Added the section "Outside datasets for checking care quality and reliability" to `docs/dataset-notes.md`, with about 25 sources in four groups (priority 1, specific services, existence and location, context) and links.
 - **How:** Web searches on 2026-11-21 for each source's official portal or data.gov.in / AIKosh page. Portals were mostly not opened, so availability and formats still need checking.
