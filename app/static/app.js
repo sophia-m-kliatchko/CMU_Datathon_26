@@ -6,7 +6,7 @@
   const pinInput = $("#pincode");
   const pinStatus = $("#pin-status");
   const urgency = $("#urgency");
-  const TIER_LABEL = { T1: "Current cert.", T2: "Expired cert.", T3: "Indirect", R: "Under review", U: "No evidence", X: "Contradicted" };
+  const TIER_LABEL = { T1: "Current direct evidence", T2: "Moderate capability evidence", T3: "Weaker/self-report", R: "Review", U: "Unknown", X: "Contradicted" };
   const SERVICES = {};
   const TIER_COLOR = { T1: "var(--t1)", T2: "var(--t2)", T3: "var(--t3)", R: "var(--tr)", U: "var(--tu)", X: "var(--tx)" };
 

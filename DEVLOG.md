@@ -22,6 +22,18 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 11:29: Website tier labels match the slide key
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New labels: T1 "Current direct evidence", T2 "Moderate capability evidence", T3 "Weaker/self-report", R "Review", U "Unknown". X stays "Contradicted".
+  - Applied in `app/backend/evidence.py` (`TIER_LABEL`, used by cards, explanations and the API), `app/static/app.js` (stamps and the evidence bar) and `app/static/index.html` (evidence key headings).
+  - The key's smaller explanatory lines and the references legend are unchanged.
+  - `app/static/styles.css`: stamp labels can now wrap onto two lines (max 118 px) so the longer names fit.
+  - Redeployed `find-the-right-care`.
+- **How:** text edits, then `databricks sync --full` and `databricks apps deploy`. On the live site, all five new key headings appear, and a cancer-care search at 800020 returns `evidence_level` "Moderate capability evidence", "Unknown" and "Review".
+- **Why:** Sophia asked for the website labels to match the key on the "Service Verification" slide.
+- **Branch:** `aesthetics` only; not pushed to `main`.
+
 ### 2026-11-22 10:20: Final check of the website and repo; app README brought up to date
 - **Who:** Claude (for Sophia)
 - **What:** `app/README.md`:

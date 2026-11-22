@@ -165,7 +165,7 @@ select:focus, input:focus { outline: none; border-color: var(--accent); box-shad
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
 .stamp__tier { font-size: 20px; font-weight: 500; line-height: 1; }
-.stamp__label { font-size: 10.5px; letter-spacing: .08em; white-space: nowrap; }
+.stamp__label { font-size: 10.5px; letter-spacing: .06em; line-height: 1.25; max-width: 118px; text-align: center; }
 .t-T1 { color: var(--t1); } .t-T2 { color: var(--t2); } .t-T3 { color: var(--t3); }
 .t-R { color: var(--tr); } .t-U { color: var(--tu); } .t-X { color: var(--tx); }
 

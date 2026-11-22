@@ -33,8 +33,8 @@ from . import config, db, services
 TIER_ORDER = {"T1": 0, "T2": 1, "T3": 2, "R": 3, "U": 4, "X": 5}
 # Labels follow Alice's tier definitions (app/evidence_confidence/TIERS.md).
 TIER_LABEL = {
-    "T1": "Current certification", "T2": "Expired certification", "T3": "Indirect or self-reported",
-    "R": "Match under review", "U": "No evidence found", "X": "Contradicted",
+    "T1": "Current direct evidence", "T2": "Moderate capability evidence", "T3": "Weaker/self-report",
+    "R": "Review", "U": "Unknown", "X": "Contradicted",
 }
 
 
