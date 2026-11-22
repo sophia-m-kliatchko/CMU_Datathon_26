@@ -51,7 +51,8 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - C-section claims count for `emergency_c_section` (William's call; Alice flagged it for the team). Each such card warns that the claim doesn't state emergency availability.
   - Kept the app's own SQL loading instead of her `recommend_facilities()`, which reads a local CSV bundle that a Databricks App doesn't have.
   - Kept Sophia's selection policy (top 3, filled in her order) rather than her ranks 1..K; noted in `app/README.md` as a team decision.
-- **Notes / follow-ups:** not yet committed or redeployed. `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
+- **Deployed:** committed as f7ecedf and pushed to `origin/website_finalization`, then redeployed William's app `find-the-right-care` (`databricks sync --full`, `apps start`, `apps deploy`; deployment 01f1e67bd62e1e628f474bb74d26086b SUCCEEDED). The live `/api/health` reports `evidence_confidence@c5f1586`; Patna dialysis returns 161 candidates, 30 T3 from claims, adapter PASS.
+- **Notes / follow-ups:** `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
 
 ### 2026-11-22 05:00: Backend final validation (Alice)
 - **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
