@@ -38,8 +38,8 @@ if USE_ENGINE:
 PROVIDER_NAME = engine.NAME if USE_ENGINE else EVIDENCE.name
 RANKER_NAME = engine.NAME if USE_ENGINE else RANKER.name
 PROVISIONAL_NOTE = (
-    "Evidence levels come from the team's evidence engine, using registry records only: facilities' own "
-    "claims aren't counted yet, and the ranking settings are still provisional." if USE_ENGINE else
+    "Evidence levels come from the team's evidence engine. Facilities' own claims count (as T3, self-reported) "
+    "only for dialysis and C-sections so far, and the ranking settings are still provisional." if USE_ENGINE else
     "The evidence engine and ranking model aren't connected; tiers and order here come from placeholders.")
 
 STATIC = Path(__file__).parent / "static"

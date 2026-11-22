@@ -64,10 +64,29 @@ def resolve_pin(raw):
     }
 
 
+_MAX_UNCERTAINTY = None
+
+
+def max_uncertainty_km():
+    """Largest location_uncertainty_km in facility_geo_ready (cached; widens the bounding box)."""
+    global _MAX_UNCERTAINTY
+    if _MAX_UNCERTAINTY is None:
+        rows = db.query(f"SELECT max(coalesce(location_uncertainty_km, 0)) AS m FROM {config.t('facility_geo_ready')}")
+        _MAX_UNCERTAINTY = float(rows[0]["m"] or 0) if rows else 0.0
+    return _MAX_UNCERTAINTY
+
+
 def nearby_facilities(lat0, lon0, radius_km, limit):
-    """Facilities with a usable point within radius_km, nearest first (straight-line distance)."""
-    dlat = radius_km / KM_PER_DEG_LAT
-    dlon = radius_km / (KM_PER_DEG_LAT * max(math.cos(math.radians(lat0)), 0.01))
+    """Facilities that may be within radius_km, nearest first (straight-line distance).
+
+    Same radius rule as notebook 07 and Alice's pipeline: a facility is a candidate if its closest
+    possible distance, distance_min_km = max(distance_km - location_uncertainty_km, 0), is within the
+    radius. So a facility placed at its PIN centre just outside the radius is kept, with a warning.
+    The bounding box is widened by the largest uncertainty so those facilities aren't cut early.
+    """
+    reach = radius_km + max_uncertainty_km()
+    dlat = reach / KM_PER_DEG_LAT
+    dlon = reach / (KM_PER_DEG_LAT * max(math.cos(math.radians(lat0)), 0.01))
     return db.query(
         f"""
         WITH box AS (
@@ -76,13 +95,14 @@ def nearby_facilities(lat0, lon0, radius_km, limit):
           FROM {config.t('facility_geo_ready')}
           WHERE geo_latitude BETWEEN :lat_lo AND :lat_hi AND geo_longitude BETWEEN :lon_lo AND :lon_hi
         )
-        SELECT * FROM (
+        SELECT *, greatest(round(distance_km - coalesce(location_uncertainty_km, 0), 2), 0.0) AS distance_min_km
+        FROM (
           SELECT *, round(2 * 6371.0 * asin(least(1.0, sqrt(
                       pow(sin(radians(geo_latitude - :lat0) / 2), 2) +
                       cos(radians(:lat0)) * cos(radians(geo_latitude)) *
                       pow(sin(radians(geo_longitude - :lon0) / 2), 2)))), 2) AS distance_km
           FROM box
-        ) WHERE distance_km <= :radius
+        ) WHERE greatest(round(distance_km - coalesce(location_uncertainty_km, 0), 2), 0.0) <= :radius
         ORDER BY distance_km, facility_id
         LIMIT {int(limit)}
         """,

@@ -22,25 +22,111 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-22 09:37: App fills empty slots only with facilities that self-report the service
-- **Who:** Claude (for Sophia)
+### 2026-11-22 09:22: Website: evidence key stays visible next to the results
+- **Who:** Claude (for William)
 - **What:**
+  - `app/static/index.html`: an "Evidence key" panel (`#key`, a `<details>`) in the sidebar under the search form, with the six tiers, a short definition each, and a count.
+  - `app/static/app.js`: `updateKey()` shows the key after each search with the count per tier over all candidates (tiers with none are dimmed); `linkToKey()` highlights a card's or table row's tier in the key on hover or keyboard focus. Collapsed by default on narrow screens.
+  - `app/static/styles.css`: `.key*` styles. The sidebar now stretches to the results' height and only the key is sticky (the form was sticky before and scrolls with the page now).
+- **How:** edited the three files; checked with Playwright in live mode (Delhi C-section: counts T1 1, T2 0, T3 46, R 3, U 699, X 0; hovering a T3 table row highlights T3) at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a key that stays on screen; the tier definitions only appeared on the start screen and disappeared once results loaded.
+- **Tradeoff:** the full form no longer follows you down the page; pinning both didn't fit a 900 px-tall window and cut off the key.
+- **Deployed:** committed as 131c6ec, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e68050c21f028dc60446ca1b9703 SUCCEEDED); the live page serves the key.
+
+### 2026-11-22 09:05: Website: "Data sources and references" section
+- **Who:** Claude (for William)
+- **What:** `app/static/index.html`: a numbered references list in the footer (`#references`, entries `#ref-1`…`#ref-12`) replaces the one-line source sentence; a "Data sources and references" link under the intro jumps to it. `app/static/styles.css`: `.refs*` and `.lede__refs` styles.
+- **How:** William's 11 references (IEEE style) as given, each with a "Used for" line that says honestly how the app uses it. NQAS [3], Kayakalp [4] and NFHS-5 [5] are marked "the data pipeline only; not yet used in results". Added [12] Meta Llama 3.3 70B Instruct (the AI explainer, via Databricks Foundation Model APIs). Checked with Playwright at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a references window or footer listing every dataset used. All 11 match the sources in `docs/data-sources.md`; the explainer model was the only thing missing, since its text appears on the page.
+- **Deployed:** committed as fae884c, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e67e313f1d3faae946b348aa332a SUCCEEDED); the live page serves all 12 references.
+
+### 2026-11-22 08:41: Website brought up to date with Alice's `evidence_confidence` on main (claims, review decisions, radius rule)
+- **Who:** Claude (for William)
+- **What:** new branch `website_finalization` from `main` @ 8a2c8d3 (PR #19).
+  - `app/evidence_confidence/`: re-copied unchanged from main's `evidence_confidence/` (last commit c5f1586). `app/EVIDENCE_CONFIDENCE_VERSION` now records `source_branch: main`, commit c5f1586e…, and how to update from main.
+  - `app/backend/geography.py` `nearby_facilities()`: Alice's and notebook 07's radius rule. `distance_min_km = max(distance_km - location_uncertainty_km, 0) <= radius` (was `distance_km <= radius`); bounding box widened by the largest `location_uncertainty_km` (cached `max_uncertainty_km()`); `distance_min_km` returned.
   - `app/backend/engine.py`:
-    - New `self_reports(facility_ids, service)` finds facilities whose own listing (`silver_facility_claims`) mentions the service, using the synonyms in `backend/services.py`.
-    - `shape(..., claims)`: when fewer than 3 facilities have documentary evidence (T1–T3), the remaining slots go to the **nearest** facilities that self-report the service. They keep the **U** label, and their claim text appears in the evidence list as "SELF … not verified".
-    - The alternatives table also keeps only U facilities that self-report the service.
-    - Unrelated facilities are no longer shown. Before, a dialysis search could show dental clinics.
-  - `app/main.py`: passes the claims to `shape`.
-  - `app/static/app.js`: shows "No additional facilities found." when there are fewer than 3 cards. The no-evidence notice now says the facilities below only claim the service themselves.
-  - Redeployed `find-the-right-care`.
-- **How:** edited the files, then ran `databricks sync --full` and `databricks apps deploy`. Checked through the live API:
-  - dialysis 800020: 1 T3 + 2 self-reported U cards.
-  - C-section 800020: 1 T3 + 2 U.
-  - dialysis 110001 (5 km): 1 self-reported U card (an eye hospital whose listing describes a 20-bed dialysis unit) and no alternatives.
-  - stroke 800020 (3 km): 1 U card.
-- **Why:** Sophia asked that, without evidence, the app take the dataset's self-reports at their word (labelled U), fill the open slots with the nearest such facilities, and say "No additional facilities found" when there are none. Her first version capped this at 2; she then asked to fill all the open slots instead.
-- **Tradeoff:** self-reports are unverified. The U stamp, the "SELF" ledger tag and the "not verified" status keep this visible. Where nothing nearby claims the service, fewer than 3 cards are shown, which is better than showing unrelated facilities.
-- **Branch:** on `sophia-wip` at Sophia's request (new work normally goes to `aesthetics`).
+    - `load_claims()` reads `silver_facility_claims` (fields specialties / capability / procedure / equipment, coarse `claim_norm` prefilter that is a superset of her patterns) for services in her `CLAIM_PATTERNS`. `claim_evidence()` turns them into self-reported Evidence (T3 cap) added to the registry evidence.
+    - `load_reviews()` reads `registry_match_review` rows with a `reviewer_decision`, passed to `adapt_registry_tables(reviews=)`.
+    - `distance_min_km` passed to `build_recommendation_response`; the adapter report now includes `claim_mapping` and row counts for reviews and claims.
+    - Display: claims shown as "Listed under procedures: “…”" with source "Facility's own listing (Virtue Foundation dataset)"; cards with only self-reported T3 say so and get `self_reported_only`; the C-section qualifier `CLAIM_DOES_NOT_STATE_EMERGENCY` becomes a warning; facilities kept by the uncertainty rule say why they're outside the radius; two new auditor strings from her package mapped; R cards no longer also say "no record was found".
+  - `app/main.py`: provisional note says claims count for dialysis and C-section. `app/static/app.js`: T3 stamp reads "Self-reported" when only claims support it.
+  - `app/README.md`, `CLAUDE.md`: tables read, call sequence, update steps from main, answered questions.
+- **How:** `git archive HEAD evidence_confidence | tar -x -C app` (checked identical with `diff -rq`); ran her tests on main (228 pass, 18 skipped, 1 unrelated error: `scripts/kayakalp_pdf_to_csv.py` needs `pdfplumber`). Local app in live mode against warehouse 280169f53e6a2de0: 7 searches, adapter PASS on all; Playwright screenshots of 3 searches, no console errors.
+- **Why:** Alice's PR #19 added the claim mapping, review-decision support and a handoff list for the website (`docs/recommendation-pipeline.md`): radius rule, `distance_min_km`, selection policy. William asked to bring the website up to date with it and to count C-section claims for now.
+- **Result (live tables, 50 km unless noted):**
+
+  | Search | Before | Now |
+  |---|---|---|
+  | Patna 800020 dialysis | T3 1 | T3 30 (claims) |
+  | Chennai 600001 dialysis | | T3 34, R 2 |
+  | Delhi 110001 C-section | T1 1, T3 0 | T1 1, T3 46, R 3 |
+  | Patna C-section, emergency | 5 unconfirmed | 11 T3 unconfirmed |
+  | Mumbai 400001 blood bank, 25 km | T1 Lilavati | unchanged (no claim mapping) |
+
+  The radius rule adds 2–12 candidates per search (110001: 12, matching Alice's measurement).
+- **Tradeoffs / decisions:**
+  - C-section claims count for `emergency_c_section` (William's call; Alice flagged it for the team). Each such card warns that the claim doesn't state emergency availability.
+  - Kept the app's own SQL loading instead of her `recommend_facilities()`, which reads a local CSV bundle that a Databricks App doesn't have.
+  - Kept Sophia's selection policy (top 3, filled in her order) rather than her ranks 1..K; noted in `app/README.md` as a team decision.
+- **Deployed:** committed as f7ecedf and pushed to `origin/website_finalization`, then redeployed William's app `find-the-right-care` (`databricks sync --full`, `apps start`, `apps deploy`; deployment 01f1e67bd62e1e628f474bb74d26086b SUCCEEDED). The live `/api/health` reports `evidence_confidence@c5f1586`; Patna dialysis returns 161 candidates, 30 T3 from claims, adapter PASS.
+- **Notes / follow-ups:** `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
+
+### 2026-11-22 05:00: Backend final validation (Alice)
+- **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
+- **What:** ran `recommend_facilities` on 4 real queries with Elliot's 07 notebook; corrected merge notes (only `setup_pipeline.py` conflicts, 1 hunk; the rename deletes the legacy notebook); re-measured website radius-rule loss.
+- **Validation:** 749/749/700/347 candidates kept, 5 recs + 5 distinct alternatives each, 0 duplicates, all non-U cited, deterministic, 400001 dialysis identical to the reference. 246/247 unittest (test_kayakalp: pdfplumber). Details in BACKEND_PROGRESS.md.
+
+### 2026-11-22 (time not captured; shell blocked): Website entrypoint + handoff (Alice)
+- **Who:** Claude (for Alice), non-interactive run.
+- **What:** `evidence_confidence/pipeline.py`: added `recommend_facilities(service, pincode, radius_km, max_results=5, max_alternatives=5, *, silver_dir|bundle, **options)`, a thin wrapper over `recommend()` with a per-directory bundle cache. `tests/test_pipeline.py`: 2 new tests. `docs/recommendation-pipeline.md`: entrypoint, website handoff (radius rule, cap, selection-policy difference), Elliot merge plan. New `BACKEND_PROGRESS.md`.
+- **How:** read `origin/website:app/backend/{geography,engine}.py` and `git diff origin/Elliot_New_Branch` (read only).
+- **Why:** the website needs one call; ranking/tier logic untouched.
+- **Validation:** NOT RUN. Python/pytest were blocked by the session's permission mode; the new code and tests are unexecuted.
+
+### 2026-11-22 04:00: Compatibility check against origin/Elliot_New_Branch (Alice)
+- **Who:** Claude (for Alice). Read-only inspection; no checkout/merge.
+- **What:** 07 notebook on that branch is byte-identical to the version validated locally; `notebooks/common/validation.py` identical. Added `default_notebook()` so pipeline/validation/tests use the renamed `notebooks/07_pin_nearby_facilities.py` when present.
+- **Validation:** post-merge layout simulated in a scratch copy: 245 tests, only test_kayakalp (pdfplumber) errors; 400001 dialysis response identical to the pre-merge run. Committed HEAD merges cleanly; the uncommitted `notebooks/setup_pipeline.py` edit conflicts with Elliot's step_07 task (one hunk).
+
+### 2026-11-22 03:30: End-to-end recommendation pipeline + self-reported claim mapping (Alice)
+- **Who:** Claude (for Alice).
+- **What:** new `evidence_confidence/pipeline.py` (`load_bundle`, `recommend` → `recommendation-pipeline/1`: top-K + next-ranked alternatives, provenance, uncertainty, warnings, nearest-first comparison) and `evidence_confidence/service_claims.py` (`service-claims/1`, provisional: dialysis + C-section exact terms, negations skipped, self-report ≤ T3); `tests/test_pipeline.py` (13). Ranking semantics, `build_recommendation_response` and the website contract unchanged. Docs: `docs/recommendation-pipeline.md`.
+- **Validation:** local only, downloaded Silver + ~/Downloads 07 notebook. 110001 C-section/dialysis 749 candidates, 400001 dialysis 700, 600001 C-section 347; all retained, deterministic, JSON round-trip, no duplicate IDs; website-shape call still PASS. 244/245 tests pass (test_kayakalp: pdfplumber missing). No Databricks, commits or pushes.
+- **Open:** claim-mapping approval; LaQshya site linked to a 'Blood Bank, LBS Hospital' record (notebook 06); facility PIN/address mismatches (e.g. Hyderabad address with Delhi PIN); 07 notebook not yet committed by Elliot.
+
+### 2026-11-22 02:00: Geographic producer integrated with Evidence Confidence (Alice)
+- **Who:** Claude (for Alice).
+- **What:** `geographic_candidates.py` supports the newer 07 notebook (uncertainty-adjusted radius, widened box) and adds `to_join_candidate`; `geographic_validation.py` takes `--geography-notebook`/`--pins` and checks the box against the producer's own rule; new `tests/test_geographic_integration.py` (8 tests). Teammate notebooks untouched; the downloaded 07 notebook was read from ~/Downloads, not copied.
+- **Validation:** local run on downloaded Silver (no Databricks): 9,989 geo-ready rows, 2 unsearchable; PINs 110001/400001/600001 → 749/700/347 candidates, 0 box omissions, all retained through LEFT JOIN, uncertainty fields preserved. 231/232 tests pass (test_kayakalp needs pdfplumber). No commits/pushes.
+
+### 2026-11-22 01:05: Audited real evidence review decisions and prepared geography handoff (Alice)
+- **Who:** Codex (for Alice)
+- **What:** Added read-only evidence review audit, per-R ledger generation, local snapshot regressions and component handoff documentation.
+- **How:** Reclassified actual downloaded Silver records as of 2026-11-22; inspected all 1,771 R pairs and eight T3/pending-T1 pairs; exercised real evidence with explicitly controlled geographic fixtures.
+- **Why:** Separate identity-review coverage from geographic readiness while teammate develops facility_geo_ready.
+- **Notes / follow-ups:** 223 Evidence Confidence tests pass. Real geographic validation awaits teammate handoff; no geography/shared pipelines, source data, tier policy or ranking policy changed in this phase. See docs/evidence-confidence-review-audit.md.
+
+### 2026-11-22 00:22: Audited downloaded Silver CSVs without regeneration or publication (Alice)
+- **Who:** Codex (for Alice).
+- **What:** Added `evidence_confidence/downloaded_silver_audit.py`, explicit CSV dialect support in the existing reader/CLI, six focused tests and `docs/evidence-confidence-downloaded-silver-audit.md`; linked the existing integration handoff. Preserved prior uncommitted pipeline and Evidence Confidence work.
+- **How:** Read all 14 downloaded CSVs (322,321,092 bytes) using their verified backslash-escape convention; checked keys/rows/types, full-row duplicates, arrays, references, geography, provenance, snapshot differences and contact-field presence. Reused the existing adapters/tier/LEFT JOIN/ranker/JSON interfaces with real records; inventory probes explicitly used unknown distances and were not geographic searches.
+- **Why:** Downloads are incomplete for full integration and publication eligibility must be separate from data quality. Missing Kayakalp/review/geographic exports, legacy schemas, unresolved source redistribution terms, a 136.3 MiB CSV and a public destination block publication.
+- **Validation / result:** 214 Evidence Confidence tests passed; full suite has one pdfplumber import error and pytest is unavailable. Synthetic smoke retains 32/32. Actual inventory probes retain 9,989/9,989 per service and preserve eight real T3 + pending-T1 cases without promotion. Source hashes unchanged; no downloaded records changed, regenerated, staged, committed or uploaded. No Databricks job ran in this task.
+
+### 2026-11-21 23:25: Silver generation/publication preflight blocked before execution (Alice)
+- **Who:** Codex (for Alice).
+- **What:** Added `docs/silver-generation-publication.md`; no preprocessing code, source data, tables, jobs or Evidence Confidence implementation changed.
+- **How:** Inspected setup/runner and notebook 00–06 source, source-licence documentation, actual local input presence, runtime dependencies, existing output directories, Git size/ignore/LFS configuration and official GitHub limits. Setup is a Databricks notebook/job provisioner, not a local environment installer. Its step 03 omits the persistence flag.
+- **Why:** The user's stop conditions prohibit publication with unclear redistribution rights. Virtue Foundation terms remain TODO, NCG records an all-rights-reserved restriction, and other source licences are unresolved; local PySpark/Delta/SDK runtime is also absent. No environment install, remote execution, dataset export, staging, commit, push, PR or merge was performed.
+- **Validation / result:** No Silver was generated or newly validated; published size 0 bytes, no publication commit. The report inventories expected outputs/dependencies, exact blockers and remaining reproduction/validation gates; documentation whitespace checks passed.
+
+### 2026-11-22 00:18: Added nearby-facility search to the pipeline
+- **Who:** Copilot (for Elliot)
+- **What:** Moved `notebooks/common/pin_nearby_facilities.py` to `notebooks/07_pin_nearby_facilities.py`; added step 07 to `setup_pipeline.py`, `run_pipeline.py`, and `scripts/local_spark/run_all.sh`; documented the 00 → 07 run order.
+- **How:** Replaced the hand-run dependency on `facility_geo_ready` with a fresh rebuild, and changed radius matching to include facilities whose uncertainty-adjusted closest distance is within the requested radius while retaining measured distance and uncertainty columns.
+- **Why:** A fresh pipeline could not build or run the nearby-facility app, and the previous radius filter ignored coordinate uncertainty.
+- **Notes / follow-ups:** Rerun setup_pipeline and the 00–07 Job on Databricks to recreate `facility_geo_ready`; verify step 07 with a PIN and radius before merging.
 
 ### 2026-11-22 07:44: App title in DM Sans with a real italic "right"
 - **Who:** Claude (for Sophia)
@@ -627,6 +713,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - `sophia-wip` fixes the line-753 `haversine_km` bug in notebook 01 (all its versions).
   - The notebook 04 `F.least()` NULL bug is still present there.
   - Nothing from `sophia-wip` was merged into this branch.
+
+### 2026-11-21 19:51: Started modular Evidence Confidence baseline (Alice)
+- **Who:** Codex (for Alice).
+- **What:** new isolated `alice-evidence-confidence` worktree from `origin/main` b5aba4d; additive `evidence_confidence/`, `config/evidence-confidence.json`, focused unit tests/examples and integration documentation. No teammate notebooks, datasets or Silver contracts edited.
+- **How:** inspected current main, William registry normalization/matching at ab113d7, Sophia NQAS/Kayakalp and Elliot PIN/location contracts, plus the local Kayakalp audit. Pure standard-library scoring with explicit source/match/recency weights, bounded lineage-aware agreement, contradictions, scoped service vs quality/cleanliness/identity outputs, citations and fail-closed adapters. No Databricks execution or writes.
+- **Why:** provide a runnable, interpretable policy baseline while upstream schemas evolve; no calibrated-probability, current clinical-safety or missing-means-absent claims. Canonical matches and service assertions remain explicit upstream inputs. No commits, merges, pushes or shared-resource changes.
+- **Validation:** 57 focused tests passed on Python 3.10.4; 10 synthetic scenarios serialized/executed with default and file-loaded policy; 5 existing address and 12 coordinate parser cases passed; compile and whitespace checks passed. No live scoring deployment, probability calibration or clinical validation claimed; integration needs are in `docs/evidence-confidence.md`.
 
 ### 2026-11-21 18:28: Registry sites matched to facilities (notebook 06)
 - **Who:** Claude (for William)

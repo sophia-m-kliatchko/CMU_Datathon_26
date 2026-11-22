@@ -13,12 +13,12 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from .adapters import (from_kayakalp, from_nqas, from_registry_service,
-                       from_registry_site, registry_match, _row)
+                       from_registry_site, from_registry_service_context, registry_match, NON_SERVICE_CATEGORIES, _row)
 from .models import FacilityMatch, MatchStatus
 
 PRIMARY_KEYS = {'facilities_silver': 'facility_id', 'registry_sites_silver': 'site_id',
     'registry_services_silver': 'service_row_id', 'facility_registry_links_silver': 'link_id',
-    'nqas_silver': 'certification_id', 'kayakalp_silver': 'award_id', 'facility_geo_ready': 'facility_id',
+    'registry_match_review': 'link_id', 'nqas_silver': 'certification_id', 'kayakalp_silver': 'award_id', 'facility_geo_ready': 'facility_id',
     'geographic_candidates': 'facility_id'}
 CORE_TABLES = ('facilities_silver', 'registry_sites_silver', 'registry_services_silver',
                'facility_registry_links_silver', 'geographic_candidates')
@@ -26,7 +26,7 @@ PROVENANCE_FIELDS = ('source_name', 'source_publisher', 'source_url', 'retrieved
                      'source_license', 'produced_by', 'row_citation')
 
 
-def read_local_export(path):
+def read_local_export(path, *, csv_escapechar=None):
     """Read a local JSON array/JSONL/CSV/Parquet without remote filesystem APIs.
 
     CSV arrays must be JSON arrays, not Spark's ambiguous display strings. JSONL
@@ -42,7 +42,10 @@ def read_local_export(path):
         records = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
     elif suffix == '.csv':
         with path.open(newline='') as handle:
-            records = list(csv.DictReader(handle))
+            reader = csv.DictReader(handle, escapechar=csv_escapechar, strict=True)
+            records = list(reader)
+            if any(None in row or any(value is None for value in row.values()) for row in records):
+                raise ValueError('CSV record width does not match its header')
         for row in records:
             for key, value in row.items():
                 if value == '':
@@ -105,13 +108,14 @@ def profile_table(rows, primary_key):
                       if key in r} for r in rows[:3]]}
 
 
-def adapt_registry_tables(facilities, sites, services, links, *, canonical_services):
+def adapt_registry_tables(facilities, sites, services, links, *, canonical_services, reviews=()):
     """Join actual 05/06 tables, including pending/rejected links, without filtering.
 
     Errors are returned with counts/examples; callers must not publish partial
     results when errors exist. Unlinked sites remain unattached, never matched by name.
     """
     issues = defaultdict(list)
+    adapter_errors = Counter()
     def add(code, table, example, severity='ERROR'):
         issues[(code, table, severity)].append(str(example))
     def index(rows, key, table):
@@ -130,6 +134,26 @@ def adapt_registry_tables(facilities, sites, services, links, *, canonical_servi
     site = index(sites, 'site_id', 'registry_sites_silver')
     service = index(services, 'service_row_id', 'registry_services_silver')
     link = index(links, 'link_id', 'facility_registry_links_silver')
+    review = index(reviews, 'link_id', 'registry_match_review')
+    for key, row in review.items():
+        decision = row.get('reviewer_decision')
+        if decision is None or decision == '':
+            continue
+        if key not in link:
+            add('ORPHAN_REVIEW', 'registry_match_review', key)
+            continue
+        if any(row.get(field) is not None and row[field] != link[key].get(field)
+               for field in ('facility_id', 'site_id')):
+            add('REVIEW_KEY_CONFLICT', 'registry_match_review', key)
+            continue
+        if decision not in ('confirm', 'reject'):
+            add('INVALID_REVIEW_DECISION', 'registry_match_review', key)
+            continue
+        existing = link[key].get('reviewer_decision')
+        if existing is not None and existing != decision:
+            add('CONFLICTING_REVIEW_DECISION', 'registry_match_review', key)
+            continue
+        link[key]['reviewer_decision'] = decision
     allowed = set(canonical_services)
     by_site = defaultdict(list)
     for row in service.values():
@@ -158,8 +182,14 @@ def adapt_registry_tables(facilities, sites, services, links, *, canonical_servi
             linked_sites.add(sid);linked_facilities.add(fid)
             evidence.append(from_registry_site(site[sid], match))
             for source in by_site[sid]:
-                evidence.append(from_registry_service(source, match, site=site[sid]))
+                if site[sid].get('listing_category') in NON_SERVICE_CATEGORIES:
+                    evidence.append(from_registry_service_context(source, match, site=site[sid]))
+                    add('NON_SERVICE_LISTING_WITH_SERVICE_TAG', 'registry_services_silver',
+                        source['service_row_id'], 'WARNING')
+                else:
+                    evidence.append(from_registry_service(source, match, site=site[sid]))
         except (ValueError, TypeError) as exc:
+            adapter_errors[str(exc)] += 1
             add('ADAPTER_ERROR', 'facility_registry_links_silver', f"{row['link_id']}: {exc}")
     unlinked = sorted(set(site)-linked_sites)
     if unlinked:
@@ -168,7 +198,7 @@ def adapt_registry_tables(facilities, sites, services, links, *, canonical_servi
     findings=[dict(code=code,table=table,severity=severity,count=len(examples),examples=examples[:3])
               for (code,table,severity),examples in sorted(issues.items())]
     return {'status': 'FAIL' if any(f['severity']=='ERROR' for f in findings) else 'PASS',
-        'evidence': tuple(evidence), 'findings': findings,
+        'evidence': tuple(evidence), 'findings': findings, 'adapter_error_reasons': dict(sorted(adapter_errors.items())),
         'coverage': {'canonical_facilities': len(fac), 'registry_sites': len(site),
             'registry_service_records': len(service), 'registry_links': len(link),
             'linked_sites': len(linked_sites), 'linked_facilities': len(linked_facilities),
@@ -209,7 +239,7 @@ def adapt_quality_tables(rows, links, *, source, canonical_facility_ids):
     return tuple(result)
 
 
-def local_inventory(directory, *, additional_exports=None):
+def local_inventory(directory, *, additional_exports=None, csv_escapechar=None):
     """Profile actual local exports. Never substitutes raw CSVs for Silver tables."""
     directory=Path(directory)
     exports={}
@@ -226,7 +256,7 @@ def local_inventory(directory, *, additional_exports=None):
     result={}
     for name,path in sorted(exports.items()):
         result[name]={'path':str(path.resolve()),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
-                      'profile':profile_table(read_local_export(path),PRIMARY_KEYS[name])}
+                      'profile':profile_table(read_local_export(path,csv_escapechar=csv_escapechar),PRIMARY_KEYS[name])}
     missing=[name for name in CORE_TABLES if name not in result]
     return {'readiness':'BLOCKED' if missing else 'NOT_YET_VALIDATED',
         'exports':result,'missing_core_exports':missing,
