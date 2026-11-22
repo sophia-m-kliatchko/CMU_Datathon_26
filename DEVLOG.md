@@ -22,6 +22,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 07:44: App title in DM Sans with a real italic "right"
+- **Who:** Claude (for Sophia)
+- **What:** `app/static/index.html` loads DM Sans 700 (roman and italic) from Google Fonts. In `app/static/styles.css`, the `h1` uses DM Sans and `h1 em` is italic again. Redeployed `find-the-right-care`.
+- **How:** edited the font link and two CSS rules, then ran `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia wants "right" in italics, but in a better-looking font. The previous Atkinson Hyperlegible title had no bold italic loaded, so the browser would have faked a slanted one. DM Sans ships a true bold italic.
+
 ### 2026-11-22 07:42: App shows the top 3 results, each with its own explanation; plainer title font
 - **Who:** Claude (for Sophia)
 - **What:**
