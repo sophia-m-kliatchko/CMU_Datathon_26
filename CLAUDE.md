@@ -4,7 +4,7 @@
 CMU Datathon Fall 2026, "Find the right care": given a medical service and a location in India, recommend facilities from the Virtue Foundation dataset with cited, evidence-based explanations and honest uncertainty. Must run on Databricks Free Edition. Team of 4.
 
 ## Branches
-- Claude's work for Sophia goes on the **`sophia-wip`** branch (tracking `origin/sophia-wip`).
+- **New** work for Sophia (from 2026-11-22 on) goes on the **`aesthetics`** branch (tracking `origin/aesthetics`). Earlier work is on `sophia-wip`.
 - Claude's work for William goes on the **`Will_branch`** branch.
 - Don't commit to `main` unless asked.
 

@@ -22,6 +22,67 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:58: Website: no red or orange anywhere; cool tier colours
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/static/styles.css`, tier colours: T3 from orange `#a35d12` to indigo `#4f58a5`, R from `#3e5a86` to steel blue `#2b7aa0`, X from red `#a33a2a` to plum `#7a4a8c`. T1 (green), T2 (teal) and U (grey) are unchanged, so all six tiers are still distinct.
+  - Removed the unused `.provisional` banner styles and the `--saffron` token, the last orange in the stylesheet. A hue scan of `styles.css`, `app.js` and `index.html` finds no red or orange left.
+  - Redeployed `find-the-right-care`.
+- **How:** CSS edits, a Python hue scan, then `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia asked that T3 and X not be red or orange, that any red or orange be replaced with cool or grey tones that fit the green palette, and that every category keep a distinct colour.
+
+### 2026-11-22 09:56: Website alerts in cool yellow instead of red/orange
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/static/styles.css`: new tokens `--alert-bg #f6f5d4`, `--alert-line #c4c047`, `--alert-ink #45430f` and `--alert-dot #e2dc5a`. They now colour the emergency box, the error and "no evidence" boxes, the notes list, the "!" warning dots on cards, and invalid-PIN hints.
+  - The tier X colour stays red because it marks contradicted evidence.
+  - Redeployed `find-the-right-care`.
+- **How:** CSS edits, then `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia asked for alerts in shades of cool-ish yellow instead of red and orange, to fit the green palette.
+
+### 2026-11-22 09:52: `aesthetics`: merged main; green palette, one font, no provisional banner, new subtitle
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `origin/main` into `aesthetics`: PRs #20 (evidence key, references footer), #21 (Alice's evidence tiers v2, claim guards) and #22. The only conflict was `DEVLOG.md`, where I kept both sides' entries.
+  - `app/static/styles.css`:
+    - Off-white paper (`#f7f8f4`), white cards and green accents (`--accent #2f7a4b`, `--accent-2 #1f5a35`, plus new `--accent-soft` and `--accent-tint`). Former teal tints are now green, the orange background glow is now pale green, and the focus outline is green.
+    - Tier colours are unchanged because they carry meaning.
+    - `--display`, `--body` and `--mono` are all DM Sans; the section titles no longer use Newsreader.
+  - `app/static/index.html`:
+    - Loads only DM Sans (400–700, with italics).
+    - Removed the "Provisional results" banner.
+    - New subtitle: "Pick a service and enter your PIN code. We find facilities near you, rank them by how well independent records back the service, and link every piece of evidence to its source."
+  - `app/static/app.js`: removed the code that filled and showed the banner.
+  - Redeployed `find-the-right-care` from `aesthetics`.
+- **How:** `git merge origin/main`, then edited the files, ran `databricks sync --full` and `databricks apps deploy`. The live page has no banner and shows the new subtitle. A dialysis search at PIN 800020 returns 3 cards.
+- **Why:** Sophia asked for the final website to match `main` and for these visual changes.
+- **Note:** with Alice's tiers v2 from `main`, accepted self-reports for dialysis count as T3. The Patna dialysis top 3 is now three nearby facilities that self-report it, not IGIMS.
+
+### 2026-11-22 09:37: App fills empty slots only with facilities that self-report the service
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/backend/engine.py`:
+    - New `self_reports(facility_ids, service)` finds facilities whose own listing (`silver_facility_claims`) mentions the service, using the synonyms in `backend/services.py`.
+    - `shape(..., claims)`: when fewer than 3 facilities have documentary evidence (T1–T3), the remaining slots go to the **nearest** facilities that self-report the service. They keep the **U** label, and their claim text appears in the evidence list as "SELF … not verified".
+    - The alternatives table also keeps only U facilities that self-report the service.
+    - Unrelated facilities are no longer shown. Before, a dialysis search could show dental clinics.
+  - `app/main.py`: passes the claims to `shape`.
+  - `app/static/app.js`: shows "No additional facilities found." when there are fewer than 3 cards. The no-evidence notice now says the facilities below only claim the service themselves.
+  - Redeployed `find-the-right-care`.
+- **How:** edited the files, then ran `databricks sync --full` and `databricks apps deploy`. Checked through the live API:
+  - dialysis 800020: 1 T3 + 2 self-reported U cards.
+  - C-section 800020: 1 T3 + 2 U.
+  - dialysis 110001 (5 km): 1 self-reported U card (an eye hospital whose listing describes a 20-bed dialysis unit) and no alternatives.
+  - stroke 800020 (3 km): 1 U card.
+- **Why:** Sophia asked that, without evidence, the app take the dataset's self-reports at their word (labelled U), fill the open slots with the nearest such facilities, and say "No additional facilities found" when there are none. Her first version capped this at 2; she then asked to fill all the open slots instead.
+- **Tradeoff:** self-reports are unverified. The U stamp, the "SELF" ledger tag and the "not verified" status keep this visible. Where nothing nearby claims the service, fewer than 3 cards are shown, which is better than showing unrelated facilities.
+- **Branch:** on `sophia-wip` at Sophia's request (new work normally goes to `aesthetics`).
+
+### 2026-11-22 09:26: New work for Sophia goes on the `aesthetics` branch
+- **Who:** Claude (for Sophia)
+- **What:** `CLAUDE.md`, Branches section: new work for Sophia now goes on `aesthetics` (tracking `origin/aesthetics`) instead of `sophia-wip`. Earlier work stays on `sophia-wip`.
+- **How:** edited the line, then committed and pushed to `aesthetics`.
+- **Why:** Sophia asked for all new updates to go to the aesthetics branch.
 ### 2026-11-22 14:30: Tier framework evidence-tiers/2 (variant C) integrated in production (Alice)
 - **Who:** Claude (for Alice). Uncommitted, for review.
 - **What:** `tiers.py` applies the approved variant C upgrade (`_evidence_class`, `_tier_from_classes`, `PROCEDURE_OR_UNIT_SERVICES`, `BROAD_SPECIALTY_HINTS`); new assessment fields `t2_basis`, `evidence_nature`; framework `evidence-tiers/2`. `pipeline.py`: route-specific T2 explanation, `tier_label`, `t2_basis`, `evidence_nature`. `evidence_review_audit.py` mirrors the rule. `service_claims.py`: guard skipped (and reported) when callers pass no facility names, for the website's current call.
