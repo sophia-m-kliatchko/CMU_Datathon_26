@@ -22,6 +22,56 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:22: Website: evidence key stays visible next to the results
+- **Who:** Claude (for William)
+- **What:**
+  - `app/static/index.html`: an "Evidence key" panel (`#key`, a `<details>`) in the sidebar under the search form, with the six tiers, a short definition each, and a count.
+  - `app/static/app.js`: `updateKey()` shows the key after each search with the count per tier over all candidates (tiers with none are dimmed); `linkToKey()` highlights a card's or table row's tier in the key on hover or keyboard focus. Collapsed by default on narrow screens.
+  - `app/static/styles.css`: `.key*` styles. The sidebar now stretches to the results' height and only the key is sticky (the form was sticky before and scrolls with the page now).
+- **How:** edited the three files; checked with Playwright in live mode (Delhi C-section: counts T1 1, T2 0, T3 46, R 3, U 699, X 0; hovering a T3 table row highlights T3) at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a key that stays on screen; the tier definitions only appeared on the start screen and disappeared once results loaded.
+- **Tradeoff:** the full form no longer follows you down the page; pinning both didn't fit a 900 px-tall window and cut off the key.
+- **Deployed:** committed as 131c6ec, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e68050c21f028dc60446ca1b9703 SUCCEEDED); the live page serves the key.
+
+### 2026-11-22 09:05: Website: "Data sources and references" section
+- **Who:** Claude (for William)
+- **What:** `app/static/index.html`: a numbered references list in the footer (`#references`, entries `#ref-1`…`#ref-12`) replaces the one-line source sentence; a "Data sources and references" link under the intro jumps to it. `app/static/styles.css`: `.refs*` and `.lede__refs` styles.
+- **How:** William's 11 references (IEEE style) as given, each with a "Used for" line that says honestly how the app uses it. NQAS [3], Kayakalp [4] and NFHS-5 [5] are marked "the data pipeline only; not yet used in results". Added [12] Meta Llama 3.3 70B Instruct (the AI explainer, via Databricks Foundation Model APIs). Checked with Playwright at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a references window or footer listing every dataset used. All 11 match the sources in `docs/data-sources.md`; the explainer model was the only thing missing, since its text appears on the page.
+- **Deployed:** committed as fae884c, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e67e313f1d3faae946b348aa332a SUCCEEDED); the live page serves all 12 references.
+
+### 2026-11-22 08:41: Website brought up to date with Alice's `evidence_confidence` on main (claims, review decisions, radius rule)
+- **Who:** Claude (for William)
+- **What:** new branch `website_finalization` from `main` @ 8a2c8d3 (PR #19).
+  - `app/evidence_confidence/`: re-copied unchanged from main's `evidence_confidence/` (last commit c5f1586). `app/EVIDENCE_CONFIDENCE_VERSION` now records `source_branch: main`, commit c5f1586e…, and how to update from main.
+  - `app/backend/geography.py` `nearby_facilities()`: Alice's and notebook 07's radius rule. `distance_min_km = max(distance_km - location_uncertainty_km, 0) <= radius` (was `distance_km <= radius`); bounding box widened by the largest `location_uncertainty_km` (cached `max_uncertainty_km()`); `distance_min_km` returned.
+  - `app/backend/engine.py`:
+    - `load_claims()` reads `silver_facility_claims` (fields specialties / capability / procedure / equipment, coarse `claim_norm` prefilter that is a superset of her patterns) for services in her `CLAIM_PATTERNS`. `claim_evidence()` turns them into self-reported Evidence (T3 cap) added to the registry evidence.
+    - `load_reviews()` reads `registry_match_review` rows with a `reviewer_decision`, passed to `adapt_registry_tables(reviews=)`.
+    - `distance_min_km` passed to `build_recommendation_response`; the adapter report now includes `claim_mapping` and row counts for reviews and claims.
+    - Display: claims shown as "Listed under procedures: “…”" with source "Facility's own listing (Virtue Foundation dataset)"; cards with only self-reported T3 say so and get `self_reported_only`; the C-section qualifier `CLAIM_DOES_NOT_STATE_EMERGENCY` becomes a warning; facilities kept by the uncertainty rule say why they're outside the radius; two new auditor strings from her package mapped; R cards no longer also say "no record was found".
+  - `app/main.py`: provisional note says claims count for dialysis and C-section. `app/static/app.js`: T3 stamp reads "Self-reported" when only claims support it.
+  - `app/README.md`, `CLAUDE.md`: tables read, call sequence, update steps from main, answered questions.
+- **How:** `git archive HEAD evidence_confidence | tar -x -C app` (checked identical with `diff -rq`); ran her tests on main (228 pass, 18 skipped, 1 unrelated error: `scripts/kayakalp_pdf_to_csv.py` needs `pdfplumber`). Local app in live mode against warehouse 280169f53e6a2de0: 7 searches, adapter PASS on all; Playwright screenshots of 3 searches, no console errors.
+- **Why:** Alice's PR #19 added the claim mapping, review-decision support and a handoff list for the website (`docs/recommendation-pipeline.md`): radius rule, `distance_min_km`, selection policy. William asked to bring the website up to date with it and to count C-section claims for now.
+- **Result (live tables, 50 km unless noted):**
+
+  | Search | Before | Now |
+  |---|---|---|
+  | Patna 800020 dialysis | T3 1 | T3 30 (claims) |
+  | Chennai 600001 dialysis | | T3 34, R 2 |
+  | Delhi 110001 C-section | T1 1, T3 0 | T1 1, T3 46, R 3 |
+  | Patna C-section, emergency | 5 unconfirmed | 11 T3 unconfirmed |
+  | Mumbai 400001 blood bank, 25 km | T1 Lilavati | unchanged (no claim mapping) |
+
+  The radius rule adds 2–12 candidates per search (110001: 12, matching Alice's measurement).
+- **Tradeoffs / decisions:**
+  - C-section claims count for `emergency_c_section` (William's call; Alice flagged it for the team). Each such card warns that the claim doesn't state emergency availability.
+  - Kept the app's own SQL loading instead of her `recommend_facilities()`, which reads a local CSV bundle that a Databricks App doesn't have.
+  - Kept Sophia's selection policy (top 3, filled in her order) rather than her ranks 1..K; noted in `app/README.md` as a team decision.
+- **Deployed:** committed as f7ecedf and pushed to `origin/website_finalization`, then redeployed William's app `find-the-right-care` (`databricks sync --full`, `apps start`, `apps deploy`; deployment 01f1e67bd62e1e628f474bb74d26086b SUCCEEDED). The live `/api/health` reports `evidence_confidence@c5f1586`; Patna dialysis returns 161 candidates, 30 T3 from claims, adapter PASS.
+- **Notes / follow-ups:** `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
+
 ### 2026-11-22 05:00: Backend final validation (Alice)
 - **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
 - **What:** ran `recommend_facilities` on 4 real queries with Elliot's 07 notebook; corrected merge notes (only `setup_pipeline.py` conflicts, 1 hunk; the rename deletes the legacy notebook); re-measured website radius-rule loss.

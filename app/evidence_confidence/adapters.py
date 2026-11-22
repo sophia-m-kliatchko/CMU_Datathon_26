@@ -225,6 +225,23 @@ def from_registry_site(row, match):
                     qualifiers=flags + ('LISTING_IS_NOT_SERVICE_VERIFICATION',))
 
 
+def from_registry_service_context(row, match, *, site):
+    """Preserve a tagged row whose listing is explicitly quality/identity only.
+
+    This does not relax from_registry_service's direct-service scope guard.
+    Original row ID, statement, citations, dates and upstream tag are retained.
+    """
+    parent = _row(site)
+    if parent.get('listing_category') not in NON_SERVICE_CATEGORIES:
+        raise ValueError('context routing requires an explicitly non-service listing category')
+    context = from_registry_site(parent, match)
+    evidence = from_registry_service(row, context.match)
+    return replace(evidence, scope=context.scope, service=None,
+        qualifiers=tuple(dict.fromkeys(evidence.qualifiers + ('LISTING_IS_NOT_SERVICE_VERIFICATION',
+            'UPSTREAM_SERVICE_TAG_IS_NON_SERVICE_CONTEXT'))),
+        source_provenance=evidence.source_provenance + (('upstream_service_tag', evidence.service),))
+
+
 def from_facility_claim(row, *, service, polarity, direct=False, observed_on=None, citations=(), facility_flags=()):
     """Canonical service and assertion polarity MUST be supplied by a reviewed service matcher.
 
