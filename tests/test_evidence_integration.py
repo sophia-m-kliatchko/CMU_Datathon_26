@@ -43,7 +43,7 @@ class IntegrationTests(unittest.TestCase):
 
     def test_t3_pending_t1_preserves_identity_citations(self):
         e=pending(certificate('potential'))
-        r=rows([indirect(key='accepted'),e])[0]
+        r=rows([indirect('virtue_foundation',key='accepted'),e])[0]
         self.assertEqual((r['base_tier'],r['effective_tier']),('T3','T3'))
         self.assertEqual(r['pending_stronger_tier'],'T1')
         self.assertEqual(r['pending_source_families'],['laqshya'])
@@ -54,10 +54,10 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(record['valid_until'],'2028-03-09')
 
     def test_t1_pending_t3_no_promotion(self):
-        r=rows([certificate(),pending(indirect(key='potential'))])[0]
+        r=rows([certificate(),pending(indirect('ncg',key='potential'))])[0]
         self.assertEqual(r['effective_tier'],'T1')
         self.assertIsNone(r['pending_stronger_tier'])
-        self.assertEqual(r['pending_source_families'],['nmc'])
+        self.assertEqual(r['pending_source_families'],['ncg'])
         self.assertTrue(r['identity_review_required'])
 
     def test_rejected_extra_does_not_override_accepted(self):

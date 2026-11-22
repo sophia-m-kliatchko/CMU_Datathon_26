@@ -116,7 +116,7 @@ def build_recommendation_response(request, evidence_records, geographic_candidat
         }
 
     result = {
-        'contract_version': CONTRACT_VERSION, 'framework_version': 'evidence-tiers/1',
+        'contract_version': CONTRACT_VERSION, 'framework_version': 'evidence-tiers/2',
         'request': request, 'candidate_count': len(candidates),
         'recommendations': [export(r) for r in ranking.ranked],
         'alternatives': [export(r) for r in ranking.alternatives],

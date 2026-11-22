@@ -122,18 +122,44 @@ def _summary(se):
             'self_reported_only': bool(claims) and not any(i['credited'] for i in registry) and any(i['credited'] for i in claims)}
 
 
+T2_LABEL = {'expired_certification': 'Expired certification', 'membership': 'Network membership',
+            'designation': 'Government designation', 'corroborated_self_report': 'Corroborated listing',
+            'specialist_department': 'Specialist department (expertise)'}
+TIER_LABEL = {'T1': 'Current certification', 'T3': 'Indirect or self-reported', 'R': 'Under review',
+              'X': 'Contradicted', 'U': 'No evidence'}
+
+
+def tier_label(se):
+    """Display label; for T2 it names the route so expertise is never shown as availability."""
+    if se['effective_tier'] != 'T2':
+        return TIER_LABEL[se['effective_tier']]
+    basis = se.get('t2_basis') or ['expired_certification']
+    order = ['expired_certification', 'membership', 'designation', 'corroborated_self_report', 'specialist_department']
+    return T2_LABEL[min(basis, key=order.index)]
+
+
 def _explain(row, se, summary):
     tier = se['effective_tier']
     parts = {'T1': 'Current, direct registry certification/accreditation for this service (documentary, not live availability).',
-             'T2': 'Direct registry certification for this service exists but has expired (historical only).',
+             'T2': {'expired_certification': 'Direct registry certification for this service exists but has expired (historical only).',
+                    'membership': 'Member of a service-specific network (e.g. National Cancer Grid); membership is not an inspection.',
+                    'designation': 'Holds a service-specific government designation.',
+                    'corroborated_self_report': "The facility's own listing names this service and an independent registry record supports it.",
+                    'specialist_department': 'Has an NMC-approved specialist training department in this discipline: clinical expertise, not confirmation that this service is currently offered.',
+                    }.get(min(se.get('t2_basis') or ['expired_certification'],
+                              key=['expired_certification', 'membership', 'designation', 'corroborated_self_report', 'specialist_department'].index)),
              'T3': ('Only the facility\'s own listing mentions this service (self-reported).' if summary['self_reported_only']
-                    else 'Indirect support only (training approval, network membership, designation or self-report).'),
+                    else 'Indirect support only (specialist training, network membership, designation or self-report); not confirmation that the service is currently offered.'),
              'R': 'Registry evidence may belong to this facility, but the facility match is pending review; not counted.',
              'X': 'Sources conflict about this service; resolve before relying on it.',
              'U': 'No record of this service was found for this facility. Unknown, not unavailable.'}
     text = [parts[tier]]
     if se.get('pending_stronger_tier'):
         text.append(f"A stronger {se['pending_stronger_tier']} record exists but its facility match is pending review.")
+    if se.get('related_specialty'):
+        text.append('Specialist training on record: shows clinical expertise, not that this service is currently offered.')
+    if se['flags'].get('attribution_unresolved') or row.get('_attribution_excluded'):
+        text.append('Some of this facility\'s listed claims describe another named facility; those were not counted.')
     if row['location_basis'] == 'pin_centroid':
         text.append(f"Location is the facility's PIN centre (±{row['location_uncertainty_km']} km), not its address.")
     return text
@@ -170,7 +196,8 @@ def recommend(bundle, request):
     records = [e for fid in ids for e in bundle.registry_by_facility.get(fid, ()) if e.service == req['service']]
     claim_report = {'included': False}
     if req['include_self_reported_claims'] and 'silver_facility_claims' not in bundle.missing:
-        claims, claim_report = claim_evidence([c for fid in ids for c in bundle.claims_by_facility.get(fid, ())], req['service'])
+        claims, claim_report = claim_evidence([c for fid in ids for c in bundle.claims_by_facility.get(fid, ())], req['service'],
+                                              facility_names={fid: bundle.facilities.get(fid, {}).get('name') for fid in ids})
         records += claims
         claim_report = {**claim_report, 'included': True}
     response = build_recommendation_response(
@@ -182,9 +209,26 @@ def recommend(bundle, request):
     by_dist = {fid: i + 1 for i, fid in enumerate(c['facility_id'] for c in sorted(candidates, key=lambda c: (c['distance_km'], c['facility_id'])))}
     tiers = Counter(r['service_evidence']['effective_tier'] for r in ranked)
 
+    excluded_claims = claim_report.get('attribution_excluded', {}) if claim_report.get('included') else {}
+
+    def freshness(fid, summary):
+        """Freshness and expiry as attributes; they never change the tier."""
+        credited = [i for i in summary['registry_evidence'] + summary['self_reported_claims'] if i['credited']]
+        page = bundle.facilities.get(fid, {}).get('recency_of_page_update') or None
+        age = (date.fromisoformat(req['as_of']) - date.fromisoformat(page)).days if page else None
+        dated = sorted(i['observed_on'] for i in credited if i['observed_on'])
+        until = sorted(i['valid_until'] for i in credited if i['valid_until'])
+        return {'latest_evidence_date': dated[-1] if dated else None,
+                'earliest_valid_until': until[0] if until else None,
+                'expired_direct_evidence': any(i['temporal_status'] == 'historical' for i in summary['registry_evidence'] if i['credited']),
+                'undated_credited_records': sum(1 for i in credited if not i['observed_on']),
+                'self_report_page_updated_on': page if summary['self_reported_claims'] else None,
+                'self_report_page_age_days': age if summary['self_reported_claims'] else None}
+
     def export(position, row):
         se = row['service_evidence']
         summary = _summary(se)
+        row = {**row, '_attribution_excluded': excluded_claims.get(row['facility_id'], [])}
         warnings = list(row['warnings'][len(se['explanation']):])
         if row['location_basis'] == 'pin_centroid':
             warnings.append('Approximate location (PIN centre).')
@@ -192,15 +236,23 @@ def recommend(bundle, request):
             warnings.append('Displayed centre is outside the radius; included because it may be inside after location uncertainty.')
         if tier_of(row) in ('U', 'R'):
             warnings.append('No verified service evidence.')
+        if row['_attribution_excluded']:
+            warnings.append('Record attribution unresolved: some claims describe another named facility and were not counted.')
         warnings.append('Current availability of this service is not verified.')
         return {'rank': position, 'distance_only_rank': by_dist[row['facility_id']], 'facility_id': row['facility_id'],
                 'name': row.get('name'), **_facility(bundle, row['facility_id']),
                 **{k: row.get(k) for k in ('distance_km', 'distance_min_km', 'location_basis', 'geo_confidence', 'location_uncertainty_km')},
-                'evidence_tier': se['effective_tier'], 'base_tier': se['base_tier'], 'review_status': se['review_status'],
+                'evidence_tier': se['effective_tier'], 'tier_label': tier_label(se), 't2_basis': list(se.get('t2_basis') or []),
+                'evidence_nature': list(se.get('evidence_nature') or []),
+                'base_tier': se['base_tier'], 'review_status': se['review_status'],
                 'pending_stronger_tier': se.get('pending_stronger_tier'),
                 'supporting_source_families': se['supporting_source_families'], 'evidence_basis': se['evidence_basis'],
                 'flags': se['flags'], 'contradiction': bool(se['flags'].get('conflicting_evidence')), **summary,
                 'source_urls': row['source_urls'],
+                'related_specialty': list(se.get('related_specialty') or []),
+                'attribution': {'unresolved': bool(se['flags'].get('attribution_unresolved') or row['_attribution_excluded']),
+                                'excluded_other_facility_claims': row['_attribution_excluded']},
+                'evidence_freshness': freshness(row['facility_id'], summary),
                 'quality_signals': {'nqas': 'unavailable: no canonical facility link in the Silver bundle',
                                     'kayakalp': 'unavailable: kayakalp_silver not in the Silver bundle'
                                     if 'kayakalp_silver' in bundle.missing else 'unavailable: no canonical facility link'},

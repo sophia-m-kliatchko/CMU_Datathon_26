@@ -158,6 +158,30 @@
     }
     if (d.alternatives.length) frag.append(alternatives(d.alternatives, urgent));
     results.replaceChildren(frag);
+    updateKey(d.tier_counts);
+  }
+
+  // Evidence key in the sidebar: always visible after a search, with counts over all candidates.
+  // Pointing at a card or table row highlights its tier in the key.
+  const key = $("#key");
+  function updateKey(counts) {
+    key.hidden = false;
+    if (window.matchMedia("(max-width: 860px)").matches) key.open = false;
+    for (const li of key.querySelectorAll("li")) {
+      const n = counts[li.dataset.tier] || 0;
+      $(".key__n", li).textContent = n.toLocaleString("en-IN");
+      li.classList.toggle("is-zero", n === 0);
+    }
+  }
+  function highlightTier(t) {
+    for (const li of key.querySelectorAll("li")) li.classList.toggle("is-active", li.dataset.tier === t);
+  }
+  function linkToKey(node, tier) {
+    node.addEventListener("mouseenter", () => highlightTier(tier));
+    node.addEventListener("mouseleave", () => highlightTier(null));
+    node.addEventListener("focusin", () => highlightTier(tier));
+    node.addEventListener("focusout", () => highlightTier(null));
+    return node;
   }
 
   function card(r, i, service, listedOnly) {
@@ -171,7 +195,8 @@
     stamp.classList.add(`t-${r.tier}`);
     stamp.setAttribute("aria-label", `Evidence tier ${r.tier}: ${r.evidence_level}`);
     $(".stamp__tier", node).textContent = r.tier;
-    $(".stamp__label", node).textContent = TIER_LABEL[r.tier] || r.evidence_level;
+    $(".stamp__label", node).textContent = r.tier === "T3" && r.self_reported_only ? "Self-reported"
+      : (TIER_LABEL[r.tier] || r.evidence_level);
     $(".card__geo", node).classList.add(`geo-${r.geo_confidence}`);
     $(".card__dist", node).textContent = `${Number(r.distance_km).toFixed(1)} km`;
     $(".card__geolabel", node).textContent = `straight-line · ${r.geo_label}`;
@@ -210,15 +235,15 @@
     btn.addEventListener("click", explainNow);
     $(".why", node).open = true;
     explainNow();
-    return node;
+    return linkToKey(node, r.tier);
   }
 
   function alternatives(list, urgent) {
-    const rows = list.map(a => el("tr", {},
+    const rows = list.map(a => linkToKey(el("tr", {},
       el("td", {}, el("span", { class: `tier tier--${a.tier}`, text: a.tier, title: a.evidence_level })),
       el("td", {}, el("strong", { text: a.facility_name }), el("br"), el("span", { text: a.location })),
       el("td", { class: "num", text: `${Number(a.distance_km).toFixed(1)} km` }),
-      el("td", { text: a.geo_label })));
+      el("td", { text: a.geo_label })), a.tier));
     return el("section", { class: "alts", "aria-labelledby": "alts-title" },
       el("h3", { id: "alts-title", text: urgent ? "Other nearby facilities" : "Nearby alternatives" }),
       el("table", {},

@@ -1,5 +1,7 @@
-# Vendored copy of Alice's evidence_confidence package. Do not edit files in app/evidence_confidence/.
-# To update: copy it again from Alice's branch at a new commit and change the commit below.
-#   git fetch origin && rm -rf app/evidence_confidence && git archive <commit> evidence_confidence | tar -x -C app
-source_branch: alice-evidence-confidence
-commit: 236838212f1af6e389b46dd354700b76223051ef
+# Vendored copy of Alice's evidence_confidence package (repo root evidence_confidence/ on main).
+# Do not edit files in app/evidence_confidence/. A Databricks App only uploads its own folder, hence the copy.
+# To update: copy it again from main and change the commit below (last commit that touched evidence_confidence/).
+#   git fetch origin && rm -rf app/evidence_confidence && git archive origin/main evidence_confidence | tar -x -C app
+#   git log -1 --format=%H origin/main -- evidence_confidence
+source_branch: main
+commit: c5f1586e6e3cb071d4415df1eb52afd02fc3c8b9

@@ -31,9 +31,11 @@ def classify(rows, **kwargs):
 
 
 def indirect(family='nmc', **kwargs):
+    # As in notebook 05: only NMC/DNB training rows are specialty-inferred (INDIRECT_VIA_SPECIALTY).
     defaults = dict(verification=Verification.INFERRED,directness=Directness.INDIRECT,
                     observed_on=None,valid_from=None,valid_until=None,current_status=None,
-                    qualifiers=('INDIRECT_VIA_SPECIALTY',))
+                    qualifiers=('INDIRECT_VIA_SPECIALTY',) if family in ('nmc', 'dnb') else
+                               ('SANCTIONED_NOT_CONFIRMED_FUNCTIONAL',) if family == 'trauma' else ())
     defaults.update(kwargs)
     return certificate(family=family, **defaults)
 
@@ -109,11 +111,14 @@ class EvidenceTierTests(unittest.TestCase):
                       date_precision=DatePrecision.YEAR,current_status=None)
         self.assertEqual(classify([e]).effective_tier,Tier.U)
 
-    def test_all_named_indirect_families_remain_t3_even_if_mislabelled_direct(self):
-        for family in ['nmc','dnb','ncg','trauma','virtue_foundation']:
+    def test_indirect_families_never_t1_even_if_mislabelled_direct(self):
+        # tiers/2: NCG membership is T2; the rest stay T3 for a procedure/unit service.
+        expected={'nmc':Tier.T3,'dnb':Tier.T3,'ncg':Tier.T2,'trauma':Tier.T3,'virtue_foundation':Tier.T3}
+        for family,tier in expected.items():
             with self.subTest(family=family):
-                r=classify([certificate(family=family,current_status=True)])
-                self.assertEqual(r.effective_tier,Tier.T3)
+                q=('SANCTIONED_NOT_CONFIRMED_FUNCTIONAL',) if family=='trauma' else ()
+                r=classify([certificate(family=family,current_status=True,qualifiers=q)])
+                self.assertEqual(r.effective_tier,tier)
                 self.assertEqual(r.supporting_source_families,(family,))
 
     def test_virtue_self_report_cannot_be_t1_or_t2(self):
@@ -160,7 +165,7 @@ class EvidenceTierTests(unittest.TestCase):
 
     def test_accepted_t3_and_unresolved_direct_stay_t3_with_review_flag(self):
         e=certificate('direct',match=replace(certificate().match,status=MatchStatus.PENDING))
-        r=classify([indirect(key='indirect'),e])
+        r=classify([indirect('virtue_foundation',key='indirect'),e])
         self.assertEqual((r.base_tier,r.effective_tier),(Tier.T3,Tier.T3))
         self.assertEqual(r.review_status,'partial')
         self.assertTrue(r.flags.identity_review)
@@ -226,22 +231,98 @@ class EvidenceTierTests(unittest.TestCase):
         self.assertEqual(r.quality_evidence_ids,('cert-1',))
 
     def test_payload_duplicates_and_repeated_indirect_rows_do_not_false_corroborate(self):
-        e=indirect()
+        e=indirect('virtue_foundation')
         r=classify([e,e,replace(e,evidence_id='alias')])
         self.assertEqual(r.effective_tier,Tier.T3)
         self.assertEqual(r.supporting_source_count,1)
         self.assertEqual(r.supporting_record_count,1)
         self.assertEqual(len(r.duplicate_of),2)
-        many=[indirect(key=str(i),statement=f'Synthetic training course {i}') for i in range(20)]
+        many=[indirect('virtue_foundation',key=str(i),statement=f'Synthetic listing {i}') for i in range(20)]
         self.assertEqual(classify(many).effective_tier,Tier.T3)
         self.assertEqual(classify(many).supporting_source_count,1)
+
+    def test_specialty_training_is_indirect_t3_labelled_as_expertise(self):
+        r=classify([indirect('nmc',key='n'),indirect('dnb',key='d',statement='Synthetic DNB nephrology training')])
+        self.assertEqual((r.base_tier,r.effective_tier),(Tier.T3,Tier.T3))
+        self.assertTrue(r.flags.related_specialty)
+        self.assertEqual(len(r.related_specialty),2)
+        self.assertTrue(any('not confirmation that this service is currently offered' in x for x in r.explanation))
+
+    def test_pending_specialty_training_alone_is_r(self):
+        e=indirect('nmc',key='n',match=replace(certificate().match,status=MatchStatus.PENDING))
+        r=classify([e])
+        self.assertEqual(r.effective_tier,Tier.R)
+        self.assertEqual(r.related_specialty,())  # unresolved identity: not credited, not listed
+
+    def test_training_and_self_report_are_separate_families(self):
+        r=classify([indirect('nmc',key='n'),indirect('virtue_foundation',key='v')])
+        # tiers/2: own listing corroborated by independent specialist training -> T2.
+        self.assertEqual(r.effective_tier,Tier.T2)
+        self.assertEqual(r.t2_basis,('corroborated_self_report',))
+        self.assertEqual(r.evidence_nature,('expertise','operational'))
+        self.assertEqual(r.supporting_source_families,('nmc','virtue_foundation'))
+        self.assertTrue(r.flags.related_specialty)
+
+    # --- tiers/2 (variant C) ------------------------------------------------------------
+    def _svc(self, service, records):
+        return evidence_tier(FID, service, [replace(e, service=service) for e in records], TODAY)
+
+    def test_nmc_department_for_specialty_level_service_is_t2_expertise_only(self):
+        r=self._svc('cardiac_care',[indirect('nmc',statement='NMC-approved D.M. Cardiology, 4 approved seats')])
+        self.assertEqual(r.effective_tier,Tier.T2)
+        self.assertEqual(r.t2_basis,('specialist_department',))
+        self.assertEqual(r.evidence_nature,('expertise',))
+        self.assertTrue(any('does not confirm that the service is currently offered' in x for x in r.explanation))
+
+    def test_training_alone_stays_t3_for_procedure_or_unit_services(self):
+        for service in ('dialysis','emergency_c_section','icu','nicu','blood_bank','emergency','trauma','stroke_care','cath_lab'):
+            with self.subTest(service=service):
+                self.assertEqual(self._svc(service,[indirect('nmc',statement='NMC-approved D.M. Nephrology')]).effective_tier,Tier.T3)
+
+    def test_undated_dnb_and_broad_hints_stay_t3(self):
+        self.assertEqual(self._svc('cardiac_care',[indirect('dnb',statement='DNB Cardiology')]).effective_tier,Tier.T3)
+        r=self._svc('cardiac_care',[indirect('nmc',statement='NMC-approved D.M. Cardiac Anaesthesia')])
+        self.assertEqual(r.effective_tier,Tier.T3)
+
+    def test_broad_hint_or_sanctioned_designation_never_corroborates(self):
+        vf=indirect('virtue_foundation',key='v')
+        self.assertEqual(self._svc('icu',[indirect('nmc',key='n',statement='NMC-approved M.D. Anaesthesiology'),vf]).effective_tier,Tier.T3)
+        self.assertEqual(self._svc('trauma',[indirect('trauma',key='t'),vf]).effective_tier,Tier.T3)
+
+    def test_self_report_corroborated_by_unit_training_is_t2(self):
+        r=self._svc('dialysis',[indirect('nmc',key='n',statement='NMC-approved D.M. Nephrology'),indirect('virtue_foundation',key='v')])
+        self.assertEqual((r.effective_tier,r.t2_basis),(Tier.T2,('corroborated_self_report',)))
+
+    def test_strong_registry_corroboration_is_t1(self):
+        old=certificate('old',valid_until=TODAY-timedelta(days=10),valid_from=TODAY-timedelta(days=1100))
+        r=self._svc('cancer_care',[old,indirect('ncg',key='c')])
+        self.assertEqual(r.effective_tier,Tier.T1)
+
+    def test_r_and_x_overlays_unchanged_by_tiers2(self):
+        pend=indirect('ncg',key='c',match=replace(certificate().match,status=MatchStatus.PENDING))
+        self.assertEqual(self._svc('cancer_care',[pend]).effective_tier,Tier.R)
+
+    def test_attribution_flag_is_reported_not_demoting(self):
+        v=indirect('virtue_foundation',key='v',qualifiers=('RECORD_ATTRIBUTION_UNRESOLVED',))
+        r=classify([v])
+        self.assertEqual(r.effective_tier,Tier.T3)
+        self.assertTrue(r.flags.attribution_unresolved)
+
+    def test_expired_direct_stays_t2(self):
+        e=certificate('old',valid_until=TODAY-timedelta(days=10),valid_from=TODAY-timedelta(days=1100))
+        r=classify([e])
+        self.assertEqual(r.effective_tier,Tier.T2)
+        self.assertTrue(r.flags.expired_certification)
 
     def test_source_families_separate_not_weighted_by_row_count(self):
         r=classify([indirect('nmc',key='n'),indirect('dnb',key='d'),indirect('ncg',key='c'),
                     indirect('trauma',key='t'),indirect('virtue_foundation',key='v')])
-        self.assertEqual(r.effective_tier,Tier.T3)
+        # tiers/2: NCG membership and a corroborated self-report give T2; row counts never matter.
+        self.assertEqual(r.effective_tier,Tier.T2)
+        self.assertEqual(set(r.t2_basis),{'membership','corroborated_self_report'})
         self.assertEqual(r.supporting_source_count,5)
         self.assertEqual(set(r.evidence_basis),{'training','membership','sanctioned_not_confirmed_functional','self_report'})
+        self.assertTrue(r.flags.related_specialty)  # NMC/DNB training labelled as expertise
 
     def test_direct_families_are_counted_separately_without_changing_tier(self):
         r=classify([certificate('l'),certificate('n',family='nabh')])
@@ -329,7 +410,8 @@ class TemporalAdapterTests(unittest.TestCase):
         self.assertIsNone(e.observed_on)
         self.assertIsNone(e.valid_from)
         self.assertIn('SNAPSHOT_NOT_SERVICE_EVENT',e.qualifiers)
-        r=classify([e]);self.assertEqual(r.effective_tier,Tier.T3)
+        r=classify([e]);self.assertEqual(r.effective_tier,Tier.T2)  # tiers/2: membership
+        self.assertEqual(r.t2_basis,('membership',))
         self.assertTrue(r.flags.temporal_uncertainty)
 
     def test_authoritative_listing_current_alias_supported(self):

@@ -47,6 +47,75 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **What:** `CLAUDE.md`, Branches section: new work for Sophia now goes on `aesthetics` (tracking `origin/aesthetics`) instead of `sophia-wip`. Earlier work stays on `sophia-wip`.
 - **How:** edited the line, then committed and pushed to `aesthetics`.
 - **Why:** Sophia asked for all new updates to go to the aesthetics branch.
+### 2026-11-22 14:30: Tier framework evidence-tiers/2 (variant C) integrated in production (Alice)
+- **Who:** Claude (for Alice). Uncommitted, for review.
+- **What:** `tiers.py` applies the approved variant C upgrade (`_evidence_class`, `_tier_from_classes`, `PROCEDURE_OR_UNIT_SERVICES`, `BROAD_SPECIALTY_HINTS`); new assessment fields `t2_basis`, `evidence_nature`; framework `evidence-tiers/2`. `pipeline.py`: route-specific T2 explanation, `tier_label`, `t2_basis`, `evidence_nature`. `evidence_review_audit.py` mirrors the rule. `service_claims.py`: guard skipped (and reported) when callers pass no facility names, for the website's current call.
+- **Result:** all 5,619 evidence pairs: T1 281 / T2 942 / T3 2,641 / R 1,754 / U 1 (was T2 77 / T3 3,506). Four validation queries: only 400001 dialysis changes (Lilavati T3→T2 corroborated, #9→#2).
+- **Tests:** 269 run, 268 pass, 1 error (SparkTests: pyspark). Simulated merge with origin/main a93dd99: same result; website `shape()` consumes the response but labels every T2 "Expired certification" (website change documented).
+
+### 2026-11-22 13:00: Tier policy revision: specialty training restored; revised framework proposed (Alice)
+- **Who:** Claude (for Alice). Uncommitted, for review.
+- **Production (`tiers.py`):** the 11:30 specialty-only exclusion is reverted at Alice's request; NMC/DNB training is again T3, now labelled as clinical expertise (`related_specialty`, explanation: not confirmation the service is offered). Kept: future/planned claim fix (`service-claims/2`), attribution guard (`service-claims/3`), `evidence_freshness`, `attribution` output. Snapshot re-baselines from 11:30 reverted. Ranking unchanged.
+- **Proposal (`experimental_tiers.py`, analysis only):** T1 current direct; T2 expired direct, NCG membership, NMC training for specialty-level services, or self-report corroborated by independent registry evidence; T3 self-report, training for procedure/unit services, undated DNB training, sanctioned trauma designation; `evidence_nature` operational/expertise.
+- **Result on all 5,619 evidence-bearing facility-service pairs (61 services):** production T1 281 / T2 77 / T3 3,506 / R 1,754 / U 1 → proposal T1 281 / T2 942 / T3 2,641 / R 1,754 / U 1 (865 T3→T2, no demotions).
+- **Tests:** 260 run, 259 pass, 1 error (SparkTests: pyspark).
+
+### 2026-11-22 09:00: Diagnosed suspicious Mumbai dialysis recommendations; fixed future-tense claim matching (Alice)
+- **Who:** Claude (for Alice).
+- **What:** `service_claims.py` → `service-claims/2`: claims stating a plan or future capability (`plans to`, `under construction`, `will be/open`, `being set up`, `to be set up/started…`) are skipped like negations (never counterevidence). Two regression tests in `tests/test_pipeline.py`.
+- **Why:** Municipal Hospital (Mumbai) was T3 for dialysis only from "Plans to convert into a 17-floor multispeciality hospital … including dialysis". 5 dialysis claims across the dataset were future-tense; "dialysis planning, initiation and maintenance" (clinical) stays matched.
+- **Result (local snapshot):** 400001 dialysis T3 56→55, U 641→642, Municipal Hospital leaves the top 5; 110001 dialysis/C-section and 600001 C-section unchanged. 251 tests: 250 pass, 1 error (SparkTests needs pyspark).
+- **Not code bugs (data quality, reported):** J J Eye Hospital and Saifee Hospital VF records are conflated with other facilities (claims describe a JJDB dialysis centre in Santacruz; Saifee's website/description are Prince Aly Khan Hospital); 10 Mumbai-area dialysis registry sites (9 Apex Kidney Care branches, Grant Medical College) are not linked to any facility by notebook 06. Live Databricks links (4,226) not available locally to compare with 4,482.
+
+### 2026-11-22 09:22: Website: evidence key stays visible next to the results
+- **Who:** Claude (for William)
+- **What:**
+  - `app/static/index.html`: an "Evidence key" panel (`#key`, a `<details>`) in the sidebar under the search form, with the six tiers, a short definition each, and a count.
+  - `app/static/app.js`: `updateKey()` shows the key after each search with the count per tier over all candidates (tiers with none are dimmed); `linkToKey()` highlights a card's or table row's tier in the key on hover or keyboard focus. Collapsed by default on narrow screens.
+  - `app/static/styles.css`: `.key*` styles. The sidebar now stretches to the results' height and only the key is sticky (the form was sticky before and scrolls with the page now).
+- **How:** edited the three files; checked with Playwright in live mode (Delhi C-section: counts T1 1, T2 0, T3 46, R 3, U 699, X 0; hovering a T3 table row highlights T3) at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a key that stays on screen; the tier definitions only appeared on the start screen and disappeared once results loaded.
+- **Tradeoff:** the full form no longer follows you down the page; pinning both didn't fit a 900 px-tall window and cut off the key.
+- **Deployed:** committed as 131c6ec, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e68050c21f028dc60446ca1b9703 SUCCEEDED); the live page serves the key.
+
+### 2026-11-22 09:05: Website: "Data sources and references" section
+- **Who:** Claude (for William)
+- **What:** `app/static/index.html`: a numbered references list in the footer (`#references`, entries `#ref-1`…`#ref-12`) replaces the one-line source sentence; a "Data sources and references" link under the intro jumps to it. `app/static/styles.css`: `.refs*` and `.lede__refs` styles.
+- **How:** William's 11 references (IEEE style) as given, each with a "Used for" line that says honestly how the app uses it. NQAS [3], Kayakalp [4] and NFHS-5 [5] are marked "the data pipeline only; not yet used in results". Added [12] Meta Llama 3.3 70B Instruct (the AI explainer, via Databricks Foundation Model APIs). Checked with Playwright at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a references window or footer listing every dataset used. All 11 match the sources in `docs/data-sources.md`; the explainer model was the only thing missing, since its text appears on the page.
+- **Deployed:** committed as fae884c, pushed to `origin/website_finalization`, redeployed William's app `find-the-right-care` (deployment 01f1e67e313f1d3faae946b348aa332a SUCCEEDED); the live page serves all 12 references.
+
+### 2026-11-22 08:41: Website brought up to date with Alice's `evidence_confidence` on main (claims, review decisions, radius rule)
+- **Who:** Claude (for William)
+- **What:** new branch `website_finalization` from `main` @ 8a2c8d3 (PR #19).
+  - `app/evidence_confidence/`: re-copied unchanged from main's `evidence_confidence/` (last commit c5f1586). `app/EVIDENCE_CONFIDENCE_VERSION` now records `source_branch: main`, commit c5f1586e…, and how to update from main.
+  - `app/backend/geography.py` `nearby_facilities()`: Alice's and notebook 07's radius rule. `distance_min_km = max(distance_km - location_uncertainty_km, 0) <= radius` (was `distance_km <= radius`); bounding box widened by the largest `location_uncertainty_km` (cached `max_uncertainty_km()`); `distance_min_km` returned.
+  - `app/backend/engine.py`:
+    - `load_claims()` reads `silver_facility_claims` (fields specialties / capability / procedure / equipment, coarse `claim_norm` prefilter that is a superset of her patterns) for services in her `CLAIM_PATTERNS`. `claim_evidence()` turns them into self-reported Evidence (T3 cap) added to the registry evidence.
+    - `load_reviews()` reads `registry_match_review` rows with a `reviewer_decision`, passed to `adapt_registry_tables(reviews=)`.
+    - `distance_min_km` passed to `build_recommendation_response`; the adapter report now includes `claim_mapping` and row counts for reviews and claims.
+    - Display: claims shown as "Listed under procedures: “…”" with source "Facility's own listing (Virtue Foundation dataset)"; cards with only self-reported T3 say so and get `self_reported_only`; the C-section qualifier `CLAIM_DOES_NOT_STATE_EMERGENCY` becomes a warning; facilities kept by the uncertainty rule say why they're outside the radius; two new auditor strings from her package mapped; R cards no longer also say "no record was found".
+  - `app/main.py`: provisional note says claims count for dialysis and C-section. `app/static/app.js`: T3 stamp reads "Self-reported" when only claims support it.
+  - `app/README.md`, `CLAUDE.md`: tables read, call sequence, update steps from main, answered questions.
+- **How:** `git archive HEAD evidence_confidence | tar -x -C app` (checked identical with `diff -rq`); ran her tests on main (228 pass, 18 skipped, 1 unrelated error: `scripts/kayakalp_pdf_to_csv.py` needs `pdfplumber`). Local app in live mode against warehouse 280169f53e6a2de0: 7 searches, adapter PASS on all; Playwright screenshots of 3 searches, no console errors.
+- **Why:** Alice's PR #19 added the claim mapping, review-decision support and a handoff list for the website (`docs/recommendation-pipeline.md`): radius rule, `distance_min_km`, selection policy. William asked to bring the website up to date with it and to count C-section claims for now.
+- **Result (live tables, 50 km unless noted):**
+
+  | Search | Before | Now |
+  |---|---|---|
+  | Patna 800020 dialysis | T3 1 | T3 30 (claims) |
+  | Chennai 600001 dialysis | | T3 34, R 2 |
+  | Delhi 110001 C-section | T1 1, T3 0 | T1 1, T3 46, R 3 |
+  | Patna C-section, emergency | 5 unconfirmed | 11 T3 unconfirmed |
+  | Mumbai 400001 blood bank, 25 km | T1 Lilavati | unchanged (no claim mapping) |
+
+  The radius rule adds 2–12 candidates per search (110001: 12, matching Alice's measurement).
+- **Tradeoffs / decisions:**
+  - C-section claims count for `emergency_c_section` (William's call; Alice flagged it for the team). Each such card warns that the claim doesn't state emergency availability.
+  - Kept the app's own SQL loading instead of her `recommend_facilities()`, which reads a local CSV bundle that a Databricks App doesn't have.
+  - Kept Sophia's selection policy (top 3, filled in her order) rather than her ranks 1..K; noted in `app/README.md` as a team decision.
+- **Deployed:** committed as f7ecedf and pushed to `origin/website_finalization`, then redeployed William's app `find-the-right-care` (`databricks sync --full`, `apps start`, `apps deploy`; deployment 01f1e67bd62e1e628f474bb74d26086b SUCCEEDED). The live `/api/health` reports `evidence_confidence@c5f1586`; Patna dialysis returns 161 candidates, 30 T3 from claims, adapter PASS.
+- **Notes / follow-ups:** `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
 
 ### 2026-11-22 05:00: Backend final validation (Alice)
 - **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
@@ -103,6 +172,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **How:** Replaced the hand-run dependency on `facility_geo_ready` with a fresh rebuild, and changed radius matching to include facilities whose uncertainty-adjusted closest distance is within the requested radius while retaining measured distance and uncertainty columns.
 - **Why:** A fresh pipeline could not build or run the nearby-facility app, and the previous radius filter ignored coordinate uncertainty.
 - **Notes / follow-ups:** Rerun setup_pipeline and the 00–07 Job on Databricks to recreate `facility_geo_ready`; verify step 07 with a PIN and radius before merging.
+
 ### 2026-11-22 07:44: App title in DM Sans with a real italic "right"
 - **Who:** Claude (for Sophia)
 - **What:** `app/static/index.html` loads DM Sans 700 (roman and italic) from Google Fonts. In `app/static/styles.css`, the `h1` uses DM Sans and `h1 em` is italic again. Redeployed `find-the-right-care`.
