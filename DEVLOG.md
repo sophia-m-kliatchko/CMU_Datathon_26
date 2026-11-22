@@ -22,6 +22,44 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 00:52: End-to-end Databricks run (00 → 07) with main's notebooks + the 06 kind-of-place fix
+- **Who:** Claude (for William)
+- **What:**
+  - New workspace folder `/Users/<William>/e2e/CMU_Datathon_26`: main @ 73facd8's notebooks and input CSVs, plus this branch's `06_registry_matching.py` and Elliot's `notebooks/common/pin_nearby_facilities.py` copied as `notebooks/07_pin_nearby_facilities`.
+  - Helper notebook `/Users/<William>/e2e/00b_load_missing_bronze`: the bronze section of `setup_pipeline.py`, verbatim. It created the missing `facilities` and `nqas_certified_facilities` bronze tables; existing tables were kept.
+  - New job 681912826573850, "E2E check: 00-07 from main + 06 kind fix": tasks bronze → 00 → 01 → 02 → 03 → 04 → 05 → 06 → 07 on serverless, using the same parameters as `setup_pipeline.py`.
+  - The app `find-the-right-care` had stopped (the compute stops when idle on Free Edition), so I restarted and redeployed it from the same workspace code (`website` 71c20c1).
+- **How:** `databricks workspace import-dir`, `jobs create`, `jobs run-now` (run 218502582054949). The outputs were then checked through the SQL warehouse.
+- **Why:** Verify the whole pipeline end to end on the real datasets, including `facility_geo_ready` (07) and the website on fresh tables.
+- **Results:**
+  - Every task succeeded (about 8 minutes of compute).
+  - Validations passed: facilities 13/13, pincode 12/12, nqas 8/8, nfhs 7/7, facility_geo_ready 7/7.
+  - Row counts: `facilities` bronze 10,088; `facilities_silver` 9,989; `facility_geo_ready` 9,989 (8,350 high, 1,634 PIN centroid, 5 none), all IDs in `facilities_silver`; `registry_sites_silver` 24,961; `registry_services_silver` 22,757; `nqas_silver` 989; `nfhs_silver` 705.
+  - `facility_registry_links_silver`: 4,226 links (4,241 before; 15 rejected by the kind check). 1,197 need review, 165 of them because of the kind check.
+  - "Blood Bank, LBS Hospital" and Government Dental College Raipur are now review links. Kasturba Hospital ↔ Kasturba Hospital Blood Bank stays automatic.
+  - Deployed website on the fresh tables, adapter PASS on each search:
+    - Delhi C-section (100 km): T1 1, T3 3, R 3, U 854. The LBS blood bank moved from T2 to R.
+    - Patna dialysis: IGIMS T3.
+    - Mumbai blood bank (25 km): Lilavati T1.
+- **Notes / follow-ups:** The job and the e2e folder are a one-off check, separate from Sophia's "CMU Datathon pipeline 00-06" job; delete them after Elliot adds 07 to the pipeline. The 06 fix is still uncommitted on `Will_branch`.
+
+### 2026-11-22 00:15: Notebook 06: kind-of-place check for registry matches
+- **Who:** Claude (for William)
+- **What:** `notebooks/06_registry_matching.py` and `docs/registries-silver.md`. Added `KIND_PATTERNS` (dental, eye, blood bank, diagnostics/lab, dialysis, fertility, physiotherapy), `DEPARTMENT_KINDS`, `kinds()`, and the `kind_conflict` / `kind_mismatch` columns:
+  - Both names name kinds and share none: candidate rejected.
+  - The facility names a kind the registry name lacks, or the registry name adds a specialty (eye, dental, fertility, physiotherapy): score capped below the link threshold, so the link goes to review. The review reason names both kinds.
+  - The registry name only adds a department (blood bank, dialysis, diagnostics/lab): unchanged.
+- **How:**
+  - Found by the web app: "Blood Bank, Lal Bahadur Shastri Hospital" was auto-linked (score 98.8) to LBS Hospital's LaQshya maternity OT certificate.
+  - Queried the 4,241 live links. 248 had a kind word on one side only. Auto-accepted ones included Government Dental College Raipur → Pt. JNM Medical College (24 service rows) and Narayana Dental College → Narayana Medical College (27).
+  - Simulated the final rule on those links: 61 auto links go to review and 15 pairs are rejected, all of them clearly different places.
+  - Tested the Spark expressions on 8 sample pairs with local PySpark; `py_compile` passes.
+- **Why:**
+  - A department or specialist clinic was inheriting a whole hospital's registry evidence (and so its tiers in the app) with no review.
+  - Matching hospital departments in the registry (e.g. "Kasturba Hospital Blood Bank") stay automatic, because the hospital runs them.
+  - The rule is direction-aware, so true hospital ↔ blood-bank links aren't lost.
+- **Notes / follow-ups:** Not yet run on Databricks. Rerun notebook 06 to update `facility_registry_links_silver`, `facility_registry_summary_silver` and `registry_match_review`. The app reads the links live, so it picks up the change without a redeploy.
+
 ### 2026-11-22 00:00: Redeployed the Databricks App with Alice's engine
 - **Who:** Claude (for William)
 - **What:** Databricks App `find-the-right-care` redeployed from `website` commit 71c20c1 (evidence and ranking by `evidence_confidence@2368382`).
