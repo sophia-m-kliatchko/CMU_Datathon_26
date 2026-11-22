@@ -2,12 +2,12 @@
 Find the Right Care: web app over the team's Databricks pipeline.
 
 Request flow (matches the team's end-to-end diagram):
-  1. Geography  (Elliot)          PIN -> centre -> all facilities within the radius   [backend/geography.py]
-  2. Evidence   (evidence engine) tier + flags + citations per facility x service     [backend/evidence.py]
-     LEFT JOIN on facility_id: facilities with no evidence stay in as tier U
-  3. Rank the complete candidate set (model team; placeholder for now)                [backend/ranking.py]
-  4. Only then select the top 3-5 and nearby alternatives
-  5. Optional AI explainer per recommendation                                          [backend/explain.py]
+  1. Geography  (Elliot)   PIN -> centre -> all facilities within the radius             [backend/geography.py]
+  2. Evidence + ranking    Alice's evidence_confidence package: tiers from the registry   [backend/engine.py]
+     rows, LEFT JOIN (no evidence = U), ranks the complete candidate set
+     (fallback: EVIDENCE_PROVIDER=placeholder uses backend/evidence.py + backend/ranking.py)
+  3. Only then select the top 3-5 and nearby alternatives
+  4. Optional AI explainer per recommendation                                             [backend/explain.py]
 
 Run locally:  see app/README.md.   On Databricks: deployed as a Databricks App (app.yaml).
 """
@@ -26,10 +26,21 @@ from backend.geography import PinError
 if config.DATA_MODE == "mock":
     from backend import mock as geo
     EVIDENCE = geo.MockEvidence()
+    USE_ENGINE = False
 else:
     from backend import geography as geo
-    EVIDENCE = get_provider()
+    USE_ENGINE = config.EVIDENCE_PROVIDER == "evidence_confidence"
+    EVIDENCE = None if USE_ENGINE else get_provider()
 RANKER = ranking.get_ranker()
+if USE_ENGINE:
+    from backend import engine
+
+PROVIDER_NAME = engine.NAME if USE_ENGINE else EVIDENCE.name
+RANKER_NAME = engine.NAME if USE_ENGINE else RANKER.name
+PROVISIONAL_NOTE = (
+    "Evidence levels come from the team's evidence engine, using registry records only: facilities' own "
+    "claims aren't counted yet, and the ranking settings are still provisional." if USE_ENGINE else
+    "The evidence engine and ranking model aren't connected; tiers and order here come from placeholders.")
 
 STATIC = Path(__file__).parent / "static"
 app = FastAPI(title="Find the Right Care", version="0.1.0")
@@ -58,8 +69,9 @@ def index():
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "data_mode": config.DATA_MODE, "evidence_provider": EVIDENCE.name,
-            "ranker": RANKER.name, "explainer": config.LLM_ENDPOINT if config.EXPLAINER_ENABLED else None}
+    return {"ok": True, "data_mode": config.DATA_MODE, "evidence_provider": PROVIDER_NAME,
+            "ranker": RANKER_NAME, "explainer": config.LLM_ENDPOINT if config.EXPLAINER_ENABLED else None,
+            "provisional": True, "provisional_note": PROVISIONAL_NOTE}
 
 
 @app.get("/api/services")
@@ -75,12 +87,17 @@ def pin(pincode: str):
         raise HTTPException(status_code=422, detail=str(e))
 
 
-def _warnings(c):
+def _geo_warnings(c):
     w = []
     if c["geo_confidence"] == "approximate_pin_centroid":
         w.append(f"Location is only known to its PIN code (about ±{float(c.get('location_uncertainty_km') or 2):.0f} km).")
     elif c["geo_confidence"] == "medium_low_precision":
         w.append("Location is approximate (about ±1 km).")
+    return w
+
+
+def _warnings(c):
+    w = _geo_warnings(c)
     flag_text = {
         "MATCH_NEEDS_REVIEW": "A registry record was matched to this facility by name and place, but the match "
                               "hasn't been confirmed.",
@@ -133,6 +150,11 @@ def recommend(req: RecommendRequest):
 
     # 1. Geography: every candidate in the radius (no truncation by service yet)
     cands = geo.nearby_facilities(origin["latitude"], origin["longitude"], req.radius_km, config.MAX_CANDIDATES)
+    query = {"service": req.service, "service_label": services.BY_TAG[req.service]["label"],
+             "pincode": origin["pincode"], "radius_km": req.radius_km, "urgency": req.urgency,
+             **services.best(req.service)}
+    if USE_ENGINE:
+        return _recommend_engine(req, origin, cands, query)
     # 2. Evidence: LEFT JOIN; missing = tier U
     ev = EVIDENCE.get_evidence([c["facility_id"] for c in cands], req.service)
     for c in cands:
@@ -146,16 +168,49 @@ def recommend(req: RecommendRequest):
     for c in cands:
         tiers[c["tier"]] = tiers.get(c["tier"], 0) + 1
     return {
-        "query": {"service": req.service, "service_label": services.BY_TAG[req.service]["label"],
-                  "pincode": origin["pincode"], "radius_km": req.radius_km, "urgency": req.urgency},
+        "query": query,
         "origin": origin,
         "n_candidates": len(cands),
         "candidates_capped": len(cands) >= config.MAX_CANDIDATES,
         "tier_counts": tiers,
+        "mode": "routine" if req.urgency == "routine" else "urgent",
         "recommendations": [_shape(c, req.service) for c in top],
+        "unconfirmed": [],
         "alternatives": [_shape(c, req.service) for c in alternatives],
-        "provenance": {"data_mode": config.DATA_MODE, "evidence_provider": EVIDENCE.name, "ranker": RANKER.name,
-                       "placeholder": EVIDENCE.name != "table" or RANKER.name == "placeholder"},
+        "provenance": {"data_mode": config.DATA_MODE, "evidence_provider": PROVIDER_NAME, "ranker": RANKER_NAME,
+                       "placeholder": True},
+    }
+
+
+CALL_AHEAD = "Availability today is not confirmed. Call ahead before travelling."
+
+
+def _recommend_engine(req, origin, cands, query):
+    """Evidence + ranking by Alice's package; the app only reshapes and selects for display."""
+    response, report = engine.evaluate(cands, req.service, origin["pincode"], req.radius_km, req.urgency)
+    top, unconfirmed, alternatives, counts = engine.shape(response, cands, TIER_LABEL, config.TOP_N,
+                                                         config.ALTERNATIVES_N)
+    by_id = {c["facility_id"]: c for c in cands}
+    for f in top + unconfirmed + alternatives:
+        c = {**by_id.get(f["facility_id"], {}), "geo_confidence": f["geo_confidence"]}
+        f["geo_label"] = GEO_LABEL.get(f["geo_confidence"], f["geo_confidence"])
+        f["warnings"] = _geo_warnings(c) + f.pop("explanation_warnings") + [CALL_AHEAD]
+    return {
+        "query": query,
+        "origin": origin,
+        "n_candidates": len(cands),
+        "candidates_capped": len(cands) >= config.MAX_CANDIDATES,
+        "tier_counts": counts,
+        "mode": response["request"]["mode"],
+        "recommendations": top,
+        "unconfirmed": unconfirmed,
+        "alternatives": alternatives,
+        "notes": response["warnings"],
+        "provenance": {"data_mode": config.DATA_MODE, "evidence_provider": PROVIDER_NAME, "ranker": RANKER_NAME,
+                       "placeholder": False, "provisional": response["provisional"],
+                       "status": response["status"], "contract_version": response["contract_version"],
+                       "framework_version": response["framework_version"], "as_of": response["request"]["as_of"],
+                       "ranking_config": response["ranking_config"], "adapter": report},
     }
 
 

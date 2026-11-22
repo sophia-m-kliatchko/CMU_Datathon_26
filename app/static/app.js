@@ -6,7 +6,8 @@
   const pinInput = $("#pincode");
   const pinStatus = $("#pin-status");
   const urgency = $("#urgency");
-  const TIER_LABEL = { T1: "Strong", T2: "Moderate", T3: "Self-reported", R: "Registry only", U: "No evidence", X: "Contradicted" };
+  const TIER_LABEL = { T1: "Current cert.", T2: "Expired cert.", T3: "Indirect", R: "Under review", U: "No evidence", X: "Contradicted" };
+  const SERVICES = {};
   const TIER_COLOR = { T1: "var(--t1)", T2: "var(--t2)", T3: "var(--t3)", R: "var(--tr)", U: "var(--tu)", X: "var(--tx)" };
 
   const el = (tag, attrs = {}, ...kids) => {
@@ -34,8 +35,15 @@
     try {
       const { services } = await api("/api/services");
       const sel = $("#service");
+      services.forEach(s => { SERVICES[s.tag] = s; });
       sel.replaceChildren(el("option", { value: "", text: "Select a service…" }),
         ...services.map(s => el("option", { value: s.tag, text: s.label })));
+      sel.addEventListener("change", () => {
+        const s = SERVICES[sel.value];
+        $("#service-hint").textContent = !s ? "Choose the service, e.g. dialysis." :
+          s.best_tier === "T1" ? `Strongest possible evidence: T1, from ${s.best_source}.` :
+          `Strongest evidence available for this service is T3 (${s.best_source}). No source certifies it directly.`;
+      });
     } catch (e) {
       $("#service").replaceChildren(el("option", { value: "", text: "Couldn't load services" }));
     }
@@ -43,11 +51,11 @@
       const h = await api("/api/health");
       $("#status").textContent = `data: ${h.data_mode} · evidence: ${h.evidence_provider} · ranking: ${h.ranker}` +
         (h.explainer ? ` · explainer: ${h.explainer}` : " · explainer: off");
-      const placeholder = h.evidence_provider !== "table" || h.ranker === "placeholder";
+      if (h.provisional_note) $("#provisional-text").textContent = h.provisional_note;
       if (h.data_mode === "mock") {
         $("#provisional-text").textContent = "Demo mode: the facilities below are made up and only illustrate the layout.";
       }
-      $("#provisional").hidden = !(placeholder || h.data_mode === "mock");
+      $("#provisional").hidden = !(h.provisional || h.data_mode === "mock");
     } catch (_) { /* leave defaults */ }
   }
 
@@ -124,18 +132,34 @@
     frag.append(bar, el("p", { class: "tierbar__legend" },
       ...order.filter(t => d.tier_counts[t]).map(t => el("span", {}, el("span", { class: `tier tier--${t}`, text: t }), ` ${d.tier_counts[t]}`))));
 
-    if (!d.recommendations.length) {
+    if (q.best_tier === "T3") {
+      frag.append(el("p", { class: "notes notes--info", text:
+        `For ${q.service_label.toLowerCase()}, the strongest evidence any source gives is T3 (${q.best_source}). ` +
+        "No registry certifies this service directly, so T3 here is the best available, not a poor result." }));
+    }
+    const urgent = d.mode === "urgent";
+    if (!d.recommendations.length && urgent) {
       frag.append(el("div", { class: "error", role: "status" },
-        el("strong", { text: "No facility nearby has evidence for this service. " }),
-        "Try a larger radius. The nearest facilities are listed below, but nothing indicates they offer it."));
+        el("strong", { text: "No facility here has a confirmed emergency-capability record, so none is recommended for an emergency. " }),
+        "No source provides that record yet. Facilities are listed by distance instead; confirm by phone before travelling."));
+    } else if (!d.recommendations.length) {
+      frag.append(el("div", { class: "error", role: "status" },
+        el("strong", { text: "No facility nearby has documentary evidence for this service. " }),
+        "Try a larger radius. The nearest facilities are listed below, but no record shows they offer it."));
     }
     d.recommendations.forEach((r, i) => frag.append(card(r, i, q.service)));
-    if (d.alternatives.length) frag.append(alternatives(d.alternatives));
+    if (d.unconfirmed && d.unconfirmed.length) {
+      frag.append(el("h3", { class: "section-title", text: "Nearest facilities, emergency capability not confirmed" }),
+        el("p", { class: "section-note", text: "These have documentary evidence for this service, nearest first. Being listed doesn't mean they can take an emergency now." }));
+      d.unconfirmed.forEach((r, i) => frag.append(card(r, i, q.service, true)));
+    }
+    if (d.alternatives.length) frag.append(alternatives(d.alternatives, urgent));
     results.replaceChildren(frag);
   }
 
-  function card(r, i, service) {
+  function card(r, i, service, listedOnly) {
     const node = $("#card-tpl").content.firstElementChild.cloneNode(true);
+    if (listedOnly) $(".why summary", node).textContent = "Why is this listed?";
     node.style.animationDelay = `${i * 70}ms`;
     $(".card__rank", node).textContent = String(i + 1);
     $(".card__name", node).textContent = r.facility_name;
@@ -154,7 +178,8 @@
     for (const e of r.evidence) {
       const src = el("span", { class: "src" }, e.source || "");
       if (e.url && /^https?:\/\//i.test(e.url)) { src.append(" · "); src.append(el("a", { href: e.url, target: "_blank", rel: "noopener noreferrer", text: "source" })); }
-      if (e.match && e.match.needs_review) src.append(" · match unconfirmed");
+      if (e.status && e.status !== "counted") src.append(` · ${e.status}`);
+      else if (!e.status && e.match && e.match.needs_review) src.append(" · match unconfirmed");
       ledger.append(el("li", {},
         el("span", { class: `kind ${e.kind === "self_reported" ? "kind--self" : ""}`, title: e.kind === "self_reported" ? "Facility's own listing" : "Independent registry",
           text: e.kind === "self_reported" ? "SELF" : "REG" }),
@@ -182,14 +207,14 @@
     return node;
   }
 
-  function alternatives(list) {
+  function alternatives(list, urgent) {
     const rows = list.map(a => el("tr", {},
       el("td", {}, el("span", { class: `tier tier--${a.tier}`, text: a.tier, title: a.evidence_level })),
       el("td", {}, el("strong", { text: a.facility_name }), el("br"), el("span", { text: a.location })),
       el("td", { class: "num", text: `${Number(a.distance_km).toFixed(1)} km` }),
       el("td", { text: a.geo_label })));
     return el("section", { class: "alts", "aria-labelledby": "alts-title" },
-      el("h3", { id: "alts-title", text: "Nearby alternatives" }),
+      el("h3", { id: "alts-title", text: urgent ? "Other nearby facilities" : "Nearby alternatives" }),
       el("table", {},
         el("thead", {}, el("tr", {}, el("th", { text: "Tier" }), el("th", { text: "Facility" }), el("th", { text: "Distance" }), el("th", { text: "Location" }))),
         el("tbody", {}, ...rows)));

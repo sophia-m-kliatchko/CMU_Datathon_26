@@ -236,3 +236,8 @@ select:focus, input:focus { outline: none; border-color: var(--accent); box-shad
   .card { animation: none; opacity: 1; transform: none; }
   .skeleton { animation: none; }
 }
+
+/* Notes and section headings used with the evidence engine (per-service ceiling, urgent mode) */
+p.notes--info { font-size: 14.5px; color: var(--ink-2); background: #eef1ef; border-left: 3px solid var(--ink-3); padding: 8px 12px; border-radius: 6px; }
+.section-title { font-family: "Newsreader", Georgia, serif; font-weight: 600; font-size: 22px; margin: 28px 0 4px; }
+.section-note { margin: 0 0 14px; color: var(--ink-2); font-size: 15px; }

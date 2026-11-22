@@ -22,6 +22,43 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:51: Web app wired to Alice's evidence_confidence package
+- **Who:** Claude (for William)
+- **What:**
+  - `app/evidence_confidence/` (new): Alice's package copied unchanged from `alice-evidence-confidence` at commit 2368382. `app/EVIDENCE_CONFIDENCE_VERSION` records the commit and how to update it.
+  - `app/backend/engine.py` (new):
+    - loads the links, sites and service rows (one service) for the candidate facilities;
+    - drops service rows from empanelment or general-accreditation sites;
+    - calls her `silver.adapt_registry_tables()` and `build_recommendation_response()`;
+    - reshapes her response for the page: plain-language warnings, evidence items with "counted" / "match under review", per-facility ranking text, and urgent-mode grouping.
+  - `app/main.py`: `EVIDENCE_PROVIDER=evidence_confidence` (new default) routes searches through `engine.py`; health reports the package commit and a provisional note.
+  - `app/backend/config.py`, `app.yaml`: new default; `EVIDENCE_TABLE` and `RANKER` settings removed from `app.yaml`.
+  - `app/backend/evidence.py`: removed `TableEvidence` (gold-table plan dropped); tier labels follow Alice's definitions; the placeholder stays as a fallback and for mock mode.
+  - `app/backend/services.py`: `best_tier` per service (T1 possible for C-section, obstetrics, dialysis, blood bank, emergency, stroke and eye care; T3 at most for NICU, ICU, trauma, cancer and cardiac care).
+  - `app/static/*`: new legend (Alice's tiers, her R wording), service hint and results note on the best possible tier, urgent section "Nearest facilities, emergency capability not confirmed", evidence status labels.
+  - `app/README.md`, `CLAUDE.md`: describe the built integration.
+- **How:**
+  - Ran her tests at 2368382 in a separate worktree: 193 pass, 2 skipped.
+  - Tested live against `workspace.datathon`:
+    - Delhi C-section within 100 km: 861 candidates, T1 1 / T2 1 / T3 3 / R 2 / U 854;
+    - Patna C-section, emergency: 0 recommended, 5 T3 cards;
+    - Delhi ICU within 25 km: T3 2, R 2.
+    - Her adapter report was PASS in each; about 1–1.6 s per search.
+  - Checked the explainer, mock mode, and Playwright screenshots (no console errors).
+- **Why:**
+  - The team computes evidence and ranking per request in Alice's package instead of gold tables. A Databricks App only uploads `app/`, so the package is copied in at a fixed commit.
+  - Following Alice's answers:
+    - emergency maps to her urgent mode;
+    - capability eligibility is never invented;
+    - sites are passed so their flags count;
+    - service rows from empanelment and general-accreditation sites are filtered out.
+  - The display only filters her order, without re-scoring or re-sorting.
+- **Notes / follow-ups:**
+  - Self-reported claims aren't counted (no reviewed claim-to-service matcher yet), so most facilities are U.
+  - Urgent searches recommend nothing until an emergency-capability source exists.
+  - Notebook 06 linked "Blood Bank, Lal Bahadur Shastri Hospital" to LBS Hospital's LaQshya certificate (a name-match issue to review in 06).
+  - Not yet redeployed to Databricks.
+
 ### 2026-11-21 23:28: Test deploy of the web app as a Databricks App
 - **Who:** Claude (for William)
 - **What:**

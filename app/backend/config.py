@@ -1,10 +1,10 @@
 """
 App settings, all from environment variables (set in app.yaml on Databricks, or in your shell locally).
 
-The three "plug-in points" the model/evidence teams will replace are chosen here:
-  EVIDENCE_PROVIDER  placeholder | table   which evidence engine the app reads
-  RANKER             placeholder           how candidates are ordered (model team's ranker goes here)
-  DATA_MODE          live | mock           live = query Databricks; mock = canned demo data, no Databricks needed
+  EVIDENCE_PROVIDER  evidence_confidence | placeholder
+                     evidence_confidence = Alice's package does tiers AND ranking (backend/engine.py; default)
+                     placeholder         = the app's own provisional tiers + ranker (fallback for demos)
+  DATA_MODE          live | mock   live = query Databricks; mock = canned demo data (always uses the placeholder)
 """
 
 import os
@@ -20,11 +20,8 @@ SCHEMA = _env("APP_SCHEMA", "datathon")
 WAREHOUSE_ID = _env("DATABRICKS_WAREHOUSE_ID", "")
 
 DATA_MODE = _env("DATA_MODE", "live")                     # live | mock
-EVIDENCE_PROVIDER = _env("EVIDENCE_PROVIDER", "placeholder")  # placeholder | table
-RANKER = _env("RANKER", "placeholder")
-
-# Contract table for the evidence engine (owned by a teammate). Used when EVIDENCE_PROVIDER=table.
-EVIDENCE_TABLE = _env("EVIDENCE_TABLE", "facility_service_evidence_gold")
+EVIDENCE_PROVIDER = _env("EVIDENCE_PROVIDER", "evidence_confidence")  # evidence_confidence | placeholder
+RANKER = _env("RANKER", "placeholder")  # only used with EVIDENCE_PROVIDER=placeholder
 
 # Optional AI explainer (Databricks Foundation Model API). Empty = explainer off.
 LLM_ENDPOINT = _env("LLM_ENDPOINT", "databricks-meta-llama-3-3-70b-instruct")

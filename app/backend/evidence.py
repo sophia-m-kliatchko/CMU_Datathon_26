@@ -1,7 +1,9 @@
 """
 Evidence step: for each candidate facility and the requested service, return a tier, flags and citations.
 
-PLUG-IN POINT. The real evidence engine is being built by a teammate. Two providers share one interface:
+FALLBACK ONLY. The real evidence and ranking come from Alice's package (backend/engine.py,
+EVIDENCE_PROVIDER=evidence_confidence). This placeholder stays for demos and mock mode
+(EVIDENCE_PROVIDER=placeholder), with this interface:
 
   get_evidence(facility_ids: list[str], service: str) -> dict[facility_id -> Evidence]
 
@@ -10,14 +12,10 @@ PLUG-IN POINT. The real evidence engine is being built by a teammate. Two provid
     "flags": [str],                 # e.g. "MATCH_NEEDS_REVIEW", "CERTIFICATION_EXPIRED"
     "items": [ {"kind": "self_reported" | "registry", "text": str, "source": str, "url": str | None,
                 "current": bool | None} ],
-    "provider": "placeholder" | "table",
+    "provider": "placeholder",
   }
   Facilities missing from the dict are treated as tier "U" (no evidence), per the pipeline diagram
   ("LEFT JOIN on canonical facility ID + service; retain facilities with no evidence as U").
-
-EVIDENCE_PROVIDER=table reads the teammate's contract table (config.EVIDENCE_TABLE), expected columns:
-  facility_id STRING, service STRING, tier STRING, flags ARRAY<STRING>,
-  evidence_text ARRAY<STRING>, source_urls ARRAY<STRING>
 
 The PLACEHOLDER tiers are provisional and only for building/demoing the interface:
   T1  facility claims the service AND a confidently matched registry certifies/designates that exact
@@ -33,9 +31,10 @@ The PLACEHOLDER tiers are provisional and only for building/demoing the interfac
 from . import config, db, services
 
 TIER_ORDER = {"T1": 0, "T2": 1, "T3": 2, "R": 3, "U": 4, "X": 5}
+# Labels follow Alice's tier definitions (app/evidence_confidence/TIERS.md).
 TIER_LABEL = {
-    "T1": "Strong evidence", "T2": "Moderate evidence", "T3": "Self-reported only",
-    "R": "Registry only", "U": "No evidence found", "X": "Contradicted",
+    "T1": "Current certification", "T2": "Expired certification", "T3": "Indirect or self-reported",
+    "R": "Match under review", "U": "No evidence found", "X": "Contradicted",
 }
 
 
@@ -115,28 +114,5 @@ class PlaceholderEvidence:
         return out
 
 
-class TableEvidence:
-    name = "table"
-
-    def get_evidence(self, facility_ids, service):
-        if not facility_ids:
-            return {}
-        rows = db.query(
-            f"""SELECT facility_id, tier, flags, evidence_text, source_urls
-                FROM {config.t(config.EVIDENCE_TABLE)}
-                WHERE service = :svc AND array_contains(split(:ids, ','), facility_id)""",
-            {"svc": service, "ids": _ids_param(facility_ids)})
-        out = {}
-        for r in rows:
-            texts, urls = db.as_list(r["evidence_text"]), db.as_list(r["source_urls"])
-            items = [{"kind": "registry", "text": t, "source": "Evidence engine",
-                      "url": urls[i] if i < len(urls) else None, "current": None} for i, t in enumerate(texts)]
-            out[r["facility_id"]] = {"tier": r["tier"] if r["tier"] in TIER_ORDER else "U",
-                                     "flags": db.as_list(r["flags"]), "items": items, "provider": self.name}
-        return out
-
-
 def get_provider():
-    if config.EVIDENCE_PROVIDER == "table":
-        return TableEvidence()
     return PlaceholderEvidence()
