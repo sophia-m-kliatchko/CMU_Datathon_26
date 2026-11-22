@@ -22,6 +22,12 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:05: Website: "Data sources and references" section
+- **Who:** Claude (for William)
+- **What:** `app/static/index.html`: a numbered references list in the footer (`#references`, entries `#ref-1`…`#ref-12`) replaces the one-line source sentence; a "Data sources and references" link under the intro jumps to it. `app/static/styles.css`: `.refs*` and `.lede__refs` styles.
+- **How:** William's 11 references (IEEE style) as given, each with a "Used for" line that says honestly how the app uses it. NQAS [3], Kayakalp [4] and NFHS-5 [5] are marked "the data pipeline only; not yet used in results". Added [12] Meta Llama 3.3 70B Instruct (the AI explainer, via Databricks Foundation Model APIs). Checked with Playwright at 1360 px and 390 px, no console errors.
+- **Why:** William asked for a references window or footer listing every dataset used. All 11 match the sources in `docs/data-sources.md`; the explainer model was the only thing missing, since its text appears on the page.
+
 ### 2026-11-22 08:41: Website brought up to date with Alice's `evidence_confidence` on main (claims, review decisions, radius rule)
 - **Who:** Claude (for William)
 - **What:** new branch `website_finalization` from `main` @ 8a2c8d3 (PR #19).

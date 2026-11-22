@@ -18,7 +18,8 @@
       <p class="eyebrow">Virtue Foundation · India facility evidence</p>
       <h1>Find the <em>right</em> care</h1>
       <p class="lede">Tell us the care you need and where you are. We show nearby facilities that say they offer it,
-        how strong the independent evidence is, and exactly where each claim comes from.</p>
+        how strong the independent evidence is, and exactly where each claim comes from.
+        <a class="lede__refs" href="#references">Data sources and references</a></p>
     </div>
     <div id="provisional" class="provisional" role="note" hidden>
       <strong>Provisional results.</strong>
@@ -102,9 +103,27 @@
   </main>
 
   <footer class="colophon">
-    <p>Built on Databricks for the CMU Datathon 2026 “Find the Right Care” challenge. Sources: Virtue Foundation facility
-      records; India Post PIN directory; NMC, NBEMS/DNB, LaQshya, MoHFW trauma programme, National Cancer Grid and NABH
-      registries. A listing is evidence, not a guarantee. Always confirm with the facility.</p>
+    <section id="references" class="refs" aria-labelledby="refs-title" tabindex="-1">
+      <h2 id="refs-title" class="refs__title">Data sources and references</h2>
+      <p class="refs__intro">Every tier and piece of evidence on this page comes from these sources, matched to facilities
+        by our pipeline. Registry evidence on each card also links to the source it came from.</p>
+      <ol class="refs__list">
+        <li id="ref-1"><span class="refs__n">[1]</span><span class="refs__body">Virtue Foundation, “Virtue Foundation India Healthcare Facilities Dataset (DAIS 2026),” Databricks Marketplace, 2026. Accessed: Nov. 21, 2026.<span class="refs__use">facility names, locations and their own listed services (self-reported claims)</span></span></li>
+        <li id="ref-2"><span class="refs__n">[2]</span><span class="refs__body">Department of Posts, Ministry of Communications, Government of India, “All India Pincode Directory,” Open Government Data Platform India, 2026. [Online]. Available: <a href="https://data.gov.in/resource/all-india-pincode-directory-till-last-month" target="_blank" rel="noopener">https://data.gov.in/resource/all-india-pincode-directory-till-last-month</a>. Accessed: Nov. 21, 2026.<span class="refs__use">checking PIN codes, PIN centre points and distances</span></span></li>
+        <li id="ref-3"><span class="refs__n">[3]</span><span class="refs__body">National Health Systems Resource Centre, “NQAS Certified Facilities,” Ministry of Health and Family Welfare, Government of India, 2026. [Online]. Available: <a href="https://qps.nhsrcindia.org/nqas-facility-list" target="_blank" rel="noopener">https://qps.nhsrcindia.org/nqas-facility-list</a>. Accessed: Nov. 21, 2026.<span class="refs__use">the data pipeline only; not yet used in results</span></span></li>
+        <li id="ref-4"><span class="refs__n">[4]</span><span class="refs__body">National Health Systems Resource Centre, “List of Kayakalp Winner Facilities FY 2021-22,” Ministry of Health and Family Welfare, Government of India, 2024. [Online]. Available: <a href="https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf" target="_blank" rel="noopener">https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf</a>. Accessed: Nov. 21, 2026.<span class="refs__use">the data pipeline only; not yet used in results</span></span></li>
+        <li id="ref-5"><span class="refs__n">[5]</span><span class="refs__body">International Institute for Population Sciences (IIPS) and ICF, “National Family Health Survey (NFHS-5), 2019–21: District Fact Sheets,” IIPS, Mumbai, India, 2021. [Online]. Available: <a href="https://rchiips.org/NFHS/factsheet_NFHS-5.shtml" target="_blank" rel="noopener">https://rchiips.org/NFHS/factsheet_NFHS-5.shtml</a>. Accessed: Nov. 21, 2026.<span class="refs__use">the data pipeline only; not yet used in results</span></span></li>
+        <li id="ref-6"><span class="refs__n">[6]</span><span class="refs__body">National Accreditation Board for Hospitals &amp; Healthcare Providers, “Find an Accredited Healthcare Organisation,” Quality Council of India, 2026. [Online]. Available: <a href="https://nabh.co/find-a-healthcare-organisation/" target="_blank" rel="noopener">https://nabh.co/find-a-healthcare-organisation/</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of service accreditations (e.g. blood bank, dialysis, eye care)</span></span></li>
+        <li id="ref-7"><span class="refs__n">[7]</span><span class="refs__body">National Health Systems Resource Centre, “LaQshya Master Data,” Ministry of Health and Family Welfare, Government of India, Apr. 8, 2026. [Online]. Available: <a href="https://qps.nhsrcindia.org/sites/default/files/2026-04/LaQshya_Master_data-08-04-2026.pdf" target="_blank" rel="noopener">https://qps.nhsrcindia.org/sites/default/files/2026-04/LaQshya_Master_data-08-04-2026.pdf</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of certified labour rooms and maternity operating theatres</span></span></li>
+        <li id="ref-8"><span class="refs__n">[8]</span><span class="refs__body">National Medical Commission, “List of Colleges Teaching MBBS” and “List of Colleges Teaching PG Courses,” Government of India, 2026. [Online]. Available: <a href="https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-mbbs" target="_blank" rel="noopener">https://nmc.org.in/page/information-desk-for-students-to-study-in-india-list-of-college-teaching-mbbs</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of approval to train specialists (indirect)</span></span></li>
+        <li id="ref-9"><span class="refs__n">[9]</span><span class="refs__body">Association of National Board Accredited Institutions, “DNB Accredited Institutions,” 2026. [Online]. Available: <a href="https://anbai.org/DNB_accredited_institutions.php" target="_blank" rel="noopener">https://anbai.org/DNB_accredited_institutions.php</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of approval to train specialists (indirect)</span></span></li>
+        <li id="ref-10"><span class="refs__n">[10]</span><span class="refs__body">National Cancer Grid, “Members,” Tata Memorial Centre, Department of Atomic Energy, Government of India, 2026. [Online]. Available: <a href="https://www.ncgindia.org/hospitals-and-institutions/members" target="_blank" rel="noopener">https://www.ncgindia.org/hospitals-and-institutions/members</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of cancer network membership (indirect)</span></span></li>
+        <li id="ref-11"><span class="refs__n">[11]</span><span class="refs__body">Rajya Sabha, Parliament of India, “Unstarred Question No. 2048: Trauma Care Facilities, Annexure-I,” Mar. 10, 2026. [Online]. Available: <a href="https://sansad.in/getFile/annex/270/AU2048_OvVj2M.pdf" target="_blank" rel="noopener">https://sansad.in/getFile/annex/270/AU2048_OvVj2M.pdf</a>. Accessed: Nov. 21, 2026.<span class="refs__use">evidence of government-designated trauma care facilities (indirect)</span></span></li>
+        <li id="ref-12"><span class="refs__n">[12]</span><span class="refs__body">Meta, “Llama 3.3 70B Instruct,” served through Databricks Foundation Model APIs (databricks-meta-llama-3-3-70b-instruct), 2024. [Online]. Available: <a href="https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/" target="_blank" rel="noopener">https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/</a>. Accessed: Nov. 22, 2026.<span class="refs__use">writing the plain-language explanations, from the cited evidence only</span></span></li>
+      </ol>
+    </section>
+    <p>Built on Databricks for the CMU Datathon 2026 “Find the Right Care” challenge. A listing is evidence, not a
+      guarantee. Always confirm with the facility.</p>
     <p id="status" class="colophon__status"></p>
   </footer>
 

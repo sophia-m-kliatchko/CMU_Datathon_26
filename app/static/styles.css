@@ -232,6 +232,19 @@ select:focus, input:focus { outline: none; border-color: var(--accent); box-shad
 .colophon { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 28px 40px; color: var(--ink-3); font-size: 13.5px; }
 .colophon__status { font-family: var(--mono); font-size: 12px; }
 
+.lede__refs { display: inline-block; margin-left: 4px; font-size: 15px; color: var(--accent); text-underline-offset: 3px; }
+.refs { margin: 8px 0 28px; padding: 28px 0 0; border-top: 1px solid var(--rule); scroll-margin-top: 24px; }
+.refs:focus { outline: none; }
+.refs__title { margin: 0 0 6px; font: 500 26px/1.2 var(--display); color: var(--ink); }
+.refs__intro { margin: 0 0 18px; max-width: 70ch; color: var(--ink-2); font-size: 15px; }
+.refs__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; max-width: 980px; }
+.refs__list li { display: grid; grid-template-columns: 3.2em 1fr; gap: 0 6px; color: var(--ink-2); font-size: 14px; line-height: 1.55; }
+.refs__list li:target { background: var(--paper-2); border-radius: 8px; }
+.refs__n { font: 500 13px/1.7 var(--mono); color: var(--accent); }
+.refs__body a { color: var(--accent); word-break: break-all; text-underline-offset: 2px; }
+.refs__use { display: block; margin-top: 3px; font: 12px/1.5 var(--mono); letter-spacing: .02em; color: var(--ink-3); }
+.refs__use::before { content: "Used for: "; }
+
 @media (prefers-reduced-motion: reduce) {
   .card { animation: none; opacity: 1; transform: none; }
   .skeleton { animation: none; }
