@@ -11,7 +11,7 @@ Items marked **⚠ TODO** still need information from the person who added the d
 | `facilities_bronze`, `facilities_silver`, `silver_facility_claims`, `silver_possible_duplicates`, `silver_dq_summary`; file `data/raw/facilities.csv` | Virtue Foundation India healthcare facilities dataset (Databricks Marketplace) | Virtue Foundation | 2026-11-21 | `notebooks/01_bronze_to_silver.py` |
 | `nqas_bronze`, `nqas_silver`; file `data/external/nqas_certified_facilities.csv` | NQAS Certified Facilities list | NHSRC, MoHFW | 2026-11-21 | `scripts/scrape_nqas.py` → `notebooks/02_nqas_bronze_to_silver.py` |
 | `kayakalp_bronze`, `kayakalp_silver`; file `data/external/kayakalp_2021_22.csv` | Kayakalp Winner Facilities of FY 2021-22 (PDF) | NHSRC, MoHFW (Kayakalp scheme) | 2026-11-21 | `scripts/kayakalp_pdf_to_csv.py` → `notebooks/03_kayakalp_bronze_to_silver.py` |
-| file `data/raw/india_post_pincode_directory.csv`; table `india_post_offices_silver` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO | `notebooks/india_pincode_bronze_to_silver.py` (elliotl-ops) |
+| `pincode_bronze`, `pincode_silver`, `pincode_centroids_silver`, `pincode_rejected`, `pincode_dq_summary`; file `data/raw/india_post_pincode_directory.csv` | All India Pincode Directory | Department of Posts, via data.gov.in | ⚠ TODO (file received 2026-11-21) | `notebooks/04_pincode_bronze_to_silver.py` (builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`) |
 | file `data/raw/nfhs_5_district_health_indicators.csv` | NFHS-5 (2019-21) district factsheets | IIPS / MoHFW, via data.gov.in | ⚠ TODO | not yet processed |
 
 ---
@@ -57,7 +57,7 @@ See [validation and integration handoff](kayakalp-validation-handoff.md) for rep
 - **Processing:** `scripts/kayakalp_pdf_to_csv.py` (pdfplumber) → CSV → upload as `kayakalp_bronze` → `notebooks/03_kayakalp_bronze_to_silver.py` → `kayakalp_silver`.
 - **Known limitations:**
   - In 17 rows, district text had spilled into the State column; this was repaired and flagged `DISTRICT_REPAIRED_FROM_PDF`.
-  - Some states wrote "village, block, district" in the district field; it's split into `locality` and `district_clean`.
+  - Some states wrote "village, block, district" in the district field; it's split into `locality` and `district`.
   - Public facilities only, and FY 2021-22 only.
 - **Cite as:** National Health Systems Resource Centre. *List of Kayakalp Winner Facilities FY 2021-22.* Ministry of Health and Family Welfare, Government of India. https://qps.nhsrcindia.org/sites/default/files/2024-09/KAYAKALP%20WINNER%20FACILITIES%2021-22.pdf. Accessed 2026-11-21.
 - **Per-row citation:** the `row_citation` column in `kayakalp_silver`, which gives the PDF page and S.No.
@@ -66,7 +66,12 @@ See [validation and integration handoff](kayakalp-validation-handoff.md) for rep
 - **What:** about 165k post offices with PIN, district, state and latitude/longitude.
 - **Publisher:** Department of Posts, Government of India, via the Open Government Data Platform: https://data.gov.in/resource/all-india-pincode-directory-till-last-month.
 - **Where:** `data/raw/india_post_pincode_directory.csv`, added by JhK830 on 2026-11-21 as "original Datathon raw datasets". **⚠ TODO (JhK830): confirm the exact source** (data.gov.in or supplied by the datathon) **and the download date.** The official data.gov.in file may not include coordinates, so the coordinates may come from elsewhere.
-- **Processing:** `notebooks/india_pincode_bronze_to_silver.py` (added by elliotl-ops on 2026-11-21; its header says it was written against the data.gov.in CSV) → `india_post_offices_silver`, one row per post office. It handles junk latitudes, "NA" values and PINs that span several districts.
+- **Processing:** `notebooks/04_pincode_bronze_to_silver.py` → `pincode_bronze` (raw), `pincode_silver` (one row per post office), `pincode_centroids_silver` (one row per PIN: median office location), `pincode_rejected`, `pincode_dq_summary`. Coordinates are parsed by `notebooks/common/coordinate_parsing.py`. This builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py` (added 2026-11-21), which first documented the "NA" values, junk latitudes and multi-district PINs.
+- **Per-row citation:** the `row_citation` column in `pincode_silver` and `pincode_centroids_silver`.
+- **Known limitations:**
+  - About 7% of offices have no coordinates.
+  - About 7% sit more than 50 km from their PIN's median point; these are flagged and left out of the centroid.
+  - 1,478 PINs span several districts and 290 span several states (`pin_ambiguous`).
 - **Licence:** Government Open Data License – India (GODL), if it came from data.gov.in.
 - **Cite as:** Department of Posts. *All India Pincode Directory.* Open Government Data Platform India. ⚠ TODO: date.
 

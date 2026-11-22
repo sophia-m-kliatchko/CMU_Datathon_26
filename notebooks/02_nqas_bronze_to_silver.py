@@ -10,7 +10,7 @@
 # MAGIC | Text trimmed, blanks set to NULL | The CSV upload keeps stray spaces |
 # MAGIC | `validity_from` / `validity_to` parsed from `dd-mm-yyyy` into real dates | So you can filter "certified in 2022" or "still valid" |
 # MAGIC | `certification_status` = current / expired (as of the run date) | **Every certificate in the 2026-11 scrape has expired (2019–2023)**. Treat it as "was certified", not "is certified" |
-# MAGIC | State standardized (`state_clean`), district title-cased (`district_clean`) | To join with `facilities_silver` |
+# MAGIC | State standardized (`state`), district title-cased (`district`) | To join with `facilities_silver` |
 # MAGIC | Facility type (PHC, CHC, DH, …) guessed from the name, with a level (primary/secondary) | For filtering and for matching like with like |
 # MAGIC | `name_norm` and `name_core` (the name with type words such as "PHC" removed) | For fuzzy matching to Virtue Foundation facilities |
 # MAGIC | Department scope parsed (`n_departments_assessed`, `covers_all_departments`) | A partial certification covers only some departments |
@@ -105,8 +105,8 @@ n_dept = F.when(n_dept != "", n_dept).otherwise(F.regexp_extract(dept_l, r"(\d+)
 
 silver = (df
     .withColumn("certification_id", F.substring(F.sha2(F.concat_ws("|", *[F.coalesce(F.col(c), F.lit("")) for c in key_cols]), 256), 1, 16))
-    .withColumn("state_clean", state_from_text(F.col("state_raw")))
-    .withColumn("district_clean", F.initcap(F.regexp_replace(F.col("district_raw"), r"\s+", " ")))
+    .withColumn("state", state_from_text(F.col("state_raw")))
+    .withColumn("district", F.initcap(F.regexp_replace(F.col("district_raw"), r"\s+", " ")))
     .withColumn("facility_type", facility_type_from_text(F.col("facility_name")))
     .withColumn("facility_level", facility_level(F.col("facility_type")))
     .withColumn("name_norm", name_norm(F.col("facility_name")))
@@ -130,8 +130,8 @@ silver = (df
 # COMMAND ----------
 
 FLAGS = [
-    ("STATE_UNRECOGNIZED",          F.col("state_clean").isNull()),
-    ("MISSING_DISTRICT",            F.col("district_clean").isNull()),
+    ("STATE_UNRECOGNIZED",          F.col("state").isNull()),
+    ("MISSING_DISTRICT",            F.col("district").isNull()),
     ("MISSING_FACILITY_NAME",       F.col("facility_name").isNull()),
     ("DATE_UNPARSEABLE",            (F.col("validity_from_raw").isNotNull() & F.col("validity_from").isNull()) |
                                     (F.col("validity_to_raw").isNotNull() & F.col("validity_to").isNull())),
@@ -156,7 +156,7 @@ silver = silver.withColumn(
              F.lit(". "), F.lit(SOURCE_LANDING_URL), F.lit(", retrieved "), F.coalesce(F.col("_scraped_on"), F.lit("?")), F.lit(".")),
 ).drop("_source_url", "_scraped_on")
 
-ORDER = ["certification_id", "facility_name", "facility_type", "facility_level", "district_clean", "state_clean",
+ORDER = ["certification_id", "facility_name", "facility_type", "facility_level", "district", "state",
          "certification_type", "department_assessed", "n_departments_assessed", "covers_all_departments",
          "validity_from", "validity_to", "certification_year", "certification_status", "name_norm", "name_core",
          "n_listings", "dq_flags", "row_citation", "state_raw", "district_raw", "validity_from_raw", "validity_to_raw",
@@ -179,7 +179,7 @@ assert silver.count() == silver.select("certification_id").distinct().count(), "
 display(spark.sql(f"""
   SELECT certification_type, certification_status, count(*) AS listings,
          min(validity_from) AS earliest_from, max(validity_to) AS latest_to,
-         count_if(state_clean IS NULL) AS state_unrecognized
+         count_if(state IS NULL) AS state_unrecognized
   FROM {SILVER} GROUP BY ALL ORDER BY ALL"""))
 
 # COMMAND ----------
@@ -191,5 +191,5 @@ display(spark.sql(f"""
 # COMMAND ----------
 
 display(spark.sql(f"""
-  SELECT state_clean, facility_type, count(*) AS listings
-  FROM {SILVER} GROUP BY ALL ORDER BY state_clean, listings DESC"""))
+  SELECT state, facility_type, count(*) AS listings
+  FROM {SILVER} GROUP BY ALL ORDER BY state, listings DESC"""))

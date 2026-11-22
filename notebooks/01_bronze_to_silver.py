@@ -7,7 +7,7 @@
 # MAGIC | Output table | Grain | What it's for |
 # MAGIC |---|---|---|
 # MAGIC | `facilities_bronze` | 1 row per source row | Raw copy of the Marketplace table. The only changes: invisible control characters (NUL bytes) removed, plus load metadata. |
-# MAGIC | `facilities_silver` | 1 row per `facility_id` | Cleaned, typed, merged facilities with `*_clean` columns, data-quality flags, and the original text kept for citations. |
+# MAGIC | `facilities_silver` | 1 row per `facility_id` | Cleaned, typed, merged facilities with data-quality flags. Columns in silver are clean by definition, so cleaned columns have plain names (`state`, `pincode`, `latitude`…) and the raw versions they replace are left out (they stay in bronze). |
 # MAGIC | `silver_facility_claims` | 1 row per facility × field × claimed item | Every specialty, capability, procedure and equipment claim, one per row. Use this for service matching and for quoting evidence. |
 # MAGIC | `silver_possible_duplicates` | 1 row per suspected duplicate pair | Facilities with different IDs that look like the same place. They are flagged, never deleted. |
 # MAGIC | `silver_dq_summary` | 1 row per flag | How many facilities carry each data-quality flag. |
@@ -21,7 +21,7 @@
 # MAGIC
 # MAGIC **Columns dropped from silver** (still in `facilities_bronze`): source_types, source_ids, source_content_id, organization_type, content_table_id, phone_numbers, websites, acceptsVolunteers, facebookLink, address_country, address_countryCode, countries, affiliationTypeIds, area, and every column to the right of `recency_of_page_update` except the coordinates.
 # MAGIC
-# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city_clean`, `state_clean`, `pincode_clean`, plus a combined `address_full`.
+# MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city`, `state`, `pincode`, plus a combined `address_full`. The raw `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are **dropped** from silver. A value that can't be standardized is left NULL in the cleaned column (not copied over) and flagged; section 7 prints how many. Bronze always keeps the originals.
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -739,8 +739,8 @@ base_cell = base.join(cell_sizes, "cell")
 def pairs_on(left, right, key):
     a, b = left.alias("a"), right.alias("b")
     return a.join(b, (F.col(f"a.{key}") == F.col(f"b.{key}")) & (F.col("a.facility_id") < F.col("b.facility_id"))) \
-            .select(*[F.col(f"a.{c}").alias(f"{c}_a") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]],
-                    *[F.col(f"b.{c}").alias(f"{c}_b") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]])
+            .select(*[F.col(f"a.{c}").alias(f"{c.replace('_clean', '')}_a") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]],
+                    *[F.col(f"b.{c}").alias(f"{c.replace('_clean', '')}_b") for c in ["facility_id", "name", "name_norm", "pincode_clean", "latitude_clean", "longitude_clean"]])
 
 pairs = (pairs_on(base.where("pincode_clean IS NOT NULL"), base.where("pincode_clean IS NOT NULL"), "pincode_clean")
          .unionByName(pairs_on(base_cell, base_cell, "cell"))
@@ -750,16 +750,16 @@ maxlen = F.greatest(F.length("name_norm_a"), F.length("name_norm_b"))
 minlen = F.least(F.length("name_norm_a"), F.length("name_norm_b"))
 pairs = (pairs
     .withColumn("name_similarity", F.round(1 - F.levenshtein("name_norm_a", "name_norm_b") / maxlen, 3))
-    .withColumn("distance_km", F.round(haversine_km("latitude_clean_a", "longitude_clean_a", "latitude_clean_b", "longitude_clean_b"), 3))
+    .withColumn("distance_km", F.round(haversine_km("latitude_a", "longitude_a", "latitude_b", "longitude_b"), 3))
     .withColumn("_near", F.col("distance_km").isNull() | (F.col("distance_km") <= 2.0))
     .withColumn("_contains", (minlen >= 10) & (F.instr("name_norm_a", F.col("name_norm_b")) > 0) | (minlen >= 10) & (F.instr("name_norm_b", F.col("name_norm_a")) > 0))
     .withColumn("match_reason",
                 F.when((F.col("name_similarity") >= 0.85) & F.col("_near"), "similar_name_nearby")
                  .when(F.col("_contains") & F.col("_near"), "name_contains_other_nearby"))
     .where("match_reason IS NOT NULL")
-    .withColumn("same_pincode", F.col("pincode_clean_a") == F.col("pincode_clean_b"))
+    .withColumn("same_pincode", F.col("pincode_a") == F.col("pincode_b"))
     .select("facility_id_a", "name_a", "facility_id_b", "name_b", "name_similarity", "distance_km",
-            "same_pincode", "pincode_clean_a", "pincode_clean_b", "match_reason")
+            "same_pincode", "pincode_a", "pincode_b", "match_reason")
 )
 pairs.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("silver_possible_duplicates")
 pairs = spark.table("silver_possible_duplicates")
@@ -824,8 +824,38 @@ FRONT = ["facility_id", COL["name"], "address_full", "address_street", "address_
          "pincode_variants", "dup_coord_spread_km", "states_mentioned_in_text", "description_all"]
 FRONT = list(dict.fromkeys(FRONT))  # keep order, drop repeats
 internal = [c for c in silver.columns if c.startswith("_") and c not in META_COLS]
-rest = [c for c in silver.columns if c not in FRONT and c not in internal]
-silver = silver.select(*[qc(c) for c in FRONT + rest])
+# Raw address columns are replaced by their cleaned columns and dropped from silver:
+#   address_line1/2/3      -> address_full / address_street / address_region / address_landmark
+#   address_city           -> city_clean
+#   address_stateOrRegion  -> state_clean
+#   address_zipOrPostcode  -> pincode_clean
+# A value that can't be standardized stays NULL in the cleaned column (it is NOT copied over);
+# dq_flags records it (STATE_UNRECOGNIZED, PINCODE_MISSING_OR_INVALID). The originals stay in facilities_bronze.
+lost = silver.select(*[
+    F.sum(F.when(qc(COL[k]).isNotNull() & F.col(clean).isNull(), 1).otherwise(0)).alias(clean)
+    for k, clean in [("city", "city_clean"), ("state", "state_clean"), ("pincode", "pincode_clean")]
+    if COL.get(k) and COL[k] in silver.columns
+]).first().asDict()
+for clean, n in lost.items():
+    print(f"{clean}: {int(n or 0):,} rows had a raw value that could not be standardized -> left NULL")
+
+# Raw columns whose cleaned version replaces them (coordinates and numbers too). The originals stay in facilities_bronze.
+REPLACED_BY_PARSED = [COL[k] for k in ["line1", "line2", "line3", "city", "state", "pincode",
+                                       "lat", "lon", "coords_json", "year", "doctors", "capacity"]
+                      if COL.get(k) and COL[k] in silver.columns]
+print(f"Dropping from silver (replaced by cleaned columns): {REPLACED_BY_PARSED}")
+rest = [c for c in silver.columns if c not in FRONT and c not in internal and c not in REPLACED_BY_PARSED]
+
+# Being in silver means a column is clean, so cleaned columns get the plain name (no "_clean" suffix)
+SILVER_RENAME = {
+    "city_clean": "city", "state_clean": "state", "pincode_clean": "pincode",
+    "latitude_clean": "latitude", "longitude_clean": "longitude",
+    "year_established_clean": "year_established", "num_doctors_clean": "num_doctors", "capacity_clean": "capacity",
+}
+final_cols = FRONT + rest
+clash = {SILVER_RENAME[c] for c in final_cols if c in SILVER_RENAME} & {c for c in final_cols if c not in SILVER_RENAME}
+assert not clash, f"Renamed columns would collide with existing columns: {clash}"
+silver = silver.select(*[qc(c).alias(SILVER_RENAME.get(c, c)) for c in final_cols])
 
 silver.write.mode("overwrite").option("overwriteSchema", "true").saveAsTable("facilities_silver")
 silver = spark.table("facilities_silver")
@@ -891,13 +921,13 @@ COLUMN_COMMENTS = {
     "address_street": "House/plot/building number and street, road or lane, parsed from address_line1-3.",
     "address_region": "Locality, neighbourhood, sector or area, parsed from address_line1-3.",
     "address_landmark": "Directions such as near/opposite/behind, parsed from address_line1-3.",
-    "pincode_from_address_text": "True if pincode_clean was recovered from the address text because the PIN field was invalid.",
+    "pincode_from_address_text": "True if pincode was recovered from the address text because the PIN field was invalid.",
     "source_fill_share": "Share (0 to 1) of the kept source columns that are filled in. Facilities under 0.30 are removed.",
-    "latitude_clean": "Validated latitude (inside India, swapped values fixed). NULL if unusable. Use for distance.",
-    "longitude_clean": "Validated longitude. NULL if unusable.",
+    "latitude": "Validated latitude (inside India, swapped values fixed). NULL if unusable. Use for distance.",
+    "longitude": "Validated longitude. NULL if unusable.",
     "coords_low_precision": "True if both coordinates have 2 or fewer decimals (about 1 km or worse; possibly a city-centre point).",
-    "state_clean": "Standardized state or UT. From the reported state, else inferred from the PIN prefix (see state_from_pin).",
-    "pincode_clean": "Valid 6-digit PIN code or NULL.",
+    "state": "Standardized state or UT. From the reported state, else inferred from the PIN prefix (see state_from_pin).",
+    "pincode": "Valid 6-digit PIN code or NULL.",
     "dq_flags": "Data-quality issue codes. See docs/silver-tables.md.",
     "completeness_score": "Share (0 to 1) of 13 key fields that are filled in. A measure of how much we know, not of quality.",
     "possible_duplicate_ids": "Other facility_ids that look like the same place (see silver_possible_duplicates).",
@@ -926,10 +956,10 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # MAGIC SELECT
 # MAGIC   count(*)                                            AS facilities,
 # MAGIC   count_if(n_source_rows > 1)                         AS merged_from_duplicate_ids,
-# MAGIC   count_if(latitude_clean IS NOT NULL)                AS with_usable_coords,
+# MAGIC   count_if(latitude IS NOT NULL)                AS with_usable_coords,
 # MAGIC   count_if(coords_low_precision)                       AS low_precision_coords,
-# MAGIC   count_if(state_clean IS NOT NULL)                   AS with_state,
-# MAGIC   count_if(pincode_clean IS NOT NULL)                 AS with_valid_pin,
+# MAGIC   count_if(state IS NOT NULL)                   AS with_state,
+# MAGIC   count_if(pincode IS NOT NULL)                 AS with_valid_pin,
 # MAGIC   count_if(n_service_claims = 0)                      AS no_service_claims,
 # MAGIC   count_if(size(possible_duplicate_ids) > 0)          AS possible_near_duplicates,
 # MAGIC   round(avg(completeness_score), 3)                   AS avg_completeness
@@ -939,18 +969,18 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 
 # MAGIC %sql
 # MAGIC -- Facilities per state (check for odd spellings that slipped through as NULL)
-# MAGIC SELECT state_clean, count(*) AS facilities
-# MAGIC FROM facilities_silver GROUP BY state_clean ORDER BY facilities DESC
+# MAGIC SELECT state, count(*) AS facilities
+# MAGIC FROM facilities_silver GROUP BY state ORDER BY facilities DESC
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC -- Example: which facilities claim anything dialysis-related? (match on claim_norm, quote claim_text)
-# MAGIC SELECT f.facility_id, f.name, f.city_clean, f.state_clean, c.claim_field, c.claim_text, f.dq_flags
+# MAGIC SELECT f.facility_id, f.name, f.city, f.state, c.claim_field, c.claim_text, f.dq_flags
 # MAGIC FROM silver_facility_claims c
 # MAGIC JOIN facilities_silver f USING (facility_id)
 # MAGIC WHERE c.claim_norm RLIKE 'dialys|haemodialys|hemodialys'
-# MAGIC ORDER BY f.state_clean, f.city_clean
+# MAGIC ORDER BY f.state, f.city
 # MAGIC LIMIT 50
 
 # COMMAND ----------
@@ -963,7 +993,8 @@ print(f"Done. bronze rows: {n_bronze:,} | silver facilities: {n_silver:,}")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- Spot-check the reorganized addresses against the original lines
-# MAGIC SELECT name, address_line1, address_line2, address_line3,
-# MAGIC        address_street, address_region, address_landmark, city_clean, state_clean, pincode_clean
-# MAGIC FROM facilities_silver TABLESAMPLE (30 ROWS)
+# MAGIC -- Spot-check the reorganized addresses against the original lines (which only bronze still has)
+# MAGIC SELECT s.name, b.address_line1, b.address_line2, b.address_line3,
+# MAGIC        s.address_street, s.address_region, s.address_landmark, s.city, s.state, s.pincode
+# MAGIC FROM (SELECT * FROM facilities_silver TABLESAMPLE (30 ROWS)) s
+# MAGIC JOIN facilities_bronze b ON lower(trim(b.unique_id)) = s.facility_id

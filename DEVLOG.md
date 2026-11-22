@@ -22,41 +22,85 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 19:17: Comprehensive read-only persisted Kayakalp Silver audit
-- **Who:** Codex (for Alice); independent Claude review unavailable (CLI unauthenticated).
-- **What:** new `docs/kayakalp-silver-audit.md`, handoff audit link and this log entry; no production code or data changes. Existing uncommitted test edits were preserved.
-- **How:** fresh PDF-to-CSV reproduction; Databricks SELECT/DESCRIBE through an isolated audit notebook on existing Free Edition serverless STANDARD; CSV/Bronze multiset and award-ID reconciliation; read-only validated transform/full-row comparison; independent Python recalculation of all 18 DQ rules; postal reference membership; pinned Sophia branch inspection. Query error Q09 was corrected and rerun independently rather than hidden. Exact execution/results are ignored under `shared/runs/kayakalp-validation/silver-audit/`.
-- **Why:** establish actual persisted integrity and conditional readiness without relying on prior reports. All 1,197 awards and 30 columns match; Delta versions unchanged; all DQ counts match. Three blank `name_core` values are a matching defect; 291 awards in 218 geographic groups remain unresolved, not proven wrong. No ingestion, writes, table/view DDL, shared-resource changes, new paid compute, branch changes, push/merge/PR or Notion action.
-- **Validation:** fresh audit run `793080827549335` succeeded; corrected SQL finds 17 cross-category groups/34 awards and blank cores at 368/371/559. After documentation changes: 3 local tests passed, 2 local write tests deselected, 7 Spark setup errors because the restricted sandbox disallowed a Java gateway socket. Live Databricks/PDF audits succeeded; `git diff --check` and new-report whitespace checks passed. Full outcome/evidence are in the audit report.
+### 2026-11-21 16:27: No `_clean` suffix on silver column names
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01`–`04` and the docs.
+  - **`facilities_silver`:** `city_clean`→`city`, `state_clean`→`state`, `pincode_clean`→`pincode`, `latitude_clean`→`latitude`, `longitude_clean`→`longitude`, `year_established_clean`→`year_established`, `num_doctors_clean`→`num_doctors`, `capacity_clean`→`capacity`.
+    - The raw `latitude`, `longitude`, `coordinates`, `yearEstablished`, `numberDoctors` and `capacity` columns are now left out of silver; bronze keeps them.
+    - `silver_possible_duplicates`: `pincode_clean_a/b`→`pincode_a/b` (latitude/longitude likewise).
+  - **`nqas_silver`, `kayakalp_silver`:** `state_clean`→`state`, `district_clean`→`district` (raw stays in `state_raw`/`district_raw`).
+  - **`pincode_silver`:** `latitude`, `longitude`, `state`, `district`, `office_name`; the raw district column is renamed `district_raw`.
+  - `CLAUDE.md`: naming rule added.
+- **How:**
+  - **Notebooks 01 and 04:** the code keeps the `_clean` names internally and renames only at the final select, with an assertion that no names collide. This is because their raw columns use the same plain names.
+  - **Notebooks 02 and 03:** a word-boundary rename, since raw values there are already `*_raw`.
+  - Downstream code, comments and SQL checks were updated to the new names.
+- **Why:** Sophia: being in a silver table already implies a column is clean. Raw columns that would clash with the plain names are dropped from `facilities_silver`, consistent with the earlier address decision ("if it is not standard, drop it"). In the outside-data tables, raw text is kept as `*_raw` because their `row_citation` and source checks rely on it.
+- **Notes / follow-ups:**
+  - Earlier `facilities_silver` drafts kept the raw `coordinates`/`latitude`/`longitude`. The validated coordinates now carry those names instead; the raw ones are in bronze.
+  - **Anything already querying `*_clean` columns must be updated.** Not yet run on Databricks.
 
+### 2026-11-21 16:23: Raw address columns always dropped from silver; non-standard values left NULL
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py` (section 7 and header) and `docs/silver-tables.md`.
+  - Replaces the "drop only when fully covered" rule from 16:18.
+- **How:** `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are always left out of `facilities_silver`. Where a value can't be standardized, `city_clean` / `state_clean` / `pincode_clean` stay NULL, and the notebook prints how many per column. The existing flags `STATE_UNRECOGNIZED` and `PINCODE_MISSING_OR_INVALID` still mark those rows.
+- **Why:** Sophia's decision: a non-standard value (e.g. "Mumbai" in the state field, or "56" as a PIN) should not be kept in silver, either as a raw column or copied into a cleaned column. A briefly considered "copy the raw value into the cleaned column" approach was dropped before being committed. The originals remain in `facilities_bronze`.
+- **Notes / follow-ups:** about 300 rows will have `state_clean` NULL unless the PIN fallback fills it, and about 70 will have `pincode_clean` NULL (local estimate). Not yet run on Databricks.
 
-### 2026-11-21 18:43: Creation-only Kayakalp Silver persistence compatibility fix
-- **Who:** Codex (for Alice).
-- **What:** `notebooks/03_kayakalp_bronze_to_silver.py` persistence branch only; `tests/test_kayakalp.py` expects the explicit existing-table error and skips local Delta CTAS when Delta extensions are absent; isolated execution harness and validation artifacts in ignored `shared/runs/kayakalp-validation/databricks/persistence_ctas/`; handoff updated with final outcome.
-- **How:** explicit target existence check, same-session unique temporary view, `CREATE TABLE ... USING DELTA AS SELECT`, then bidirectional `EXCEPT ALL` readback. No `IF NOT EXISTS` or replacement operation. Existing runtime is Spark Connect 4.2.0; prior isolated Bronze CTAS succeeded on this environment.
-- **Why:** `errorifexists` alias is rejected by this client. User explicitly authorized this minimal persistence change; validated cleaning and all 30 columns remain identical. No Bronze ingestion, paid cluster/warehouse creation, shared modification, push, merge or PR. Claude independent review unavailable due to unauthenticated CLI.
-- **Results:** CTAS creation run `401124689166111` and separate read-only run `292844685607275` both succeeded. Managed Delta table `labuser_alice083073.alice_kayakalp_validation_20261121_215928.kayakalp_silver_validation`: 1,197 rows/unique award IDs, unchanged 30 names/types, full-row baseline hash match, bidirectional row equality, complete provenance, expected DQ counts. CTAS nullability metadata is relaxed; no enforced key/NOT NULL constraints were added. Local Spark tests could not start the Java gateway; three extraction checks, compile and whitespace checks passed.
+### 2026-11-21 16:18: Raw address columns dropped from silver only when fully covered by a cleaned column
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py` (section 7 and header).
+  - `docs/silver-tables.md` (dropped-columns section and watch-out 22).
+  - Replaces the unconditional drop of `address_line1/2/3` logged earlier at 16:17.
+- **How:**
+  - Pairs: `address_line1/2/3` → `address_full`, `address_city` → `city_clean`, `address_stateOrRegion` → `state_clean`, `address_zipOrPostcode` → `pincode_clean`.
+  - For each pair, one aggregate counts rows that have a raw value but no cleaned value. A raw column is dropped only if that count is 0; otherwise it's kept, and the notebook prints the count.
+- **Why:** Sophia asked to remove `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` too, then specified "ONLY if there's a cleaned equivalent". Checking per value (not just whether a clean column exists) means silver never loses an address value. For example, "Mumbai" typed into the state field has no `state_clean`, so that column stays.
+- **Local estimate** (approximate; the notebook decides at run time): `address_city` drops (0 uncovered). `address_stateOrRegion` likely stays (~297 uncovered before the PIN fallback). `address_zipOrPostcode` likely stays (~72 uncovered).
+- **Notes / follow-ups:** if Sophia prefers dropping a column even when a few values have no cleaned equivalent, the rule could become a threshold. Not yet run on Databricks.
 
+### 2026-11-21 16:17: `address_line1/2/3` removed from `facilities_silver`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/01_bronze_to_silver.py`: the final select leaves out the three address-line columns, the header text is updated, and the address spot-check SQL now joins to `facilities_bronze` for the original lines.
+  - `docs/silver-tables.md`: dropped-columns list and watch-out 22.
+- **How:** a `REPLACED_BY_PARSED` list removes them only in the last step, because the lines are still needed earlier, for address parsing and for the `NO_COORDS_OR_ADDRESS` rule.
+- **Why:** Sophia: once `address_full` and the split `address_street` / `address_region` / `address_landmark` exist, the raw lines are redundant in silver. They remain in `facilities_bronze` for exact quoting.
+- **Notes / follow-ups:** `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are still in silver next to `city_clean`, `state_clean` and `pincode_clean`; they could be removed the same way if wanted. Notebook 01 is still unverified on Databricks; the last run there appears to have stopped before section 5.
 
-### 2026-11-21 17:14: Reviewed completed Databricks validation and added original notebook name
-- **Who:** Codex (for Alice); independent Claude CLI final-results review completed: PASS for validation-only; no blocking discrepancies. Separate original-named notebook added without execution; export matches local source. Optional Silver persistence remains untested.
-- **What:** read-only refreshed table metadata, successful run and output, notebook/dependency status; added the missing original-named `03_kayakalp_bronze_to_silver` notebook to Alice's existing isolated validation folder without overwrite. No execution repeated or compute created.
-- **How:** existing authenticated `CMU_Datathon_26` CLI profile. Remote results independently compared against local metrics, 30 column names/types and full-row reference hash; all matched. Existing Bronze metadata reports 1,197 rows, consistent with actual count assertion from the successful run. Review evidence is in `shared/runs/kayakalp-validation/databricks/review/`.
-- **Why:** distinguish the unchanged pipeline body actually executed inside `validation_run_v2` from the separately named notebook, and complete its availability without rerunning successful work. No shared/Sophia data, tables or branches modified.
-
-### 2026-11-21 17:00: Databricks isolated validation execution
-- **Who:** Codex (for Alice), with read-only Claude CLI review requested.
-- **What:** isolated workspace folder `/Workspace/Users/alice083073@gmail.com/alice-kayakalp-validation/20261121_215928`; new schema `labuser_alice083073.alice_kayakalp_validation_20261121_215928` and creation-only `kayakalp_bronze`; one-time serverless run 313746975724142. Validation artifacts are in `shared/runs/kayakalp-validation/databricks/`.
-- **How:** existing `CMU_Datathon_26` profile, CLI v1.27.0; workspace/catalog/schema/compute discovery and Genie read-only discovery. Uploaded immutable CSV/PDF/raw audit, existing reference notebook, and harness containing the unchanged transformation with setup and full-row/schema/metric assertions. STANDARD serverless; `write_output=false`.
-- **Why:** validate the actual Databricks runtime while isolating all new resources from shared and existing personal tables. No profile or credential changes, shared data modifications, branch merge, push, or persisted Silver output authorized.
-- **Notes / follow-ups:** initial run failed before Bronze creation because Spark Connect rejected the `errorifexists` alias. New harness v2 uses creation-only SQL CTAS in the same isolated schema, checks submitted widgets before staging, and was submitted as run 485076506625337. Transformation unchanged. Final status and Claude findings will be recorded in `docs/kayakalp-validation-handoff.md` after execution; Bronze import intentionally persists only in the new validation schema.
-
-### 2026-11-21 16:13: Isolated Kayakalp validation and integration handoff
-- **Who:** Codex (for Alice), with independent Claude CLI analysis/review.
-- **What:** notebook 03 validation/write guards (default target now `kayakalp_silver_validation`, writing disabled), two PDF-verified Silver district spacing fixes and uncertainty flags; `scripts/validate_kayakalp.py`, local requirements, regression tests, and `docs/kayakalp-validation-handoff.md`; source/table docs linked.
-- **How:** fetched origin, isolated `codex/kayakalp-validation` from `eb813a7`; reproduced all 1,197 PDF awards and audited raw cells, Poppler page renders and old/new local Spark transforms. Used existing orchestration/direct read-only Claude CLI. Results and limitations are in the handoff and `shared/runs/kayakalp-validation/`.
-- **Why:** preserve all awards and provenance while making validation repeatable and preventing writes before validation or shared-table overwrites. No shared schema/ID changes, source edits, Databricks execution or push.
-- **Notes / follow-ups:** Elliot owns geographic matching; unresolved health jurisdictions, type conflicts and duplicate candidates stay flagged. Notion token unavailable. Review/test status is recorded in the handoff after execution.
+### 2026-11-21 16:03: PIN directory notebook producing `pincode_*` tables
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/04_pincode_bronze_to_silver.py`, which writes:
+    - `pincode_bronze`: raw copy.
+    - `pincode_silver`: one row per post office.
+    - `pincode_centroids_silver`: one row per PIN.
+    - `pincode_rejected` and `pincode_dq_summary`.
+  - New `notebooks/common/coordinate_parsing.py` (plain Python plus a Spark UDF) and `scripts/test_pincode_cleaning.py` (12 unit tests plus a dry run on the real CSV).
+  - `docs/data-sources.md` and `CLAUDE.md` (layout and the `<dataset>_<layer>` naming rule) updated.
+- **How:** profiled `data/raw/india_post_pincode_directory.csv`: 165,627 offices, 19,586 PINs, about 7% "NA" coordinates, a few junk values ("28.43° N", "17°57'17.7", "28.4 32628"), swapped pairs, 2 exact duplicate rows, 0 invalid PINs.
+  - Coordinates: plain numbers are used as-is; degree signs and N/E letters are removed; degrees-minutes-seconds are converted; spaces inside decimals are removed; values are checked against India's bounding box, and swapped pairs are fixed. The method is recorded in `lat_how`/`lon_how`.
+  - Each PIN's centroid is the median of its offices' locations, leaving out offices more than 50 km from the PIN's median.
+  - The source can be a CSV path (Volume) or a table.
+- **Why:** Sophia asked for a PIN-directory pipeline like 02/03, named `pincode_*`. The centroid table is what turns a user's PIN into coordinates for distance ranking.
+  - **Builds on elliotl-ops's `notebooks/india_pincode_bronze_to_silver.py`:** its "NA" handling, junk-latitude findings, PIN ambiguity, office-name suffix cleaning and deterministic `office_id` were kept; that file was left untouched.
+  - **Differences from it:**
+    - Swapped lat/lon pairs and recoverable junk are repaired rather than set to NULL, and every repair is flagged.
+    - `.cache()` is avoided, because Free Edition's serverless compute doesn't support it.
+    - The "quality gate" that refuses to write is replaced by a flags table.
+    - Per-row citations are added.
+- **Dry-run results:**
+  - 91.2% of offices are usable as given and 0.5% after a swap fix; 7.3% have no coordinates; 1.1% are outside India.
+  - 99.9% of PINs get a centroid; the median PIN spread is 10.5 km.
+  - **12,102 offices (7%) sit more than 50 km from their PIN's median point.** These are probably wrong coordinates in the source; they're flagged `COORDS_FAR_FROM_PIN`.
+- **Notes / follow-ups:**
+  - **Not yet run on Databricks.**
+  - Upload the CSV to `/Volumes/workspace/datathon/external/` first, or point the `source` widget at a table.
+  - The team should decide whether to keep both PIN notebooks or retire the older one.
 
 ### 2026-11-21 15:47: Corrected DEVLOG timestamps
 - **Who:** Claude (for Sophia)
