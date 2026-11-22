@@ -132,13 +132,15 @@ tasks = [
     NT("step_02_nqas", "02_nqas_bronze_to_silver",
        {**CS, "bronze_table": "nqas_certified_facilities", "silver_table": "nqas_silver"}, "step_01_facilities"),
     NT("step_03_kayakalp", "03_kayakalp_bronze_to_silver",
-       {**CS, "bronze_table": "kayakalp_bronze"}, "step_02_nqas"),
+       {**CS, "bronze_table": "kayakalp_bronze", "silver_table": "kayakalp_silver_validation", "write_output": "true"}, "step_02_nqas"),
     NT("step_04_nfhs", "04_nfhs_bronze_to_silver",
        {**CS, "source": _csv("data/raw/nfhs_5_district_health_indicators.csv"), "retrieved_on": "2026-11-21"},
        "step_03_kayakalp"),
     NT("step_05_registries", "05_registries_bronze_to_silver",
        {**CS, "reload_bronze": "no"}, "step_04_nfhs"),
     NT("step_06_matching", "06_registry_matching", CS, "step_05_registries"),
+    NT("validate_silver", "validate_silver_persistence",
+       {**CS, "repo_root": REPO_ROOT, "kayakalp_table": "kayakalp_silver_validation"}, "step_06_matching"),
 ]
 settings = {
     "name": JOB_NAME,

@@ -48,6 +48,46 @@ class SilverContractTests(unittest.TestCase):
         self.assertEqual(by_id['synthetic-005']['effective_tier'],'R')
         self.assertEqual(by_id['synthetic-006']['pending_stronger_tier'],'T1')
 
+    def test_separate_review_queue_rejection_is_applied_by_link_id(self):
+        _,fac,site,svc,links=registry_tables()
+        review={**links[0],'reviewer_decision':'reject'}
+        r=adapt_registry_tables(fac,site,svc,links,canonical_services=[SERVICE],reviews=[review])
+        rows=build_facility_service_rows(r['evidence'],as_of=AS_OF)
+        row=next(r for r in rows if r['facility_id']==links[0]['facility_id'])
+        self.assertEqual(row['effective_tier'],'U')
+        self.assertTrue(row['flags']['rejected_candidate_match'])
+        self.assertIsNone(links[0]['reviewer_decision'])  # No input mutation.
+
+    def test_conflicting_or_orphaned_reviews_fail_closed(self):
+        _,fac,site,svc,links=registry_tables()
+        cases=[({'link_id':'SYNTHETIC-orphan','reviewer_decision':'reject'},'ORPHAN_REVIEW'),
+               ({**links[0],'reviewer_decision':'maybe'},'INVALID_REVIEW_DECISION'),
+               ({**links[0],'reviewer_decision':'reject','site_id':'wrong'},'REVIEW_KEY_CONFLICT')]
+        for review,code in cases:
+            r=adapt_registry_tables(fac,site,svc,links,canonical_services=[SERVICE],reviews=[review])
+            self.assertEqual(r['status'],'FAIL')
+            self.assertTrue(any(f['code']==code for f in r['findings']))
+
+    def test_empanelment_service_tag_is_retained_as_identity_context(self):
+        _,fac,site,svc,links=registry_tables()
+        row=svc[0];link=links[0]
+        sid='nabh:SYNTHETIC-empanelment'
+        source={**row,'site_id':sid,'source':'nabh','service_row_id':'SYNTHETIC-empanelment',
+            'evidence_type':'government_scheme_empanelment','status':'empaneled'}
+        parent={**site[0],'site_id':sid,'source':'nabh','listing_category':'empanelment'}
+        association={**link,'site_id':sid,'source':'nabh'}
+        r=adapt_registry_tables(fac,[parent],[source],[association],canonical_services=[SERVICE])
+        self.assertEqual(r['status'],'PASS')
+        self.assertEqual(r['adapter_error_reasons'],{})
+        self.assertTrue(any(f['code']=='NON_SERVICE_LISTING_WITH_SERVICE_TAG' and f['count']==1 for f in r['findings']))
+        e=next(e for e in r['evidence'] if e.source_record_id=='SYNTHETIC-empanelment')
+        self.assertEqual(e.scope.value,'identity');self.assertIsNone(e.service)
+        self.assertEqual(dict(e.source_provenance)['upstream_service_tag'],SERVICE)
+        self.assertEqual(e.citations[0].locator,row['source_url'])
+        output=build_facility_service_rows(r['evidence'],as_of=AS_OF,facility_services=[(association['facility_id'],SERVICE)])[0]
+        self.assertEqual(output['effective_tier'],'U')
+        self.assertIn(e.evidence_id,output['identity_evidence_ids'])
+
     def test_bulk_orphans_report_count_and_example(self):
         _,fac,site,svc,links=registry_tables();links[0]['facility_id']='SYNTHETIC-orphan'
         r=adapt_registry_tables(fac,site,svc,links,canonical_services=[SERVICE])

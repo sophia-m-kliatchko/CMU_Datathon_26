@@ -293,3 +293,48 @@ Alternative local reproduction of Silver requires provisioning the documented lo
 - Compilation and `git diff --check` passed. Tier/ranking policy files and all shared preprocessing files remain unchanged; no tables or remote resources were accessed or written.
 
 **Ready locally:** source-level profiling, real-schema adapters, explicit join contracts and synthetic regressions. **Not yet ready:** real Silver end-to-end certification, final geographic retrieval integration or deployment. Do not interpret historical FY 2021-22 cleanliness awards, quality certificates, proximity or missing evidence as current clinical safety, service availability or emergency capability.
+
+## Downloaded CSV snapshot audit — 2026-11-22
+
+The [downloaded Silver audit](evidence-confidence-downloaded-silver-audit.md) inventories all 14 local exports and their actual schemas/counts/sizes. Basic integrity passes with warnings; the snapshot has missing outputs, legacy fields and different link counts. Actual evidence classification and explicitly non-geographic all-facility join/ranking probes ran locally. Geographic search validation and public GitHub publication remain blocked. No Databricks job or regeneration was performed for this audit.
+
+## facility_geo_ready handoff contract
+
+Latest [real evidence review audit](evidence-confidence-review-audit.md) supersedes earlier availability statements for the downloaded snapshot. Evidence rules pass locally; actual geographic retrieval in this audit awaits the teammate handoff.
+
+**Point inventory produced by Elliot (one row per canonical facility):**
+
+- `facility_id`: nonblank string, unique, exactly matching `facilities_silver.facility_id`; no newly generated IDs.
+- `name`: string (missing names must be flagged; no invented names).
+- `geo_latitude`, `geo_longitude`: double or null, valid paired WGS84 coordinates. Preserve unavailable locations as null and report unlocatable coverage.
+- `location_basis`: string or null; distinguish `facility_coordinates` from `pin_centroid`. Facility coordinates are source-reported points, not guaranteed exact locations.
+- `geo_confidence`: upstream categorical string or null, with documented semantics. Existing notebook labels include `high`, `medium_low_precision`, `approximate_pin_centroid`; these are separate from service tiers.
+- `location_uncertainty_km`: finite nonnegative double or null; null means unknown, never zero by default. Preserve uncertainty methodology/source. Retain source PIN, coordinate status and DQ flags for lineage.
+
+Downloaded facilities use `latitude_clean`, `longitude_clean`, `pincode_clean`, `state_clean`; an explicit upstream adapter must map these to retrieval's expected names. Do not silently substitute raw coordinate columns. Confirm actual produced schema rather than assuming these proposed output fields already exist.
+
+**Computed by geographic retrieval for each request, not required in the point inventory:** `distance_km` (finite nonnegative numeric or null), optional `distance_min_km`/`distance_max_km` (same type; ordered and containing the point estimate), query PIN/origin, radius, origin basis/uncertainty and candidate selection diagnostics. Bounds must have a defensible method; never invent them. Preserve point uncertainty separately from origin uncertainty. Supply the entire eligible radius candidate set before top-25 truncation or service-substring filters. Report unlocatable/excluded rows separately; do not invent distances.
+
+**Supplied by the request/evidence layer:** canonical `service` string, `as_of` date and `framework_version`. A service identifier is not required in `facility_geo_ready`, whose grain is facility, not facility–service. Pass service explicitly to `join_geographic_candidates`; any optional candidate service field must agree with the request. Evidence rows must be unique by facility/service/date/version. No service mapping is inferred from names or geographic proximity.
+
+The actual Python join signature is `join_geographic_candidates(candidates, evidence_rows, *, service, as_of, framework_version='evidence-tiers/1')`. Its minimal candidate fields are `facility_id: str`, `distance_km: int|float|None`, and present `geo_confidence` (opaque JSON metadata or null). For a meaningful recommendation handoff also supply name, location basis and uncertainty above. Coordinates are retrieval inputs; the join does not require them or compute distances. Optional distance bounds are checked. Duplicate candidate IDs or duplicate evidence slice keys fail; missing evidence produces U. Candidate order and metadata survive the LEFT JOIN. Recommendation JSON preserves location basis, confidence, distance uncertainty and structured evidence; it does not currently export point coordinates.
+
+Read-only local audit and controlled-fixture regression commands are documented in the linked audit. Fixture distances are explicitly labelled and are **not real radius-search validation**. No shared geographic implementation was changed.
+
+See also `docs/recommendation-pipeline.md` for the end-to-end entrypoint.
+
+## Geographic producer → join contract (2026-11-22)
+
+Producer: teammate notebook `07_pin_nearby_facilities.py` (read-only). Repo copy `notebooks/common/pin_nearby_facilities.py` (sha256 `21adb9d4…`) uses `distance_km <= radius`; the newer downloaded version (sha256 `848f182e…`, not committed here) uses `uncertainty_adjusted_distance_km = max(distance_km − location_uncertainty_km, 0) <= radius` and widens the bounding box by the table-wide max uncertainty. `GeographicProducer` evaluates either version's own expressions locally (no Spark); `--geography-notebook` selects the file. The Spark-only `max_uncertainty` aggregate is recomputed locally only if its source text matches the inspected definition, otherwise construction fails.
+
+`to_join_candidate(row)` copies, never recomputes:
+
+| Producer `near` column | Join/response field |
+|---|---|
+| `facility_id`, `name`, `city`, `state`, `pincode`, `coord_status`, `dq_flags` | same |
+| `distance_km` (haversine from query PIN centroid, rounded 2 dp) | `distance_km` |
+| `location_basis`, `geo_confidence`, `location_uncertainty_km` | same |
+| `uncertainty_adjusted_distance_km` (new version only) | `distance_min_km` |
+| — | `distance_max_km` absent (producer emits no upper bound; none invented) |
+
+Rules: every radius-eligible row is passed on (no `max_results`, no `service_keyword` semi-join); `limit`/display truncation happens only after `build_recommendation_response`. Validation re-runs the producer rule with box filters skipped and requires zero box omissions. Facilities with no point (2 of 9,989 in the downloaded bundle) are unsearchable by distance and are reported, not ranked.

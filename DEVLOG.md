@@ -22,6 +22,55 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 05:00: Backend final validation (Alice)
+- **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
+- **What:** ran `recommend_facilities` on 4 real queries with Elliot's 07 notebook; corrected merge notes (only `setup_pipeline.py` conflicts, 1 hunk; the rename deletes the legacy notebook); re-measured website radius-rule loss.
+- **Validation:** 749/749/700/347 candidates kept, 5 recs + 5 distinct alternatives each, 0 duplicates, all non-U cited, deterministic, 400001 dialysis identical to the reference. 246/247 unittest (test_kayakalp: pdfplumber). Details in BACKEND_PROGRESS.md.
+
+### 2026-11-22 (time not captured; shell blocked): Website entrypoint + handoff (Alice)
+- **Who:** Claude (for Alice), non-interactive run.
+- **What:** `evidence_confidence/pipeline.py`: added `recommend_facilities(service, pincode, radius_km, max_results=5, max_alternatives=5, *, silver_dir|bundle, **options)`, a thin wrapper over `recommend()` with a per-directory bundle cache. `tests/test_pipeline.py`: 2 new tests. `docs/recommendation-pipeline.md`: entrypoint, website handoff (radius rule, cap, selection-policy difference), Elliot merge plan. New `BACKEND_PROGRESS.md`.
+- **How:** read `origin/website:app/backend/{geography,engine}.py` and `git diff origin/Elliot_New_Branch` (read only).
+- **Why:** the website needs one call; ranking/tier logic untouched.
+- **Validation:** NOT RUN. Python/pytest were blocked by the session's permission mode; the new code and tests are unexecuted.
+
+### 2026-11-22 04:00: Compatibility check against origin/Elliot_New_Branch (Alice)
+- **Who:** Claude (for Alice). Read-only inspection; no checkout/merge.
+- **What:** 07 notebook on that branch is byte-identical to the version validated locally; `notebooks/common/validation.py` identical. Added `default_notebook()` so pipeline/validation/tests use the renamed `notebooks/07_pin_nearby_facilities.py` when present.
+- **Validation:** post-merge layout simulated in a scratch copy: 245 tests, only test_kayakalp (pdfplumber) errors; 400001 dialysis response identical to the pre-merge run. Committed HEAD merges cleanly; the uncommitted `notebooks/setup_pipeline.py` edit conflicts with Elliot's step_07 task (one hunk).
+
+### 2026-11-22 03:30: End-to-end recommendation pipeline + self-reported claim mapping (Alice)
+- **Who:** Claude (for Alice).
+- **What:** new `evidence_confidence/pipeline.py` (`load_bundle`, `recommend` → `recommendation-pipeline/1`: top-K + next-ranked alternatives, provenance, uncertainty, warnings, nearest-first comparison) and `evidence_confidence/service_claims.py` (`service-claims/1`, provisional: dialysis + C-section exact terms, negations skipped, self-report ≤ T3); `tests/test_pipeline.py` (13). Ranking semantics, `build_recommendation_response` and the website contract unchanged. Docs: `docs/recommendation-pipeline.md`.
+- **Validation:** local only, downloaded Silver + ~/Downloads 07 notebook. 110001 C-section/dialysis 749 candidates, 400001 dialysis 700, 600001 C-section 347; all retained, deterministic, JSON round-trip, no duplicate IDs; website-shape call still PASS. 244/245 tests pass (test_kayakalp: pdfplumber missing). No Databricks, commits or pushes.
+- **Open:** claim-mapping approval; LaQshya site linked to a 'Blood Bank, LBS Hospital' record (notebook 06); facility PIN/address mismatches (e.g. Hyderabad address with Delhi PIN); 07 notebook not yet committed by Elliot.
+
+### 2026-11-22 02:00: Geographic producer integrated with Evidence Confidence (Alice)
+- **Who:** Claude (for Alice).
+- **What:** `geographic_candidates.py` supports the newer 07 notebook (uncertainty-adjusted radius, widened box) and adds `to_join_candidate`; `geographic_validation.py` takes `--geography-notebook`/`--pins` and checks the box against the producer's own rule; new `tests/test_geographic_integration.py` (8 tests). Teammate notebooks untouched; the downloaded 07 notebook was read from ~/Downloads, not copied.
+- **Validation:** local run on downloaded Silver (no Databricks): 9,989 geo-ready rows, 2 unsearchable; PINs 110001/400001/600001 → 749/700/347 candidates, 0 box omissions, all retained through LEFT JOIN, uncertainty fields preserved. 231/232 tests pass (test_kayakalp needs pdfplumber). No commits/pushes.
+
+### 2026-11-22 01:05: Audited real evidence review decisions and prepared geography handoff (Alice)
+- **Who:** Codex (for Alice)
+- **What:** Added read-only evidence review audit, per-R ledger generation, local snapshot regressions and component handoff documentation.
+- **How:** Reclassified actual downloaded Silver records as of 2026-11-22; inspected all 1,771 R pairs and eight T3/pending-T1 pairs; exercised real evidence with explicitly controlled geographic fixtures.
+- **Why:** Separate identity-review coverage from geographic readiness while teammate develops facility_geo_ready.
+- **Notes / follow-ups:** 223 Evidence Confidence tests pass. Real geographic validation awaits teammate handoff; no geography/shared pipelines, source data, tier policy or ranking policy changed in this phase. See docs/evidence-confidence-review-audit.md.
+
+### 2026-11-22 00:22: Audited downloaded Silver CSVs without regeneration or publication (Alice)
+- **Who:** Codex (for Alice).
+- **What:** Added `evidence_confidence/downloaded_silver_audit.py`, explicit CSV dialect support in the existing reader/CLI, six focused tests and `docs/evidence-confidence-downloaded-silver-audit.md`; linked the existing integration handoff. Preserved prior uncommitted pipeline and Evidence Confidence work.
+- **How:** Read all 14 downloaded CSVs (322,321,092 bytes) using their verified backslash-escape convention; checked keys/rows/types, full-row duplicates, arrays, references, geography, provenance, snapshot differences and contact-field presence. Reused the existing adapters/tier/LEFT JOIN/ranker/JSON interfaces with real records; inventory probes explicitly used unknown distances and were not geographic searches.
+- **Why:** Downloads are incomplete for full integration and publication eligibility must be separate from data quality. Missing Kayakalp/review/geographic exports, legacy schemas, unresolved source redistribution terms, a 136.3 MiB CSV and a public destination block publication.
+- **Validation / result:** 214 Evidence Confidence tests passed; full suite has one pdfplumber import error and pytest is unavailable. Synthetic smoke retains 32/32. Actual inventory probes retain 9,989/9,989 per service and preserve eight real T3 + pending-T1 cases without promotion. Source hashes unchanged; no downloaded records changed, regenerated, staged, committed or uploaded. No Databricks job ran in this task.
+
+### 2026-11-21 23:25: Silver generation/publication preflight blocked before execution (Alice)
+- **Who:** Codex (for Alice).
+- **What:** Added `docs/silver-generation-publication.md`; no preprocessing code, source data, tables, jobs or Evidence Confidence implementation changed.
+- **How:** Inspected setup/runner and notebook 00–06 source, source-licence documentation, actual local input presence, runtime dependencies, existing output directories, Git size/ignore/LFS configuration and official GitHub limits. Setup is a Databricks notebook/job provisioner, not a local environment installer. Its step 03 omits the persistence flag.
+- **Why:** The user's stop conditions prohibit publication with unclear redistribution rights. Virtue Foundation terms remain TODO, NCG records an all-rights-reserved restriction, and other source licences are unresolved; local PySpark/Delta/SDK runtime is also absent. No environment install, remote execution, dataset export, staging, commit, push, PR or merge was performed.
+- **Validation / result:** No Silver was generated or newly validated; published size 0 bytes, no publication commit. The report inventories expected outputs/dependencies, exact blockers and remaining reproduction/validation gates; documentation whitespace checks passed.
+
 ### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
 - **Who:** Claude (for Sophia)
 - **What:**

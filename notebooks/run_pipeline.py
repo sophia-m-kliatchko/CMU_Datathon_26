@@ -58,7 +58,7 @@ PIPELINE = [
     ("00", "00_pincode_bronze_to_silver", _opt("pincode_source", "source"), [], "pincode_validation"),
     ("01", "01_bronze_to_silver", _opt("facilities_source_table", "source_table"), ["00"], "facilities_validation"),
     ("02", "02_nqas_bronze_to_silver", {}, ["00"], "nqas_validation"),
-    ("03", "03_kayakalp_bronze_to_silver", {}, [], None),
+    ("03", "03_kayakalp_bronze_to_silver", {"silver_table": "kayakalp_silver_validation", "write_output": "true"}, [], None),
     ("04", "04_nfhs_bronze_to_silver", _opt("nfhs_source", "source"), ["00"], "nfhs_validation"),
     ("05", "05_registries_bronze_to_silver", {}, ["00"], None),
     ("06", "06_registry_matching", {}, ["01", "05"], None),
