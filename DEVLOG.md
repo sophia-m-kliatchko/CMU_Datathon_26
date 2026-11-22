@@ -22,6 +22,37 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - PR #14 (branch `nfhs-04`) now also carries `notebooks/run_pipeline.py` and the local-harness updates (`nbrun.py`, `run_all.sh`, `show_pipeline_log.sh`, `test_pipeline_failure.sh`, `README.md`), plus `CLAUDE.md` and `DEVLOG.md`.
+  - `scripts/local_spark/README.md`: added the `pipeline` / failure-test / log commands, which were missing because an earlier scripted edit skipped this file.
+- **How:** copied those files from `sophia-wip` onto `nfhs-04` (in a separate worktree) and pushed. The branch equals `sophia-wip` except for the two unverified Databricks files, which stay on `sophia-wip` only.
+- **Why:** Sophia chose to ship the runner together with the NFHS notebook it calls (step 04), so `main` gets both at once.
+
+### 2026-11-21 22:14: Pipeline runner `notebooks/run_pipeline.py` (00 → 06 with a run log)
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/run_pipeline.py`.
+  - Local harness: `scripts/local_spark/nbrun.py` (adds `dbutils.notebook.run`; command-line widgets now flow to child notebooks), `run_all.sh` (`pipeline` option), and new `test_pipeline_failure.sh` and `show_pipeline_log.sh`.
+  - Docs: `CLAUDE.md`, `scripts/local_spark/README.md`.
+  - New table `pipeline_run_log`.
+- **How:**
+  - Runs 00, 01, 02, 03, 04, 05, 06 in order with `dbutils.notebook.run`, passing `catalog` / `schema` (plus `target_*` for 01).
+  - **Dependencies:** 00 → 01, 02, 04, 05; 01 + 05 → 06; 03 is independent. A failed step marks the steps that depend on it `SKIPPED`; the other steps still run. Optional `stop_on_failure` stops everything after the first failure.
+  - **Run log:** each step appends a row to `pipeline_run_log`: `run_id`, `step`, `notebook`, `status` (OK / FAILED / SKIPPED / MISSING), `seconds`, `error` (Databricks' message), and `failed_checks` from that step's `<dataset>_validation` table during the run.
+  - **End of run:** prints a summary, then raises if any step failed, so a scheduled job turns red.
+  - **Inputs:** optional widgets `pincode_source`, `facilities_source_table` and `nfhs_source`, because 00 and 04 both name their input widget `source`. Blank means each notebook's own default.
+- **Why:** Sophia asked for a script that runs 00 → 06 in sequence and logs what breaks.
+- **Local tests:**
+  - **Clean run:** all 7 steps OK in ~4 min.
+  - **Forced failure** (`test_pipeline_failure.sh`: missing input file for 00): 00 FAILED with `[PATH_NOT_FOUND] Path does not exist: …`; 01, 02, 04, 05 and 06 SKIPPED with the reason; 03 OK; the run ends red.
+  - **Fixed during testing:** a missing data file was first mislabelled MISSING (that status now means only "notebook not found").
+- **Notes / follow-ups:**
+  - `03_kayakalp` runs in validation-only mode under the runner (`write_output` defaults to false), as it does when opened directly.
+  - The runner needs `04_nfhs_bronze_to_silver.py`, which is on `main` only after PR #14 merges; until then step 04 shows MISSING on `main`.
+  - Not yet run on Databricks.
+
 ### 2026-11-21 21:05: NFHS notebook fixed and fitted into the pipeline as `04_nfhs_bronze_to_silver.py`
 - **Who:** Claude (for Sophia; notebook written by elliotl-ops)
 - **What:**

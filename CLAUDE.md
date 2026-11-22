@@ -25,6 +25,7 @@ CMU Datathon Fall 2026, "Find the right care": given a medical service and a loc
 
 ## Run order and validation (required)
 - **Run order:** `00_pincode` → `01_bronze_to_silver` (facilities) → `02_nqas` → `03_kayakalp` → `04_nfhs` → `05_registries` → `06_registry_matching`. 01, 02, 04 and 05 read the India Post tables from 00 (04 only for an optional district check); 06 needs 01 and 05.
+- **Run everything in order on Databricks:** open `notebooks/run_pipeline.py` and Run all. It runs 00 → 06 with `dbutils.notebook.run`, skips steps whose prerequisites failed, appends one row per step to `pipeline_run_log` (status, seconds, error, failed validation checks), and fails at the end if any step failed.
 - **Verify locally before pushing notebook changes:** `scripts/local_spark/run_all.sh` runs every notebook in that order on a local Spark (WSL) against the repo CSVs, and `run_all.sh audit` checks the outputs (see `scripts/local_spark/README.md`).
 - Every silver notebook validates its output against its bronze table with `common/validation.py` (`run_validations()`), writes `<dataset>_validation`, and only publishes the silver table if every check passes. New silver notebooks must do the same.
 - Coordinates that don't match the record's PIN or state are set to NULL, never kept.

@@ -54,6 +54,7 @@ for n in $WANT; do
     03) run 03_kayakalp "$NB/03_kayakalp_bronze_to_silver.py" --widget write_output=true ;;
     05) run 05_registries "$NB/05_registries_bronze_to_silver.py" --widget external_path="$EXT" --widget reload_bronze=yes ;;
     06) run 06_matching "$NB/06_registry_matching.py" ;;
+    pipeline) run pipeline "$NB/run_pipeline.py" --widget pincode_source="$REPO/data/raw/india_post_pincode_directory.csv" --widget nfhs_source="$REPO/data/raw/nfhs_5_district_health_indicators.csv" --widget facilities_source_table=spark_catalog.vf.facilities --widget external_path="$EXT" --widget reload_bronze=yes ${STEPS:+--widget steps=$STEPS} ${EXTRA_WIDGETS} ;;
     audit_nfhs) "$PY" "$REPO/scripts/local_spark/audit_nfhs.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
     audit_links) "$PY" "$REPO/scripts/local_spark/audit_links.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
     audit) echo "================ audit ================"; "$PY" "$REPO/scripts/local_spark/audit.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
