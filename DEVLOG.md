@@ -22,7 +22,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 20:50: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
+### 2026-11-21 20:45: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
 - **Who:** Claude (for Sophia)
 - **What:**
   - Deleted `notebooks/nfhs_district_silver.py` on `sophia-wip`. Elliot had deleted it on `main` (`3ca16f7`) and replaced it with `notebooks/NFHS_Bronze_to_Silver.py`; it survived on `sophia-wip` only through a merge.
