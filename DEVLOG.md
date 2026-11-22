@@ -22,6 +22,66 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 21:05: NFHS notebook fixed and fitted into the pipeline as `04_nfhs_bronze_to_silver.py`
+- **Who:** Claude (for Sophia; notebook written by elliotl-ops)
+- **What:**
+  - `notebooks/NFHS_Bronze_to_Silver.py` renamed with `git mv` to `notebooks/04_nfhs_bronze_to_silver.py` and edited.
+  - `scripts/local_spark/run_all.sh` (runs it as `04`) and new `scripts/local_spark/audit_nfhs.py`.
+  - `CLAUDE.md` (run order, layout) and `docs/data-sources.md` (NFHS entry).
+- **How:** applied the four suggested fixes; Elliot's cleaning rules, quality report, gate, history, quarantine, copied-row detection and quality view are kept as written.
+  1. **Locations:** widgets `catalog` / `schema` / `source` (defaults `workspace.datathon` and `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv`) replace the candidate-path lists.
+  2. **Numbers:** whole numbers may be written `882.0` (pattern `^\d+(\.0+)?$`, cast via double to int).
+  3. **Caching:** `df.cache()` / `unpersist()` replaced by a staging table `_nfhs_stage`, dropped at the end.
+  4. **Pipeline conventions:**
+     - Notebook format with `%run` of the common helpers.
+     - Tables `nfhs_bronze` (raw copy of the whole file), `nfhs_silver`, `nfhs_quarantine`, `nfhs_quality_history` and the view `nfhs_quality_current`.
+     - `nfhs_validation` with 7 checks against bronze, run before writing.
+     - Citation columns plus `row_citation`.
+     - Writes go through `write_table()`, which blocks any `_clean` column.
+     - New columns `state` (standardized, for joins), `district_join_key` and `district_in_pin_directory` (optional check against `pincode_silver`).
+  - Also: `OPTIMIZE` / `ANALYZE` made best-effort. `ANALYZE … FOR ALL COLUMNS` isn't supported by open-source Delta, and it's housekeeping on a ~700-row table.
+  - Correction to my earlier claim: Elliot's PR #11 version already read the columns by name, so the column-order bug was already fixed there.
+- **Why:** Sophia asked to apply the fixes so the NFHS notebook works in the shared pipeline.
+- **Local run** (`run_all.sh 04` on `data/raw/nfhs_5_district_health_indicators.csv`):
+  - **Runs end to end.** Elliot's quality gate passes and all 7 validation checks pass.
+  - **Rows:** 706 bronze rows → 705 silver plus 1 quarantined (Mizoram "Chandel").
+  - **Values:** sex ratios 755–1,332 (at birth 658–1,485), percentages 16–100.
+  - **Flags:** 8 districts are low-sample, 2 have estimates, and 36 state names were fixed (Maharastra).
+  - **Directory match:** 613 of 705 districts match the India Post directory; the rest are mostly spelling variants (e.g. Koch Bihar / Cooch Behar), flagged only.
+- **Notes / follow-ups:**
+  - Upload the CSV to `/Volumes/workspace/datathon/external/` before running on Databricks.
+  - `nfhs_silver` keeps Elliot's 8 indicators; the other ~99 indicators are only in `nfhs_bronze`.
+  - Elliot should know his file was renamed and adapted.
+  - Not on `main` yet.
+
+### 2026-11-21 20:58: Re-checked Elliot's updated NFHS notebook (PR #11): still fails
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `main` (PR #11, `a0033bc` "Update NFHS_Bronze_to_Silver.py") into `sophia-wip`.
+  - `scripts/local_spark/run_all.sh`: two NFHS runs, `nfhs_asis` (unchanged notebook) and `nfhs` (repo data and local schema added to its candidate lists, as its own comment suggests).
+- **How:** local Spark run (see the 20:44 entry).
+- **Results:**
+  - **`nfhs_asis`:** stops at once with `ValueError: No readable bronze source found`. Its inputs are `/Volumes/main/default/bronze_data/NFR.csv`, `dbfs:/FileStore/tables/NFR.csv` and Elliot's personal upload, and none exist outside his workspace. Its output targets (`main.default`, `labuser_elliotl.silver`) don't exist in a Free Edition workspace either, where the catalog is `workspace`, so it would then stop with "No usable (catalog, schema) target".
+  - **`nfhs` (repo file `data/raw/nfhs_5_district_health_indicators.csv`):** its quality gate fails with 706/706 rows unparseable and 706/706 rows with a NULL indicator. The parsing logic didn't change: counts written like `882.0` fail its `^\d+$` pattern.
+- **Why:** Sophia asked to check whether the newly pulled NFHS notebook works.
+- **Suggested fixes for Elliot (not applied; it's his notebook):**
+  1. Add `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv` (or a `source` widget) to the inputs and `("workspace", "datathon")` to the targets.
+  2. Accept whole numbers written as `882.0`: pattern `^\d+(\.0+)?$`, cast via double to int.
+  3. Drop `df.cache()` (may not be supported on serverless).
+  4. Follow the pipeline conventions: number it `04`, write `nfhs_*` tables, and add a `<dataset>_validation` check and citation columns.
+- **Notes / follow-ups:** `main` and `sophia-wip` still differ only by the two unverified Databricks files and recent DEVLOG entries.
+
+### 2026-11-21 20:47: PR #10 merged: `main` now has the verified pipeline
+- **Who:** Sophia (approved the merge), Claude (merged)
+- **What:**
+  - PR #10 (`verified-pipeline` → `main`) merged as merge commit `4ba4065`, then brought into `sophia-wip`.
+  - Remote branch `verified-pipeline` deleted.
+- **How:** `gh pr merge 10 --merge --match-head-commit 4a789a5` (merged only if the head was still the verified commit), then `git merge origin/main` on `sophia-wip`.
+- **Why:** Sophia approved merging after the local end-to-end verification (20:44 entry).
+- **Notes / follow-ups:**
+  - **`main` and `sophia-wip` now differ only by the two unverified Databricks files** (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`), plus this DEVLOG entry until the next sync.
+  - **Next:** Pull `main` (or `sophia-wip`) in the Databricks Git folder, then run 00 → 01 → 02 → 03 → 05 → 06 once on Databricks to catch anything serverless-specific.
+
 ### 2026-11-21 20:45: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
 - **Who:** Claude (for Sophia)
 - **What:**
