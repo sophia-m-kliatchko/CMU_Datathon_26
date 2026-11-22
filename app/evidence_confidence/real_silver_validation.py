@@ -18,9 +18,9 @@ from .silver import (adapt_quality_tables, adapt_registry_tables, local_inventor
 from .validation import validate_integration
 
 
-def run_local_validation(export_dir, *, as_of, notebook_path, request=None, kayakalp_export=None):
+def run_local_validation(export_dir, *, as_of, notebook_path, request=None, kayakalp_export=None, csv_escapechar=None):
     inventory=local_inventory(export_dir,additional_exports=(
-        {'kayakalp_silver':kayakalp_export} if kayakalp_export else None))
+        {'kayakalp_silver':kayakalp_export} if kayakalp_export else None),csv_escapechar=csv_escapechar)
     hard_profile_fields=('missing_primary_keys','invalid_primary_key_types','duplicate_primary_key_rows',
                          'untyped_flag_rows','geographic_alias_conflicts')
     invalid_profiles=[name for name,entry in inventory['exports'].items()
@@ -35,10 +35,10 @@ def run_local_validation(export_dir, *, as_of, notebook_path, request=None, kaya
     if invalid_profiles:
         report.update(readiness='BLOCKED',real_end_to_end={'status':'FAIL','reason':'Resolve local export integrity failures.'})
         return report
-    tables={name:read_local_export(entry['path']) for name,entry in inventory['exports'].items()}
+    tables={name:read_local_export(entry['path'],csv_escapechar=csv_escapechar) for name,entry in inventory['exports'].items()}
     adapted=adapt_registry_tables(tables['facilities_silver'],tables['registry_sites_silver'],
         tables['registry_services_silver'],tables['facility_registry_links_silver'],
-        canonical_services=report['service_vocabulary'])
+        canonical_services=report['service_vocabulary'],reviews=tables.get('registry_match_review',()))
     report['registry_adaptation']={key:value for key,value in adapted.items() if key!='evidence'}
     if adapted['status']=='FAIL':
         report.update(readiness='BLOCKED',real_end_to_end={'status':'FAIL','reason':'Resolve registry integrity/adapter errors.'})
@@ -60,7 +60,7 @@ def run_local_validation(export_dir, *, as_of, notebook_path, request=None, kaya
                if (Path(export_dir)/(source+'_facility_links'+suffix)).is_file()]
         if len(paths)>1:
             raise ValueError('ambiguous supplemental quality link exports')
-        links=read_local_export(paths[0]) if paths else []
+        links=read_local_export(paths[0],csv_escapechar=csv_escapechar) if paths else []
         records.extend(adapt_quality_tables(tables[table],links,source=source,
             canonical_facility_ids=[r['facility_id'] for r in tables['facilities_silver']]))
         key='award_id' if source=='kayakalp' else 'certification_id'
@@ -99,15 +99,18 @@ def main():
     parser.add_argument('--as-of',required=True,type=date.fromisoformat)
     parser.add_argument('--notebook',default='notebooks/05_registries_bronze_to_silver.py')
     parser.add_argument('--kayakalp-export')
+    parser.add_argument('--csv-escapechar',help='Explicit one-character CSV escape convention; no automatic repair')
     parser.add_argument('--pin');parser.add_argument('--service');parser.add_argument('--radius-km',type=float)
     parser.add_argument('--mode',choices=('routine','urgent'),default='routine')
     args=parser.parse_args()
+    if args.csv_escapechar is not None and len(args.csv_escapechar)!=1:
+        parser.error('--csv-escapechar must be exactly one character')
     supplied=(args.pin,args.service,args.radius_km)
     if any(x is not None for x in supplied) and not all(x is not None for x in supplied):
         parser.error('--pin, --service and --radius-km must be supplied together')
     request=dict(pin=args.pin,service=args.service,radius_km=args.radius_km,mode=args.mode) if args.pin else None
     result=run_local_validation(args.export_dir,as_of=args.as_of,notebook_path=args.notebook,
-        request=request,kayakalp_export=args.kayakalp_export)
+        request=request,kayakalp_export=args.kayakalp_export,csv_escapechar=args.csv_escapechar)
     print(json.dumps(result,indent=2,allow_nan=False))
     return 1 if result['readiness']=='BLOCKED' else 0
 
