@@ -17,3 +17,6 @@ shared/handoffs/
 # Local secrets
 .env
 .env.*
+
+# Databricks CLI sync state (databricks sync)
+.databricks/

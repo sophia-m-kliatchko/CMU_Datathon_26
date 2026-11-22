@@ -22,6 +22,24 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 23:28: Test deploy of the web app as a Databricks App
+- **Who:** Claude (for William)
+- **What:**
+  - New Databricks App `find-the-right-care` (compute MEDIUM), with resources `sql-warehouse` (Serverless Starter Warehouse, CAN_USE) and `serving-endpoint` (`databricks-meta-llama-3-3-70b-instruct`, CAN_QUERY).
+  - Code uploaded to `/Workspace/Users/<William>/apps/find-the-right-care` from the `website` branch (commit 7f5b751).
+  - Granted the app's service principal `USE CATALOG` on `workspace` and `USE SCHEMA, SELECT` on `workspace.datathon`.
+- **How:** `databricks apps create --json` (resources attached at creation, so no UI step), `databricks sync`, GRANTs through the SQL warehouse, `databricks apps deploy`.
+- **Why:** Check that the app runs on Databricks before the evidence engine is ready. Verified on the deployed URL:
+  - `/api/health` reports live data;
+  - a PIN lookup for 800001 works;
+  - a dialysis search within 100 km of Patna returns 204 candidates (IGIMS T2 first);
+  - the Llama explainer answers.
+- **Notes / follow-ups:**
+  - It still uses the placeholder evidence and ranking.
+  - Teammates need workspace access plus *Can use* on the app to open it.
+  - An app's compute runs until stopped (`databricks apps stop find-the-right-care`).
+  - Added `.databricks/` (the CLI's sync state) to `.gitignore`.
+
 ### 2026-11-21 23:22: README rewritten for the no-gold-table plan
 - **Who:** Claude (for William)
 - **What:** In `app/README.md`, rewrote:
