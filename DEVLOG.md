@@ -22,6 +22,31 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:01: Pipeline check re-run on main's verified pipeline (00 → 01 + 05 → 06, plus 02 and 03)
+- **Who:** Claude (for William)
+- **What:**
+  - Job 413468616877500 updated to "Pipeline check: 00 -> 01 + 05 -> 06, plus 02 and 03". It uses unchanged copies of `Will_branch` `427dc75` (main + 2 commits), with notebook 02 also depending on 00.
+  - Dropped `kayakalp_silver_validation` beforehand (notebook 03 is create-only).
+  - Run 253038959423039: 00, 02, 03 and 05 succeeded.
+  - **Notebook 01 failed:** `InvalidRunConfiguration: The selected GPU base environment is incompatible with the selected accelerator (CPU)`. Its file starts with a `# /// script … base_environment = "databricks_ai_v6" … # ///` header, from commit `4297f3c`. That's a GPU environment, while serverless jobs run on CPU.
+  - Fix, **in the workspace copy only:** deleted notebook 01 and re-imported it without those 5 lines. Overwriting in place wasn't enough: the environment recorded at first import stayed. Then repaired 01 and 06, which **succeeded**.
+- **How:**
+  - `workspace delete` + `workspace import` (new object, no environment metadata, checked by a Jupyter export).
+  - `jobs repair-run` with `latest_repair_id`: a second repair is silently not created without it.
+  - Counts checked with the SQL Statements API.
+- **Results, with the previous run (patched old main) for comparison:**
+  - `facilities_silver` 9,989 (=). **Facilities with coordinates: 8,350**. Main's notebook 01 now nulls coordinates that don't match the PIN: 1,598 `nulled_pin_mismatch`, 5 `nulled_state_mismatch`.
+  - `pincode_*`, `registry_*`, `nqas_silver` (989) and `kayakalp_silver_validation` (1,197) all unchanged.
+  - **Links:** 4,241 (was 4,482). Needing review: 1,154 (was 1,444). Confident: 3,087 (was 3,038).
+  - Facilities in at least one registry: 2,639 (was 2,745).
+  - Confident evidence: C-section 118 (114), trauma 130 (126), cancer 98 (90), dialysis 37 (36), blood bank 21 (19), NICU 4 (4).
+  - Teammates' validation tables written and passed: `facilities_validation`, `pincode_validation`, `nqas_validation`.
+- **Why:** Main now has Sophia's verified pipeline, with both reported bugs fixed and the PIN notebook renamed 04 → 00. William wanted the job verified on the current code. Reading the change: with bad facility coordinates removed, fewer pairs qualify on distance, so there are fewer links overall. But fewer links get flagged "more than 10 km apart", so more of them are confident.
+- **Notes for Sophia:**
+  - Remove the `# /// script … # ///` header (lines 2–6) from `notebooks/01_bronze_to_silver.py`. It makes notebook 01 fail in any serverless or CPU job.
+  - Databricks adds this header when the notebook is exported or committed from a workspace where the AI/GPU environment was selected.
+
+
 ### 2026-11-21 21:31: Notebooks 02 (NQAS) and 03 (Kayakalp) added to the Databricks pipeline check
 - **Who:** Claude (for William)
 - **What:**
