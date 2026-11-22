@@ -22,6 +22,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:12: Merged `main` (Kayakalp validation, PR #5) into `Will_branch`
+- **Who:** Claude (for William)
+- **What:** Merged `origin/main` up to `7daea47` into `Will_branch`. It brings in JhK830's Kayakalp validation: `notebooks/03_kayakalp_bronze_to_silver.py` changes, `scripts/validate_kayakalp.py`, `scripts/requirements-kayakalp.txt`, `tests/test_kayakalp.py`, `docs/kayakalp-validation-handoff.md`, and edits to `docs/silver-tables.md` and `docs/data-sources.md`.
+- **How:** `git merge --no-ff origin/main`. No conflicts. Alice's DEVLOG entry stays at the bottom of the file, where it is on main.
+- **Why:** So the pull request from `Will_branch` into `main` is clean and includes everyone's latest work. None of the incoming files are used by notebooks 05/06.
+
+
 ### 2026-11-21 20:00: Registry silver tables built on Databricks; serverless fixes to notebooks 05 and 06
 - **Who:** Claude (for William)
 - **What:**
@@ -618,3 +625,10 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Constraints:** Must run on Databricks Free Edition, use the Virtue Foundation dataset of about 10,000 Indian facilities with 51 attributes each, support a non-technical user workflow, cite the facility text behind every claim or score, and communicate uncertainty.
 - **Team:** Sophia (the most experienced with Databricks) plus 3 collaborators.
 - **Why logged:** To keep the goal and the rules in one place for everyone.
+
+## 2026-11-21 — Authorized isolated Kayakalp persistence attempt
+
+- Executed unchanged notebook 03 with explicit isolated catalog/schema and `write_output=true`; failed before creation because Spark Connect rejects `errorifexists`. Canceled the automatic retry; kept write behavior and transformation unchanged.
+- Prepared separate read-only session checks and retained submission, traceback, source hashes and comparison evidence in ignored `shared/runs/kayakalp-validation/databricks/persistence/`.
+- Updated validation handoff with the blocker, intended target, queries, review/access limitations and integration recommendations against Sophia `106316d2d81db70755e8e94aaaef2241e0d4f2fd` (district/state naming and reference-helper conflict). Claude review attempt failed because CLI is not logged in. No push, merge, credential or generated-data commit, shared modification, overwrite/drop/truncate, or new cluster/warehouse.
+- Separate read-only run `694938706475969` completed: Bronze actual count 1,197; Silver absent; Spark 4.2.0. Parent persistence run canceled after first failed attempt. Final documentation whitespace check passed.

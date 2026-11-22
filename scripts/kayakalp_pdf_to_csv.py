@@ -8,7 +8,7 @@ pdfplumber can still read it as long as it opens without a password.
 
 Output columns:
     s_no, financial_year, award_raw, award_rank, award_category, facility_type,
-    facility_name, district, state, source_file, source_page
+    facility_name, district, state, state_raw, district_repaired, source_file, source_page
 
 Requires:  python -m pip install pdfplumber
 
