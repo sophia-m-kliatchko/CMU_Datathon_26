@@ -137,7 +137,7 @@ Full citations (publisher, URL, retrieval date, licence, processing chain, limit
 
 ```
 notebooks/            Databricks notebooks (source .py format), in pipeline order 00-06
-  common/             shared helpers loaded with %run (and pin_nearby_facilities, see Known issues)
+  common/             shared helpers loaded with %run (and pin_nearby_facilities.py, see Known issues)
   setup_pipeline.py   one-time workspace setup + the Lakeflow Job
   run_pipeline.py     00->06 runner with pipeline_run_log (local Spark / classic clusters only)
 data/raw/             core raw datasets (facilities, PIN directory, NFHS-5)
@@ -201,7 +201,7 @@ python scripts/dryrun_coordinate_checks.py
 
 ## Known issues
 
-- **`notebooks/common/pin_nearby_facilities`** (notebook "07": PIN → nearby facilities) has no `.py` extension, so Databricks won't treat it as a notebook. It also lives in `common/`, so its `%run ./common/...` lines point to the wrong folder. It belongs at `notebooks/07_pin_nearby_facilities.py`.
+- **`notebooks/common/pin_nearby_facilities.py`** (notebook "07": PIN → nearby facilities) lives in `common/`, so its `%run ./common/...` lines point to `notebooks/common/common/`, which doesn't exist. It belongs at `notebooks/07_pin_nearby_facilities.py`. It hasn't been run on Databricks yet.
 - **NQAS is historical:** every certificate in the scraped list expired between 2019 and 2023. Treat it as "was certified".
 - **Notebook 03** runs in validation-only mode by default, so it doesn't persist a Kayakalp silver table unless `write_output=true`.
 - **`setup_pipeline` before 2026-11-21 read `facilities.csv` with the wrong escape character,** which garbled `latitude` in about 9,700 rows. It's fixed now. If you built `workspace.datathon.facilities` with an older `setup_pipeline`, drop that table and run setup again.
