@@ -22,6 +22,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 00:18: Added nearby-facility search to the pipeline
+- **Who:** Copilot (for Elliot)
+- **What:** Moved `notebooks/common/pin_nearby_facilities.py` to `notebooks/07_pin_nearby_facilities.py`; added step 07 to `setup_pipeline.py`, `run_pipeline.py`, and `scripts/local_spark/run_all.sh`; documented the 00 → 07 run order.
+- **How:** Replaced the hand-run dependency on `facility_geo_ready` with a fresh rebuild, and changed radius matching to include facilities whose uncertainty-adjusted closest distance is within the requested radius while retaining measured distance and uncertainty columns.
+- **Why:** A fresh pipeline could not build or run the nearby-facility app, and the previous radius filter ignored coordinate uncertainty.
+- **Notes / follow-ups:** Rerun setup_pipeline and the 00–07 Job on Databricks to recreate `facility_geo_ready`; verify step 07 with a PIN and radius before merging.
+
 ### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
 - **Who:** Claude (for Sophia)
 - **What:**
