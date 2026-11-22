@@ -22,6 +22,37 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 08:41: Website brought up to date with Alice's `evidence_confidence` on main (claims, review decisions, radius rule)
+- **Who:** Claude (for William)
+- **What:** new branch `website_finalization` from `main` @ 8a2c8d3 (PR #19).
+  - `app/evidence_confidence/`: re-copied unchanged from main's `evidence_confidence/` (last commit c5f1586). `app/EVIDENCE_CONFIDENCE_VERSION` now records `source_branch: main`, commit c5f1586e…, and how to update from main.
+  - `app/backend/geography.py` `nearby_facilities()`: Alice's and notebook 07's radius rule. `distance_min_km = max(distance_km - location_uncertainty_km, 0) <= radius` (was `distance_km <= radius`); bounding box widened by the largest `location_uncertainty_km` (cached `max_uncertainty_km()`); `distance_min_km` returned.
+  - `app/backend/engine.py`:
+    - `load_claims()` reads `silver_facility_claims` (fields specialties / capability / procedure / equipment, coarse `claim_norm` prefilter that is a superset of her patterns) for services in her `CLAIM_PATTERNS`. `claim_evidence()` turns them into self-reported Evidence (T3 cap) added to the registry evidence.
+    - `load_reviews()` reads `registry_match_review` rows with a `reviewer_decision`, passed to `adapt_registry_tables(reviews=)`.
+    - `distance_min_km` passed to `build_recommendation_response`; the adapter report now includes `claim_mapping` and row counts for reviews and claims.
+    - Display: claims shown as "Listed under procedures: “…”" with source "Facility's own listing (Virtue Foundation dataset)"; cards with only self-reported T3 say so and get `self_reported_only`; the C-section qualifier `CLAIM_DOES_NOT_STATE_EMERGENCY` becomes a warning; facilities kept by the uncertainty rule say why they're outside the radius; two new auditor strings from her package mapped; R cards no longer also say "no record was found".
+  - `app/main.py`: provisional note says claims count for dialysis and C-section. `app/static/app.js`: T3 stamp reads "Self-reported" when only claims support it.
+  - `app/README.md`, `CLAUDE.md`: tables read, call sequence, update steps from main, answered questions.
+- **How:** `git archive HEAD evidence_confidence | tar -x -C app` (checked identical with `diff -rq`); ran her tests on main (228 pass, 18 skipped, 1 unrelated error: `scripts/kayakalp_pdf_to_csv.py` needs `pdfplumber`). Local app in live mode against warehouse 280169f53e6a2de0: 7 searches, adapter PASS on all; Playwright screenshots of 3 searches, no console errors.
+- **Why:** Alice's PR #19 added the claim mapping, review-decision support and a handoff list for the website (`docs/recommendation-pipeline.md`): radius rule, `distance_min_km`, selection policy. William asked to bring the website up to date with it and to count C-section claims for now.
+- **Result (live tables, 50 km unless noted):**
+
+  | Search | Before | Now |
+  |---|---|---|
+  | Patna 800020 dialysis | T3 1 | T3 30 (claims) |
+  | Chennai 600001 dialysis | | T3 34, R 2 |
+  | Delhi 110001 C-section | T1 1, T3 0 | T1 1, T3 46, R 3 |
+  | Patna C-section, emergency | 5 unconfirmed | 11 T3 unconfirmed |
+  | Mumbai 400001 blood bank, 25 km | T1 Lilavati | unchanged (no claim mapping) |
+
+  The radius rule adds 2–12 candidates per search (110001: 12, matching Alice's measurement).
+- **Tradeoffs / decisions:**
+  - C-section claims count for `emergency_c_section` (William's call; Alice flagged it for the team). Each such card warns that the claim doesn't state emergency availability.
+  - Kept the app's own SQL loading instead of her `recommend_facilities()`, which reads a local CSV bundle that a Databricks App doesn't have.
+  - Kept Sophia's selection policy (top 3, filled in her order) rather than her ranks 1..K; noted in `app/README.md` as a team decision.
+- **Notes / follow-ups:** not yet committed or redeployed. `registry_match_review.reviewer_decision` is empty (0 of 1,197), and notebook 06 overwrites the table, so a separate decisions table is still needed.
+
 ### 2026-11-22 05:00: Backend final validation (Alice)
 - **Who:** Claude (for Alice). Read-only on teammate branches; no commits or merges.
 - **What:** ran `recommend_facilities` on 4 real queries with Elliot's 07 notebook; corrected merge notes (only `setup_pipeline.py` conflicts, 1 hunk; the rename deletes the legacy notebook); re-measured website radius-rule loss.

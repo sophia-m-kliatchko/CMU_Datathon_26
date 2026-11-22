@@ -168,7 +168,8 @@
     stamp.classList.add(`t-${r.tier}`);
     stamp.setAttribute("aria-label", `Evidence tier ${r.tier}: ${r.evidence_level}`);
     $(".stamp__tier", node).textContent = r.tier;
-    $(".stamp__label", node).textContent = TIER_LABEL[r.tier] || r.evidence_level;
+    $(".stamp__label", node).textContent = r.tier === "T3" && r.self_reported_only ? "Self-reported"
+      : (TIER_LABEL[r.tier] || r.evidence_level);
     $(".card__geo", node).classList.add(`geo-${r.geo_confidence}`);
     $(".card__dist", node).textContent = `${Number(r.distance_km).toFixed(1)} km`;
     $(".card__geolabel", node).textContent = `straight-line · ${r.geo_label}`;
