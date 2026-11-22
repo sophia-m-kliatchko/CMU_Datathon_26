@@ -22,6 +22,17 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:47: PR #10 merged: `main` now has the verified pipeline
+- **Who:** Sophia (approved the merge), Claude (merged)
+- **What:**
+  - PR #10 (`verified-pipeline` → `main`) merged as merge commit `4ba4065`, then brought into `sophia-wip`.
+  - Remote branch `verified-pipeline` deleted.
+- **How:** `gh pr merge 10 --merge --match-head-commit 4a789a5` (merged only if the head was still the verified commit), then `git merge origin/main` on `sophia-wip`.
+- **Why:** Sophia approved merging after the local end-to-end verification (20:44 entry).
+- **Notes / follow-ups:**
+  - **`main` and `sophia-wip` now differ only by the two unverified Databricks files** (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`), plus this DEVLOG entry until the next sync.
+  - **Next:** Pull `main` (or `sophia-wip`) in the Databricks Git folder, then run 00 → 01 → 02 → 03 → 05 → 06 once on Databricks to catch anything serverless-specific.
+
 ### 2026-11-21 20:45: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
 - **Who:** Claude (for Sophia)
 - **What:**
