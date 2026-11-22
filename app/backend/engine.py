@@ -293,8 +293,26 @@ def _ranking_text(f, tier_label, mode, edges):
     return s
 
 
-def shape(response, candidates, tier_label, top_n, alternatives_n):
-    """Returns (recommendations, unconfirmed, alternatives, tier_counts), each facility in the page's format."""
+def self_reports(facility_ids, service):
+    """{facility_id: [claim texts]} for facilities whose own listing mentions the service
+    (silver_facility_claims, matched with the service's synonyms). Not verified: shown as U."""
+    from . import services
+    svc = services.BY_TAG.get(service)
+    if not facility_ids or not svc:
+        return {}
+    rows = db.query(
+        f"""SELECT facility_id, collect_set(claim_text) AS texts
+            FROM {config.t('silver_facility_claims')}
+            WHERE array_contains(split(:ids, ','), facility_id) AND claim_norm RLIKE :pat
+            GROUP BY facility_id""",
+        {"ids": ",".join(str(i) for i in facility_ids), "pat": "|".join(svc["synonyms"])})
+    return {r["facility_id"]: db.as_list(r["texts"])[:3] for r in rows}
+
+
+def shape(response, candidates, tier_label, top_n, alternatives_n, claims=None):
+    """Returns (recommendations, unconfirmed, alternatives, tier_counts), each facility in the page's format.
+    claims: {facility_id: [self-reported texts]} from self_reports(); only these may fill empty slots."""
+    claims = claims or {}
     extra = {c["facility_id"]: c for c in candidates}
     mode = response["request"]["mode"]
     radius_km = response["request"].get("radius_km")
@@ -305,6 +323,11 @@ def shape(response, candidates, tier_label, top_n, alternatives_n):
         c = extra.get(f["facility_id"], {})
         items = _items(se)
         tier = se["effective_tier"]
+        if tier not in DOCUMENTARY and not any(i["kind"] == "self_reported" for i in items):
+            items += [{"kind": "self_reported", "text": f"Facility's own listing mentions: “{t}”",
+                       "source": "Virtue Foundation listing (self-reported, not verified)", "url": None,
+                       "status": "not verified", "match": {"needs_review": False}}
+                      for t in claims.get(f["facility_id"], [])]
         return {
             "facility_id": f["facility_id"], "facility_name": f.get("name") or "(name not listed)",
             "location": ", ".join(x for x in (c.get("city"), c.get("state")) if x), "pincode": c.get("pincode"),
@@ -334,10 +357,11 @@ def shape(response, candidates, tier_label, top_n, alternatives_n):
         top = [f for f in response["recommendations"] if f["service_evidence"]["effective_tier"] in DOCUMENTARY][:top_n]
         chosen = {f["facility_id"] for f in top}
         rest = [f for f in response["recommendations"] if f["facility_id"] not in chosen]
-        # Always show top_n cards: if fewer have documentary evidence, fill with the next best in her order
-        # (some evidence first, then the nearest unknowns). Their tier stamp and ledger say what's missing.
-        fill = ([f for f in rest if f["service_evidence"]["effective_tier"] != "U"]
-                + [f for f in rest if f["service_evidence"]["effective_tier"] == "U"])[:top_n - len(top)]
+        # If fewer than top_n have documentary evidence, fill the remaining slots with the NEAREST
+        # facilities whose own listing claims the service (still labelled U). Never unrelated facilities.
+        claimed = sorted((f for f in rest if f["facility_id"] in claims),
+                         key=lambda f: (f["distance_km"] is None, f["distance_km"] or 0))
+        fill = claimed[:max(0, top_n - len(top))]
         top += fill
         filled = {f["facility_id"] for f in fill}
         rest = [f for f in rest if f["facility_id"] not in filled]
@@ -354,6 +378,7 @@ def shape(response, candidates, tier_label, top_n, alternatives_n):
     # Table of alternatives: ones with some evidence (incl. R / X) first, then the nearest unknowns.
     # Both groups keep her order.
     with_evidence = [f for f in rest if f["service_evidence"]["effective_tier"] != "U"]
-    unknown = [f for f in rest if f["service_evidence"]["effective_tier"] == "U"]
+    # Unknowns only if their own listing claims the service, so unrelated facilities never appear.
+    unknown = [f for f in rest if f["service_evidence"]["effective_tier"] == "U" and f["facility_id"] in claims]
     alternatives = (with_evidence + unknown)[:alternatives_n]
     return [one(f) for f in top], [one(f) for f in unconfirmed], [one(f) for f in alternatives], counts
