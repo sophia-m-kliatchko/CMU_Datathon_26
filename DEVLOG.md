@@ -22,6 +22,34 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:55: setup_pipeline.py for teammates; notebook 03 validation-mode fix
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/setup_pipeline.py`: one-run Databricks setup for teammates. Auto-detects the repo Git folder, creates schema `workspace.datathon` and the bronze tables (`nqas_certified_facilities`, `kayakalp_bronze`, the 9 registry `*_bronze` tables, `facilities`) as all-text from the repo CSVs when missing, then creates or updates the "CMU Datathon pipeline 00-06" job (00 to 06 sequential, serverless, CPU environment v5; steps 00/04 read the repo CSVs, step 01 reads the created `facilities` table, step 05 runs with `reload_bronze=no`). Job operations go through raw REST (`w.api_client.do`) because this workspace's SDK rejects dict arguments for `environments`; validated with a create/list/update smoke test.
+  - `notebooks/03_kayakalp_bronze_to_silver.py`: the check/display cells now query the temp view `kayakalp_validation_result` instead of `{SILVER}`. In validation mode (`write_output=false`, the job default) the silver table is never written, so `FROM {SILVER}` crashed step 03 of run 270846421127289 with TABLE_OR_VIEW_NOT_FOUND. The view exists in both modes and is identical to the table in write mode.
+- **How:** exact-match patches verified with syntax checks; notebook 02's earlier fix proved out in the repair run (step 02 green).
+- **Why:** Sophia asked how friends can pull the updates and set up the pipeline in Databricks.
+- **Notes:** teammates run the job, not `run_pipeline.py`, on serverless. Leftover smoke-test job 207585649559027 should be deleted from the Jobs UI.
+
+### 2026-11-21 22:50: Notebook 02 date validation accepts ISO text from the DATE-typed bronze
+- **Who:** Claude (for Sophia)
+- **What:** `date_differs` in `notebooks/02_nqas_bronze_to_silver.py` now accepts both d-m-yyyy text (the site's format, as in the repo CSV) and ISO yyyy-mm-dd (what the DATE-typed `nqas_certified_facilities` columns render as when cast to string); rows whose text matches neither layout are listed as validation failures instead of crashing on `''` → INT casts.
+- **How:** job run 270846421127289 failed at step 02 with CAST_INVALID_INPUT. The bronze table was uploaded with type inference (dates became DATE columns), so the d-m-yyyy-only regexp no longer matched. Sophia chose to keep the DATE-typed table, so the notebook now handles both layouts. `parse_date` already handled ISO, so only `date_differs` needed the fix.
+- **Why:** keep the bronze table as uploaded; the same notebook must run against the local harness's text CSVs and the workspace's typed table.
+- **Notes / follow-ups:** fix committed on branch `pipeline-fixes`.
+
+### 2026-11-21 22:35: Pipeline as a Lakeflow Job; missing bronze inputs created; GPU env headers removed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New job `CMU Datathon pipeline 00-06` (id 448999964395839): notebooks 00–06 as sequential tasks (00 → 01 → … → 06) on serverless job compute. This replaces `run_pipeline`'s `dbutils.notebook.run` calls, which cannot run from this workspace's serverless notebook compute ("NOT_FOUND: Cluster … does not exist").
+  - Job parameters: 00 and 04 read the shared UC tables (`…dais_2026.virtue_foundation_dataset.india_post_pincode_directory` and `.nfhs_5_district_health_indicators`) because their volume widget defaults don't exist; 03 gets `bronze_table=kayakalp_bronze`; 05 runs with `reload_bronze=no` (uses existing bronze tables).
+  - Created `workspace.datathon.kayakalp_bronze` (1,197 rows) from `data/external/kayakalp_2021_22.csv`.
+  - Created the 9 registry bronze tables (laqshya ×2, trauma, nmc ×2, dnb ×2, ncg, nabh) from the `datasets/external/**` CSVs, all-string columns plus `_ingested_at`/`_source_file`, matching notebook 05's loader.
+  - Removed the `# /// script` environment headers (`base_environment = "databricks_ai_v6"`, a GPU environment) from notebooks 00, 01, 02, 04; staged in git.
+- **How:** job created and configured via the Jobs API (7 sequential tasks, 60-min timeout each); bronze tables loaded with Spark CSV reads (all-string, same read options as the notebooks' loaders); headers removed with an exact-match patch script; then a job-level `environment_key` ("default", CPU environment version 5) was added to all 7 tasks.
+- **Why:** Sophia asked for a script that runs all pipeline code sequentially. The first two job runs failed instantly with "The selected GPU base environment is incompatible with the selected accelerator (CPU)": the notebooks' environment setting persists server-side (Environment panel), so removing the source headers alone wasn't enough — the job-level CPU environment on every task overrides it, and the third run is executing.
+- **Notes / follow-ups:** step 03 runs in validation mode by default (`write_output=false`), so it does not create `kayakalp_silver`; create that separately if analysis needs it. `run_pipeline` stays for reference but can't orchestrate on serverless notebook compute.
+
 ### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
 - **Who:** Claude (for Sophia)
 - **What:**

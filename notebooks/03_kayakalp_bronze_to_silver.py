@@ -229,7 +229,7 @@ silver = spark.table("kayakalp_validation_result")
 assert silver.count() == silver.select("award_id").distinct().count(), "award_id is not unique"
 display(spark.sql(f"""
   SELECT award_category, award_rank, count(*) AS awards, count_if(state IS NULL) AS state_unrecognized
-  FROM {SILVER} GROUP BY ALL ORDER BY award_category, min(award_rank_order)"""))
+  FROM kayakalp_validation_result GROUP BY ALL ORDER BY award_category, min(award_rank_order)"""))
 
 # COMMAND ----------
 
@@ -241,4 +241,4 @@ display(spark.sql(f"""
 
 display(spark.sql(f"""
   SELECT state, facility_type_reported, count(*) AS awards
-  FROM {SILVER} GROUP BY ALL ORDER BY state, awards DESC"""))
+  FROM kayakalp_validation_result GROUP BY ALL ORDER BY state, awards DESC"""))

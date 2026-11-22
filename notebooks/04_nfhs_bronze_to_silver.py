@@ -1,9 +1,4 @@
 # Databricks notebook source
-# /// script
-# [tool.databricks.environment]
-# base_environment = "databricks_ai_v6"
-# environment_version = "6"
-# ///
 # MAGIC %md
 # MAGIC # 04 · NFHS-5 district indicators: `nfhs_bronze` → `nfhs_silver`
 # MAGIC
