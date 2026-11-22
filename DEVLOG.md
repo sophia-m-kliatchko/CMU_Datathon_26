@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:55: setup_pipeline.py for teammates; notebook 03 validation-mode fix
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/setup_pipeline.py`: one-run Databricks setup for teammates. Auto-detects the repo Git folder, creates schema `workspace.datathon` and the bronze tables (`nqas_certified_facilities`, `kayakalp_bronze`, the 9 registry `*_bronze` tables, `facilities`) as all-text from the repo CSVs when missing, then creates or updates the "CMU Datathon pipeline 00-06" job (00 to 06 sequential, serverless, CPU environment v5; steps 00/04 read the repo CSVs, step 01 reads the created `facilities` table, step 05 runs with `reload_bronze=no`). Job operations go through raw REST (`w.api_client.do`) because this workspace's SDK rejects dict arguments for `environments`; validated with a create/list/update smoke test.
+  - `notebooks/03_kayakalp_bronze_to_silver.py`: the check/display cells now query the temp view `kayakalp_validation_result` instead of `{SILVER}`. In validation mode (`write_output=false`, the job default) the silver table is never written, so `FROM {SILVER}` crashed step 03 of run 270846421127289 with TABLE_OR_VIEW_NOT_FOUND. The view exists in both modes and is identical to the table in write mode.
+- **How:** exact-match patches verified with syntax checks; notebook 02's earlier fix proved out in the repair run (step 02 green).
+- **Why:** Sophia asked how friends can pull the updates and set up the pipeline in Databricks.
+- **Notes:** teammates run the job, not `run_pipeline.py`, on serverless. Leftover smoke-test job 207585649559027 should be deleted from the Jobs UI.
+
 ### 2026-11-21 22:50: Notebook 02 date validation accepts ISO text from the DATE-typed bronze
 - **Who:** Claude (for Sophia)
 - **What:** `date_differs` in `notebooks/02_nqas_bronze_to_silver.py` now accepts both d-m-yyyy text (the site's format, as in the repo CSV) and ISO yyyy-mm-dd (what the DATE-typed `nqas_certified_facilities` columns render as when cast to string); rows whose text matches neither layout are listed as validation failures instead of crashing on `''` → INT casts.
