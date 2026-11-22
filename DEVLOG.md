@@ -22,7 +22,7 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
-### 2026-11-21 20:12: Merged `main` (Kayakalp validation, PR #5) into `Will_branch`
+### 2026-11-21 20:05: Merged `main` (Kayakalp validation, PR #5) into `Will_branch`
 - **Who:** Claude (for William)
 - **What:** Merged `origin/main` up to `7daea47` into `Will_branch`. It brings in JhK830's Kayakalp validation: `notebooks/03_kayakalp_bronze_to_silver.py` changes, `scripts/validate_kayakalp.py`, `scripts/requirements-kayakalp.txt`, `tests/test_kayakalp.py`, `docs/kayakalp-validation-handoff.md`, and edits to `docs/silver-tables.md` and `docs/data-sources.md`.
 - **How:** `git merge --no-ff origin/main`. No conflicts. Alice's DEVLOG entry stays at the bottom of the file, where it is on main.
