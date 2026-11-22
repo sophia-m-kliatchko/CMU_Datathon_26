@@ -22,6 +22,14 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 01:02: Merged `Will_branch` and `main` into `website`
+- **Who:** Claude (for William)
+- **What:** `website` now includes:
+  - `Will_branch` (70c2e6f): the notebook 06 kind-of-place check and its docs;
+  - `origin/main` (73facd8): Sophia's Databricks-verified pipeline, `setup_pipeline.py`, `run_pipeline.py`, NFHS notebook 04, the project README and the pre-processed silver CSVs.
+- **How:** `git merge Will_branch`, then `git merge origin/main`. The only conflicts were in `DEVLOG.md`, where both sides had added entries at the top. I kept all 23 entries (no duplicates) and ordered them by timestamp, newest first. CLAUDE.md merged automatically and keeps the `app/` line and main's updated run order.
+- **Why:** Keep the website branch current with the pipeline it reads. The app code is unchanged, so the deployed app still matches.
+
 ### 2026-11-22 00:52: End-to-end Databricks run (00 → 07) with main's notebooks + the 06 kind-of-place fix
 - **Who:** Claude (for William)
 - **What:**
