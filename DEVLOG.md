@@ -22,6 +22,27 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 18:43: Creation-only Kayakalp Silver persistence compatibility fix
+- **Who:** Codex (for Alice).
+- **What:** `notebooks/03_kayakalp_bronze_to_silver.py` persistence branch only; `tests/test_kayakalp.py` expects the explicit existing-table error and skips local Delta CTAS when Delta extensions are absent; isolated execution harness and validation artifacts in ignored `shared/runs/kayakalp-validation/databricks/persistence_ctas/`; handoff updated with final outcome.
+- **How:** explicit target existence check, same-session unique temporary view, `CREATE TABLE ... USING DELTA AS SELECT`, then bidirectional `EXCEPT ALL` readback. No `IF NOT EXISTS` or replacement operation. Existing runtime is Spark Connect 4.2.0; prior isolated Bronze CTAS succeeded on this environment.
+- **Why:** `errorifexists` alias is rejected by this client. User explicitly authorized this minimal persistence change; validated cleaning and all 30 columns remain identical. No Bronze ingestion, paid cluster/warehouse creation, shared modification, push, merge or PR. Claude independent review unavailable due to unauthenticated CLI.
+- **Results:** CTAS creation run `401124689166111` and separate read-only run `292844685607275` both succeeded. Managed Delta table `labuser_alice083073.alice_kayakalp_validation_20261121_215928.kayakalp_silver_validation`: 1,197 rows/unique award IDs, unchanged 30 names/types, full-row baseline hash match, bidirectional row equality, complete provenance, expected DQ counts. CTAS nullability metadata is relaxed; no enforced key/NOT NULL constraints were added. Local Spark tests could not start the Java gateway; three extraction checks, compile and whitespace checks passed.
+
+
+### 2026-11-21 17:14: Reviewed completed Databricks validation and added original notebook name
+- **Who:** Codex (for Alice); independent Claude CLI final-results review completed: PASS for validation-only; no blocking discrepancies. Separate original-named notebook added without execution; export matches local source. Optional Silver persistence remains untested.
+- **What:** read-only refreshed table metadata, successful run and output, notebook/dependency status; added the missing original-named `03_kayakalp_bronze_to_silver` notebook to Alice's existing isolated validation folder without overwrite. No execution repeated or compute created.
+- **How:** existing authenticated `CMU_Datathon_26` CLI profile. Remote results independently compared against local metrics, 30 column names/types and full-row reference hash; all matched. Existing Bronze metadata reports 1,197 rows, consistent with actual count assertion from the successful run. Review evidence is in `shared/runs/kayakalp-validation/databricks/review/`.
+- **Why:** distinguish the unchanged pipeline body actually executed inside `validation_run_v2` from the separately named notebook, and complete its availability without rerunning successful work. No shared/Sophia data, tables or branches modified.
+
+### 2026-11-21 17:00: Databricks isolated validation execution
+- **Who:** Codex (for Alice), with read-only Claude CLI review requested.
+- **What:** isolated workspace folder `/Workspace/Users/alice083073@gmail.com/alice-kayakalp-validation/20261121_215928`; new schema `labuser_alice083073.alice_kayakalp_validation_20261121_215928` and creation-only `kayakalp_bronze`; one-time serverless run 313746975724142. Validation artifacts are in `shared/runs/kayakalp-validation/databricks/`.
+- **How:** existing `CMU_Datathon_26` profile, CLI v1.27.0; workspace/catalog/schema/compute discovery and Genie read-only discovery. Uploaded immutable CSV/PDF/raw audit, existing reference notebook, and harness containing the unchanged transformation with setup and full-row/schema/metric assertions. STANDARD serverless; `write_output=false`.
+- **Why:** validate the actual Databricks runtime while isolating all new resources from shared and existing personal tables. No profile or credential changes, shared data modifications, branch merge, push, or persisted Silver output authorized.
+- **Notes / follow-ups:** initial run failed before Bronze creation because Spark Connect rejected the `errorifexists` alias. New harness v2 uses creation-only SQL CTAS in the same isolated schema, checks submitted widgets before staging, and was submitted as run 485076506625337. Transformation unchanged. Final status and Claude findings will be recorded in `docs/kayakalp-validation-handoff.md` after execution; Bronze import intentionally persists only in the new validation schema.
+
 ### 2026-11-21 16:13: Isolated Kayakalp validation and integration handoff
 - **Who:** Codex (for Alice), with independent Claude CLI analysis/review.
 - **What:** notebook 03 validation/write guards (default target now `kayakalp_silver_validation`, writing disabled), two PDF-verified Silver district spacing fixes and uncertainty flags; `scripts/validate_kayakalp.py`, local requirements, regression tests, and `docs/kayakalp-validation-handoff.md`; source/table docs linked.
@@ -260,3 +281,10 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Constraints:** Must run on Databricks Free Edition, use the Virtue Foundation dataset of about 10,000 Indian facilities with 51 attributes each, support a non-technical user workflow, cite the facility text behind every claim or score, and communicate uncertainty.
 - **Team:** Sophia (the most experienced with Databricks) plus 3 collaborators.
 - **Why logged:** To keep the goal and the rules in one place for everyone.
+
+## 2026-11-21 — Authorized isolated Kayakalp persistence attempt
+
+- Executed unchanged notebook 03 with explicit isolated catalog/schema and `write_output=true`; failed before creation because Spark Connect rejects `errorifexists`. Canceled the automatic retry; kept write behavior and transformation unchanged.
+- Prepared separate read-only session checks and retained submission, traceback, source hashes and comparison evidence in ignored `shared/runs/kayakalp-validation/databricks/persistence/`.
+- Updated validation handoff with the blocker, intended target, queries, review/access limitations and integration recommendations against Sophia `106316d2d81db70755e8e94aaaef2241e0d4f2fd` (district/state naming and reference-helper conflict). Claude review attempt failed because CLI is not logged in. No push, merge, credential or generated-data commit, shared modification, overwrite/drop/truncate, or new cluster/warehouse.
+- Separate read-only run `694938706475969` completed: Bronze actual count 1,197; Silver absent; Spark 4.2.0. Parent persistence run canceled after first failed attempt. Final documentation whitespace check passed.

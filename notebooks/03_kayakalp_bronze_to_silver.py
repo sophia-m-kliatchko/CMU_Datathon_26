@@ -201,11 +201,22 @@ assert silver.filter(F.col("financial_year") != "2021-22").count() == 0, "Source
 assert silver.count() == silver.select("award_id").distinct().count(), "award_id is not unique"
 if WRITE_OUTPUT:
     # Creation only: never overwrite a shared table or change its schema.
-    silver.write.mode("errorifexists").saveAsTable(SILVER)
+    if spark.catalog.tableExists(SILVER):
+        raise FileExistsError(f"Refusing to change existing table {SILVER}")
+    # Spark Connect rejects the errorifexists alias. CTAS fails atomically if a
+    # concurrent writer creates the target after the explicit existence check.
+    # Register the DataFrame in THIS session before SQL reads it.
+    import uuid
+    write_view = "kayakalp_silver_to_persist_" + uuid.uuid4().hex
+    silver.createTempView(write_view)
+    creation_sql = f"CREATE TABLE `{SILVER}` USING DELTA AS SELECT * FROM `{write_view}`"
+    spark.sql(creation_sql)
     spark.sql(f"COMMENT ON TABLE `{SILVER}` IS 'Kayakalp FY 2021-22 award-level evidence; PDF page and serial citations; historical public-facility cleanliness awards.'")
     persisted = spark.table(SILVER)
     assert persisted.count() == silver.count(), "Persisted row count differs"
     assert persisted.schema.simpleString() == silver.schema.simpleString(), "Persisted column names/types differ"
+    assert silver.exceptAll(persisted).count() == 0, "Transformed rows missing from persisted table"
+    assert persisted.exceptAll(silver).count() == 0, "Unexpected persisted rows"
     silver = persisted
     print(f"Created and verified {SILVER}")
 else:
