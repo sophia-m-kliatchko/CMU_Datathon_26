@@ -45,7 +45,7 @@ run() {  # run <label> <args...>
   return $rc
 }
 
-WANT="${*:-00 01 02 03 05 06 nfhs}"
+WANT="${*:-00 01 02 03 04 05 06}"
 for n in $WANT; do
   case $n in
     00) run 00_pincode "$NB/00_pincode_bronze_to_silver.py" --widget source="$REPO/data/raw/india_post_pincode_directory.csv" ;;
@@ -54,8 +54,10 @@ for n in $WANT; do
     03) run 03_kayakalp "$NB/03_kayakalp_bronze_to_silver.py" --widget write_output=true ;;
     05) run 05_registries "$NB/05_registries_bronze_to_silver.py" --widget external_path="$EXT" --widget reload_bronze=yes ;;
     06) run 06_matching "$NB/06_registry_matching.py" ;;
+    pipeline) run pipeline "$NB/run_pipeline.py" --widget pincode_source="$REPO/data/raw/india_post_pincode_directory.csv" --widget nfhs_source="$REPO/data/raw/nfhs_5_district_health_indicators.csv" --widget facilities_source_table=spark_catalog.vf.facilities --widget external_path="$EXT" --widget reload_bronze=yes ${STEPS:+--widget steps=$STEPS} ${EXTRA_WIDGETS} ;;
+    audit_nfhs) "$PY" "$REPO/scripts/local_spark/audit_nfhs.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
     audit_links) "$PY" "$REPO/scripts/local_spark/audit_links.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
     audit) echo "================ audit ================"; "$PY" "$REPO/scripts/local_spark/audit.py" 2>&1 | grep -v "Stage [0-9]\|WARN\|ivy\|:: \|found \|central\|downloading\|SUCCESSFUL" ;;
-    nfhs) run nfhs "$NB/NFHS_Bronze_to_Silver.py"             --replace "$(grep -m1 '^BRONZE_PATH = ' "$NB/NFHS_Bronze_to_Silver.py")=>BRONZE_PATH = \"$REPO/data/raw/nfhs_5_district_health_indicators.csv\""             --replace "$(grep -m1 '^SILVER_TABLE = ' "$NB/NFHS_Bronze_to_Silver.py")=>SILVER_TABLE = \"spark_catalog.datathon.nfhs_district_indicators_silver\"" ;;
+    04|nfhs) run 04_nfhs "$NB/04_nfhs_bronze_to_silver.py" --widget source="$REPO/data/raw/nfhs_5_district_health_indicators.csv" ;;
   esac
 done
