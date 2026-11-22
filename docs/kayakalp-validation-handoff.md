@@ -1,5 +1,9 @@
 # Kayakalp validation and integration handoff
 
+## Comprehensive read-only audit
+
+[Kayakalp Silver audit](kayakalp-silver-audit.md) records fresh source/CSV/Bronze/Silver comparisons, all 18 independently recalculated DQ rules, full-row equality, Delta history/schema, postal-geography corroboration and latest Sophia compatibility. **Integrity PASS; overall PARTIAL for downstream readiness.** Newly confirmed risk: three blank `name_core` keys (368, 371, 559); geography leaves 291 awards in 218 state/district groups unresolved. No source awards removed or data changed. Audit run `793080827549335`; corrected supplemental SQL verifies 17 cross-category groups / 34 awards. Claude review unavailable (unauthenticated). See the report for severity, evidence, exact mapping and recommended actions.
+
 Worktree branch: `codex/kayakalp-validation`, based on Sophia's `eb813a7af257f402f2d9f96e71aadd5b769dad9a`.
 Fetched refs inspected: main `839a656fd30fb16f98da608cd228a03094f90b9f`, alice `e482006870e11cebba41ab5e22eef391f124a022`, sophia-wip as above.
 The original alice checkout has uncommitted orchestration/configuration files; those were read and left untouched. Initially no push, merge, commit, Databricks write, canonical-ID change, or facility matching was performed. The subsequent authorized isolated Databricks Bronze import and validation are recorded below.

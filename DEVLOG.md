@@ -22,6 +22,14 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 19:17: Comprehensive read-only persisted Kayakalp Silver audit
+- **Who:** Codex (for Alice); independent Claude review unavailable (CLI unauthenticated).
+- **What:** new `docs/kayakalp-silver-audit.md`, handoff audit link and this log entry; no production code or data changes. Existing uncommitted test edits were preserved.
+- **How:** fresh PDF-to-CSV reproduction; Databricks SELECT/DESCRIBE through an isolated audit notebook on existing Free Edition serverless STANDARD; CSV/Bronze multiset and award-ID reconciliation; read-only validated transform/full-row comparison; independent Python recalculation of all 18 DQ rules; postal reference membership; pinned Sophia branch inspection. Query error Q09 was corrected and rerun independently rather than hidden. Exact execution/results are ignored under `shared/runs/kayakalp-validation/silver-audit/`.
+- **Why:** establish actual persisted integrity and conditional readiness without relying on prior reports. All 1,197 awards and 30 columns match; Delta versions unchanged; all DQ counts match. Three blank `name_core` values are a matching defect; 291 awards in 218 geographic groups remain unresolved, not proven wrong. No ingestion, writes, table/view DDL, shared-resource changes, new paid compute, branch changes, push/merge/PR or Notion action.
+- **Validation:** fresh audit run `793080827549335` succeeded; corrected SQL finds 17 cross-category groups/34 awards and blank cores at 368/371/559. After documentation changes: 3 local tests passed, 2 local write tests deselected, 7 Spark setup errors because the restricted sandbox disallowed a Java gateway socket. Live Databricks/PDF audits succeeded; `git diff --check` and new-report whitespace checks passed. Full outcome/evidence are in the audit report.
+
+
 ### 2026-11-21 18:43: Creation-only Kayakalp Silver persistence compatibility fix
 - **Who:** Codex (for Alice).
 - **What:** `notebooks/03_kayakalp_bronze_to_silver.py` persistence branch only; `tests/test_kayakalp.py` expects the explicit existing-table error and skips local Delta CTAS when Delta extensions are absent; isolated execution harness and validation artifacts in ignored `shared/runs/kayakalp-validation/databricks/persistence_ctas/`; handoff updated with final outcome.
