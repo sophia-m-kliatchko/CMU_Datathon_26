@@ -200,12 +200,24 @@ b_keys = bronze.select(
     col("state").alias("state_raw"), col("district").alias("district_raw"), col("facility_name").alias("facility_name"),
     col("department_assessed").alias("department_assessed"), col("validity_from").alias("validity_from_raw"),
     col("validity_to").alias("validity_to_raw"), F.lower(col("certification_type")).alias("certification_type"))
-DATE_PARTS = r"^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$"
+DATE_PARTS = r"^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$"   # the site's d-m-yyyy text
+ISO_PARTS = r"^(\d{4})-(\d{1,2})-(\d{1,2})$"           # DATE-typed bronze columns render as ISO text
 
 def date_differs(date_col, raw_col):
-    d, m, y = [F.regexp_extract(F.col(raw_col), DATE_PARTS, i) for i in (1, 2, 3)]
-    return F.col(date_col).isNotNull() & ((F.dayofmonth(date_col) != d.cast("int")) |
-                                          (F.month(date_col) != m.cast("int")) | (F.year(date_col) != y.cast("int")))
+    """True when the parsed date disagrees with the bronze text (d-m-yyyy or ISO).
+    Text matching neither layout is listed as a failed row, never cast to INT."""
+    raw = F.col(raw_col)
+    d = (F.when(F.regexp_extract(raw, DATE_PARTS, 1) != "", F.regexp_extract(raw, DATE_PARTS, 1))
+               .when(F.regexp_extract(raw, ISO_PARTS, 3) != "", F.regexp_extract(raw, ISO_PARTS, 3)))
+    m = (F.when(F.regexp_extract(raw, DATE_PARTS, 2) != "", F.regexp_extract(raw, DATE_PARTS, 2))
+               .when(F.regexp_extract(raw, ISO_PARTS, 2) != "", F.regexp_extract(raw, ISO_PARTS, 2)))
+    y = (F.when(F.regexp_extract(raw, DATE_PARTS, 3) != "", F.regexp_extract(raw, DATE_PARTS, 3))
+               .when(F.regexp_extract(raw, ISO_PARTS, 1) != "", F.regexp_extract(raw, ISO_PARTS, 1)))
+    matched = d.isNotNull() & m.isNotNull() & y.isNotNull()
+    return (F.col(date_col).isNotNull() & (~matched
+            | (F.dayofmonth(date_col) != d.cast("int"))
+            | (F.month(date_col) != m.cast("int"))
+            | (F.year(date_col) != y.cast("int"))))
 
 n_listed = silver.agg(F.sum("n_listings")).first()[0] or 0
 checks = [

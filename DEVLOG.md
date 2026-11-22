@@ -22,6 +22,13 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:50: Notebook 02 date validation accepts ISO text from the DATE-typed bronze
+- **Who:** Claude (for Sophia)
+- **What:** `date_differs` in `notebooks/02_nqas_bronze_to_silver.py` now accepts both d-m-yyyy text (the site's format, as in the repo CSV) and ISO yyyy-mm-dd (what the DATE-typed `nqas_certified_facilities` columns render as when cast to string); rows whose text matches neither layout are listed as validation failures instead of crashing on `''` → INT casts.
+- **How:** job run 270846421127289 failed at step 02 with CAST_INVALID_INPUT. The bronze table was uploaded with type inference (dates became DATE columns), so the d-m-yyyy-only regexp no longer matched. Sophia chose to keep the DATE-typed table, so the notebook now handles both layouts. `parse_date` already handled ISO, so only `date_differs` needed the fix.
+- **Why:** keep the bronze table as uploaded; the same notebook must run against the local harness's text CSVs and the workspace's typed table.
+- **Notes / follow-ups:** fix committed on branch `pipeline-fixes`.
+
 ### 2026-11-21 22:35: Pipeline as a Lakeflow Job; missing bronze inputs created; GPU env headers removed
 - **Who:** Claude (for Sophia)
 - **What:**
