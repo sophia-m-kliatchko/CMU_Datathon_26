@@ -1,9 +1,10 @@
 # Service Registries at Silver: `registry_sites_silver` and `registry_services_silver`
 
-Built by `notebooks/05_registries_bronze_to_silver.py`. These tables hold **outside evidence about which services a place provides**, from six registries, in one shared shape. They don't link to `facilities_silver` yet; notebook 06 (matching) will add `facility_registry_links_silver` (`facility_id` ↔ `site_id`).
+Built by `notebooks/05_registries_bronze_to_silver.py` (sites and services) and `notebooks/06_registry_matching.py` (links to facilities). These tables hold **outside evidence about which services a place provides**, from six registries, in one shared shape, linked to `facilities_silver.facility_id`.
 
 ```
-facilities_silver ──facility_id── facility_registry_links_silver (06, to come) ──site_id── registry_sites_silver ──site_id── registry_services_silver
+facilities_silver ──facility_id── facility_registry_links_silver (06) ──site_id── registry_sites_silver ──site_id── registry_services_silver
+        └── facility_registry_summary_silver (06): one row per facility, quick view
 ```
 
 ## How to run it
@@ -97,10 +98,68 @@ A site can have several rows for one service. For example, a college with D.M. N
 - `SERVICE_NOT_IN_VOCABULARY`.
 
 ## ⚠️ Watch-outs
-1. **These are places in registries, not yet our facilities.** Join to `facilities_silver` only through the links table from notebook 06. **Never join on name alone.**
+1. **These are places in registries, not our facilities.** Join to `facilities_silver` only through `facility_registry_links_silver`. **Never join on name alone.**
 2. **No scores here.** `evidence_type`, `service_specific` and `is_current` describe the evidence; points and levels belong in gold.
 3. **A match is evidence for a facility; no match is not evidence against it.** Each registry covers only part of India's facilities.
 4. **`pin_latitude`/`pin_longitude` are PIN-level** (often several km across). Use them to narrow down candidates, not as exact positions.
 5. **Expired isn't worthless.** An expired LaQshya certification still shows the facility had a certified maternity OT when assessed. Use `is_current` to weight it, not to drop it.
 6. **Some service tags are broad hints** (e.g. orthopaedics → `trauma`). They're `service_specific = false` and flagged `INDIRECT_VIA_SPECIALTY`.
 7. **NABH general accreditation is a site-level quality signal** (`listing_category` = `hospital_accreditation` / `entry_level_certification` / `empanelment`). It isn't service evidence. See `docs/nabh.md`.
+
+---
+
+# Matching to facilities: `facility_registry_links_silver` (notebook 06)
+
+## Output tables
+| Table | One row per | Use it for |
+|---|---|---|
+| `facility_registry_links_silver` | facility ↔ registry site link | **The join table.** `facility_id`, `site_id`, `match_score`, `needs_review`, `review_reason`, `match_method` (which evidence agreed: name, coordinates, pin, pin_area, place_name, type), `name_score`, `distinct_overlap`, `distance_km` + `distance_basis`, both names and places side by side |
+| `facility_registry_summary_silver` | facility (all 9,989) | Quick view: `registry_sources`, `listing_categories`, `services_evidenced` (from confident links), `services_evidenced_pending_review`, `n_links_needing_review` |
+| `registry_match_review` | link needing review | Side-by-side for a person; fill `reviewer_decision` with confirm/reject |
+
+**Typical join:** `facility_registry_links_silver` → `registry_services_silver` on `site_id`, filtered to `NOT needs_review` (or with review links weighted lower).
+
+## How matching works
+1. **Candidates:** a facility and a registry site are compared only if all of these hold:
+   - same `state`;
+   - they share a **distinctive name word** (words in more than 250 names, such as "sri", "care" or "medical", don't count here);
+   - they're **close by**: site coordinates within 3 km, the same PIN, the site's PIN area within 5 km, or the site's town or district named in the facility's address.
+2. **Distinctive-word check:** remove common or generic words (medical, college, cardiac, eye, district…) and place names from both names.
+   - Both have words left and **none match** (typo-tolerant) → rejected. This stops "ESIC Medical College" matching "Osmania Medical College".
+   - Only one has words left → **review**.
+3. **Score (0–100):**
+   - name similarity (`rapidfuzz` token-set and token-sort average);
+   - location bonus up to +20;
+   - facility-type agreement +5 / −10;
+   - ownership: a government registry against a private facility −10, against a public one +5;
+   - −10 if a clinic or dentist is matched to a teaching-hospital, trauma, LaQshya or NCG listing.
+
+   A registry name that's only a type plus a place ("DH Faridabad") needs the type to agree.
+4. **Decide:**
+   - Per site, the best candidate with score ≥ 85 is **linked**.
+   - It's linked but marked **`needs_review`** if: the score is 70–84; there's a near-tie (within 5 points) with another facility; it's more than 10 km away; or the distinctive words appear on one side only.
+   - A near-tie with a facility listed in the best one's `possible_duplicate_ids` is linked too, as two records of the same place.
+
+All thresholds are widgets.
+
+## Results (local test, 2026-11-21)
+| Source | Sites | Linked | Confident | Needs review | Facilities reached |
+|---|---|---|---|---|---|
+| nabh | 21,480 | 3,878 (18%) | 2,696 | 1,182 | 2,546 |
+| dnb | 655 | 212 (32%) | 140 | 72 | 204 |
+| nmc | 911 | 167 (18%) | 77 | 90 | 145 |
+| ncg | 376 | 110 (29%) | 61 | 49 | 109 |
+| laqshya | 1,343 | 70 (5%) | 39 | 31 | 64 |
+| trauma | 196 | 37 (19%) | 19 | 18 | 37 |
+
+- **2,745 of 9,989 facilities (27%) are linked to at least one registry.**
+- Facilities with **confident** outside evidence: C-section 114, trauma 126, cancer care 90, dialysis 36, blood bank 19, NICU 4.
+- **Precision check:** random samples of confident links were checked by hand. NABH: 15/15 correct. Other sources: 29/30 (one branch mix-up of the same chain, "Jupiter Hospital, Thane" vs NCG "Jupiter Hospital Pune").
+- **Low match rates for LaQshya and trauma are expected.** They list public facilities, while 88% of Virtue Foundation facilities are private.
+
+## ⚠️ Watch-outs for links
+1. **`needs_review` links are probably right, but not certain.** Count them as weaker evidence, or ask someone to review `registry_match_review`.
+2. **Chains and branches** (Apollo, Jupiter, Max…) are the main risk: same name, different city. Links more than 10 km apart are sent to review, but a branch in the same metro area can still slip through.
+3. **A teaching hospital and its medical college often have different names**, so some true matches are missed (e.g. a district hospital that's the teaching hospital of a government medical college).
+4. **No link ≠ no service.** Most facilities are in no registry at all.
+5. Facilities with no state (157) and sites with no state (80) aren't matched.

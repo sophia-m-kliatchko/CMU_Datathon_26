@@ -22,6 +22,30 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 18:28: Registry sites matched to facilities (notebook 06)
+- **Who:** Claude (for William)
+- **What:**
+  - New `notebooks/06_registry_matching.py`. It writes:
+    - `facility_registry_links_silver` (facility ↔ registry site, with match score and evidence);
+    - `facility_registry_summary_silver` (one row per facility);
+    - `registry_match_review` (links for a person to confirm).
+  - Matching section added to `docs/registries-silver.md`; layout line added to `CLAUDE.md`.
+- **How:**
+  - **Candidates:** same state + a shared distinctive name word (join on state and word, ignoring words in more than 250 names) + nearby (coordinates within 3 km, same PIN, PIN area within 5 km, or the town/district named in the address).
+  - **Distinctive-word check:** after removing generic words and place names, mismatched distinctive words → rejected; words on one side only → review.
+  - **Score:** `rapidfuzz` name similarity + location, type, ownership and clinic adjustments.
+  - **Decision:** link at ≥ 85; review for 70–84, near-ties, distance over 10 km, or one-sided words. Known duplicates are linked together.
+  - **Tested locally:** notebooks 01 → 04 → 05 → 06 on local Spark 4.0. `facilities_silver` came from `data/raw/facilities.csv`, which uses **backslash-escaped quotes** (load it with Spark's default escape).
+  - **Result:** 4,482 links; 2,745 of 9,989 facilities (27%) linked; 1,444 links need review.
+  - **Hand checks:** NABH 15/15 correct; other sources 29/30.
+- **Why:** This makes all registry evidence joinable on `facility_id`, as the structure agreed with William requires (links table, not a list column on facilities). Decisions:
+  - Precision over recall: uncertain matches are kept but marked `needs_review`, not dropped.
+  - Generic-word-only matches were the main source of false links (e.g. "ESIC Medical College" vs "Osmania Medical College"); the distinctive-word check removes them.
+- **Bugs found in teammates' notebooks** (reported to William; not changed here, since the files are Sophia's/Elliot's):
+  1. **`notebooks/01_bronze_to_silver.py` line 753:** `haversine_km("latitude_a", …)` passes column **names** as plain strings, so Python fails with `TypeError: unsupported operand type(s) for -: 'str' and 'str'`. The near-duplicate step, and with it the whole notebook, can't finish. Fix: wrap each name in `F.col(...)`. The local test used a patched scratch copy.
+  2. **`notebooks/04_pincode_bronze_to_silver.py`:** `F.least(F.lit(1.0), F.sqrt(h))` returns 1.0 when coordinates are NULL (`least` skips NULLs). So every office **without coordinates** gets `km_from_pin_median` = 20,015 km and the `COORDS_FAR_FROM_PIN` flag: about 12k of the 12,102 flagged offices. The centroids are unaffected, but the flag counts and the note in `docs/data-sources.md` §4 are wrong. Fix: `F.when(h.isNotNull(), …)`. The same guard is used in notebook 06.
+
+
 ### 2026-11-21 18:16: NABH directory scraped and added to the registries silver tables
 - **Who:** Claude (for William)
 - **What:**
