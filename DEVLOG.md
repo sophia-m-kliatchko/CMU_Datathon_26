@@ -22,6 +22,17 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 20:50: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Deleted `notebooks/nfhs_district_silver.py` on `sophia-wip`. Elliot had deleted it on `main` (`3ca16f7`) and replaced it with `notebooks/NFHS_Bronze_to_Silver.py`; it survived on `sophia-wip` only through a merge.
+  - New branch `verified-pipeline` (from `main`) and a PR into `main`.
+- **How:** in a separate worktree, `verified-pipeline` was cut from `origin/main`, then every file was taken from `sophia-wip` except three:
+  - `Preprocessing ETL/transformations/init_transforms.py` and `describe_given_data.sql.dbquery.ipynb`: from the Databricks commit `e7f701b`, never run locally, so they stay on `sophia-wip` only.
+  - `notebooks/nfhs_district_silver.py`: deleted by Elliot.
+- **Why:** Sophia asked that `main` and `sophia-wip` be consistent, with less-sure changes only on `sophia-wip`. Everything in the PR was run end to end on local Spark (see the 20:44 entry).
+- **Notes / follow-ups:** merging the PR is Sophia's call. After it merges, `main` = `sophia-wip` minus the two unverified Databricks files.
+
 ### 2026-11-21 20:44: Verified the whole pipeline by running it on a local Spark; merged Elliot's NFHS notebook into `sophia-wip`
 - **Who:** Claude (for Sophia)
 - **What:**
