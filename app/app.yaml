@@ -1,0 +1,21 @@
+# Databricks App configuration (https://docs.databricks.com/dev-tools/databricks-apps/)
+command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+env:
+  # The SQL warehouse added to the app as a resource named "sql-warehouse"
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  - name: APP_CATALOG
+    value: workspace
+  - name: APP_SCHEMA
+    value: datathon
+  - name: DATA_MODE
+    value: live
+  # evidence_confidence = Alice's package (tiers + ranking; vendored in evidence_confidence/)
+  # placeholder         = the app's own provisional tiers and ranker (fallback for demos)
+  - name: EVIDENCE_PROVIDER
+    value: evidence_confidence
+  - name: LLM_ENDPOINT
+    value: databricks-meta-llama-3-3-70b-instruct
+  - name: EXPLAINER_ENABLED
+    value: "true"

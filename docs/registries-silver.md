@@ -127,7 +127,12 @@ A site can have several rows for one service. For example, a college with D.M. N
 2. **Distinctive-word check:** remove common or generic words (medical, college, cardiac, eye, district…) and place names from both names.
    - Both have words left and **none match** (typo-tolerant) → rejected. This stops "ESIC Medical College" matching "Osmania Medical College".
    - Only one has words left → **review**.
-3. **Score (0–100):**
+3. **Kind-of-place check:** each full name is checked for a kind of place: dental, eye, blood bank, diagnostics/lab, dialysis, fertility, physiotherapy.
+   - Both names name a kind and **share none** ("Fertility Foundation" vs "Eye Foundation Ltd.") → rejected.
+   - The **facility** names a kind the registry name doesn't ("Neo Dental Care" vs "Neo Hospital"; "Blood Bank, Lal Bahadur Shastri Hospital" vs "Lal Bahadur Shastri Hospital") → **review**. A department or specialist clinic shouldn't inherit a whole hospital's certificates without a person confirming.
+   - The **registry** name adds a specialty (eye, dental, fertility, physiotherapy: "Manocha Hospital" vs "Manocha Eye Hospital") → **review**, since these are often separate places.
+   - The registry name only adds a hospital **department** (blood bank, dialysis, diagnostics/lab: "Kasturba Hospital Blood Bank") → no change; the hospital runs it.
+4. **Score (0–100):**
    - name similarity (`rapidfuzz` token-set and token-sort average);
    - location bonus up to +20;
    - facility-type agreement +5 / −10;
@@ -135,14 +140,16 @@ A site can have several rows for one service. For example, a college with D.M. N
    - −10 if a clinic or dentist is matched to a teaching-hospital, trauma, LaQshya or NCG listing.
 
    A registry name that's only a type plus a place ("DH Faridabad") needs the type to agree.
-4. **Decide:**
+5. **Decide:**
    - Per site, the best candidate with score ≥ 85 is **linked**.
-   - It's linked but marked **`needs_review`** if: the score is 70–84; there's a near-tie (within 5 points) with another facility; it's more than 10 km away; or the distinctive words appear on one side only.
+   - It's linked but marked **`needs_review`** if: the score is 70–84; there's a near-tie (within 5 points) with another facility; it's more than 10 km away; the distinctive words appear on one side only; or the kind-of-place check says so (the reason names both kinds, e.g. "different kind of place in the names (facility: dental; registry: general)").
    - A near-tie with a facility listed in the best one's `possible_duplicate_ids` is linked too, as two records of the same place.
 
 All thresholds are widgets.
 
-## Results (local test, 2026-11-21)
+## Results (local test, 2026-11-21, before the kind-of-place check)
+The kind-of-place check (added 2026-11-22) was simulated on the 4,241 links from the 2026-11-21 Databricks run: 61 links that were automatic go to review, and 15 are rejected (2 of them were automatic). Rerun notebook 06 for exact numbers.
+
 | Source | Sites | Linked | Confident | Needs review | Facilities reached |
 |---|---|---|---|---|---|
 | nabh | 21,480 | 3,878 (18%) | 2,696 | 1,182 | 2,546 |
