@@ -145,9 +145,12 @@
     } else if (!d.recommendations.some(r => ["T1", "T2", "T3"].includes(r.tier))) {
       frag.append(el("div", { class: "error", role: "status" },
         el("strong", { text: "No facility nearby has documentary evidence for this service. " }),
-        "Try a larger radius. The nearest facilities are listed below, but no record shows they offer it."));
+        "Try a larger radius. Facilities shown below only say so in their own listing; that isn't verified."));
     }
     d.recommendations.forEach((r, i) => frag.append(card(r, i, q.service)));
+    if (!urgent && d.recommendations.length < 3) {
+      frag.append(el("p", { class: "section-note", text: "No additional facilities found." }));
+    }
     if (d.unconfirmed && d.unconfirmed.length) {
       frag.append(el("h3", { class: "section-title", text: "Nearest facilities, emergency capability not confirmed" }),
         el("p", { class: "section-note", text: "These have documentary evidence for this service, nearest first. Being listed doesn't mean they can take an emergency now." }));
