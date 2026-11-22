@@ -22,6 +22,29 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 10:20: Final check of the website and repo; app README brought up to date
+- **Who:** Claude (for Sophia)
+- **What:** `app/README.md`:
+  - claim mapping is now `service-claims/3`, with its guards;
+  - the "Provisional results" banner is no longer mentioned;
+  - added how self-report filling and "No additional facilities found." work;
+  - the typeface and colour notes now match the site.
+
+  No code changes.
+- **How (checks):**
+  - **Live app sweep:** all 12 services × PINs 800020, 400001, 110001 and 600001 × routine and emergency (96 searches at 25 km). The sweep found 0 problems:
+    - no errors, no duplicate facilities and never more than 3 cards;
+    - no facility outside the radius plus its location uncertainty, and no missing names;
+    - every U card cites a claim, no negated self-report is used, and every card says "call ahead".
+  - **Other live checks:** `/api/explain` answers through Llama 3.3 70B. Bad inputs are rejected with 422 (5-digit PIN, unknown PIN, unknown service, radius 0). `/api/pin/800020` resolves to Patna, Bihar.
+  - **Front end:** every `#id` used in `app.js` exists in `index.html`, every CSS variable is defined, and nothing references the old banner or fonts.
+  - **Repo:**
+    - no conflict markers, and every `.py` file parses;
+    - `app/evidence_confidence` is identical to the repo-root package;
+    - `origin/main` and `origin/aesthetics` point at the same commit;
+    - `python -m unittest discover -s tests` ran 269 tests: 21 skipped, 1 error (`test_kayakalp.SparkTests` needs PySpark, which isn't installed locally; known).
+- **Why:** Sophia asked for a final scan for anything broken and a check that all code works as intended.
+
 ### 2026-11-22 10:16: Website runs Alice's tiers v2; self-report filling uses her claim guards; tighter Emergency keywords
 - **Who:** Claude (for Sophia)
 - **What:**

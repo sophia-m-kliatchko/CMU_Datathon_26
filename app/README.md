@@ -14,7 +14,7 @@ A FastAPI app with one web page, built to run as a **Databricks App** on top of 
  5. Optional AI explainer (Databricks Foundation Model, grounded in the evidence)                         backend/explain.py
 ```
 
-**Status:** geography (Elliot's search) and evidence + ranking (Alice's `evidence_confidence` package, commit in `EVIDENCE_CONFIDENCE_VERSION`) are both real. Tiers use registry records, plus facilities' own claims for **dialysis and C-section** (Alice's provisional claim mapping `service-claims/1`, capped at T3, self-reported). Reviewer decisions in `registry_match_review` are applied when present. Alice's ranking settings are provisional, so the page keeps a "Provisional results" banner. The old placeholder evidence and ranker remain as a fallback (`EVIDENCE_PROVIDER=placeholder`, and always in mock mode).
+**Status:** geography (Elliot's search) and evidence + ranking (Alice's `evidence_confidence` package, commit in `EVIDENCE_CONFIDENCE_VERSION`) are both real. Tiers use registry records, plus facilities' own claims for **dialysis and C-section** (Alice's claim mapping `service-claims/3`, capped at T3, self-reported; negated, planned and other-facility claims are skipped). Reviewer decisions in `registry_match_review` are applied when present. When fewer than 3 facilities have documentary evidence, the remaining cards are filled with the nearest facilities whose own listing claims the service (labelled U, same claim guards); otherwise the page says "No additional facilities found." The old placeholder evidence and ranker remain as a fallback (`EVIDENCE_PROVIDER=placeholder`, and always in mock mode).
 
 ## For the team: how the app uses the pipeline, and what we need from you
 
@@ -142,6 +142,6 @@ Then, in the app's settings:
    ```
 
 ## Design notes
-- **Typefaces:** Newsreader (headings), Atkinson Hyperlegible (body; designed for low-vision readers) and IBM Plex Mono (citations).
+- **Typeface and colour:** DM Sans throughout; off-white with green accents; alerts in cool yellow; no red or orange (tier colours: T1 green, T2 teal, T3 indigo, R steel blue, U grey, X plum).
 - **Accessibility:** keyboard focus rings, `aria-live` results, tier text alongside colour, and reduced-motion support.
-- **Honesty:** a "Provisional results" banner while the evidence or ranking is provisional; every card ends with "availability today is not confirmed"; distances are labelled straight-line; location certainty is shown per facility; choosing Emergency shows "call 112 / 108" first.
+- **Honesty:** every card ends with "availability today is not confirmed"; distances are labelled straight-line; location certainty is shown per facility; choosing Emergency shows "call 112 / 108" first.
