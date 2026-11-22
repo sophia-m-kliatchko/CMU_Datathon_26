@@ -22,6 +22,50 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 21:31: Notebooks 02 (NQAS) and 03 (Kayakalp) added to the Databricks pipeline check
+- **Who:** Claude (for William)
+- **What:**
+  - Uploaded `data/external/nqas_certified_facilities.csv` and `kayakalp_2021_22.csv` to the Volume, and created `workspace.datathon.nqas_bronze` (989 rows) and `kayakalp_bronze` (1,197 rows), all text columns, as `scripts/README.md` describes.
+  - Added unchanged copies of notebooks 02 and 03 to `/Users/<William>/pipeline_check/notebooks/`.
+  - Job 413468616877500 renamed "Pipeline check: 04 -> 01 + 05 -> 06, plus 02 and 03", with tasks `nb02_nqas` and `nb03_kayakalp` running in parallel with the main chain.
+  - Run 183485095627632: **all 6 tasks succeeded** (about 5 minutes).
+- **How:**
+  - Bronze tables built with `read_files(…, format => 'csv', header => true, inferColumnTypes => false)` through the SQL Statements API.
+  - Job updated with `databricks jobs reset`, then `jobs run-now`.
+- **Results:**
+  - `nqas_silver` 989 (all `expired`, as documented; 1 with an unrecognized state).
+  - `kayakalp_silver_validation` 1,197 (equal to bronze, Alice's check).
+  - Registry and link tables unchanged (4,482 links).
+- **Why:** William wanted every notebook so far checked on Databricks.
+- **Notes for teammates:**
+  - **Notebook 03 (Alice):**
+    - With `write_output = true` it creates `kayakalp_silver_validation` and refuses to run if that table already exists, so the job's next **Run now** will fail at `nb03` unless that table is dropped first. That's intended on her side; the job description says so.
+    - With the default `write_output = false`, the first and last check cells query `FROM {SILVER}`, a table never created in that mode. They should probably read the temp view `kayakalp_validation_result`, as the middle check does.
+  - **Naming:** the Kayakalp output is now `kayakalp_silver_validation`, not the `kayakalp_silver` that `docs/data-sources.md` and the scripts README mention.
+
+
+### 2026-11-21 21:15: Full pipeline verified on Databricks (04 → 01 → 05 → 06)
+- **Who:** Claude (for William)
+- **What:**
+  - Created the saved Databricks job **"Registry pipeline check (04 -> 01 -> 05 -> 06)"** (job ID 413468616877500) in William's workspace. It runs notebooks from `/Users/<William>/pipeline_check/notebooks/`, a copy of `Will_branch` (`f0c78e2`) plus `common/`.
+  - **One change in that copy only:** `01_bronze_to_silver` line 753 calls `haversine_km(F.col("latitude_a"), …)` instead of passing strings. That's the same fix as on `sophia-wip`. The repo is unchanged; William is telling Sophia.
+  - Run 1017643203247717: all 4 tasks succeeded in about 5 minutes on serverless.
+- **How:**
+  - `databricks workspace import-dir`, `jobs create` (04 first; 01 and 05 in parallel after it; 06 after both), `jobs run-now`.
+  - Counts checked with the SQL Statements API.
+- **Results** (identical to the local test):
+  - `facilities_silver` 9,989; `silver_facility_claims` 549,841
+  - `pincode_silver` 165,625; `pincode_centroids_silver` 19,586
+  - `registry_sites_silver` 24,961; `registry_services_silver` 22,757
+  - `facility_registry_links_silver` 4,482; `facility_registry_summary_silver` 9,989; `registry_match_review` 1,444
+  - Facilities in at least one registry: 2,745. Confident evidence: C-section 114, trauma 126, cancer 90, dialysis 36, blood bank 19, NICU 4.
+  - Registry sites now have PIN locations (e.g. 16,675 / 21,480 NABH sites).
+- **Why:** William wanted to check that everything so far runs end to end on Databricks, not just locally. The job is kept so it can be re-run from **Jobs & Pipelines → Run now**.
+- **Notes / follow-ups:**
+  - Once Sophia's notebook 01 fix reaches main, re-upload or point the job at the Git folder, so it no longer uses the patched copy.
+  - Notebooks 02 (NQAS) and 03 (Kayakalp) aren't in the job yet; they need `nqas_bronze` and `kayakalp_bronze` loaded first.
+
+
 ### 2026-11-21 20:05: Merged `main` (Kayakalp validation, PR #5) into `Will_branch`
 - **Who:** Claude (for William)
 - **What:** Merged `origin/main` up to `7daea47` into `Will_branch`. It brings in JhK830's Kayakalp validation: `notebooks/03_kayakalp_bronze_to_silver.py` changes, `scripts/validate_kayakalp.py`, `scripts/requirements-kayakalp.txt`, `tests/test_kayakalp.py`, `docs/kayakalp-validation-handoff.md`, and edits to `docs/silver-tables.md` and `docs/data-sources.md`.
