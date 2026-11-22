@@ -22,6 +22,21 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:18: PR #14 merged: pipeline runner and NFHS notebook 04 are on `main`
+- **Who:** Sophia (approved), Claude (merged)
+- **What:**
+  - PR #14 (`nfhs-04` → `main`) merged as `c710c57`, adding `notebooks/run_pipeline.py`, `notebooks/04_nfhs_bronze_to_silver.py` and the local-harness updates.
+  - `main` merged back into `sophia-wip`.
+  - Remote branch `nfhs-04` deleted.
+- **How:** `gh pr merge 14 --merge --match-head-commit 6297016` (only if the head was still the reviewed commit).
+- **Why:** Sophia approved the merge.
+- **Notes / follow-ups:**
+  - `main` and `sophia-wip` now differ only by the two unverified Databricks files, plus this entry until the next sync.
+  - **Next, on Databricks:**
+    1. Pull `main`.
+    2. Upload `nfhs_5_district_health_indicators.csv` to `/Volumes/workspace/datathon/external/`.
+    3. Run `run_pipeline`.
+
 ### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
 - **Who:** Claude (for Sophia)
 - **What:**
