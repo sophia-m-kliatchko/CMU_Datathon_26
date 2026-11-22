@@ -293,20 +293,32 @@ def _ranking_text(f, tier_label, mode, edges):
     return s
 
 
-def self_reports(facility_ids, service):
-    """{facility_id: [claim texts]} for facilities whose own listing mentions the service
-    (silver_facility_claims, matched with the service's synonyms). Not verified: shown as U."""
+def self_reports(candidates, service):
+    """{facility_id: [claim texts]} for facilities whose own listing says they offer the service
+    (silver_facility_claims, matched with the service's synonyms). Not verified: shown as U.
+    Alice's claim guards apply: a claim with a negation or qualifier ("does not provide emergency
+    services", "referred", "planned") is skipped, and so is one that places the service at another
+    named facility. Skipped claims never fill a slot."""
+    from evidence_confidence.service_claims import NEGATION, attribution
     from . import services
     svc = services.BY_TAG.get(service)
-    if not facility_ids or not svc:
+    names = {c["facility_id"]: c.get("name") for c in candidates}
+    if not names or not svc:
         return {}
     rows = db.query(
-        f"""SELECT facility_id, collect_set(claim_text) AS texts
+        f"""SELECT facility_id, claim_norm, claim_text
             FROM {config.t('silver_facility_claims')}
-            WHERE array_contains(split(:ids, ','), facility_id) AND claim_norm RLIKE :pat
-            GROUP BY facility_id""",
-        {"ids": ",".join(str(i) for i in facility_ids), "pat": "|".join(svc["synonyms"])})
-    return {r["facility_id"]: db.as_list(r["texts"])[:3] for r in rows}
+            WHERE array_contains(split(:ids, ','), facility_id) AND claim_norm RLIKE :pat""",
+        {"ids": ",".join(str(i) for i in names), "pat": "|".join(svc["synonyms"])})
+    out = {}
+    for r in rows:
+        norm, text = (r["claim_norm"] or "").lower(), r["claim_text"] or ""
+        if NEGATION.search(norm) or attribution(text, names.get(r["facility_id"])) == "other":
+            continue
+        texts = out.setdefault(r["facility_id"], [])
+        if text not in texts and len(texts) < 3:
+            texts.append(text)
+    return out
 
 
 def shape(response, candidates, tier_label, top_n, alternatives_n, claims=None):

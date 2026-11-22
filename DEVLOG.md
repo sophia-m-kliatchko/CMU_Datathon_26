@@ -22,6 +22,25 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 10:16: Website runs Alice's tiers v2; self-report filling uses her claim guards; tighter Emergency keywords
+- **Who:** Claude (for Sophia)
+- **What:**
+  - **Vendored package updated.** `app/evidence_confidence/` was re-copied from the repo root on `main`, and `app/EVIDENCE_CONFIDENCE_VERSION` now pins commit `1f91b6c` (tiers v2 / variant C, `service-claims/3`). It had been pinned to `c5f1586`, so the live site wasn't running v2. The app copy is now identical to the repo root (`diff -rq` shows no differences).
+  - **Negated claims no longer fill slots.** `app/backend/engine.py` `self_reports(candidates, service)` now applies Alice's guards from `evidence_confidence.service_claims`:
+    - `NEGATION` skips claims such as "Does not provide emergency services", "referred" or "planned";
+    - `attribution(...) == "other"` skips claims that place the service at another named facility.
+    Before, a facility whose listing said it does *not* provide emergency services could fill an Emergency care slot.
+  - `app/main.py`: passes the candidates, with their names, to `self_reports`.
+  - `app/backend/services.py`: removed "24x7" from the Emergency care keywords. It matched "24x7 call and WhatsApp support" (a hair salon) and "24x7 pathology services" (a lab).
+  - Redeployed `find-the-right-care`.
+- **How:** `git archive origin/main evidence_confidence | tar -x -C app` (the procedure in the version file), code edits, then `databricks sync --full` and `databricks apps deploy`. Live checks:
+  - `/api/health` reports ranker `evidence_confidence@1f91b6c`.
+  - Emergency care searches at 800020, 400001 and 110001: no card or alternative cites a negated claim; the salon and the lab are gone.
+  - Dialysis 400001 and blood bank 110001 still return T1, T3 and R results.
+- **Why:** issues reported to Sophia: (1) the website still ran Alice's previous package; (2) self-report filling counted "Does not provide emergency services" as offering emergency care.
+- **Still open:** "Emergency" self-reports from eye and dental clinics (for example "24/7 emergency dental care") still count for Emergency care, because they do mention emergency care.
+- **Branch:** committed and pushed to `main` at Sophia's request, and to `aesthetics` (the same commit).
+
 ### 2026-11-22 09:58: Website: no red or orange anywhere; cool tier colours
 - **Who:** Claude (for Sophia)
 - **What:**

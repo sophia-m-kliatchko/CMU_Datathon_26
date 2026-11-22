@@ -25,7 +25,7 @@ SERVICES = [
     {"tag": "trauma", "label": "Trauma care",
      "synonyms": [r"\btrauma\b", r"polytrauma", r"accident"]},
     {"tag": "emergency", "label": "Emergency care",
-     "synonyms": [r"\bemergency\b", r"\bcasualty\b", r"24\s?x\s?7"]},
+     "synonyms": [r"\bemergency\b", r"\bcasualty\b"]},  # not "24x7": it matched labs, pharmacies, a hair salon
     {"tag": "icu", "label": "Intensive care (ICU)",
      "synonyms": [r"\bicu\b", r"intensive care", r"critical care"]},
     {"tag": "cancer_care", "label": "Cancer care",

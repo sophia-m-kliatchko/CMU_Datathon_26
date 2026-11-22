@@ -49,7 +49,7 @@ def _distance(value, name):
 
 
 def join_geographic_candidates(candidates, evidence_rows, *, service, as_of,
-                               framework_version='evidence-tiers/1'):
+                               framework_version='evidence-tiers/2'):
     """One output per unique canonical candidate ID; service evidence is nested.
 
     Select one service/date/version slice before the LEFT JOIN. Duplicate slice

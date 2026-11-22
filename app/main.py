@@ -188,7 +188,7 @@ CALL_AHEAD = "Availability today is not confirmed. Call ahead before travelling.
 def _recommend_engine(req, origin, cands, query):
     """Evidence + ranking by Alice's package; the app only reshapes and selects for display."""
     response, report = engine.evaluate(cands, req.service, origin["pincode"], req.radius_km, req.urgency)
-    claims = engine.self_reports([c["facility_id"] for c in cands], req.service)
+    claims = engine.self_reports(cands, req.service)
     top, unconfirmed, alternatives, counts = engine.shape(response, cands, TIER_LABEL, config.TOP_N,
                                                          config.ALTERNATIVES_N, claims)
     by_id = {c["facility_id"]: c for c in cands}
