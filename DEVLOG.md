@@ -22,6 +22,14 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - PR #14 (branch `nfhs-04`) now also carries `notebooks/run_pipeline.py` and the local-harness updates (`nbrun.py`, `run_all.sh`, `show_pipeline_log.sh`, `test_pipeline_failure.sh`, `README.md`), plus `CLAUDE.md` and `DEVLOG.md`.
+  - `scripts/local_spark/README.md`: added the `pipeline` / failure-test / log commands, which were missing because an earlier scripted edit skipped this file.
+- **How:** copied those files from `sophia-wip` onto `nfhs-04` (in a separate worktree) and pushed. The branch equals `sophia-wip` except for the two unverified Databricks files, which stay on `sophia-wip` only.
+- **Why:** Sophia chose to ship the runner together with the NFHS notebook it calls (step 04), so `main` gets both at once.
+
 ### 2026-11-21 22:14: Pipeline runner `notebooks/run_pipeline.py` (00 → 06 with a run log)
 - **Who:** Claude (for Sophia)
 - **What:**
