@@ -22,6 +22,24 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:52: `aesthetics`: merged main; green palette, one font, no provisional banner, new subtitle
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `origin/main` into `aesthetics`: PRs #20 (evidence key, references footer), #21 (Alice's evidence tiers v2, claim guards) and #22. The only conflict was `DEVLOG.md`, where I kept both sides' entries.
+  - `app/static/styles.css`:
+    - Off-white paper (`#f7f8f4`), white cards and green accents (`--accent #2f7a4b`, `--accent-2 #1f5a35`, plus new `--accent-soft` and `--accent-tint`). Former teal tints are now green, the orange background glow is now pale green, and the focus outline is green.
+    - Tier colours are unchanged because they carry meaning.
+    - `--display`, `--body` and `--mono` are all DM Sans; the section titles no longer use Newsreader.
+  - `app/static/index.html`:
+    - Loads only DM Sans (400–700, with italics).
+    - Removed the "Provisional results" banner.
+    - New subtitle: "Pick a service and enter your PIN code. We find facilities near you, rank them by how well independent records back the service, and link every piece of evidence to its source."
+  - `app/static/app.js`: removed the code that filled and showed the banner.
+  - Redeployed `find-the-right-care` from `aesthetics`.
+- **How:** `git merge origin/main`, then edited the files, ran `databricks sync --full` and `databricks apps deploy`. The live page has no banner and shows the new subtitle. A dialysis search at PIN 800020 returns 3 cards.
+- **Why:** Sophia asked for the final website to match `main` and for these visual changes.
+- **Note:** with Alice's tiers v2 from `main`, accepted self-reports for dialysis count as T3. The Patna dialysis top 3 is now three nearby facilities that self-report it, not IGIMS.
+
 ### 2026-11-22 09:37: App fills empty slots only with facilities that self-report the service
 - **Who:** Claude (for Sophia)
 - **What:**

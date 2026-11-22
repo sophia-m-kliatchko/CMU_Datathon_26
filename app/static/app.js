@@ -51,11 +51,6 @@
       const h = await api("/api/health");
       $("#status").textContent = `data: ${h.data_mode} · evidence: ${h.evidence_provider} · ranking: ${h.ranker}` +
         (h.explainer ? ` · explainer: ${h.explainer}` : " · explainer: off");
-      if (h.provisional_note) $("#provisional-text").textContent = h.provisional_note;
-      if (h.data_mode === "mock") {
-        $("#provisional-text").textContent = "Demo mode: the facilities below are made up and only illustrate the layout.";
-      }
-      $("#provisional").hidden = !(h.provisional || h.data_mode === "mock");
     } catch (_) { /* leave defaults */ }
   }
 
