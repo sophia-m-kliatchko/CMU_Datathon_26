@@ -135,6 +135,33 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Why:** The team decided against gold tables. Evidence and ranking will be computed per request by Alice's `evidence_confidence` package, so the proposed `facility_service_evidence_gold` contract and the separate ranker contract were out of date.
 - **Notes / follow-ups:** `TableEvidence` and `EVIDENCE_PROVIDER=table` in the code are now obsolete; remove them when wiring in Alice's package.
 
+### 2026-11-21 23:17: Whole pipeline verified on Databricks serverless; `setup_pipeline` facilities.csv parsing fixed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `notebooks/setup_pipeline.py`: `facilities.csv` is now read with `escape='\'`.
+  - New `scripts/databricks/`: `watch_run.ps1`, `verify_outputs.py`, `check_facilities_csv.py`.
+  - New `scripts/local_spark/check_csv_reads.py`; `run_all.sh` gets a `csvcheck` option, and 03 now runs with its default `write_output=false` (as in the job).
+  - `README.md`: verification on Databricks and known issues.
+- **How:**
+  - Sophia installed the Databricks CLI (winget, v1.27.0) and signed in with OAuth (`databricks auth login --profile datathon`).
+  - Uploaded `sophia-wip`'s notebooks to `/Users/<me>/datathon_verify/` and created a test schema `workspace.datathon_verify`, with the bronze inputs copied from `workspace.datathon`. The live Git folder (`/Datathon Fall 26/CMU_Datathon_26`, on `main`), the live job and the live tables were not touched.
+  - Submitted one-time serverless runs (CPU environment v5) with the same inputs as the job (the Marketplace PIN, facilities and NFHS tables).
+- **Results on Databricks:**
+  - **Run 69185514918504:** prep, 00, 01, 02, 03, 04, 05 and 06 all SUCCESS.
+  - **Output check (run 330170087354586):** `pincode_validation` 12/12, `facilities_validation` 13/13, `nqas_validation` 8/8, `nfhs_validation` 7/7.
+    - **Facilities:** 9,989 (all UUIDs, 0 bad PINs, 0 coordinates outside India); 1,603 coordinates nulled for PIN/state mismatch; 88 rejected as `INVALID_ID`.
+    - **PIN offices:** 12,070 nulled as far from their PIN versus 12,009 missing.
+    - **NFHS:** 705 districts.
+    - **Registry links:** 4,241; 0 accepted links more than 25 km apart.
+    - **Hygiene:** no staging leftovers and no `_clean` columns in silver. Will's registry bronze tables contain `state_clean` / `pincode_clean` from the scraper CSVs, which is allowed in bronze.
+    - The numbers match the local runs exactly.
+  - **`setup_pipeline` bug proven on the platform (run 463510234196202):** reading `facilities.csv` with the old `escape='"'` gave 10,088 rows but **9,710 non-numeric latitudes** (columns shift inside rows); with `escape='\'`, 0. Sophia's job reads the Marketplace facilities table, so it was unaffected; teammates using `setup_pipeline` were affected.
+- **Why:** Sophia pointed out that the code had not been running successfully on Databricks itself and asked to make absolutely sure it runs on the actual platform.
+- **Notes / follow-ups:**
+  - Test folder `/Users/<me>/datathon_verify` and schema `workspace.datathon_verify` are left in place for inspection; they can be dropped later.
+  - `run_pipeline.py` still can't orchestrate on serverless notebook compute; the Lakeflow Job is the runner.
+  - Teammates who already built `workspace.datathon.facilities` with the old `setup_pipeline` should drop it and re-run setup.
+
 ### 2026-11-21 23:15: README: planned integration with Alice's evidence engine
 - **Who:** Claude (for William)
 - **What:** Added "Planned integration with Alice's evidence engine" to `app/README.md`. It covers:
@@ -146,11 +173,56 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Why:** The team decided against gold tables. Evidence and ranking will run per request through Alice's Python package, so the app needs an agreed call sequence and answers to the open questions before wiring it in.
 - **Notes / follow-ups:** `kayakalp_silver` isn't in the workspace (only `kayakalp_silver_validation`); no NQAS-to-facility link exists; nothing yet produces the reviewed service and yes/no for claims, or `capability_eligible`.
 
+### 2026-11-21 22:58: Project README; merged `main` (PR #15) into `sophia-wip`, keeping the verified notebook 01
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `README.md`: purpose, pipeline order and tables, Databricks setup (`setup_pipeline` → the "CMU Datathon pipeline 00-06" job), the data-honesty approach, sources, repo layout, local verification, contributing rules and known issues.
+  - Merge of `main` (PR #15 "pipeline-fixes": `setup_pipeline.py`, notebook 02 ISO-date fix, notebook 03 validation-mode fix, GPU env headers removed) into `sophia-wip`.
+- **How:**
+  - Surveyed every tracked file, read the notebook headers, scrapers, docs and the new DEVLOG entries, then checked the README's table, branch and job names against the code.
+  - **`DEVLOG.md` merge:** union of both sides' entries, newest first.
+  - **Notebook 01 merge:** kept `sophia-wip`'s verified version and removed its `databricks_ai_v6` GPU environment header, which was PR #15's actual fix for 01. PR #15's "notebook 01 merge resolution" had replaced 01 with an older version: `_clean` column names, no bronze validation, no coordinate-vs-PIN/state check, and the pre-fix `least()` distance (the 20,015 km bug). Its `F.col` fix and spot-check cell were already in the verified version.
+  - Also removed the same GPU header from `run_pipeline.py`.
+- **Why:** Sophia asked for a project README based on the current state of the repo. Writing it surfaced the notebook 01 regression on `main`.
+- **Notes / follow-ups (also in the README's Known issues):**
+  - **Restore the verified notebook 01 on `main`.** Elliot's `pin_nearby_facilities` expects the plain column names and won't run against `main`'s version.
+  - Move `notebooks/common/pin_nearby_facilities` to `notebooks/07_pin_nearby_facilities.py` (no `.py` extension, and the wrong relative `%run` path).
+  - `docs/kayakalp-silver-audit.md` is referenced by the Kayakalp handoff doc but missing.
+  - `run_pipeline.py` can't orchestrate on serverless notebook compute; the Lakeflow Job is the runner on Free Edition.
+
+### 2026-11-21 22:55: setup_pipeline.py for teammates; notebook 03 validation-mode fix
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/setup_pipeline.py`: one-run Databricks setup for teammates. Auto-detects the repo Git folder, creates schema `workspace.datathon` and the bronze tables (`nqas_certified_facilities`, `kayakalp_bronze`, the 9 registry `*_bronze` tables, `facilities`) as all-text from the repo CSVs when missing, then creates or updates the "CMU Datathon pipeline 00-06" job (00 to 06 sequential, serverless, CPU environment v5; steps 00/04 read the repo CSVs, step 01 reads the created `facilities` table, step 05 runs with `reload_bronze=no`). Job operations go through raw REST (`w.api_client.do`) because this workspace's SDK rejects dict arguments for `environments`; validated with a create/list/update smoke test.
+  - `notebooks/03_kayakalp_bronze_to_silver.py`: the check/display cells now query the temp view `kayakalp_validation_result` instead of `{SILVER}`. In validation mode (`write_output=false`, the job default) the silver table is never written, so `FROM {SILVER}` crashed step 03 of run 270846421127289 with TABLE_OR_VIEW_NOT_FOUND. The view exists in both modes and is identical to the table in write mode.
+- **How:** exact-match patches verified with syntax checks; notebook 02's earlier fix proved out in the repair run (step 02 green).
+- **Why:** Sophia asked how friends can pull the updates and set up the pipeline in Databricks.
+- **Notes:** teammates run the job, not `run_pipeline.py`, on serverless. Leftover smoke-test job 207585649559027 should be deleted from the Jobs UI.
+
+### 2026-11-21 22:50: Notebook 02 date validation accepts ISO text from the DATE-typed bronze
+- **Who:** Claude (for Sophia)
+- **What:** `date_differs` in `notebooks/02_nqas_bronze_to_silver.py` now accepts both d-m-yyyy text (the site's format, as in the repo CSV) and ISO yyyy-mm-dd (what the DATE-typed `nqas_certified_facilities` columns render as when cast to string); rows whose text matches neither layout are listed as validation failures instead of crashing on `''` → INT casts.
+- **How:** job run 270846421127289 failed at step 02 with CAST_INVALID_INPUT. The bronze table was uploaded with type inference (dates became DATE columns), so the d-m-yyyy-only regexp no longer matched. Sophia chose to keep the DATE-typed table, so the notebook now handles both layouts. `parse_date` already handled ISO, so only `date_differs` needed the fix.
+- **Why:** keep the bronze table as uploaded; the same notebook must run against the local harness's text CSVs and the workspace's typed table.
+- **Notes / follow-ups:** fix committed on branch `pipeline-fixes`.
+
 ### 2026-11-21 22:40: Team section in app/README.md; new `website` branch
 - **Who:** Claude (for William)
 - **What:** Added "For the team" section to `app/README.md` (request flow, tables read today, what is needed from the evidence, ranking, geography and job owners). Created branch `website` from `Will_branch` (uncommitted work carried over).
 - **How:** Edited the README; `git checkout -b website`.
 - **Why:** Teammates need to know which tables the app reads, that no gold table is used yet, and which contracts (evidence table, ranker) are unagreed proposals.
+
+### 2026-11-21 22:35: Pipeline as a Lakeflow Job; missing bronze inputs created; GPU env headers removed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New job `CMU Datathon pipeline 00-06` (id 448999964395839): notebooks 00–06 as sequential tasks (00 → 01 → … → 06) on serverless job compute. This replaces `run_pipeline`'s `dbutils.notebook.run` calls, which cannot run from this workspace's serverless notebook compute ("NOT_FOUND: Cluster … does not exist").
+  - Job parameters: 00 and 04 read the shared UC tables (`…dais_2026.virtue_foundation_dataset.india_post_pincode_directory` and `.nfhs_5_district_health_indicators`) because their volume widget defaults don't exist; 03 gets `bronze_table=kayakalp_bronze`; 05 runs with `reload_bronze=no` (uses existing bronze tables).
+  - Created `workspace.datathon.kayakalp_bronze` (1,197 rows) from `data/external/kayakalp_2021_22.csv`.
+  - Created the 9 registry bronze tables (laqshya ×2, trauma, nmc ×2, dnb ×2, ncg, nabh) from the `datasets/external/**` CSVs, all-string columns plus `_ingested_at`/`_source_file`, matching notebook 05's loader.
+  - Removed the `# /// script` environment headers (`base_environment = "databricks_ai_v6"`, a GPU environment) from notebooks 00, 01, 02, 04; staged in git.
+- **How:** job created and configured via the Jobs API (7 sequential tasks, 60-min timeout each); bronze tables loaded with Spark CSV reads (all-string, same read options as the notebooks' loaders); headers removed with an exact-match patch script; then a job-level `environment_key` ("default", CPU environment version 5) was added to all 7 tasks.
+- **Why:** Sophia asked for a script that runs all pipeline code sequentially. The first two job runs failed instantly with "The selected GPU base environment is incompatible with the selected accelerator (CPU)": the notebooks' environment setting persists server-side (Environment panel), so removing the source headers alone wasn't enough — the job-level CPU environment on every task overrides it, and the third run is executing.
+- **Notes / follow-ups:** step 03 runs in validation mode by default (`write_output=false`), so it does not create `kayakalp_silver`; create that separately if analysis needs it. `run_pipeline` stays for reference but can't orchestrate on serverless notebook compute.
 
 ### 2026-11-21 22:26: "Find the Right Care" web app with placeholder evidence and ranking
 - **Who:** Claude (for William)
@@ -182,6 +254,51 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - The placeholder's keyword matching over facility claims is loose (e.g. an eye centre matched "C-section"); it's only for the demo.
   - For Elliot: `notebooks/common/pin_nearby_facilities` should probably live at `notebooks/07_pin_nearby_facilities`, since its `%run ./common/...` lines fail from inside `common/`.
 
+### 2026-11-21 22:18: PR #14 merged: pipeline runner and NFHS notebook 04 are on `main`
+- **Who:** Sophia (approved), Claude (merged)
+- **What:**
+  - PR #14 (`nfhs-04` → `main`) merged as `c710c57`, adding `notebooks/run_pipeline.py`, `notebooks/04_nfhs_bronze_to_silver.py` and the local-harness updates.
+  - `main` merged back into `sophia-wip`.
+  - Remote branch `nfhs-04` deleted.
+- **How:** `gh pr merge 14 --merge --match-head-commit 6297016` (only if the head was still the reviewed commit).
+- **Why:** Sophia approved the merge.
+- **Notes / follow-ups:**
+  - `main` and `sophia-wip` now differ only by the two unverified Databricks files, plus this entry until the next sync.
+  - **Next, on Databricks:**
+    1. Pull `main`.
+    2. Upload `nfhs_5_district_health_indicators.csv` to `/Volumes/workspace/datathon/external/`.
+    3. Run `run_pipeline`.
+
+### 2026-11-21 22:17: Pipeline runner added to PR #14; runner docs completed
+- **Who:** Claude (for Sophia)
+- **What:**
+  - PR #14 (branch `nfhs-04`) now also carries `notebooks/run_pipeline.py` and the local-harness updates (`nbrun.py`, `run_all.sh`, `show_pipeline_log.sh`, `test_pipeline_failure.sh`, `README.md`), plus `CLAUDE.md` and `DEVLOG.md`.
+  - `scripts/local_spark/README.md`: added the `pipeline` / failure-test / log commands, which were missing because an earlier scripted edit skipped this file.
+- **How:** copied those files from `sophia-wip` onto `nfhs-04` (in a separate worktree) and pushed. The branch equals `sophia-wip` except for the two unverified Databricks files, which stay on `sophia-wip` only.
+- **Why:** Sophia chose to ship the runner together with the NFHS notebook it calls (step 04), so `main` gets both at once.
+
+### 2026-11-21 22:14: Pipeline runner `notebooks/run_pipeline.py` (00 → 06 with a run log)
+- **Who:** Claude (for Sophia)
+- **What:**
+  - New `notebooks/run_pipeline.py`.
+  - Local harness: `scripts/local_spark/nbrun.py` (adds `dbutils.notebook.run`; command-line widgets now flow to child notebooks), `run_all.sh` (`pipeline` option), and new `test_pipeline_failure.sh` and `show_pipeline_log.sh`.
+  - Docs: `CLAUDE.md`, `scripts/local_spark/README.md`.
+  - New table `pipeline_run_log`.
+- **How:**
+  - Runs 00, 01, 02, 03, 04, 05, 06 in order with `dbutils.notebook.run`, passing `catalog` / `schema` (plus `target_*` for 01).
+  - **Dependencies:** 00 → 01, 02, 04, 05; 01 + 05 → 06; 03 is independent. A failed step marks the steps that depend on it `SKIPPED`; the other steps still run. Optional `stop_on_failure` stops everything after the first failure.
+  - **Run log:** each step appends a row to `pipeline_run_log`: `run_id`, `step`, `notebook`, `status` (OK / FAILED / SKIPPED / MISSING), `seconds`, `error` (Databricks' message), and `failed_checks` from that step's `<dataset>_validation` table during the run.
+  - **End of run:** prints a summary, then raises if any step failed, so a scheduled job turns red.
+  - **Inputs:** optional widgets `pincode_source`, `facilities_source_table` and `nfhs_source`, because 00 and 04 both name their input widget `source`. Blank means each notebook's own default.
+- **Why:** Sophia asked for a script that runs 00 → 06 in sequence and logs what breaks.
+- **Local tests:**
+  - **Clean run:** all 7 steps OK in ~4 min.
+  - **Forced failure** (`test_pipeline_failure.sh`: missing input file for 00): 00 FAILED with `[PATH_NOT_FOUND] Path does not exist: …`; 01, 02, 04, 05 and 06 SKIPPED with the reason; 03 OK; the run ends red.
+  - **Fixed during testing:** a missing data file was first mislabelled MISSING (that status now means only "notebook not found").
+- **Notes / follow-ups:**
+  - `03_kayakalp` runs in validation-only mode under the runner (`write_output` defaults to false), as it does when opened directly.
+  - The runner needs `04_nfhs_bronze_to_silver.py`, which is on `main` only after PR #14 merges; until then step 04 shows MISSING on `main`.
+  - Not yet run on Databricks.
 
 ### 2026-11-21 22:01: Pipeline check re-run on main's verified pipeline (00 → 01 + 05 → 06, plus 02 and 03)
 - **Who:** Claude (for William)
@@ -207,7 +324,6 @@ Log anything that changes the project: code and notebooks, Databricks tables and
   - Remove the `# /// script … # ///` header (lines 2–6) from `notebooks/01_bronze_to_silver.py`. It makes notebook 01 fail in any serverless or CPU job.
   - Databricks adds this header when the notebook is exported or committed from a workspace where the AI/GPU environment was selected.
 
-
 ### 2026-11-21 21:31: Notebooks 02 (NQAS) and 03 (Kayakalp) added to the Databricks pipeline check
 - **Who:** Claude (for William)
 - **What:**
@@ -229,7 +345,6 @@ Log anything that changes the project: code and notebooks, Databricks tables and
     - With the default `write_output = false`, the first and last check cells query `FROM {SILVER}`, a table never created in that mode. They should probably read the temp view `kayakalp_validation_result`, as the middle check does.
   - **Naming:** the Kayakalp output is now `kayakalp_silver_validation`, not the `kayakalp_silver` that `docs/data-sources.md` and the scripts README mention.
 
-
 ### 2026-11-21 21:15: Full pipeline verified on Databricks (04 → 01 → 05 → 06)
 - **Who:** Claude (for William)
 - **What:**
@@ -250,6 +365,67 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 - **Notes / follow-ups:**
   - Once Sophia's notebook 01 fix reaches main, re-upload or point the job at the Git folder, so it no longer uses the patched copy.
   - Notebooks 02 (NQAS) and 03 (Kayakalp) aren't in the job yet; they need `nqas_bronze` and `kayakalp_bronze` loaded first.
+
+### 2026-11-21 21:05: NFHS notebook fixed and fitted into the pipeline as `04_nfhs_bronze_to_silver.py`
+- **Who:** Claude (for Sophia; notebook written by elliotl-ops)
+- **What:**
+  - `notebooks/NFHS_Bronze_to_Silver.py` renamed with `git mv` to `notebooks/04_nfhs_bronze_to_silver.py` and edited.
+  - `scripts/local_spark/run_all.sh` (runs it as `04`) and new `scripts/local_spark/audit_nfhs.py`.
+  - `CLAUDE.md` (run order, layout) and `docs/data-sources.md` (NFHS entry).
+- **How:** applied the four suggested fixes; Elliot's cleaning rules, quality report, gate, history, quarantine, copied-row detection and quality view are kept as written.
+  1. **Locations:** widgets `catalog` / `schema` / `source` (defaults `workspace.datathon` and `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv`) replace the candidate-path lists.
+  2. **Numbers:** whole numbers may be written `882.0` (pattern `^\d+(\.0+)?$`, cast via double to int).
+  3. **Caching:** `df.cache()` / `unpersist()` replaced by a staging table `_nfhs_stage`, dropped at the end.
+  4. **Pipeline conventions:**
+     - Notebook format with `%run` of the common helpers.
+     - Tables `nfhs_bronze` (raw copy of the whole file), `nfhs_silver`, `nfhs_quarantine`, `nfhs_quality_history` and the view `nfhs_quality_current`.
+     - `nfhs_validation` with 7 checks against bronze, run before writing.
+     - Citation columns plus `row_citation`.
+     - Writes go through `write_table()`, which blocks any `_clean` column.
+     - New columns `state` (standardized, for joins), `district_join_key` and `district_in_pin_directory` (optional check against `pincode_silver`).
+  - Also: `OPTIMIZE` / `ANALYZE` made best-effort. `ANALYZE … FOR ALL COLUMNS` isn't supported by open-source Delta, and it's housekeeping on a ~700-row table.
+  - Correction to my earlier claim: Elliot's PR #11 version already read the columns by name, so the column-order bug was already fixed there.
+- **Why:** Sophia asked to apply the fixes so the NFHS notebook works in the shared pipeline.
+- **Local run** (`run_all.sh 04` on `data/raw/nfhs_5_district_health_indicators.csv`):
+  - **Runs end to end.** Elliot's quality gate passes and all 7 validation checks pass.
+  - **Rows:** 706 bronze rows → 705 silver plus 1 quarantined (Mizoram "Chandel").
+  - **Values:** sex ratios 755–1,332 (at birth 658–1,485), percentages 16–100.
+  - **Flags:** 8 districts are low-sample, 2 have estimates, and 36 state names were fixed (Maharastra).
+  - **Directory match:** 613 of 705 districts match the India Post directory; the rest are mostly spelling variants (e.g. Koch Bihar / Cooch Behar), flagged only.
+- **Notes / follow-ups:**
+  - Upload the CSV to `/Volumes/workspace/datathon/external/` before running on Databricks.
+  - `nfhs_silver` keeps Elliot's 8 indicators; the other ~99 indicators are only in `nfhs_bronze`.
+  - Elliot should know his file was renamed and adapted.
+  - Not on `main` yet.
+
+### 2026-11-21 20:58: Re-checked Elliot's updated NFHS notebook (PR #11): still fails
+- **Who:** Claude (for Sophia)
+- **What:**
+  - Merged `main` (PR #11, `a0033bc` "Update NFHS_Bronze_to_Silver.py") into `sophia-wip`.
+  - `scripts/local_spark/run_all.sh`: two NFHS runs, `nfhs_asis` (unchanged notebook) and `nfhs` (repo data and local schema added to its candidate lists, as its own comment suggests).
+- **How:** local Spark run (see the 20:44 entry).
+- **Results:**
+  - **`nfhs_asis`:** stops at once with `ValueError: No readable bronze source found`. Its inputs are `/Volumes/main/default/bronze_data/NFR.csv`, `dbfs:/FileStore/tables/NFR.csv` and Elliot's personal upload, and none exist outside his workspace. Its output targets (`main.default`, `labuser_elliotl.silver`) don't exist in a Free Edition workspace either, where the catalog is `workspace`, so it would then stop with "No usable (catalog, schema) target".
+  - **`nfhs` (repo file `data/raw/nfhs_5_district_health_indicators.csv`):** its quality gate fails with 706/706 rows unparseable and 706/706 rows with a NULL indicator. The parsing logic didn't change: counts written like `882.0` fail its `^\d+$` pattern.
+- **Why:** Sophia asked to check whether the newly pulled NFHS notebook works.
+- **Suggested fixes for Elliot (not applied; it's his notebook):**
+  1. Add `/Volumes/workspace/datathon/external/nfhs_5_district_health_indicators.csv` (or a `source` widget) to the inputs and `("workspace", "datathon")` to the targets.
+  2. Accept whole numbers written as `882.0`: pattern `^\d+(\.0+)?$`, cast via double to int.
+  3. Drop `df.cache()` (may not be supported on serverless).
+  4. Follow the pipeline conventions: number it `04`, write `nfhs_*` tables, and add a `<dataset>_validation` check and citation columns.
+- **Notes / follow-ups:** `main` and `sophia-wip` still differ only by the two unverified Databricks files and recent DEVLOG entries.
+
+### 2026-11-21 20:47: PR #10 merged: `main` now has the verified pipeline
+- **Who:** Sophia (approved the merge), Claude (merged)
+- **What:**
+  - PR #10 (`verified-pipeline` → `main`) merged as merge commit `4ba4065`, then brought into `sophia-wip`.
+  - Remote branch `verified-pipeline` deleted.
+- **How:** `gh pr merge 10 --merge --match-head-commit 4a789a5` (merged only if the head was still the verified commit), then `git merge origin/main` on `sophia-wip`.
+- **Why:** Sophia approved merging after the local end-to-end verification (20:44 entry).
+- **Notes / follow-ups:**
+  - **`main` and `sophia-wip` now differ only by the two unverified Databricks files** (`Preprocessing ETL/transformations/init_transforms.py`, `describe_given_data.sql.dbquery.ipynb`), plus this DEVLOG entry until the next sync.
+  - **Next:** Pull `main` (or `sophia-wip`) in the Databricks Git folder, then run 00 → 01 → 02 → 03 → 05 → 06 once on Databricks to catch anything serverless-specific.
+
 
 ### 2026-11-21 20:45: Removed Elliot's superseded NFHS script from `sophia-wip`; verified files proposed for `main`
 - **Who:** Claude (for Sophia)

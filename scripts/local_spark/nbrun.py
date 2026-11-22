@@ -93,9 +93,38 @@ class _Fs:
         return [_FileInfo(path)]
 
 
+GLOBAL_OVERRIDES = {}   # command-line --widget values, also applied to notebooks started by dbutils.notebook.run
+_DIR_STACK = []   # directory of the notebook currently running (for relative dbutils.notebook.run paths)
+
+
+class _NotebookRunner:
+    """dbutils.notebook.run: runs another notebook in a fresh namespace with its own widget values."""
+
+    def __init__(self, spark_proxy):
+        self.spark = spark_proxy
+
+    def run(self, path, timeout_seconds=0, arguments=None):
+        base = _DIR_STACK[-1] if _DIR_STACK else os.getcwd()
+        target = os.path.normpath(os.path.join(base, path))
+        target = target if target.endswith(".py") else target + ".py"
+        if not os.path.exists(target):
+            raise Exception(f"FAILED: Notebook not found: {path}")
+        g = {"__name__": "__main__", "spark": self.spark, "display": display,
+             "dbutils": DBUtils({**GLOBAL_OVERRIDES, **{k: str(v) for k, v in (arguments or {}).items()}}, self.spark)}
+        try:
+            run_notebook(target, g)
+        except Exception as e:
+            raise Exception(f"FAILED: {os.path.basename(target)}: {type(e).__name__}: {e}") from e
+        return ""
+
+    def exit(self, value=""):
+        raise SystemExit(value)
+
+
 class DBUtils:
-    def __init__(self, overrides):
+    def __init__(self, overrides, spark_proxy=None):
         self.widgets, self.fs = _Widgets(overrides), _Fs()
+        self.notebook = _NotebookRunner(spark_proxy)
 
 
 def display(obj, *a, **k):
@@ -121,6 +150,14 @@ def cells_of(path, replacements):
 
 def run_notebook(path, g, replacements=(), depth=0):
     nb_dir = os.path.dirname(os.path.abspath(path))
+    _DIR_STACK.append(nb_dir)
+    try:
+        _run_cells(path, g, replacements, depth, nb_dir)
+    finally:
+        _DIR_STACK.pop()
+
+
+def _run_cells(path, g, replacements, depth, nb_dir):
     for i, cell in enumerate(cells_of(path, replacements if depth == 0 else ())):
         lines = [l for l in cell.split("\n")]
         magic = [l for l in lines if l.startswith("# MAGIC")]
@@ -168,9 +205,11 @@ def main():
     ap.add_argument("--replace", action="append", default=[], help="OLD=>NEW text substitution in the top notebook")
     a = ap.parse_args()
     overrides = dict(w.split("=", 1) for w in a.widget)
+    GLOBAL_OVERRIDES.update(overrides)
     replacements = [tuple(r.split("=>", 1)) for r in a.replace]
     spark = get_spark()
-    g = {"__name__": "__main__", "spark": SparkProxy(spark), "dbutils": DBUtils(overrides), "display": display}
+    proxy = SparkProxy(spark)
+    g = {"__name__": "__main__", "spark": proxy, "dbutils": DBUtils(overrides, proxy), "display": display}
     t0 = time.time()
     try:
         run_notebook(a.notebook, g, replacements)
