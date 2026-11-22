@@ -15,6 +15,7 @@ from .engine import IDENTITY_REVIEW_FLAGS, INDIRECT_FLAGS
 from .models import MatchStatus, Polarity, Scope, SourceKind, Verification, Directness
 from .silver import read_local_export, notebook_service_vocabulary, adapt_registry_tables
 from .temporal import temporal_validity
+from .tiers import Tier, _evidence_class, _tier_from_classes
 from .integration import build_facility_service_rows, join_geographic_candidates
 from .recommendation import build_recommendation_response
 from .validation import validate_integration
@@ -106,6 +107,10 @@ def audit_rules(state):
                         issues.append(('INDIRECT_PREMISE',e.evidence_id))
                 else:issues.append(('INVALID_CREDIT_TIER',e.evidence_id))
         base=min(credited,key=order.get) if credited else 'U'
+        if credited:  # tiers/2 class-based upgrade, recomputed from the raw records
+            items=[(_evidence_class(records[d['evidence_id']],d['source_family'],Tier(d['candidate_tier']),row['service']),d['source_family'])
+                   for d in row['decisions'] if d['credited']]
+            base=_tier_from_classes(Tier(base),items)[0].value
         if base!=row['base_tier']:issues.append(('STRONGEST_BASE',row['facility_id'],row['service']))
         if row['supporting_record_count']!=len(credited) or row['supporting_source_count']!=len(families):issues.append(('CORROBORATION_COUNTS',row['facility_id'],row['service']))
         if row['effective_tier']=='R' and (base!='U' or not unresolved or 'accepted' in unresolved):issues.append(('INVALID_R_OVERLAY',row['facility_id'],row['service']))

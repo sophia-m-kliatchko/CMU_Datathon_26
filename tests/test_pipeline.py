@@ -36,6 +36,67 @@ class ClaimMappingTests(unittest.TestCase):
         self.assertEqual(records, ())
         self.assertEqual(report['reasons'], {'negation_or_qualifier_skipped': 1})
 
+    def test_future_or_planned_claims_are_skipped(self):
+        for text in ('plans to introduce an in-house dialysis unit', 'dialysis room (under construction)',
+                     'plans to convert into a 17-floor multispeciality hospital including dialysis',
+                     'a dialysis unit will be opened next year', 'dialysis centre being set up'):
+            self.assertEqual(match_claim(text, 'dialysis'), (False, 'negation_or_qualifier_skipped'), text)
+        # Clinical use of "planning" and present-tense claims still match.
+        for text in ('hemodialysis and peritoneal dialysis planning initiation and maintenance',
+                     'provides dialysis treatment'):
+            self.assertTrue(match_claim(text, 'dialysis')[0], text)
+
+    def test_claims_are_attributed_only_to_their_own_facility(self):
+        rows = [claim('Dialysis', fid='syn-a'), claim('Nephrology', fid='syn-b')]
+        records, _ = claim_evidence(rows, 'dialysis', facility_ids=['syn-a', 'syn-b'])
+        self.assertEqual({e.match.facility_id for e in records}, {'syn-a'})
+        self.assertEqual(claim_evidence(rows, 'dialysis', facility_ids=['syn-b'])[0], ())
+
+    def test_attribution_guard_cases(self):
+        from evidence_confidence.service_claims import attribution
+        cases = [('Cesarean delivery (C-section) services offered at LYF Hospital, Indirapuram', 'LYF Hospital', 'own'),
+                 ('Cesarean Section performed at Max Super Speciality Hospital, Noida', 'Maa Hospital', 'other'),
+                 ('Provides dialysis treatment at Smt. B. C. J. General Hospital - Asha Parekh Hospital', 'J J Eye Hospital', 'other'),
+                 # Network/drug-bank membership is affiliation, not another site (false positive on real data).
+                 ("Dialysis centre listed within Jivan Jyot Drug Bank's Mumbai network.", 'J J Eye Hospital', 'own'),
+                 ('Part of The Renal Project network of dialysis centers', 'Sunshine Hospital', 'own'),
+                 ('Dialysis charges at this centre are Rs. 350 or less', 'KJ Somaiya Hospital and Research Centre', 'own'),
+                 ("Provides dialysis treatment at K. J. Somaiya Hospital, Chunabhatti as part of JJDB's dialysis network",
+                  'KJ Somaiya Hospital and Research Centre', 'own'),
+                 ('Provides dialysis treatment at Nair Hospital, Mumbai Central', 'Wockhardt Hospital Nagpur', 'other'),
+                 ('City Hospital is listed as a nearby hospital to Millat Dialysis Center', 'City Hospital', 'other'),
+                 ('Dialysis at Apollo Hospital and at Fortis Hospital', 'Apollo Hospital', 'mixed'),
+                 ('Dialysis unit at Dr. Ram Manohar Lohia Hospital', 'Dr. Ram Manohar Lohia Hospital', 'own'),
+                 ('Dialysis available. Also ICU at the hospital', 'Triton Hospital', 'own'),
+                 ('Dialysis department serves around 22 patients regularly', 'J J Eye Hospital', 'own')]
+        for text, name, expected in cases:
+            self.assertEqual(attribution(text, name), expected, (text, name))
+
+    def test_other_facility_claims_excluded_and_record_flagged(self):
+        rows = [claim('Dialysis at Asha Parekh Hospital', fid='syn-a', pos='0'),
+                claim('Hemodialysis', fid='syn-a', pos='1'),
+                claim('Dialysis at Apollo Hospital and at Fortis Hospital', fid='syn-b', pos='0'),
+                claim('Dialysis', fid='syn-c', pos='0')]
+        names = {'syn-a': 'Sunrise Clinic', 'syn-b': 'Apollo Hospital', 'syn-c': 'Triton Hospital'}
+        records, report = claim_evidence(rows, 'dialysis', facility_names=names)
+        by = {e.match.facility_id: e for e in records}
+        self.assertEqual(set(by), {'syn-a', 'syn-c'})  # syn-b: only claim is mixed -> not credited
+        self.assertIn('RECORD_ATTRIBUTION_UNRESOLVED', by['syn-a'].qualifiers)
+        self.assertNotIn('RECORD_ATTRIBUTION_UNRESOLVED', by['syn-c'].qualifiers)
+        self.assertEqual(set(report['attribution_excluded']), {'syn-a', 'syn-b'})
+        self.assertEqual(report['reasons']['other_facility_attribution'], 2)
+        t = evidence_tier('syn-a', 'dialysis', [by['syn-a']], date(2026, 11, 22))
+        self.assertEqual(t.effective_tier.value, 'T3')
+        self.assertTrue(t.flags.attribution_unresolved)
+
+    def test_attribution_guard_skipped_without_names_for_old_callers(self):
+        rows = [claim('Cesarean section at LYF Hospital, Indirapuram', fid='syn-l')]
+        records, report = claim_evidence(rows, 'emergency_c_section')
+        self.assertEqual(len(records), 1)
+        self.assertEqual(report['attribution_check'], 'skipped_no_facility_names')
+        records, report = claim_evidence(rows, 'emergency_c_section', facility_names={'syn-l': 'LYF Hospital'})
+        self.assertEqual((len(records), report['attribution_check']), (1, 'applied'))
+
     def test_self_report_caps_at_t3_and_is_labelled(self):
         records, _ = claim_evidence([claim('Dialysis'), claim('Dialysis machines', field='equipment', pos='1')], 'dialysis')
         t = evidence_tier('syn-f', 'dialysis', records, date(2026, 11, 22))
@@ -127,6 +188,40 @@ class RealSilverPipelineTests(unittest.TestCase):
                 self.assertEqual((r['status'], r['recommendations']), ('no_candidates', []))
                 return
         self.skipTest('no isolated PIN found')
+
+    def test_freshness_and_expiry_are_attributes(self):
+        r = self.run_query(service='emergency_c_section', pincode='110001', max_results=50, max_alternatives=50)
+        rows = r['recommendations'] + r['alternatives']
+        for x in rows:
+            self.assertEqual(set(x['evidence_freshness']), {'latest_evidence_date', 'earliest_valid_until',
+                'expired_direct_evidence', 'undated_credited_records', 'self_report_page_updated_on', 'self_report_page_age_days'})
+        t2 = [x for x in rows if x['evidence_tier'] == 'T2']
+        self.assertTrue(t2 and all(x['evidence_freshness']['expired_direct_evidence'] for x in t2))
+        self.assertTrue(any(x['evidence_freshness']['self_report_page_updated_on'] for x in rows if x['self_reported_claims']))
+
+    def test_related_specialty_and_attribution_exposed(self):
+        r = self.run_query(service='dialysis', pincode='400001', max_results=50, max_alternatives=50)
+        rows = r['recommendations'] + r['alternatives']
+        trained = [x for x in rows if x['related_specialty']]
+        self.assertTrue(trained)
+        for x in trained:  # training is described as expertise, never as current availability
+            self.assertTrue(set(x['supporting_source_families']) & {'nmc', 'dnb'})
+            self.assertTrue(any('not that this service is currently offered' in t for t in x['explanation']))
+        self.assertTrue(any(x['attribution']['unresolved'] for x in rows))
+
+    def test_expertise_only_t2_never_worded_as_availability(self):
+        rows = []
+        for pin in ('110001', '400001', '600001'):
+            for service in ('general_medicine', 'orthopaedics', 'eye_care', 'cardiac_care', 'cancer_care'):
+                r = self.run_query(service=service, pincode=pin, max_results=50, max_alternatives=50)
+                rows += [x for x in r['recommendations'] + r['alternatives'] if x['evidence_tier'] == 'T2']
+        expertise = [x for x in rows if x['evidence_nature'] == ['expertise']]
+        self.assertTrue(expertise)
+        for x in expertise:
+            self.assertEqual(x['tier_label'], 'Specialist department (expertise)')
+            self.assertTrue(any('not confirmation that this service is currently offered' in t for t in x['explanation']))
+        for x in rows:
+            self.assertTrue(x['t2_basis'])
 
     def test_unmapped_service_has_no_claim_evidence(self):
         r = self.run_query(service='nicu', pincode='110001')

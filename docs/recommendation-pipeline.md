@@ -44,13 +44,37 @@ credited, match/temporal status, dates, citation), `independently_corroborated`,
 canonical facility link), `ranking` (label, band, flags, sort key), `explanation[]`, `warnings[]`.
 Absent values are `null`; nothing is inferred.
 
-**Self-reported claim mapping (`service-claims/1`, `service_claims.py`)** — PROVISIONAL, needs team
+**Self-reported claim mapping (`service-claims/3`, `service_claims.py`)** — PROVISIONAL, needs team
 approval. Only `dialysis` (`dialysis`, `haemodialysis`, `hemodialysis`, `peritoneal dialysis`) and
 `emergency_c_section` (`c-section`, `caesarean`/`cesarean`, `LSCS`). Nephrology ≠ dialysis;
 obstetrics/maternity ≠ C-section. Claims containing negation/qualifier words (no, not, without,
-referred, planned, upcoming, shut down…) are skipped, never treated as counterevidence. All mapped
+referred, planned, upcoming, shut down…) and future/planned wording (`plans to`, `under construction`, `will be/open…`, `being set up`; added in `service-claims/2`) are skipped, never treated as counterevidence. All mapped
 claims are self-reported and cap at T3; C-section claims carry `CLAIM_DOES_NOT_STATE_EMERGENCY`.
 Other services get no claim evidence (`claim_mapping.reason = service_not_in_claim_mapping`).
+
+**Tier refinements (2026-11-22, pending team review).**
+1. *Tier framework `evidence-tiers/2` (variant C, approved 2026-11-22).*
+   - **T1:** current direct certification/accreditation (LaQshya, NABH service), or two independent
+     registry families among {expired direct certification, NCG membership, unsanctioned designation}.
+   - **T2** (`t2_basis`): `expired_certification`; `membership` (NCG); `designation`; `specialist_department`
+     (NMC-approved training whose discipline *is* a specialty-level service, e.g. DM Cardiology for
+     `cardiac_care`: clinical expertise, never described as current availability);
+     `corroborated_self_report` (own listing + independent registry record).
+   - **T3:** self-report alone; training for procedure/unit services (`PROCEDURE_OR_UNIT_SERVICES` in
+     `tiers.py`: dialysis, C-section, ICU, NICU, blood bank, emergency, trauma, stroke, cath lab, …);
+     undated DNB training; sanctioned trauma designations (all 392 rows); broad specialty hints
+     (`BROAD_SPECIALTY_HINTS`, e.g. Anaesthesiology→ICU), which also never corroborate.
+   - **R / X / U** unchanged. Every assessment carries `evidence_nature` (`operational`/`expertise`);
+     pipeline output adds `tier_label` (route-specific T2 label) and `t2_basis`.
+2. *Cross-facility attribution guard* (`service_claims.attribution`). A self-reported claim that places
+   the service at/under/within a distinctly named care site (hospital, centre, clinic, nursing home,
+   institute, medical college) other than the facility is not credited. Network/trust/drug-bank
+   membership and pronoun phrases ("at this centre") are not treated as other sites. If such claims
+   sit beside credited ones, the record keeps its tier and gets `attribution_unresolved`; excluded
+   claims are listed per facility in `attribution.excluded_other_facility_claims`.
+3. *Freshness and expiry are attributes* (`evidence_freshness`: latest dated evidence, earliest
+   `valid_until`, `expired_direct_evidence`, undated credited records, self-report page date and age).
+   T2 still means expired direct certification.
 
 **Not verified:** current availability, staffing, emergency capability (urgent mode never confirms a
 facility), road distance, ground-truth locations, ranking quality (no labelled data).
@@ -106,3 +130,14 @@ resolve `setup_pipeline.py` as above → `python3 -m unittest discover -s tests`
 installed here) → commit.
 
 **Notebook location.** With no `geography_notebook` argument, `default_notebook()` uses `notebooks/07_pin_nearby_facilities.py` (Elliot_New_Branch, sha256 `848f182e…`, identical to the version validated here) and falls back to the legacy `notebooks/common/pin_nearby_facilities.py`.
+
+## Website changes needed for `evidence-tiers/2` (website owner; files not edited)
+1. **T2 label.** `app/backend/evidence.py` `TIER_LABEL['T2']` and `app/static/app.js` `TIER_LABEL.T2` say
+   "Expired certification". T2 now has five routes. Use `service_evidence.t2_basis` (or the pipeline's
+   `tier_label`): Expired certification / Network membership / Government designation / Corroborated
+   listing / Specialist department (expertise). Verified on real data: Lilavati (400001 dialysis,
+   corroborated listing) currently renders as "Expired certification".
+2. **Attribution guard.** `app/backend/engine.py` calls `claim_evidence(claims, service, facility_ids=ids)`;
+   add `facility_names={id: name}` to enable the cross-facility guard (without it the guard is skipped
+   and the report says `attribution_check: skipped_no_facility_names`).
+3. Re-vendor `evidence_confidence/` at the new commit (currently `c5f1586`).
