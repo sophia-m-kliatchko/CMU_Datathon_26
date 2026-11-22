@@ -22,6 +22,26 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:37: App fills empty slots only with facilities that self-report the service
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/backend/engine.py`:
+    - New `self_reports(facility_ids, service)` finds facilities whose own listing (`silver_facility_claims`) mentions the service, using the synonyms in `backend/services.py`.
+    - `shape(..., claims)`: when fewer than 3 facilities have documentary evidence (T1–T3), the remaining slots go to the **nearest** facilities that self-report the service. They keep the **U** label, and their claim text appears in the evidence list as "SELF … not verified".
+    - The alternatives table also keeps only U facilities that self-report the service.
+    - Unrelated facilities are no longer shown. Before, a dialysis search could show dental clinics.
+  - `app/main.py`: passes the claims to `shape`.
+  - `app/static/app.js`: shows "No additional facilities found." when there are fewer than 3 cards. The no-evidence notice now says the facilities below only claim the service themselves.
+  - Redeployed `find-the-right-care`.
+- **How:** edited the files, then ran `databricks sync --full` and `databricks apps deploy`. Checked through the live API:
+  - dialysis 800020: 1 T3 + 2 self-reported U cards.
+  - C-section 800020: 1 T3 + 2 U.
+  - dialysis 110001 (5 km): 1 self-reported U card (an eye hospital whose listing describes a 20-bed dialysis unit) and no alternatives.
+  - stroke 800020 (3 km): 1 U card.
+- **Why:** Sophia asked that, without evidence, the app take the dataset's self-reports at their word (labelled U), fill the open slots with the nearest such facilities, and say "No additional facilities found" when there are none. Her first version capped this at 2; she then asked to fill all the open slots instead.
+- **Tradeoff:** self-reports are unverified. The U stamp, the "SELF" ledger tag and the "not verified" status keep this visible. Where nothing nearby claims the service, fewer than 3 cards are shown, which is better than showing unrelated facilities.
+- **Branch:** on `sophia-wip` at Sophia's request (new work normally goes to `aesthetics`).
+
 ### 2026-11-22 07:44: App title in DM Sans with a real italic "right"
 - **Who:** Claude (for Sophia)
 - **What:** `app/static/index.html` loads DM Sans 700 (roman and italic) from Google Fonts. In `app/static/styles.css`, the `h1` uses DM Sans and `h1 em` is italic again. Redeployed `find-the-right-care`.
