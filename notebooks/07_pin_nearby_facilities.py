@@ -21,6 +21,7 @@
 # MAGIC * `facility_coordinates`: the facility's own coordinates, re-verified (inside India, not 0,0, within range of its PIN's centroid).
 # MAGIC * `pin_centroid`: the facility has no usable coordinates, so its own PIN's centroid is used. **Approximate**; `location_uncertainty_km` says by how much.
 # MAGIC * Facilities with neither get no point and never appear in search results.
+# MAGIC * Radius rule: a facility is a candidate if its possible closest distance is within the radius, i.e. `distance_km - location_uncertainty_km <= radius_km`. Results remain sorted by measured centre-to-centre distance and uncertainty is shown explicitly.
 # MAGIC
 # MAGIC **Run order:** 00 → 01 → this notebook. Every change to this notebook must be logged in `DEVLOG.md`.
 
@@ -185,6 +186,11 @@ keyword = dbutils.widgets.get("service_keyword").strip().lower()
 import math
 dlat = radius / KM_PER_DEG_LAT
 dlon = radius / (KM_PER_DEG_LAT * max(math.cos(math.radians(lat0)), 0.01))
+max_uncertainty = float(spark.table("facility_geo_ready").agg(
+    F.max(F.coalesce(F.col("location_uncertainty_km"), F.lit(0.0))).alias("max_uncertainty")
+).first()["max_uncertainty"] or 0.0)
+dlat += max_uncertainty / KM_PER_DEG_LAT
+dlon += max_uncertainty / (KM_PER_DEG_LAT * max(math.cos(math.radians(lat0)), 0.01))
 
 near = (spark.table("facility_geo_ready")
         .where(F.col("geo_latitude").isNotNull())
@@ -192,7 +198,12 @@ near = (spark.table("facility_geo_ready")
         .where(F.col("geo_latitude").between(lat0 - dlat, lat0 + dlat) &
                F.col("geo_longitude").between(lon0 - dlon, lon0 + dlon))
         .withColumn("distance_km", F.round(haversine_km_col(F.lit(lat0), F.lit(lon0), F.col("geo_latitude"), F.col("geo_longitude")), 2))
-        .where(F.col("distance_km") <= radius))
+        .withColumn("uncertainty_adjusted_distance_km",
+                    F.greatest(F.round(F.col("distance_km") - F.coalesce(F.col("location_uncertainty_km"), F.lit(0.0)), 2),
+                               F.lit(0.0)))
+        # Include a facility if it could be at or inside the requested radius.
+        # This is candidate search, not a claim that its displayed point is that close.
+        .where(F.col("uncertainty_adjusted_distance_km") <= radius))
 
 if keyword:
     claims = (spark.table("silver_facility_claims")
@@ -200,13 +211,15 @@ if keyword:
     near = near.join(claims, "facility_id", "left_semi")
 
 result = (near.orderBy("distance_km", "facility_id").limit(limit_n)
-          .select("distance_km", "name", "city", "state", "pincode", "geo_confidence", "location_basis",
+          .select("distance_km", "uncertainty_adjusted_distance_km", "name", "city", "state", "pincode", "geo_confidence", "location_basis",
                   "location_uncertainty_km", "dq_flags", "facility_id"))
 
 print(f"Centre of PIN {pin}: ({lat0:.5f}, {lon0:.5f}) | radius {radius:g} km"
       + (f" | service contains '{keyword}'" if keyword else ""))
 print("Distances are straight-line from the PIN's centre, not road distance. "
-      "Rows with location_basis = pin_centroid are only accurate to location_uncertainty_km.")
+      "Candidate radius includes location_uncertainty_km: "
+      "uncertainty_adjusted_distance_km = max(distance_km - location_uncertainty_km, 0). "
+      "Rows whose location_basis = pin_centroid are approximate.")
 display(result)
 
 # COMMAND ----------
