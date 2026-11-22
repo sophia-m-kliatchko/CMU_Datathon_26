@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:56: Website alerts in cool yellow instead of red/orange
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/static/styles.css`: new tokens `--alert-bg #f6f5d4`, `--alert-line #c4c047`, `--alert-ink #45430f` and `--alert-dot #e2dc5a`. They now colour the emergency box, the error and "no evidence" boxes, the notes list, the "!" warning dots on cards, and invalid-PIN hints.
+  - The tier X colour stays red because it marks contradicted evidence.
+  - Redeployed `find-the-right-care`.
+- **How:** CSS edits, then `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia asked for alerts in shades of cool-ish yellow instead of red and orange, to fit the green palette.
+
 ### 2026-11-22 09:52: `aesthetics`: merged main; green palette, one font, no provisional banner, new subtitle
 - **Who:** Claude (for Sophia)
 - **What:**
