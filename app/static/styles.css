@@ -11,7 +11,6 @@
   --rule: #d7e0d3;
   --accent: #2f7a4b;
   --accent-2: #1f5a35;
-  --saffron: #c8731f;
   --alert-bg: #f6f5d4;
   --alert-line: #c4c047;
   --alert-ink: #45430f;
@@ -21,10 +20,10 @@
 
   --t1: #1f6b3a;
   --t2: #0d5c57;
-  --t3: #a35d12;
-  --tr: #3e5a86;
+  --t3: #4f58a5;   /* indigo */
+  --tr: #2b7aa0;   /* steel blue */
   --tu: #7a7f80;
-  --tx: #a33a2a;
+  --tx: #7a4a8c;   /* plum */
 
   --radius: 14px;
   --shadow: 0 1px 0 rgba(29, 36, 39, .04), 0 10px 30px -18px rgba(29, 36, 39, .35);
@@ -72,16 +71,6 @@ h1 {
 h1 em { font-style: italic; color: var(--accent); }
 .lede { max-width: 62ch; margin: 16px 0 0; color: var(--ink-2); font-size: 18px; }
 
-.provisional {
-  position: relative;
-  width: min(1124px, calc(100% - 56px)); margin: 0 auto 18px; padding: 10px 16px 10px 46px; border-radius: 10px;
-  color: #4a3410; font-size: 15px;
-  background:
-    repeating-linear-gradient(-45deg, rgba(200, 115, 31, .14) 0 10px, rgba(200, 115, 31, .06) 10px 20px),
-    #f7e9d2;
-  border: 1px solid rgba(200, 115, 31, .45);
-}
-.provisional::before { content: "\26A0"; position: absolute; left: 16px; top: 8px; font-size: 18px; color: var(--saffron); }
 
 /* ---------- layout ---------- */
 .layout {

@@ -22,6 +22,15 @@ Log anything that changes the project: code and notebooks, Databricks tables and
 
 ## Entries
 
+### 2026-11-22 09:58: Website: no red or orange anywhere; cool tier colours
+- **Who:** Claude (for Sophia)
+- **What:**
+  - `app/static/styles.css`, tier colours: T3 from orange `#a35d12` to indigo `#4f58a5`, R from `#3e5a86` to steel blue `#2b7aa0`, X from red `#a33a2a` to plum `#7a4a8c`. T1 (green), T2 (teal) and U (grey) are unchanged, so all six tiers are still distinct.
+  - Removed the unused `.provisional` banner styles and the `--saffron` token, the last orange in the stylesheet. A hue scan of `styles.css`, `app.js` and `index.html` finds no red or orange left.
+  - Redeployed `find-the-right-care`.
+- **How:** CSS edits, a Python hue scan, then `databricks sync --full` and `databricks apps deploy`.
+- **Why:** Sophia asked that T3 and X not be red or orange, that any red or orange be replaced with cool or grey tones that fit the green palette, and that every category keep a distinct colour.
+
 ### 2026-11-22 09:56: Website alerts in cool yellow instead of red/orange
 - **Who:** Claude (for Sophia)
 - **What:**
