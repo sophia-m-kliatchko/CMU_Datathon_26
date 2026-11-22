@@ -4,7 +4,7 @@
 # environment_version = "6"
 # ///
 # MAGIC %md
-# MAGIC # 04 · PIN directory: `pincode_bronze` → `pincode_silver`, `pincode_centroids_silver`
+# MAGIC # 00 · PIN directory: `pincode_bronze` → `pincode_silver`, `pincode_centroids_silver`
 # MAGIC
 # MAGIC **Input:** India Post *All India Pincode Directory* (`data/raw/india_post_pincode_directory.csv`, about 165k post offices), as a CSV in a Volume or an uploaded table.
 # MAGIC
@@ -62,7 +62,7 @@ SOURCE_NAME = "All India Pincode Directory"
 SOURCE_PUBLISHER = "Department of Posts, Ministry of Communications, Government of India (via Open Government Data Platform India)"
 SOURCE_URL = "https://data.gov.in/resource/all-india-pincode-directory-till-last-month"
 SOURCE_LICENSE = "Government Open Data License - India (GODL), if obtained from data.gov.in"
-PRODUCED_BY = "notebooks/04_pincode_bronze_to_silver.py (github.com/sophia-m-kliatchko/CMU_Datathon_26)"
+PRODUCED_BY = "notebooks/00_pincode_bronze_to_silver.py (github.com/sophia-m-kliatchko/CMU_Datathon_26)"
 
 from pyspark.sql import Window
 EXPECTED = ["circlename", "regionname", "divisionname", "officename", "pincode", "officetype",
@@ -316,10 +316,10 @@ run_validations(checks, "pincode_validation")
 # All checks passed: publish
 write_table(silver, "pincode_silver",
             "India Post offices (All India Pincode Directory), one row per office. Coordinates that don't match their PIN are NULL. "
-            "Validated against pincode_bronze (see pincode_validation). Built by notebooks/04_pincode_bronze_to_silver.")
+            "Validated against pincode_bronze (see pincode_validation). Built by notebooks/00_pincode_bronze_to_silver.")
 write_table(cent, "pincode_centroids_silver",
             "One row per PIN code: median location of its post offices, main district/state, ambiguity. "
-            "Use to turn a user PIN into coordinates. Built by notebooks/04_pincode_bronze_to_silver.")
+            "Use to turn a user PIN into coordinates. Built by notebooks/00_pincode_bronze_to_silver.")
 silver = spark.table("pincode_silver")
 spark.sql("DROP TABLE IF EXISTS _pincode_silver_stage")
 spark.sql("DROP TABLE IF EXISTS _pincode_centroids_stage")

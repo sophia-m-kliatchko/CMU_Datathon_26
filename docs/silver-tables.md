@@ -17,7 +17,7 @@ Built by `notebooks/01_bronze_to_silver.py`. All tables are written to `<target_
 | `silver_rejected_facilities` | removed record | Every record removed from silver and why (`INVALID_ID`, `NAME_MISSING`, `NAME_IS_LIST`, `NO_COORDS_OR_ADDRESS`, `UNDER_MIN_FILLED_SHARE`). |
 
 ## Coordinates must match the address
-Using the India Post directory (`pincode_silver` / `pincode_centroids_silver`, built by notebook 04, **which must run first**):
+Using the India Post directory (`pincode_silver` / `pincode_centroids_silver`, built by notebook 00, **which must run first**):
 - A facility's coordinates must be within **25 km plus the PIN's own spread** of its PIN's centre point, and inside its state's area (the box around that state's post offices, padded 0.25°).
 - **If not, `latitude`/`longitude` are set to NULL.** `coord_status` becomes `nulled_pin_mismatch` or `nulled_state_mismatch`, with the matching `dq_flags`. `km_from_pin_centre` keeps the distance of the original point.
 - Also flagged (coordinates kept): `PIN_NOT_IN_DIRECTORY` (the PIN doesn't exist in the directory) and `STATE_NOT_SERVED_BY_PIN` (the PIN doesn't serve that state).

@@ -1,6 +1,6 @@
 """
-Dry run (no Spark) of the coordinate/address cross-checks in notebooks 01, 02 and 04, on the raw CSVs:
-  * PIN offices: coordinates more than 50 km from their PIN's median point are set to NULL (notebook 04)
+Dry run (no Spark) of the coordinate/address cross-checks in notebooks 00, 01 and 02, on the raw CSVs:
+  * PIN offices: coordinates more than 50 km from their PIN's median point are set to NULL (notebook 00)
   * Facilities: coordinates must be within 25 km (+ the PIN's spread) of the PIN centre and inside the
     state's padded box, else set to NULL (notebook 01)
   * NQAS: district must exist in the state per the India Post directory (notebook 02, flag only)
@@ -56,7 +56,7 @@ def km(a, b, c, d):
     return 2 * 6371 * math.asin(min(1, math.sqrt(h)))
 
 
-# ---- PIN directory (notebook 04) ----
+# ---- PIN directory (notebook 00) ----
 offices = []
 with open(os.path.join(ROOT, "data/raw/india_post_pincode_directory.csv"), encoding="utf-8", newline="") as f:
     for r in csv.DictReader(f):

@@ -29,11 +29,11 @@
 # MAGIC
 # MAGIC **Addresses** are reorganized into `address_street` (number + street/road/lane + building), `address_region` (locality/area), `address_landmark` ("near…/opp…"), `city`, `state`, `pincode`, plus a combined `address_full`. The raw `address_line1/2/3`, `address_city`, `address_stateOrRegion` and `address_zipOrPostcode` are **dropped** from silver. A value that can't be standardized is left NULL in the cleaned column (not copied over) and flagged; section 7 prints how many. Bronze always keeps the originals.
 # MAGIC
-# MAGIC **Coordinates must match the address.** Using the India Post directory (`pincode_*` tables from notebook 04), a facility's point must be within 25 km (+ the PIN's own spread) of its PIN's centre and inside its state's area. If not, `latitude`/`longitude` are set to NULL (`coord_status` = `nulled_pin_mismatch` / `nulled_state_mismatch`).
+# MAGIC **Coordinates must match the address.** Using the India Post directory (`pincode_*` tables from notebook 00), a facility's point must be within 25 km (+ the PIN's own spread) of its PIN's centre and inside its state's area. If not, `latitude`/`longitude` are set to NULL (`coord_status` = `nulled_pin_mismatch` / `nulled_state_mismatch`).
 # MAGIC
 # MAGIC **Validation:** before `facilities_silver` is written, it is checked against `facilities_bronze` (row counts, IDs, names, PINs, coordinates, state, numbers) and against the coordinate rules. Results go to `facilities_validation`; any failure stops the run and leaves the old `facilities_silver` in place.
 # MAGIC
-# MAGIC **Run order:** `04_pincode_bronze_to_silver` first, then this notebook.
+# MAGIC **Run order:** `00_pincode_bronze_to_silver` first, then this notebook.
 # MAGIC
 # MAGIC **How to run:** attach to serverless compute, check the widgets at the top, then **Run all**. It's safe to re-run, because every table is fully overwritten.
 # MAGIC
@@ -78,7 +78,7 @@ DROP_AFTER_COLUMN = "recency_of_page_update"
 KEEP_AFTER_CUTOFF = ["coordinates", "latitude", "longitude"]
 # A facility needs at least this share of the kept source columns filled in
 MIN_FILLED_SHARE = 0.30
-# Coordinates must match the address (uses notebook 04's India Post tables): a facility's point must be within
+# Coordinates must match the address (uses notebook 00's India Post tables): a facility's point must be within
 # PIN_MATCH_KM of its PIN's centre point (plus that PIN's own spread) and inside its state's area (padded box).
 # If not, latitude/longitude are set to NULL.
 PIN_MATCH_KM = 25.0
@@ -698,11 +698,11 @@ stage = (stage
     .drop("_addr")
 )
 
-# ---- Coordinates must match the PIN and state (India Post directory, built by notebook 04) ----
+# ---- Coordinates must match the PIN and state (India Post directory, built by notebook 00) ----
 PIN_CENTROIDS = f"{CATALOG}.{SCHEMA}.pincode_centroids_silver"
 PIN_OFFICES = f"{CATALOG}.{SCHEMA}.pincode_silver"
 assert spark.catalog.tableExists(PIN_CENTROIDS) and spark.catalog.tableExists(PIN_OFFICES), (
-    "Run notebooks/04_pincode_bronze_to_silver first: checking coordinates against PIN and state "
+    "Run notebooks/00_pincode_bronze_to_silver first: checking coordinates against PIN and state "
     "needs pincode_centroids_silver and pincode_silver.")
 pin_ref = spark.table(PIN_CENTROIDS).select(
     F.col("pincode").alias("_ref_pin"), F.col("latitude").alias("_ref_lat"), F.col("longitude").alias("_ref_lon"),

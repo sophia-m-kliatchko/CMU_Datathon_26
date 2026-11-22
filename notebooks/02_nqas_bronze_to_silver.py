@@ -20,7 +20,7 @@
 # MAGIC | Department scope parsed (`n_departments_assessed`, `covers_all_departments`) | A partial certification covers only some departments |
 # MAGIC | Exact duplicate listings collapsed (`n_listings`) | The website repeats a few rows |
 # MAGIC | `dq_flags` | Problems are flagged, never silently dropped |
-# MAGIC | `district_in_state`: the district exists in that state in the India Post directory (`pincode_silver`) | Catches a district/state pair that don't belong together (flag `DISTRICT_NOT_IN_STATE`). Run notebook 04 first |
+# MAGIC | `district_in_state`: the district exists in that state in the India Post directory (`pincode_silver`) | Catches a district/state pair that don't belong together (flag `DISTRICT_NOT_IN_STATE`). Run notebook 00 first |
 # MAGIC | **Validation** against bronze before publishing (results in `nqas_validation`) | Row counts, every listing, dates, state, district must match bronze, or `nqas_silver` is not overwritten |
 # MAGIC | **Citation columns** (`source_*`, `row_citation`) | Every row can be cited back to the NHSRC website (see `docs/data-sources.md`) |
 # MAGIC
@@ -132,10 +132,10 @@ silver = (df
     .withColumn("certification_year", F.year("validity_from"))
 )
 
-# ---- District must belong to the state (India Post directory, built by notebook 04) ----
+# ---- District must belong to the state (India Post directory, built by notebook 00) ----
 PIN_OFFICES = f"{CATALOG}.{SCHEMA}.pincode_silver"
 assert spark.catalog.tableExists(PIN_OFFICES), (
-    "Run notebooks/04_pincode_bronze_to_silver first: the district/state check needs pincode_silver.")
+    "Run notebooks/00_pincode_bronze_to_silver first: the district/state check needs pincode_silver.")
 district_ref = (spark.table(PIN_OFFICES).where("state IS NOT NULL AND district_key IS NOT NULL")
                 .select(F.col("state").alias("_ref_state"), F.col("district_key").alias("_ref_district_key")).distinct())
 silver = (silver
