@@ -15,7 +15,7 @@ facilities_silver ──facility_id── facility_registry_links_silver (06) �
    - `dnb_hospitals_bronze.csv`, `dnb_hospital_specialties_bronze.csv`
    - `ncg_members_bronze.csv`
    - `nabh_organisations_bronze.csv`
-2. Optional but recommended: run notebook 04 first. Sites with a PIN then get that PIN's location and a state cross-check.
+2. Optional but recommended: run notebook 00 first. Sites with a PIN then get that PIN's location and a state cross-check.
 3. Run notebook 05, setting widget 3 to the Volume folder. Each CSV becomes a raw table of the same name, plus the two silver tables. A source whose CSV is missing is skipped with a warning.
 
 **Local test:** on 2026-11-21 the notebook ran end to end on local Spark 4.0 against these CSVs: 24,961 sites, 22,757 service rows, and all checks passed.
